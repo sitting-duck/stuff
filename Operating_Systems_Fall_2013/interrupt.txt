@@ -1,0 +1,16 @@
+1 //load 1 into acc
+1
+10 //copy acc to x
+2 //load num times interrupted into acc
+1015 
+4 // add 1 to acc
+9 //print acc
+1
+3 //store the val in acc to addr
+1015
+1 //load newline
+10
+9 //print newline
+2
+26
+0 //number of times interrupted
