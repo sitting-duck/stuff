@@ -1,0 +1,23 @@
+﻿Build started 11/14/2011 5:27:59 PM.
+     1>Project "E:\c++\Fall 2011\labs\lab 5\dev\vers 7 - draw experiment\MathTree.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching "Debug\MathTree.unsuccessfulbuild".
+       ClCompile:
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp MathTree.cpp Token.cpp
+         Token.cpp
+     1>e:\c++\fall 2011\labs\lab 5\dev\vers 7 - draw experiment\operator.h(59): warning C4060: switch statement contains no 'case' or 'default' labels
+         MathTree.cpp
+     1>e:\c++\fall 2011\labs\lab 5\dev\vers 7 - draw experiment\operator.h(59): warning C4060: switch statement contains no 'case' or 'default' labels
+     1>e:\c++\fall 2011\labs\lab 5\dev\vers 7 - draw experiment\mathtree.cpp(89): warning C4172: returning address of local variable or temporary
+     1>e:\c++\fall 2011\labs\lab 5\dev\vers 7 - draw experiment\mathtree.cpp(237): error C2039: 'G' : is not a member of 'MathTree::Node'
+                 e:\c++\fall 2011\labs\lab 5\dev\vers 7 - draw experiment\mathtree.h(10) : see declaration of 'MathTree::Node'
+         Main.cpp
+     1>e:\c++\fall 2011\labs\lab 5\dev\vers 7 - draw experiment\operator.h(59): warning C4060: switch statement contains no 'case' or 'default' labels
+         Generating Code...
+     1>e:\c++\fall 2011\labs\lab 5\dev\vers 7 - draw experiment\operator.h(60): error C4716: 'GetOperType' : must return a value
+     1>e:\c++\fall 2011\labs\lab 5\dev\vers 7 - draw experiment\operator.h(60): error C4716: 'GetOperType' : must return a value
+     1>Done Building Project "E:\c++\Fall 2011\labs\lab 5\dev\vers 7 - draw experiment\MathTree.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:20.58

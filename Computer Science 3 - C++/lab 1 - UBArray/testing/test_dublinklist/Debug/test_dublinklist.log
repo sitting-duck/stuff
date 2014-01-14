@@ -1,0 +1,29 @@
+﻿Build started 8/26/2011 2:55:59 PM.
+     1>Project "\\design01\StudentProfiles$\render\Desktop\test_dublinklist\test_dublinklist.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching "Debug\test_dublinklist.unsuccessfulbuild".
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         main.cpp
+       ManifestResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\test_dublinklist.exe.embed.manifest.res" Debug\test_dublinklist_manifest.rc 
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"\\design01\StudentProfiles$\render\Desktop\test_dublinklist\Debug\test_dublinklist.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\test_dublinklist.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"\\design01\StudentProfiles$\render\Desktop\test_dublinklist\Debug\test_dublinklist.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\design01\StudentProfiles$\render\Desktop\test_dublinklist\Debug\test_dublinklist.lib" /MACHINE:X86 Debug\test_dublinklist.exe.embed.manifest.res
+         Debug\double_linked.obj
+         Debug\main.obj
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\test_dublinklist.exe.embed.manifest" /manifest Debug\test_dublinklist.exe.intermediate.manifest
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\test_dublinklist.exe.embed.manifest.res" Debug\test_dublinklist_manifest.rc 
+       LinkEmbedManifest:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"\\design01\StudentProfiles$\render\Desktop\test_dublinklist\Debug\test_dublinklist.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\test_dublinklist.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"\\design01\StudentProfiles$\render\Desktop\test_dublinklist\Debug\test_dublinklist.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\design01\StudentProfiles$\render\Desktop\test_dublinklist\Debug\test_dublinklist.lib" /MACHINE:X86 Debug\test_dublinklist.exe.embed.manifest.res
+         Debug\double_linked.obj
+         Debug\main.obj
+         test_dublinklist.vcxproj -> \\design01\StudentProfiles$\render\Desktop\test_dublinklist\Debug\test_dublinklist.exe
+       FinalizeBuildStatus:
+         Deleting file "Debug\test_dublinklist.unsuccessfulbuild".
+         Touching "Debug\test_dublinklist.lastbuildstate".
+     1>Done Building Project "\\design01\StudentProfiles$\render\Desktop\test_dublinklist\test_dublinklist.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:09.81

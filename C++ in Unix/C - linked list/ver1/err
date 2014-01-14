@@ -1,0 +1,3 @@
+cc    -c -o Linked_List.o Linked_List.c
+cc    -c -o node.o node.c
+gcc Linked_List.h Linked_List.c node.h node.c main.c -o ll -g -std=c99

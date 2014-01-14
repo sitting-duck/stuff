@@ -1,0 +1,6 @@
+ABC
+BAC
+BCA
+CBA
+CAB
+ACB
