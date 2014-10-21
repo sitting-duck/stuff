@@ -13,6 +13,8 @@
 class NetTeach
 {
 private:
+	enum exampleType {TRAINING, TESTING};
+
 	std::vector<std::string> _attrNames;
 
 	std::vector<Instance> _trainex;
@@ -21,30 +23,26 @@ private:
 
 	unsigned int _numIter;
 
-	std::string _trainingFileName;
-
-	std::ifstream _trainFileStream;
-
-	std::string _testingFileName;
-
-	std::ifstream _testFileStream;
+	float _learningRate;
 
 	float _currentTrainingSetAccuracy;
 
 	float _currentTestingSetAccuracy;
 
+public:
+	NetTeach();
 
-private:
+	NetTeach(float learningRate, unsigned int numIter);
+
 	NetTeach(const NetTeach& nt);
 
 	NetTeach& operator =(const NetTeach& nt);
 
-public:
-	NetTeach();
+	std::vector<Instance> getExamplesFromFile(std::string& filename);
 
-	NetTeach(std::string trainingFile, std::string testingFile);
+	void setTrainingExamples(std::vector<Instance> trainex);
 
-	std::vector<Instance> getExamplesFromFile(std::string& filename, int exampleType);
+	void setTestingExamples(std::vector<Instance> testex);
 
 	float teach(std::vector<Instance> trainingExamples);
 

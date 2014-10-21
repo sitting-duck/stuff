@@ -10,7 +10,7 @@
 class Instance
 {
 private:
-	std::vector<int> _values;
+	std::vector<unsigned int> _values;
 
 	unsigned int _class;
 
@@ -20,7 +20,7 @@ private:
 public:
 	Instance();
 
-	Instance(unsigned int numAttrs, std::vector<int> values, unsigned int classVal);
+	Instance(unsigned int numAttrs, std::vector<unsigned int> values, unsigned int classVal);
 
 	Instance(const Instance& i);
 
