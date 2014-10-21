@@ -35,5 +35,11 @@ Instance& Instance::operator =(const Instance& i)
 
 std::ostream& operator<<(std::ostream& os, const Instance& w)
 {
+	std::cout << "values: " ;
+	for(int i = 0; i < w._numAttrs; i++){
+		std::cout << w._values[i] << " " ;
+	}
+	std::cout << std::endl;
+	std::cout << "class: " << w._class;
 	return os;
 }

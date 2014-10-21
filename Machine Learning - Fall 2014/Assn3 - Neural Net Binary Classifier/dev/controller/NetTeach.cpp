@@ -39,20 +39,34 @@ std::vector<Instance> NetTeach::getExamplesFromFile(std::string& filename)
 	std::string line;
 	if(filestream.is_open()){
 
-		//discard the first line, it only contains the attribute names
+		//grab the first line, it contains the attribute names
 		getline(filestream, line);
 
-		//gonna grab these from the file
-		unsigned int numValues = 0;
-		std::vector<unsigned int> values;
-		unsigned int classVal;
-
+		//delimiters include tab and space
+		const char* delim = " \t";
+		
 		//placeholders for tokenizing the current line, these keep the tokenizer moving forward so we don't acknowledge the same space more than once
 		size_t prev = 0;
 		size_t next = 0;
 
-		//delimiters include tab and space
-		const char* delim = " \t";
+
+		while((next = line.find_first_of(delim, prev)) != std::string::npos){
+			
+				//if the token we got is not an empty string, add it to _attrNames
+				if(next - prev != 0){
+					_attrNames.push_back(line.substr(prev, next - prev));
+				}
+				//update the placeholder
+				prev = next + 1;
+			}
+
+			//reset some variables for the next loop around
+			prev = 0; next = 0;
+
+		//gonna grab these from the file. The rest of the lines will contain attibute and class values
+		unsigned int numValues = 0;
+		std::vector<unsigned int> values;
+		unsigned int classVal;
 
 		//examples container that we will return
 		std::vector<Instance> examples;

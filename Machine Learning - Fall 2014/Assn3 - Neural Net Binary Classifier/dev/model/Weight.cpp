@@ -26,5 +26,9 @@ Weight& Weight::operator =(const Weight& w)
 
 std::ostream& operator<<(std::ostream& os, const Weight& w)
 {
+	std::cout << w._name << std::endl;
+	std::cout << "val: " << w._val << std::endl;
+	std::cout << "previous val: " << w._previousVal << std::endl;
+	std::cout << "gradient : " << w._gradient << std::endl;
 	return os;
 }

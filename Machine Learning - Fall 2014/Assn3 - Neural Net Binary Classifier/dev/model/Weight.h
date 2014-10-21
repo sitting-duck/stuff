@@ -7,16 +7,26 @@
 #include <iostream>
 #include <assert.h>
 
+class Neuron;
+class InputNeuron;
+class OutputNeuron;
+class HiddenNeuron;
+
 class Weight
 {
+	friend Neuron;
+	friend InputNeuron;
+	friend OutputNeuron;
+	friend HiddenNeuron;
+
 private:
-	std::string name;
+	std::string _name;
 
-	float val;
+	float _val;
 
-	float previousVal;
+	float _previousVal;
 
-	float gradient;
+	float _gradient;
 
 
 public:
@@ -29,6 +39,12 @@ public:
 	Weight& operator =(const Weight& w);
 
 	friend std::ostream& operator<<(std::ostream& os, const Weight& w);
+
+	friend std::ostream& operator<<(std::ostream& os, const InputNeuron& in);
+
+	friend std::ostream& operator<<(std::ostream& os, const HiddenNeuron& hn);
+
+	friend std::ostream& operator << (std::ostream& os, const OutputNeuron& on);
 
 };
 #endif

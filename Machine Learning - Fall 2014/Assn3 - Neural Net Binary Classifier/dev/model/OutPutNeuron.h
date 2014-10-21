@@ -9,8 +9,12 @@
 
 #include "Weight.h"
 
+class Weight;
+
 class OutputNeuron
 {
+	friend Weight;
+
 private:
 	std::string _name;
 

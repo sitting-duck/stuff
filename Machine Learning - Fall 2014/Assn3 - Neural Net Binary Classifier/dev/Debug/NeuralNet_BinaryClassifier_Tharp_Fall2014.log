@@ -1,8 +1,18 @@
-﻿Build started 10/21/2014 6:09:07 AM.
+﻿Build started 10/21/2014 6:46:00 AM.
      1>Project "D:\GIT\Machine Learning - Fall 2014\Assn3 - Neural Net Binary Classifier\dev\NeuralNet_BinaryClassifier_Tharp_Fall2014.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\Program Filesx86\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt model\Instance.cpp
-         Instance.cpp
+         D:\Program Filesx86\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt controller\NeuronController.cpp model\HiddenNeuron.cpp model\InputNeuron.cpp model\Net.cpp model\OutPutNeuron.cpp model\Weight.cpp
+         OutPutNeuron.cpp
+     1>d:\git\machine learning - fall 2014\assn3 - neural net binary classifier\dev\model\outputneuron.cpp(31): warning C4018: '<' : signed/unsigned mismatch
+         HiddenNeuron.cpp
+     1>d:\git\machine learning - fall 2014\assn3 - neural net binary classifier\dev\model\hiddenneuron.cpp(31): warning C4018: '<' : signed/unsigned mismatch
+         Generating Code...
+         Compiling...
+         Weight.cpp
+         Net.cpp
+         InputNeuron.cpp
+         NeuronController.cpp
+         Generating Code...
        Link:
          D:\Program Filesx86\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\GIT\Machine Learning - Fall 2014\Assn3 - Neural Net Binary Classifier\dev\Debug\NeuralNet_BinaryClassifier_Tharp_Fall2014.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Ashley\Documents\Visual Studio 2012\Projects\Adam_Skeleton\Adam_Skeleton\lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\GIT\Machine Learning - Fall 2014\Assn3 - Neural Net Binary Classifier\dev\Debug\NeuralNet_BinaryClassifier_Tharp_Fall2014.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\GIT\Machine Learning - Fall 2014\Assn3 - Neural Net Binary Classifier\dev\Debug\NeuralNet_BinaryClassifier_Tharp_Fall2014.lib" /MACHINE:X86 Debug\NetTeach.obj
          Debug\NeuronController.obj
@@ -21,4 +31,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.69
+Time Elapsed 00:00:02.74

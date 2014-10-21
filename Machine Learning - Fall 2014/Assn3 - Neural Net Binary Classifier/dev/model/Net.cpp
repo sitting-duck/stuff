@@ -26,5 +26,13 @@ Net& Net::operator =(const Net& n)
 
 std::ostream& operator<<(std::ostream& os, const Net& n)
 {
+	std::cout << "input layer: " << std::endl;
+	std::cout << n._inputLayer << std::endl;
+	std::cout << "hidden layers: " << std::endl;
+	for(int i = 0; i < n._hiddenLayers.size(); i++){
+		std::cout << n._hiddenLayers[i] << std::endl;
+	}
+	std::cout << "output layer: " << std::endl;
+	std::cout << n._outputLayer << std::endl;
 	return os;
 }

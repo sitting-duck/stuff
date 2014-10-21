@@ -26,5 +26,6 @@ Neuron& Neuron::operator =(const Neuron& n)
 
 std::ostream& operator<<(std::ostream& os, const Neuron& n)
 {
+	std::cout << n._name << std::endl;
 	return os;
 }

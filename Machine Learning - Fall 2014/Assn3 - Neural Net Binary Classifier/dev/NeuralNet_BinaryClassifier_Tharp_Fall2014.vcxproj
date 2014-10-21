@@ -84,7 +84,7 @@
     <ClCompile Include="model\InputNeuron.cpp" />
     <ClCompile Include="model\Instance.cpp" />
     <ClCompile Include="model\Layer.cpp" />
-    <ClCompile Include="model\main.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="model\Net.cpp" />
     <ClCompile Include="model\Neuron.cpp" />
     <ClCompile Include="model\OutPutNeuron.cpp" />

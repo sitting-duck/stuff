@@ -9,6 +9,7 @@
 
 class Instance
 {
+
 private:
 	std::vector<unsigned int> _values;
 

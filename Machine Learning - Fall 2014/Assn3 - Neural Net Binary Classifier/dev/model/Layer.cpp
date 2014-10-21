@@ -26,5 +26,11 @@ Layer& Layer::operator =(const Layer& l)
 
 std::ostream& operator<<(std::ostream& os, const Layer& n)
 {
+	std::cout << n._name << std::endl;
+	std::cout << "num neurons: " << n._numNeurons << std::endl;
+	for(int i = 0; i < n._neurons.size(); i++){
+		std::cout << n._neurons[i] << std::endl;
+	}
+	std::cout << "bias: " << n._bias << std::endl;
 	return os;
 }
