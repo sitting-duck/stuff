@@ -6,9 +6,13 @@
 #include <list>
 #include <iostream>
 #include <assert.h>
+#include <cmath>
+#include <stdlib.h>
 
-#include "Layer.h"
 #include "Weight.h"
+#include "InputNeuron.h"
+#include "HiddenNeuron.h"
+#include "OutputNeuron.h"
 
 class Net
 {
@@ -17,14 +21,13 @@ private:
 
 	float _momentum;
 
-	Layer _inputLayer;
+	std::vector<InputNeuron> _inputLayer;
 
-	std::vector<Layer> _hiddenLayers;
+	std::vector<HiddenNeuron> _hiddenLayer;
 
-	Layer _outputLayer;
+	std::vector<OutputNeuron> _outputLayer;
 
 	std::vector<Weight> _weights;
-
 
 public:
 	Net();
@@ -35,7 +38,17 @@ public:
 
 	Net& operator =(const Net& n);
 
-	friend std::ostream& operator<<(std::ostream& os, const Net& n);
+	friend std::ostream& operator << (std::ostream& os, const Net& n);
+
+	friend std::ostream& operator << (std::ostream& os, std::vector<InputNeuron>& inv);
+
+	friend std::ostream& operator << (std::ostream& os, const InputNeuron& in);
+
+	friend std::ostream& operator << (std::ostream& os, const HiddenNeuron& hn);
+
+	friend std::ostream& operator << (std::ostream& os, const OutputNeuron& on);
+
+	void buildInputLayer(unsigned int numInputs);
 
 };
 #endif

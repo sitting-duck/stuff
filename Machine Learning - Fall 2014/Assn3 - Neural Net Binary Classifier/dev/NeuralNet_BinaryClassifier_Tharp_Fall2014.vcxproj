@@ -83,10 +83,8 @@
     <ClCompile Include="model\HiddenNeuron.cpp" />
     <ClCompile Include="model\InputNeuron.cpp" />
     <ClCompile Include="model\Instance.cpp" />
-    <ClCompile Include="model\Layer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model\Net.cpp" />
-    <ClCompile Include="model\Neuron.cpp" />
     <ClCompile Include="model\OutPutNeuron.cpp" />
     <ClCompile Include="model\Weight.cpp" />
   </ItemGroup>
@@ -97,9 +95,7 @@
     <ClInclude Include="model\HiddenNeuron.h" />
     <ClInclude Include="model\InputNeuron.h" />
     <ClInclude Include="model\Instance.h" />
-    <ClInclude Include="model\Layer.h" />
     <ClInclude Include="model\Net.h" />
-    <ClInclude Include="model\Neuron.h" />
     <ClInclude Include="model\OutPutNeuron.h" />
     <ClInclude Include="model\Weight.h" />
   </ItemGroup>

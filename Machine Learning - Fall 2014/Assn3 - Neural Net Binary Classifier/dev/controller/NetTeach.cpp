@@ -1,4 +1,4 @@
-#include <string>
+ #include <string>
 #include <vector>
 #include <list>
 #include <iostream>
@@ -49,7 +49,9 @@ std::vector<Instance> NetTeach::getExamplesFromFile(std::string& filename)
 		size_t prev = 0;
 		size_t next = 0;
 
-
+		if(_attrNames.size() != 0){
+			_attrNames.clear();
+		}
 		while((next = line.find_first_of(delim, prev)) != std::string::npos){
 			
 				//if the token we got is not an empty string, add it to _attrNames
@@ -121,16 +123,26 @@ void NetTeach::setTestingExamples(std::vector<Instance> testex){
 	_testex = testex;
 }
 
-float NetTeach::teach(std::vector<Instance> trainingExamples)
+float NetTeach::teach(Net& net)
 {
+	//first the net has to build itself
+	
+	//in the input layer there will be an input for each attribute type
+	net.buildInputLayer(_attrNames.size());
+
+	forwardPropogate(net);
+	backPropogate(net);
+	testAccuracyOnSet(_trainex);
 	return 0;
 }
 
-void NetTeach::forwardPropogate()
+void NetTeach::forwardPropogate(Net& net)
 {
+	//cycle through all the neurons in the network and calculate the output values for all of them.
+
 }
 
-void NetTeach::backPropogate()
+void NetTeach::backPropogate(Net& net)
 {
 }
 

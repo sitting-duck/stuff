@@ -7,7 +7,7 @@
 #include <iostream>
 #include <assert.h>
 
-#include "Neuron.h"
+#include "InputNeuron.h"
 #include "OutputNeuron.h"
 #include "HiddenNeuron.h"
 
@@ -16,9 +16,15 @@ class NeuronController
 public:
 	NeuronController();
 
-	float sumInputWeights(Neuron* neuron);
+	float sumInputWeights(HiddenNeuron* neuron);
 
-	float calcNeuronOutput(Neuron* neuron);
+	float sumInputWeights(OutputNeuron* neuron);
+
+	float calcNeuronOutput(InputNeuron* neuron);
+
+	float calcNeuronOutput(HiddenNeuron* neuron);
+
+	float calcNeuronOutput(OutputNeuron* neuron);
 
 	float sigmoid(float in);
 

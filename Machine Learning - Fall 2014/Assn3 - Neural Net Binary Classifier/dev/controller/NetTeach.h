@@ -9,6 +9,7 @@
 #include <assert.h>
 
 #include "Instance.h"
+#include "Net.h"
 
 class NetTeach
 {
@@ -44,11 +45,11 @@ public:
 
 	void setTestingExamples(std::vector<Instance> testex);
 
-	float teach(std::vector<Instance> trainingExamples);
+	float teach(Net& net);
 
-	void forwardPropogate();
+	void forwardPropogate(Net& net);
 
-	void backPropogate();
+	void backPropogate(Net& net);
 
 	float testAccuracyOnSet(std::vector<Instance> examples);
 

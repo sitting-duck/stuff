@@ -11,13 +11,27 @@ NeuronController::NeuronController()
 {
 }
 
-float NeuronController::sumInputWeights(Neuron* neuron)
+float sumInputWeights(HiddenNeuron* neuron)
 {
 	return 0;
 }
 
-float NeuronController::calcNeuronOutput(Neuron* neuron)
+float sumInputWeights(OutputNeuron* neuron)
 {
+	return 0;
+}
+
+float calcNeuronOutput(InputNeuron* neuron)
+{
+	return 0;
+}
+
+float calcNeuronOutput(HiddenNeuron* neuron)
+{
+	return 0;
+}
+
+float calcNeuronOutput(OutputNeuron* neuron){
 	return 0;
 }
 

@@ -13,14 +13,24 @@ Weight::Weight()
 
 Weight::Weight(std::string name, float val)
 {
+	_name = name;
+	_val = val;
 }
 
 Weight::Weight(const Weight& w)
 {
+	_name = w._name;
+	_val = w._val;
+	_previousVal = w._previousVal;
+	_gradient = w._gradient;
 }
 
 Weight& Weight::operator =(const Weight& w)
 {
+	_name = w._name;
+	_val = w._val;
+	_previousVal = w._previousVal;
+	_gradient = w._gradient;
 	return *this;
 }
 

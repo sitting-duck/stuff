@@ -8,29 +8,33 @@
 #include <assert.h>
 
 #include "Weight.h"
+#include "Net.h"
 
 class HiddenNeuron
 {
 private:
+	Net* _net;
+
 	std::string _name;
 
 	unsigned int _numIncomingWeights;
 
-	std::vector<Weight*> _incomingWeights;
+	std::vector<unsigned int> _incomingWeights;
 
 	unsigned int _numOutgoingWeights;
 
-	std::vector<Weight*> _outgoingWeights;
+	//the indices of the weights pointed to by this neuron
+	std::vector<unsigned int> _outgoingWeights;
 
 	float _delta;
 
-	float _sumOfInputWeights;
+	float _sumOfIncomingtWeights;
 
 
 public:
 	HiddenNeuron();
 
-	HiddenNeuron(std::string name, unsigned int numIncomingWeights, unsigned int numOutgoingWeights);
+	HiddenNeuron(std::string name, unsigned int numIncomingWeights, unsigned int numOutgoingWeights, Net* net);
 
 	HiddenNeuron(const HiddenNeuron& hn);
 

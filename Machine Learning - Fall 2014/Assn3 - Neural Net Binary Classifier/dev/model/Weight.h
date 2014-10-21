@@ -7,17 +7,17 @@
 #include <iostream>
 #include <assert.h>
 
-class Neuron;
 class InputNeuron;
 class OutputNeuron;
 class HiddenNeuron;
+class Net;
 
 class Weight
-{
-	friend Neuron;
+{	
 	friend InputNeuron;
 	friend OutputNeuron;
 	friend HiddenNeuron;
+	friend Net;
 
 private:
 	std::string _name;
@@ -27,7 +27,6 @@ private:
 	float _previousVal;
 
 	float _gradient;
-
 
 public:
 	Weight();
@@ -46,5 +45,6 @@ public:
 
 	friend std::ostream& operator << (std::ostream& os, const OutputNeuron& on);
 
+	friend std::ostream& operator << (std::ostream& os, std::vector<InputNeuron>& inv);
 };
 #endif
