@@ -24,6 +24,8 @@ private:
 	//the indices of the weights pointed to by this neuron
 	std::vector<unsigned int> _incomingWeights;
 
+	float _output;
+
 	float _delta;
 
 	float _sumOfIncomingtWeights;

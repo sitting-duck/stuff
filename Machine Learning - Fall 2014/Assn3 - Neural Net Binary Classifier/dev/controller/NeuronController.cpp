@@ -37,7 +37,7 @@ float calcNeuronOutput(OutputNeuron* neuron){
 
 float NeuronController::sigmoid(float in)
 {
-	return 0;
+	return (float)(1 / (1 + exp((-1)*in)));
 }
 
 float NeuronController::partialDeriv(float sum)

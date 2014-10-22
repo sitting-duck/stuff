@@ -25,6 +25,7 @@ HiddenNeuron::HiddenNeuron(const HiddenNeuron& hn)
 	_incomingWeights = hn._incomingWeights;
 	_numOutgoingWeights = hn._numOutgoingWeights;
 	_outgoingWeights = hn._outgoingWeights;
+	_output = hn._output;
 	_delta = hn._delta;
 	_sumOfIncomingtWeights = hn._sumOfIncomingtWeights;
 }
@@ -36,6 +37,7 @@ HiddenNeuron& HiddenNeuron::operator =(const HiddenNeuron& hn)
 	_incomingWeights = hn._incomingWeights;
 	_numOutgoingWeights = hn._numOutgoingWeights;
 	_outgoingWeights = hn._outgoingWeights;
+	_output = hn._output;
 	_delta = hn._delta;
 	_sumOfIncomingtWeights = hn._sumOfIncomingtWeights;
 	return *this;

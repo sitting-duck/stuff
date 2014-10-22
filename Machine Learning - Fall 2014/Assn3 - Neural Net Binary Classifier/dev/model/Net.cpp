@@ -96,8 +96,7 @@ void Net::buildInputLayer(unsigned int numInputs){
 		}
 		//add newly created input neuron to input layer
 		_inputLayer.push_back(in);
-	}
-	std::cout << _inputLayer << std::endl;
+	}	
 }
 
 void Net::buildHiddenLayer(){
@@ -134,8 +133,7 @@ void Net::buildHiddenLayer(){
 
 		//add this neuron to the net global hidden layer neurons list
 		_hiddenLayer.push_back(hn);
-	}
-	std::cout << _hiddenLayer << std::endl;
+	}	
 }
 
 void Net::buildOutputLayer(){
@@ -156,6 +154,4 @@ void Net::buildOutputLayer(){
 	on._sumOfIncomingtWeights = sumWeights(on._incomingWeights);
 
 	_outputLayer.push_back(on);
-
-	std::cout << _outputLayer << std::endl;
 }

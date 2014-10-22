@@ -22,7 +22,7 @@ private:
 
 	std::vector<Instance> _testex;
 
-	unsigned int _numIter;
+	unsigned int _numTotalIter;
 
 	float _learningRate;
 
@@ -45,7 +45,9 @@ public:
 
 	void setTestingExamples(std::vector<Instance> testex);
 
-	float teach(Net& net);
+	float teach(Net& net, unsigned int iterationNum);
+
+	void setInputs(Net& net, unsigned int iterationNum);
 
 	void forwardPropogate(Net& net);
 

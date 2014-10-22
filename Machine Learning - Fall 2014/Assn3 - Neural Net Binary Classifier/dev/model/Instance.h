@@ -7,8 +7,11 @@
 #include <iostream>
 #include <assert.h>
 
+class NetTeach;
+
 class Instance
 {
+	friend NetTeach;
 
 private:
 	std::vector<unsigned int> _values;
@@ -16,7 +19,6 @@ private:
 	unsigned int _class;
 
 	unsigned int _numAttrs;
-
 
 public:
 	Instance();

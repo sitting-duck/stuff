@@ -8,11 +8,13 @@
 #include <assert.h>
 
 class Net;
+class NetTeach;
 
 class InputNeuron
 {
 
 	friend Net;
+	friend NetTeach;
 
 private:
 

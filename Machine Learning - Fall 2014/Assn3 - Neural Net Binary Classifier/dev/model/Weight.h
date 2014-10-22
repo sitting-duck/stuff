@@ -11,6 +11,7 @@ class InputNeuron;
 class OutputNeuron;
 class HiddenNeuron;
 class Net;
+class NetTeach;
 
 class Weight
 {	
@@ -18,6 +19,7 @@ class Weight
 	friend OutputNeuron;
 	friend HiddenNeuron;
 	friend Net;
+	friend NetTeach;
 
 private:
 	std::string _name;

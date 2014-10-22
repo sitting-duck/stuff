@@ -8,11 +8,13 @@
 #include <assert.h>
 
 class Net;
+class NetTeach;
 
 class HiddenNeuron
 {
 
 	friend Net;
+	friend NetTeach;
 
 private:
 
@@ -26,6 +28,9 @@ private:
 
 	//the indices of the weights pointed to by this neuron
 	std::vector<unsigned int> _outgoingWeights;
+
+	float _output;
+
 
 	float _delta;
 

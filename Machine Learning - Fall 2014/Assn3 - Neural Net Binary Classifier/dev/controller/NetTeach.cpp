@@ -14,19 +14,19 @@ NetTeach::NetTeach()
 NetTeach::NetTeach(float learningRate, unsigned int numIter)
 {
 	_learningRate = learningRate;
-	_numIter = numIter;
+	_numTotalIter = numIter;
 }
 
 NetTeach::NetTeach(const NetTeach& nt)
 {
 	_learningRate = nt._learningRate;
-	_numIter = nt._numIter;
+	_numTotalIter = nt._numTotalIter;
 }
 
 NetTeach& NetTeach::operator =(const NetTeach& nt)
 {
 	_learningRate = nt._learningRate;
-	_numIter = nt._numIter;
+	_numTotalIter = nt._numTotalIter;
 	return *this;
 }
 
@@ -123,7 +123,7 @@ void NetTeach::setTestingExamples(std::vector<Instance> testex){
 	_testex = testex;
 }
 
-float NetTeach::teach(Net& net)
+float NetTeach::teach(Net& net, unsigned int iterationNum)
 {
 	//first the net has to build itself
 	
@@ -136,16 +136,52 @@ float NetTeach::teach(Net& net)
 	//the output layer will just have one output node
 	net.buildOutputLayer();
 
-	forwardPropogate(net);
-	backPropogate(net);
-	testAccuracyOnSet(_trainex);
+	for(int i = 0; i < _trainex.size(); i++){
+		setInputs(net, iterationNum);
+		forwardPropogate(net);
+
+		std::cout << net._inputLayer << std::endl;
+		std::cout << net._hiddenLayer << std::endl;
+		std::cout << net._outputLayer << std::endl;
+
+		backPropogate(net);
+		testAccuracyOnSet(_trainex);
+	}
+
 	return 0;
+}
+
+void NetTeach::setInputs(Net& net, unsigned int iterationNum){
+	for(int i = 0; i < net._inputLayer.size(); i++){
+		net._inputLayer[i]._inputVal = _trainex[iterationNum]._values[i];
+	}
 }
 
 void NetTeach::forwardPropogate(Net& net)
 {
 	//cycle through all the neurons in the network and calculate the output values for all of them.
+	//we don't need to calculate ouputs for input neurons
+	float fromInputNeuron_i;
+	float sumFromInputs = 0;
+	float outputForHidden_i;
+	for(int i = 0; i < net._hiddenLayer.size(); i++){
+		for(int j = 0; j < net._inputLayer.size(); j++){
+			//multiply the input from that neuron by the connecting weight
+			fromInputNeuron_i = net._inputLayer[j]._inputVal * net.findWeight(net.weightController.genWeightName(j, 'i', i, 'h'))._val;
+			sumFromInputs += fromInputNeuron_i;
+		}
+		outputForHidden_i = net.neuronController.sigmoid(sumFromInputs);
+		net._hiddenLayer[i]._output = outputForHidden_i;
+	}
 
+	float fromHiddenNeuron_i;
+	float sumFromHiddens = 0;
+	float finalOutput;
+	for(int i = 0; i < net._hiddenLayer.size(); i++){
+		fromHiddenNeuron_i = net._hiddenLayer[i]._output * net.findWeight(net.weightController.genWeightName(i, 'h', 1, 'o'))._val;
+		sumFromHiddens += fromHiddenNeuron_i;
+	}
+	finalOutput = net.neuronController.sigmoid(sumFromHiddens);
 }
 
 void NetTeach::backPropogate(Net& net)
