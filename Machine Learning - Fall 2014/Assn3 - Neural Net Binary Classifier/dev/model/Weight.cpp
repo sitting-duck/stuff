@@ -15,6 +15,7 @@ Weight::Weight(std::string name, float val)
 {
 	_name = name;
 	_val = val;
+	_previousVal = 0;
 }
 
 Weight::Weight(const Weight& w)

@@ -74,7 +74,6 @@ std::vector<Instance> NetTeach::getExamplesFromFile(std::string& filename)
 		std::vector<Instance> examples;
 
 		while(getline(filestream, line)){
-		
 			while((next = line.find_first_of(delim, prev)) != std::string::npos){
 			
 				//if the token we got is not an empty string, add it to values
@@ -136,17 +135,20 @@ float NetTeach::teach(Net& net, unsigned int iterationNum)
 	//the output layer will just have one output node
 	net.buildOutputLayer();
 
-	for(int i = 0; i < _trainex.size(); i++){
+	std::vector<float> results;
+
+	for(unsigned int i = 0; i < _trainex.size(); i++){
 		setInputs(net, iterationNum);
 		forwardPropogate(net);
+		backPropogate(net, i);
 
-		std::cout << net._inputLayer << std::endl;
-		std::cout << net._hiddenLayer << std::endl;
-		std::cout << net._outputLayer << std::endl;
+		results.push_back(net._outputLayer[0]._output);
 
-		backPropogate(net);
-		testAccuracyOnSet(_trainex);
+		//std::cout << net._inputLayer << std::endl;
+		//std::cout << net._hiddenLayer << std::endl;
+		//std::cout << net._outputLayer << std::endl;
 	}
+	testAccuracyOnSet(_trainex, results);
 
 	return 0;
 }
@@ -182,13 +184,59 @@ void NetTeach::forwardPropogate(Net& net)
 		sumFromHiddens += fromHiddenNeuron_i;
 	}
 	finalOutput = net.neuronController.sigmoid(sumFromHiddens);
+	net._outputLayer[0]._output = finalOutput;
 }
 
-void NetTeach::backPropogate(Net& net)
+void NetTeach::backPropogate(Net& net, unsigned int currentTrainingInstance)
 {
+	int classVal = _trainex[currentTrainingInstance]._class;
+
+	//generate delta for the output node
+	float errorOutputNeuron = net._outputLayer[0]._output - classVal;
+	float deltaOutputNeuron = errorOutputNeuron * net.neuronController.partialDeriv(net._outputLayer[0]._sumOfIncomingtWeights);
+
+	//generate delta for all hidden nodes
+	for(int i =  0; i < net._hiddenLayer.size(); i++){
+		//delta for hidden neurons is deriv(sum incoming weights) * sumOutgoingWeights * deltaOutputNeuron
+		net._hiddenLayer[i]._delta = net.neuronController.partialDeriv(net._hiddenLayer[i]._sumOfIncomingtWeights) * net._weights[net._hiddenLayer[i]._outgoingWeights[0]]._val * deltaOutputNeuron;
+	}
+
+	std::string weightname;
+	//calculate all the gradients of all the weights
+	for(int i = 0; i < net._weights.size(); i++){
+		weightname = net._weights[i]._name;
+
+		//if current weight connects an input node and a hidden node
+		if(weightname[2] == 'i'){
+			int currentInputNodeIndex = net.weightController.getWeightParentNeuronIndex(weightname);
+			net._weights[i]._gradient = net._inputLayer[currentInputNodeIndex]._inputVal * deltaOutputNeuron;
+		}else if(weightname[2] == 'h'){
+			int currentHiddenNodeIndex = net.weightController.getWeightParentNeuronIndex(weightname);
+			net._weights[i]._gradient = net._hiddenLayer[currentHiddenNodeIndex]._output * deltaOutputNeuron;
+		}
+	}
+
+	//calculate all the weight updates
+	for(int i = 0; i < net._weights.size(); i++){
+		float newWeight = ((-1) * _learningRate * net._weights[i]._gradient) + (net._momentum * net._weights[i]._previousVal);
+		net._weights[i]._previousVal = net._weights[i]._val;
+		net._weights[i]._val = newWeight;
+	}
 }
 
-float NetTeach::testAccuracyOnSet(std::vector<Instance> examples)
+float NetTeach::testAccuracyOnSet(std::vector<Instance> examples, std::vector<float>& results)
 {
+	int numRight = 0;
+	int numWrong = 0;
+	for(int i = 0; i < examples.size(); i++){
+		std::cout << "trex: " << examples[i]._class << " res: " << (int) (results[i] + 0.5) << std::endl;
+		if(examples[i]._class == (int) (results[i] + 0.5)){
+			numRight++;
+		}else{
+			numWrong++;
+		}
+	}
+	float accuracy = (numRight) / (float)examples.size();
+	std:: cout << "accuracy: " << std::setprecision(3) << accuracy * 100 << "%" << std::endl;
 	return 0;
 }

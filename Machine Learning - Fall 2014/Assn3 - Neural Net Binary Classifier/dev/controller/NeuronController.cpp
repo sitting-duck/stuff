@@ -42,7 +42,7 @@ float NeuronController::sigmoid(float in)
 
 float NeuronController::partialDeriv(float sum)
 {
-	return 0;
+	return (sigmoid(sum))*(1 - sigmoid(sum));
 }
 
 float NeuronController::calcOutPutNeuronDelta(const OutputNeuron* on)

@@ -68,3 +68,38 @@ std::string WeightController::genWeightName(unsigned int firstNeuron, char first
 	
 	return weightname;
 }
+
+unsigned int WeightController::getWeightParentNeuronIndex(std::string& weightname){
+	 
+	weightname.erase(0, 3);
+	std::string num;
+	std::string charstr;
+
+	for(int i = 0; ; i++){
+		charstr = weightname[i];
+		int isdigitflag = isdigit(weightname[i]);
+		if( isdigitflag == 0){break;}
+		num.append(charstr);
+	}
+	return atoi(num.c_str());
+}
+
+unsigned int WeightController::getWeightChildNeuronIndex(std::string& weightname){
+
+	weightname.erase(0, 3);
+	std::string num;
+	std::string charstr;
+
+	for(int i = 0; isdigit(weightname[i]) != true; i++){
+		weightname.erase(i, 1);
+	}
+
+	weightname.erase(0, 1);
+
+	for(int i = 0; i < weightname.size(); i++){
+		charstr = weightname[i];
+		num.append(charstr);
+	}
+
+	return atoi(num.c_str());
+}

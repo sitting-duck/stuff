@@ -1,4 +1,4 @@
-﻿Build started 10/21/2014 10:50:02 PM.
+﻿Build started 10/22/2014 2:11:40 AM.
      1>Project "D:\GIT\Machine Learning - Fall 2014\Assn3 - Neural Net Binary Classifier\dev\NeuralNet_BinaryClassifier_Tharp_Fall2014.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          D:\Program Filesx86\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
@@ -31,4 +31,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.84
+Time Elapsed 00:00:00.89

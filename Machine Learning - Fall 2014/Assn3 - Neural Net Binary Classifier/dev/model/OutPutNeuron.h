@@ -9,11 +9,13 @@
 
 class Weight;
 class Net;
+class NetTeach;
 
 class OutputNeuron
 {
 	friend Weight;
 	friend Net;
+	friend NetTeach;
 
 private:
 

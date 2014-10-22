@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <assert.h>
+#include <iomanip>
 
 #include "Instance.h"
 #include "Net.h"
@@ -51,9 +52,9 @@ public:
 
 	void forwardPropogate(Net& net);
 
-	void backPropogate(Net& net);
+	void backPropogate(Net& net, unsigned int currentTrainingInstance);
 
-	float testAccuracyOnSet(std::vector<Instance> examples);
+	float testAccuracyOnSet(std::vector<Instance> examples, std::vector<float>& results);
 
 };
 #endif

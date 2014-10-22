@@ -18,5 +18,8 @@ public:
 
 	std::string genWeightName(unsigned int firstNeuron, char firstNeuronType, unsigned int secondNeuron, char secondNeuronType);
 
+	unsigned int getWeightParentNeuronIndex(std::string& weightname);
+
+	unsigned int getWeightChildNeuronIndex(std::string& weightname);
 };
 #endif
