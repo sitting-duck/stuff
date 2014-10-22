@@ -54,3 +54,31 @@ float NeuronController::calcHiddenNeuronDelta(const HiddenNeuron* hn)
 {
 	return 0;
 }
+
+std::string NeuronController::genNeuronName(unsigned int index, char type){
+	
+	std::string neuronName;
+	char numbuf[10] = {'\0'};
+
+	std::string prefix;
+
+	switch(type){
+	case 'i':
+		prefix = "i";
+		break;
+	case 'h':
+		prefix = "h";
+		break;
+	case 'o':
+		prefix = "o";
+		break;
+	default:
+		std::cout << "Error: NeuronController::genNeuronName : invalid first neuron type" << std::endl;
+	}
+
+	neuronName.append(prefix);
+	itoa(index, numbuf, 10);
+	neuronName.append(numbuf);
+
+	return neuronName;
+}

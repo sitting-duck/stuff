@@ -130,6 +130,12 @@ float NetTeach::teach(Net& net)
 	//in the input layer there will be an input for each attribute type
 	net.buildInputLayer(_attrNames.size());
 
+	//we have the data we need from building the input layer to build the hidden layer
+	net.buildHiddenLayer();
+
+	//the output layer will just have one output node
+	net.buildOutputLayer();
+
 	forwardPropogate(net);
 	backPropogate(net);
 	testAccuracyOnSet(_trainex);

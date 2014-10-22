@@ -11,9 +11,8 @@ OutputNeuron::OutputNeuron()
 {
 }
 
-OutputNeuron::OutputNeuron(std::string name, unsigned int numIncomingWeights, Net* net)
+OutputNeuron::OutputNeuron(std::string name, unsigned int numIncomingWeights)
 {
-	_net = net;
 	_name = name;
 	_numIncomingWeights = numIncomingWeights;
 
@@ -22,7 +21,6 @@ OutputNeuron::OutputNeuron(std::string name, unsigned int numIncomingWeights, Ne
 
 OutputNeuron::OutputNeuron(const OutputNeuron& on)
 {
-	_net = on._net;
 	_name = on._name;
 	_numIncomingWeights = on._numIncomingWeights;
 	_incomingWeights = on._incomingWeights;
@@ -33,7 +31,6 @@ OutputNeuron::OutputNeuron(const OutputNeuron& on)
 
 OutputNeuron& OutputNeuron::operator =(const OutputNeuron& on)
 {
-	_net = on._net;
 	_name = on._name;
 	_numIncomingWeights = on._numIncomingWeights;
 	_incomingWeights = on._incomingWeights;
@@ -42,16 +39,3 @@ OutputNeuron& OutputNeuron::operator =(const OutputNeuron& on)
 	return *this;
 }
 
-std::ostream& operator<<(std::ostream& os, const OutputNeuron& on)
-{
-	std::cout << on._name << std::endl;
-	std::cout << "numIncomingWeights: " << on._numIncomingWeights << std::endl;
-	for(int i = 0; i < on._incomingWeights.size(); i++){
-		std::cout << on._net->_weights[on._incomingWeights[i]]._val << " " ;
-	}
-	std::cout << std::endl;
-	std::cout << "delta: " << on._delta << std::endl;
-	std::cout << "sumOfIncomingtWeights: " << on._sumOfIncomingtWeights << std::endl;
-
-	return os;
-}

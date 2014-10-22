@@ -16,5 +16,7 @@ public:
 
 	float calcNewWeight(float learningRate, float gradient, float momentum, float prevWeight);
 
+	std::string genWeightName(unsigned int firstNeuron, char firstNeuronType, unsigned int secondNeuron, char secondNeuronType);
+
 };
 #endif

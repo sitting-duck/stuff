@@ -34,5 +34,8 @@ public:
 
 	float calcHiddenNeuronDelta(const HiddenNeuron* hn);
 
+	std::string genNeuronName(unsigned int index, char type);
+
+
 };
 #endif

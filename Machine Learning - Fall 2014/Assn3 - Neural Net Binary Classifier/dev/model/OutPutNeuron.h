@@ -7,18 +7,15 @@
 #include <iostream>
 #include <assert.h>
 
-#include "Weight.h"
-#include "Net.h"
-
 class Weight;
+class Net;
 
 class OutputNeuron
 {
 	friend Weight;
+	friend Net;
 
 private:
-	//handle to net
-	Net* _net;
 
 	std::string _name;
 
@@ -35,7 +32,7 @@ private:
 public:
 	OutputNeuron();
 
-	OutputNeuron(std::string name, unsigned int numIncomingWeights, Net* net);
+	OutputNeuron(std::string name, unsigned int numIncomingWeights);
 
 	OutputNeuron(const OutputNeuron& on);
 

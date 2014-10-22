@@ -7,9 +7,6 @@
 #include <iostream>
 #include <assert.h>
 
-#include "Weight.h"
-#include "Net.h"
-
 class Net;
 
 class InputNeuron
@@ -18,8 +15,6 @@ class InputNeuron
 	friend Net;
 
 private:
-	//handle to net
-	Net* _net;
 
 	std::string _name;
 
@@ -34,7 +29,7 @@ private:
 public:
 	InputNeuron();
 
-	InputNeuron(std::string name, unsigned int numOutgoingWeights, Net* net);
+	InputNeuron(std::string name, unsigned int numOutgoingWeights);
 
 	InputNeuron(const InputNeuron& in);
 

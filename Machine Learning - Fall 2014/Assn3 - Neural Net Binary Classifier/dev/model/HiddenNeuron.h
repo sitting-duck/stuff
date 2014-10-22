@@ -7,13 +7,14 @@
 #include <iostream>
 #include <assert.h>
 
-#include "Weight.h"
-#include "Net.h"
+class Net;
 
 class HiddenNeuron
 {
+
+	friend Net;
+
 private:
-	Net* _net;
 
 	std::string _name;
 
@@ -34,7 +35,7 @@ private:
 public:
 	HiddenNeuron();
 
-	HiddenNeuron(std::string name, unsigned int numIncomingWeights, unsigned int numOutgoingWeights, Net* net);
+	HiddenNeuron(std::string name, unsigned int numIncomingWeights, unsigned int numOutgoingWeights);
 
 	HiddenNeuron(const HiddenNeuron& hn);
 
