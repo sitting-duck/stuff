@@ -52,9 +52,15 @@ public:
 
 	void forwardPropogate(Net& net);
 
+	void forwardPropogate_2(Net& net);
+
 	void backPropogate(Net& net, unsigned int currentTrainingInstance);
 
+	void backPropogate_2(Net& net, unsigned int currentTrainingInstance);
+
 	float testAccuracyOnSet(std::vector<Instance> examples, std::vector<float>& results);
+
+	void printOutputForSingleIteration(Net& net, unsigned int numIter);
 
 };
 #endif

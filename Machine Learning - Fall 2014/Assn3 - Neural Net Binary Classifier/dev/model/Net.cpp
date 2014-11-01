@@ -113,7 +113,7 @@ void Net::buildHiddenLayer(){
 		HiddenNeuron hn = HiddenNeuron(neuronName, _inputLayer.size(), 1);
 
 		//create weight name
-		weightname = weightController.genWeightName(i, 'h', 1, 'o');
+		weightname = weightController.genWeightName(i, 'h', 0, 'o');
 		Weight outgoingWeight = Weight(weightname, 0.0f);
 
 		//now we have to figure out the indices of the incoming weights for this hidden neuron
@@ -139,7 +139,7 @@ void Net::buildHiddenLayer(){
 void Net::buildOutputLayer(){
 	std::string neuronName;
 	//create neuron name
-	neuronName = neuronController.genNeuronName(1, 'o');
+	neuronName = neuronController.genNeuronName(0, 'o');
 
 	OutputNeuron on = OutputNeuron(neuronName, _hiddenLayer.size());
 
@@ -148,7 +148,7 @@ void Net::buildOutputLayer(){
 	//well quite simply, every neuron in the previous layer points to this neuron
 	for(unsigned int j = 0; j < on._numIncomingWeights; j++){
 			
-		weightname = weightController.genWeightName(j, 'h', 1, 'o');
+		weightname = weightController.genWeightName(j, 'h', 0, 'o');
 		on._incomingWeights.push_back(findWeightIndex(weightname));
 	}
 	on._sumOfIncomingtWeights = sumWeights(on._incomingWeights);
