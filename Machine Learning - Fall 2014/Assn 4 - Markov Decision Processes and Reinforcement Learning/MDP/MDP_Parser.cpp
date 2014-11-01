@@ -35,100 +35,103 @@ State MDP_Parser::getNextState(std::string& line)
 		//make a state, we're going to grab some more values from the file to put in here,
 		State state;
 
-		//next were going to grab the next bit of the file encapsulated in parens. 
-		//It should look something like (a1 s1 0.5) or some variation of that
-		//we're going to strip the parens and put that string in actionNode
+		
 		prev = next;
-		next = line.find_first_of("(", prev);
-		prev = next + 1;
-		next = line.find_first_of(")", prev);
-		std::string actionNode = line.substr(prev, next - prev);
 
-		//get the first token of actionNode, it should be something like a1, indicating which action is being described
-		prev = 0; next = 0;
-		next = actionNode.find_first_of(delim, prev);
-		token = actionNode.substr(prev, next - prev);
-		unsigned int actionNum = extractNumberFromToken(token);
+		while(next != line.size() - 1){
+			//next were going to grab the next bit of the file encapsulated in parens. 
+			//It should look something like (a1 s1 0.5) or some variation of that
+			//we're going to strip the parens and put that string in actionNode
+			next = line.find_first_of("(", prev);
+			prev = next + 1;
+			next = line.find_first_of(")", prev);
+			std::string actionNode = line.substr(prev, next - prev);
+			prev = next;
 
-		//do a check to see if this action has been described before for this state, or if a new action is being described
-
-		unsigned int prevActionNum = 0;
-		int stateChangeTo;
-		float probability;
-
-		while((next = line.find_first_of("a", prev)) != std::string::npos){
-			
-				//if the token we got is not an empty string, add it to _attrNames
-				if(next - prev != 0){
-					prev += 1;
-					actionNum = atoi(&line[prev]);
-					if(actionNum != prevActionNum){//then we have found a new action variable
-						state.actions.push_back(*new ActionVariable());
-					}
-					else{//we found another possibility for the current variable
-						
-						//get the first token which has the state num
-						next = line.find_first_of("s", prev);
-						next +=1;
-						stateChangeTo = atoi(&line[prev]);
-						prev = next + 1;
-
-						//get the second token which has the probability
-						next = line.find_first_of(delim, prev);
-						next += 1;
-						probability = atof(line.substr(next, line.find_first_of(delim, next)).c_str());
-
-						//make a new possibility and add it to the current action of the current state
-						Possibility possibility;
-						possibility.stateChangeTo = stateChangeTo;
-						possibility.probability = probability;
-						state.actions.back().possibilities.back() =   possibility;
-					}
-				}
-				//update the placeholder
-				prev = next + 1;
-			}
-
-			//reset some variables for the next loop around
-			prev = 0; next = 0;
+			//this will parse the data for this possibility and figure whether to add it to an existing ActionVar or a new ActionVar
+			getAndSetNextActionVariablePossibility(state, actionNode);
+		}
+		
 	return state;
 }
 
-ActionVariable MDP_Parser::getNextAction()
-{
-	return *new ActionVariable();
-}
+void MDP_Parser::getAndSetNextActionVariablePossibility(State& state, std::string& actionNode)
 
-Possibility MDP_Parser::getNextActionVariablePossibility()
 {
-	return *new Possibility;
+	//delimiters include tab and space
+		const char* delim = " \t";
+
+	//get the first token of actionNode, it should be something like a1, indicating which action is being described
+		size_t prev = 0; size_t next = 0;
+		next = actionNode.find_first_of(delim, prev);
+		std::string token = actionNode.substr(prev, next - prev);
+		unsigned int actionNum = extractNumberFromToken(token);
+
+		//inside each ActionVariable is a set of Possibilities.
+		std::vector<Possibility>* possibilities;
+		
+		//do a check to see if this action has been described before for this state, or if a new action is being described		
+		if(state.actions.size() < actionNum){
+			//new action being defined
+			ActionVariable action;
+			state.actions.push_back(action);
+
+			//the new possibility will be added to the new ActionVariable we just made
+			possibilities = &state.actions.back().possibilities;
+		}
+		else{
+			//we take the previously defined action of the same number and we're going to add this possibility
+			possibilities = &state.actions[actionNum - 1].possibilities;
+		}
+
+		//get the next token.  This token will specify the state change for this possibility
+		prev = next + 1;
+		next = actionNode.find_first_of(delim, prev);
+		token = actionNode.substr(prev, next - prev);
+		int changeToState = extractNumberFromToken(token);
+
+		//get the next token.  This token will specify the probability of the state change just described
+		prev = next + 1;
+		next = actionNode.find_first_of(delim, prev);
+		token = actionNode.substr(prev, next - prev);
+		float probability = extractNumberFromToken(token);
+
+		//Make Possibility and populate it with state change and probability
+		Possibility possibility;
+		possibility.stateChangeTo = changeToState;
+		possibility.probability = probability;
+
+		//add it to the current state
+		possibilities->push_back(possibility);
 }
 
 MDP MDP_Parser::getStuff(const char* filename)
 {
+	MDP mdp;
+	
 	std::ifstream file(filename);
 	std::string line;
 
 	while(getline(file, line)){
-		getNextState(line);
+		mdp.states.push_back(getNextState(line));
 	}
 	file.close();
-	MDP mdp;
+	
 	return mdp;
 }
 
 //utils
-int MDP_Parser::extractNumberFromToken(std::string token){
+float MDP_Parser::extractNumberFromToken(std::string token){
 
 	std::string num;
 
 	for(int i = 0; i < token.length(); i++){
 		
-		if(isdigit(token[i]) ){
+		if(isdigit(token[i]) || token[i] == '.' ){
 			//append one copy of the char at token[i]
 			num.append(1, token[i]);
 		}
 	}
 
-	return atoi(num.c_str());
+	return atof(num.c_str());
 }

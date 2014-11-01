@@ -25,14 +25,12 @@ private:
 public:
 	State getNextState(std::string& line);
 
-	ActionVariable getNextAction();
-
-	Possibility getNextActionVariablePossibility();
+	void getAndSetNextActionVariablePossibility(State& state, std::string& actionNode);
 
 	MDP getStuff(const char* filename);
 
 	//utils
-	int extractNumberFromToken(std::string token); 
+	float extractNumberFromToken(std::string token); 
 
 };
 #endif

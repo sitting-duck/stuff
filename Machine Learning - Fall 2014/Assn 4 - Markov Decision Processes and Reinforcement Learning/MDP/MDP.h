@@ -10,11 +10,15 @@
 #include "ActionVariable.h"
 #include "State.h"
 
+class MDP_Parser;
+
 class MDP
 {
 private:	
 
-	State states;
+	friend MDP_Parser;
+
+	std::vector<State> states;
 
 	float gamma;
 
