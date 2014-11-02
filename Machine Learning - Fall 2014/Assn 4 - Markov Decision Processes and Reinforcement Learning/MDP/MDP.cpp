@@ -18,7 +18,8 @@ void MDP::init(){
 	std::uniform_real_distribution<float> dist(0.0F, 100.0F);
 
 	for(int i = 0; i < states.size(); i++){
-		states[i].utility = dist(mt);
+		//states[i].utility = dist(mt);
+		states[i].utility = 0;
 	}
 
 }
@@ -66,30 +67,39 @@ ActionVariable* MDP::determineOptimalPolicy(unsigned int numIter)
 
 void MDP::makePolicy()
 {
-	float currentUtilFromSomeAction = 0;
-	float currentMaxUtil = 0;
+	float currentUtilFromSomeAction = 0 ;
+	float currentMaxUtil = (-1) * FLT_MAX ;
 
 	ActionVariable currentBestAction;
 	int currentActionIndex = -1;
 	int currentBestActionIndex = -1;
 
 	for(int i = 0; i < states.size(); i++){
+		
 		for(int j = 0; j < states[i].actions.size(); j++){
+			
 			ActionVariable currentAction = states[i].actions[j];
 			currentActionIndex = j;
+			//std::cout << "a" << j+ 1 << " ";
+
 			for(int k = 0; k < currentAction.possibilities.size(); k++){
 				Possibility currentPossibility = currentAction.possibilities[k];
 				currentUtilFromSomeAction += currentPossibility.probability * states[currentPossibility.stateChangeTo - 1].utility;
+				//std::cout << currentUtilFromSomeAction << " ";
 			}
-		
-			if(currentUtilFromSomeAction > currentMaxUtil){
+			
+			if(currentUtilFromSomeAction >= currentMaxUtil){
 				currentMaxUtil = currentUtilFromSomeAction;
 				currentBestAction = currentAction;
 				currentBestActionIndex = currentActionIndex;
 			}
+		
 		}
-		policy.push_back(currentBestActionIndex);
+
+		//std::cout << std::endl;
+		policy.push_back(currentBestActionIndex + 1);
 	}
+
 }
 
 void MDP::updateUtilities(){
@@ -105,6 +115,6 @@ ActionVariable MDP::Bellman(State& state)
 
 void MDP::printPolicy(){
 	for(int i = 0; i < policy.size(); i++){
-		std::cout << "(s" << i + 1 << " a" << policy[i] << " " << std::setprecision(3) << states[i].utility << ") ";
+		std::cout << "(s" << i + 1 << " a" << policy[i] << " " << std::fixed << std::setprecision(3) << states[i].utility << ") ";
 	}std::cout << std::endl;
 }

@@ -21,12 +21,14 @@ void main(int argc, char* argv[]){
 	//this mainly sets the utilities of all the states to random nums 0.0-100.0. 
 	mdp.init();
 
-	for(int n = 0; n < 5; n++){
-		mdp.makePolicy();
+	for(int n = 0; n < 20; n++){
 		
 		mdp.updateUtilities();
+		
+		mdp.makePolicy();				
 
-		std::cout << "after iter " << n << " " ; mdp.printPolicy();
+		std::cout << "after iter " << n << " " << std::endl << "\t\t";
+		mdp.printPolicy();
 
 		mdp.policy.clear();
 	}

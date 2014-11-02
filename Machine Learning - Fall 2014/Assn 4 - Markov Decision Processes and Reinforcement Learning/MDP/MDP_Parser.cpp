@@ -30,7 +30,7 @@ State MDP_Parser::getNextState(std::string& line)
 		prev = next + 1;
 		next = line.find_first_of(delim, prev);
 		token = line.substr(prev, next - prev);
-		int rewardForState = extractNumberFromToken(token);
+		float rewardForState = extractNumberFromToken(token);
 
 		//make a state, we're going to grab some more values from the file to put in here,
 		State state;
@@ -38,11 +38,12 @@ State MDP_Parser::getNextState(std::string& line)
 		
 		prev = next;
 
-		while(next != line.size() - 1){
+		while(next <= line.size() - 1){
 			//next were going to grab the next bit of the file encapsulated in parens. 
 			//It should look something like (a1 s1 0.5) or some variation of that
 			//we're going to strip the parens and put that string in actionNode
 			next = line.find_first_of("(", prev);
+			if(next >= line.size() -1){break;}
 			prev = next + 1;
 			next = line.find_first_of(")", prev);
 			std::string actionNode = line.substr(prev, next - prev);
@@ -114,6 +115,7 @@ MDP MDP_Parser::getStuff(const char* filename)
 
 	while(getline(file, line)){
 		mdp.states.push_back(getNextState(line));
+		line.clear();
 	}
 	file.close();
 	
@@ -127,7 +129,7 @@ float MDP_Parser::extractNumberFromToken(std::string token){
 
 	for(int i = 0; i < token.length(); i++){
 		
-		if(isdigit(token[i]) || token[i] == '.' ){
+		if(isdigit(token[i]) || token[i] == '.' || token[i] == '-' ){
 			//append one copy of the char at token[i]
 			num.append(1, token[i]);
 		}
