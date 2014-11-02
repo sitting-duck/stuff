@@ -11,11 +11,13 @@
 #include "Possibility.h"
 
 class MDP_Parser;
+class MDP;
 
 class ActionVariable
 {
 
 	friend MDP_Parser;
+	friend MDP;
 
 private:
 	std::vector<Possibility> possibilities;

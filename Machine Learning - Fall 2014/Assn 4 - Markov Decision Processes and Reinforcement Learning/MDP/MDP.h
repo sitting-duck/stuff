@@ -22,12 +22,14 @@ private:
 
 	float gamma;
 
-	ActionVariable* policy;
+	std::vector<unsigned int> policy;
 
-	ActionVariable* optimalPolicy;
+	std::vector<unsigned int> optimalPolicy;
 
 
 public:
+
+	void init();
 
 	float reward(State& state);
 
@@ -37,9 +39,15 @@ public:
 
 	ActionVariable* determineOptimalPolicy(unsigned int numIter);
 
-	ActionVariable* makePolicy();
+	void makePolicy();
+
+	void updateUtilities();
 
 	ActionVariable Bellman(State& state);
+
+	void printPolicy();
+
+	friend void main(int argc, char* argv[]);
 
 };
 #endif

@@ -8,11 +8,13 @@
 #include <assert.h>
 
 class MDP_Parser;
+class MDP;
 
 class Possibility
 {
 
 	friend MDP_Parser;
+	friend MDP;
 
 private:
 	int stateChangeTo;

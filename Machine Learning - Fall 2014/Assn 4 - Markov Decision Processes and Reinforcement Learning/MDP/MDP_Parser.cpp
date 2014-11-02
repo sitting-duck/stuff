@@ -34,7 +34,7 @@ State MDP_Parser::getNextState(std::string& line)
 
 		//make a state, we're going to grab some more values from the file to put in here,
 		State state;
-
+		state.reward = rewardForState;
 		
 		prev = next;
 

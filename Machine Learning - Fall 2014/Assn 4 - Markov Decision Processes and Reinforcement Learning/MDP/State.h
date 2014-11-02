@@ -11,10 +11,12 @@
 #include "ActionVariable.h"
 
 class MDP_Parser;
+class MDP;
 
 class State
 {
 	friend MDP_Parser;
+	friend MDP;
 
 private:
 	float reward;
