@@ -26,3 +26,5 @@
 *.dsp
 *.dsw
 *.htm
+*.idea
+*.xml
