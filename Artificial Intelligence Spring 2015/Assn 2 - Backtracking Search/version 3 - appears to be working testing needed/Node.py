@@ -15,4 +15,4 @@ class Node:
         #    print var.name + ": " + str(self.assignment[var])
         #print "\n"
 
-        print(str(self.assignment)),
+        print str(self.assignment)

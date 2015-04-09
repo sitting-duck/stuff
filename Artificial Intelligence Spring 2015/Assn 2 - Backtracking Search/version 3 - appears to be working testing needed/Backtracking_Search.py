@@ -5,11 +5,10 @@ import operator
 import copy
 from Node import Node
 from Backtracking_Search_Heuristics import Backtracking_Search_Heuristics
-import sys
 
 class Backtracking_Search:
 
-    def __init__(self, cspArg, forwardCheckingArg):
+    def __init__(self, cspArg):
 
         # the csp problem we are trying to solve
         self.csp = copy.deepcopy(cspArg)
@@ -28,12 +27,11 @@ class Backtracking_Search:
 
         self.bsh = Backtracking_Search_Heuristics()
 
-        if forwardCheckingArg == "none":
-            self.forwardChecking = False
-        else:
-            self.forwardChecking = True
-
     def backtrack(self, currentNode):
+        print "call"
+        print "current csp vars"
+        for var in currentNode.currentcsp.variables:
+            print var.name
 
         # if the assignment of the current node is valid then we return it as the solution
         if self.csp.isCompleteAndValid(self.currentNode.assignment):
@@ -44,29 +42,28 @@ class Backtracking_Search:
             return False
         else:
             currentVariable = self.bsh.chooseNextVariable(currentNode.currentcsp)
+            print "currentVar is : " + currentVariable.name
 
         # and remove it from the list of available variables
         currentNode.currentcsp.variables.remove(currentVariable)
 
         # get the values from this variables domain and put them in the order that we want to test them
         sortedVarValues = self.bsh.getOrderedValues(currentVariable, self.currentNode)
-        newChildren = self.bsh.createChildNodes(sortedVarValues, currentNode, currentVariable, self.forwardChecking)
+        newChildren = self.bsh.createChildNodes(sortedVarValues, currentNode, currentVariable)
 
         for child in newChildren:
-            #print "current child assn: " + str(child.assignment)
+            print "current child assn: " + str(child.assignment)
             if self.csp.isCompleteAndValid(child.assignment):
-                child.printAssignment()
-                print "solution"
-                sys.exit()
-                #print "finished with : "
-                #child.printAssignment
+                print "finished with : "
+                child.printAssignment
                 return True
 
-
             currentNode = child
-            currentNode.printAssignment()
-            print " failure"
+            #print "currentNode assn: " + str(currentNode.assignment)
             result = self.backtrack(currentNode)
+
+
+
 
         return False
 

@@ -26,7 +26,7 @@ if __name__ == "__main__":
     constraints = init.getConstraintsFromFile(args.constraintFileName)
     none = "none"
     csp = CSP(variables, constraints, none)
-    bsearch = Backtracking_Search(csp, args.consistencyEnforcingProcedureFlag)
+    bsearch = Backtracking_Search(csp)
 
     # start the search
     bsearch.backtrack(bsearch.root)
