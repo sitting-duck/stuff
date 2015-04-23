@@ -1,0 +1,29 @@
+//TEST CODE
+//in main.cpp
+
+	ID3 id3 = ID3();
+	BinaryTree tree = BinaryTree();
+	
+	//make some stuff to put in the tree so that we can test the printLevelOrder function of BinaryTree
+	Node herpNode = Node();
+	Attribute herpAttr = Attribute();
+	herpAttr.name = "herp";
+	herpNode.attribute = &herpAttr;
+	
+	Node derpNode = Node();
+	Attribute derpAttr = Attribute();
+	derpAttr.name = "derp";
+	derpNode.attribute = &derpAttr;
+	
+	Node alerpNode = Node();
+	Attribute alerpAttr = Attribute();
+	alerpAttr.name = "alerp";
+	alerpNode.attribute = &alerpAttr;
+	
+	herpNode.left = &derpNode;
+	herpNode.right = &alerpNode;
+
+	tree.root = &herpNode;
+
+	tree.printLevelOrderTree();
+	return 0;
