@@ -4,15 +4,30 @@ package ctf.agent;
 import ctf.common.AgentEnvironment;
 import ctf.agent.Agent;
 
+import java.lang.System;
+import java.util.ArrayList;
+
 import ctf.common.AgentAction;
 
 public class Tharpoon extends Agent {
 
+    private static int MAX_NUM_AGENTS = 2;
+
     private static int numAgents;
 
+    private int agentNum;
+
+    //private static localMap;
+
     public Tharpoon(){
-        numAgents++;
-        System.out.println("added agent "+ numAgents);
+        if(numAgents == MAX_NUM_AGENTS){
+            numAgents = 0;
+        }
+        if(numAgents < MAX_NUM_AGENTS){
+            numAgents++;
+            agentNum = numAgents;
+            System.out.println("added agent " + agentNum);
+        }
     }
 
     // implements Agent.getMove() interface
@@ -25,7 +40,7 @@ public class Tharpoon extends Agent {
         boolean goalEast;
         boolean goalWest;
 
-
+        //if this agent doesn't have the enemy flag
         if( !inEnvironment.hasFlag() ) {
             // make goal the enemy flag
             goalNorth = inEnvironment.isFlagNorth(
@@ -158,5 +173,4 @@ public class Tharpoon extends Agent {
             return AgentAction.DO_NOTHING;
         }
     }
-
 }
