@@ -123,7 +123,7 @@ SkelParser::TokenState SkelParser::gotBallJointToken(std::string& _str)
 	std::string jointName = getNextToken();
 
 	//check that the string is a valid joint name
-	std::regex var_name_regex(R"([a-zA-Z_][a-zA -Z_\d]*)");
+	std::regex var_name_regex("[a-zA-Z_][a-zA -Z_\\d]*");
 	if(!regex_search(jointName, var_name_regex)){
 		std::cout << "Error: invalid joint name " << jointName << "found." << std::endl;
 		return end;
