@@ -17,11 +17,35 @@ public class Tharpoon extends Agent {
 
     private int agentNum;
 
-    //private static localMap;
+    private Boolean isBaseFound = false;
+
+    // booleans describing direction of goal
+    // goal is either enemy flag, or our base
+    private boolean goalNorth;
+    private boolean goalSouth;
+    private boolean goalEast;
+    private boolean goalWest;
+
+    private boolean obstNorth;
+    private boolean obstSouth;
+    private boolean obstEast;
+    private boolean obstWest;
+
+    //map stuff
+    private static int knownMapHeight = 0;
+    private static int knownMapLength = 0;
+
+    //local map for keeping track of stuff until we make the global map
+    private ArrayList<ArrayList<String>> localMap;
+
+    //global map so all agents know about our environment
+    private ArrayList<ArrayList<String>> globalMap;
 
     public Tharpoon(){
         if(numAgents == MAX_NUM_AGENTS){
             numAgents = 0;
+            private static int knownMapHeight = 0;
+            private static int knownMapLength = 0;
         }
         if(numAgents < MAX_NUM_AGENTS){
             numAgents++;
@@ -33,12 +57,28 @@ public class Tharpoon extends Agent {
     // implements Agent.getMove() interface
     public int getMove( AgentEnvironment inEnvironment ) {
 
-        // booleans describing direction of goal
-        // goal is either enemy flag, or our base
-        boolean goalNorth;
-        boolean goalSouth;
-        boolean goalEast;
-        boolean goalWest;
+        if(isBaseFound == false){
+            //at this point we know that the base is north or south of us because the agents are started on
+            //the same column as the base as far north or south as possible.
+
+            //check to see if the base is north of us
+            if(inEnvironment.isFlagNorth(inEnvironment.ENEMY_TEAM, false )){
+
+                //since it's north of us, check if it's immediately north of us
+                if(inEnvironment.isFlagNorth(inEnvironment.ENEMY_TEAM, true ) == false){
+                    //if the base was not immediately north of us then we have to get to it so we decide to go north
+                    
+                    return MOVE_NORTH;
+                }
+                else{
+                    //if it's immediately north of us we add our current knowledge to the global map
+
+                }
+            }
+
+        }
+
+
 
         //if this agent doesn't have the enemy flag
         if( !inEnvironment.hasFlag() ) {
@@ -74,10 +114,10 @@ public class Tharpoon extends Agent {
         // now we have direction booleans for our goal
 
         // check for immediate obstacles blocking our path
-        boolean obstNorth = inEnvironment.isObstacleNorthImmediate();
-        boolean obstSouth = inEnvironment.isObstacleSouthImmediate();
-        boolean obstEast = inEnvironment.isObstacleEastImmediate();
-        boolean obstWest = inEnvironment.isObstacleWestImmediate();
+        obstNorth = inEnvironment.isObstacleNorthImmediate();
+        obstSouth = inEnvironment.isObstacleSouthImmediate();
+        obstEast = inEnvironment.isObstacleEastImmediate();
+        obstWest = inEnvironment.isObstacleWestImmediate();
 
 
         // if the goal is north only, and we're not blocked
