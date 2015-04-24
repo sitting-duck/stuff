@@ -91,10 +91,9 @@ public class Tharpoon extends Agent {
         Boolean baseImmediatelyNorth = inEnvironment.isBaseNorth(inEnvironment.OUR_TEAM, true);
         Boolean baseImmediatelySouth = inEnvironment.isBaseSouth(inEnvironment.OUR_TEAM, true);
 
-        if((baseNorth && baseImmediatelyNorth) || (baseSouth && baseImmediatelySouth)){
+        if(((baseNorth && baseImmediatelyNorth) || (baseSouth && baseImmediatelySouth)) && !haveBothAgentsFoundTheBase) {
             //we know that the base is immediately above or below us
             knownMapHeight++;
-            isBaseFound = true;
             hasAgentIFoundBase[agentNum - 1] = true;
             System.out.println("agent " + agentNum + " found the base");
 
@@ -103,22 +102,20 @@ public class Tharpoon extends Agent {
             //that the map is odd size one agent will find the base one turn before the other,
             //do nothing until the other agent finds the base
             //The agent that finds the base first will do nothing until the other agent finds the base.
-            for(int i = 0; i < numAgents; i++){
+            for (int i = 0; i < numAgents; i++) {
                 //System.out.print("a" + i + " found base: " + hasAgentIFoundBase[i]);
-                System.out.println("but both agents have not found the base");
-                if(hasAgentIFoundBase[i] == false){
+                if (hasAgentIFoundBase[i] == false) {
+                    System.out.println("but the other agent has not found the base");
                     return AgentAction.DO_NOTHING;
                 }
-            }System.out.println();
-
+            }
             haveBothAgentsFoundTheBase = true;
             System.out.println("both agents have now found the base");
             return caseBothAgentsHaveFoundTheBase(inEnvironment);
-        }
-        else {
+        else{
             //We know that the base is north or south of us, and that we are not immediately next to it
             knownMapHeight++;
-            spacesTravelledToBaseInPhaseOne[agentNum-1]++;
+            spacesTravelledToBaseInPhaseOne[agentNum - 1]++;
             System.out.println("agent " + agentNum + " moved " + ((baseNorth) ? ("north") : ("south")));
             return (baseNorth) ? (AgentAction.MOVE_NORTH) : (AgentAction.MOVE_SOUTH);
         }
