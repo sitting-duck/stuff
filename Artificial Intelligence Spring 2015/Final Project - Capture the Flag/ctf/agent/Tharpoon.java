@@ -18,6 +18,7 @@ public class Tharpoon extends Agent {
     private static int MAX_NUM_AGENTS = 2;
     private static int numAgents;
     private int agentNum;
+    private boolean hasFlag;
 
     private static int[] seekBaseDistance = {1, 1};
     private static boolean haveBothAgentsFoundTheBase = false;
@@ -49,6 +50,11 @@ public class Tharpoon extends Agent {
     private boolean enemyBaseSouthImmediate;
     private boolean enemyBaseEastImmediate;
     private boolean enemyBaseWestImmediate;
+
+    boolean enemyNorthImmediate;
+    boolean enemyEastImmediate;
+    boolean enemySouthImmediate;
+    boolean enemyWestImmediate;
 
     //map stuff
     private static int knownMapHeight = 2;
@@ -119,15 +125,12 @@ public class Tharpoon extends Agent {
         pointsOfInterest.add(enemyBase);
     }
 
-    // implements Agent.getMove() interface
     public int getMove( AgentEnvironment inEnvironment ) {
         int whatToDo = AgentAction.DO_NOTHING;
         queryEnvironment(inEnvironment);
 
         switch(currentState){
             case INITIALIZE:
-                //PHASE ONE: (Find our base , start a map) at this point we know that the base is north or south of us because the agents are started on
-                //the same column as the base as far north or south as possible.
                 if(haveBothAgentsFoundTheBase == false){
                     whatToDo = seekBase_InitializeMap(inEnvironment);
                 }
@@ -158,54 +161,213 @@ public class Tharpoon extends Agent {
 
     public int seek(Place place){
         int whatToDo = AgentAction.DO_NOTHING;
+
+        if(hasFlag){
+            currentState = state.SEEK_OUR_BASE;
+            place = ourBase;
+        }else{
+            currentState = state.SEEK_ENEMY_BASE;
+            place = enemyBase;
+        }
+
         switch(place.dir){
             case NORTH:
-                whatToDo = AgentAction.MOVE_NORTH;
+                if(!obstNorth) {
+                    if (!hasFlag || !enemyNorthImmediate) {
+                        whatToDo = AgentAction.MOVE_NORTH;
+                    }else if(!hasFlag || !enemyEastImmediate){
+                        whatToDo = AgentAction.MOVE_EAST;
+                    } else if(!hasFlag || !enemyWestImmediate){
+                        whatToDo = AgentAction.MOVE_WEST;
+                    }else if(!hasFlag || !enemySouthImmediate){
+                        whatToDo = AgentAction.MOVE_SOUTH;
+                    }else{
+                        whatToDo = AgentAction.DO_NOTHING;
+                    }
+                }else if(Math.random() < 0.5 && !obstEast){
+                    whatToDo = AgentAction.MOVE_EAST;
+                }else if(!obstWest){
+                    whatToDo = AgentAction.MOVE_WEST;
+                }else{
+                    whatToDo = AgentAction.MOVE_SOUTH;
+                }
                 break;
             case NORTHEAST:
-                whatToDo = (Math.random() < 0.5) ? (AgentAction.MOVE_NORTH) : (AgentAction.MOVE_EAST);
+                /*if(!obstNorth && !obstEast){
+                    whatToDo = (Math.random() < 0.75) ? (AgentAction.MOVE_EAST) : (AgentAction.MOVE_NORTH);
+                }else{
+                    if(!obstWest){
+                        whatToDo = AgentAction.MOVE_WEST;
+                    }
+                    else{
+                        whatToDo = AgentAction.MOVE_EAST;
+                    }
+                }*/
+
+                if(!obstEast){
+                    whatToDo = AgentAction.MOVE_EAST;
+                }else if(!obstNorth){
+                    whatToDo = AgentAction.MOVE_NORTH;
+                }else if(!obstSouth){
+                    whatToDo = AgentAction.MOVE_SOUTH;
+                }else if(!obstWest){
+                    whatToDo = AgentAction.MOVE_WEST;
+                }
                 break;
             case EAST:
-                whatToDo = AgentAction.MOVE_EAST;
+                if(!obstEast) {
+                    if (!hasFlag || !enemyEastImmediate) {
+                        whatToDo = AgentAction.MOVE_EAST;
+                    }else if(!hasFlag || !enemyNorthImmediate){
+                        whatToDo = AgentAction.MOVE_NORTH;
+                    } else if(!hasFlag || !enemySouthImmediate){
+                        whatToDo = AgentAction.MOVE_SOUTH;
+                    }else if(!hasFlag || !enemyWestImmediate){
+                        whatToDo = AgentAction.MOVE_WEST;
+                    }else{
+                        whatToDo = AgentAction.DO_NOTHING;
+                    }
+                }else if(Math.random() < 0.5 && !obstNorth){
+                    whatToDo = AgentAction.MOVE_NORTH;
+                }
+                else if(!obstSouth){
+                    whatToDo = AgentAction.MOVE_SOUTH;
+                }
+                else{
+                    whatToDo = AgentAction.MOVE_WEST;
+                }
                 break;
             case SOUTHEAST:
-                whatToDo = (Math.random() < 0.5) ? (AgentAction.MOVE_SOUTH) : (AgentAction.MOVE_EAST);
+                /*if(!obstSouth && !obstEast){
+                    whatToDo = (Math.random() < 0.75) ? (AgentAction.MOVE_EAST) : (AgentAction.MOVE_SOUTH);
+                }else{
+                    if(!obstWest){
+                        whatToDo = AgentAction.MOVE_WEST;
+                    }
+                    else{
+                        whatToDo = AgentAction.MOVE_NORTH;
+                    }
+                }*/
+                if(!obstEast){
+                    whatToDo = AgentAction.MOVE_EAST;
+                }else if(!obstSouth){
+                    whatToDo = AgentAction.MOVE_SOUTH;
+                }else if(!obstNorth){
+                whatToDo = AgentAction.MOVE_NORTH;
+                }else if(!obstWest){
+                    whatToDo = AgentAction.MOVE_WEST;
+                }
                 break;
             case SOUTH:
-                whatToDo = AgentAction.MOVE_SOUTH;
+                if(!obstSouth){
+                    if (!hasFlag || !enemySouthImmediate) {
+                        whatToDo = AgentAction.MOVE_SOUTH;
+                    }else if(!hasFlag || !enemyEastImmediate){
+                        whatToDo = AgentAction.MOVE_EAST;
+                    } else if(!hasFlag || !enemyWestImmediate){
+                        whatToDo = AgentAction.MOVE_WEST;
+                    }else if(!hasFlag || !enemyNorthImmediate){
+                        whatToDo = AgentAction.MOVE_NORTH;
+                    }else{
+                        whatToDo = AgentAction.DO_NOTHING;
+                    }
+                }
+                else if(Math.random() < 0.5 && !obstEast){
+                    whatToDo = AgentAction.MOVE_EAST;
+                }
+                else if(!obstWest){
+                    whatToDo = AgentAction.MOVE_WEST;
+                }
+                else{
+                    whatToDo = AgentAction.MOVE_NORTH;
+                }
                 break;
             case SOUTHWEST:
-                whatToDo = (Math.random() < 0.5) ? (AgentAction.MOVE_SOUTH) : (AgentAction.MOVE_WEST);
+                /*if(!obstSouth && !obstWest){
+                    whatToDo = (Math.random() < 0.75) ? (AgentAction.MOVE_WEST) : (AgentAction.MOVE_SOUTH);
+                }else{
+                    if(!obstEast){
+                        whatToDo = AgentAction.MOVE_EAST;
+                    }
+                    else{
+                        whatToDo = AgentAction.MOVE_NORTH;
+                    }
+                }*/
+                if(!obstWest){
+                    whatToDo = AgentAction.MOVE_WEST;
+                }else if(!obstSouth){
+                    whatToDo = AgentAction.MOVE_SOUTH;
+                }else if(!obstNorth){
+                    whatToDo = AgentAction.MOVE_NORTH;
+                }else if(!obstEast){
+                    whatToDo = AgentAction.MOVE_EAST;
+                }
                 break;
             case WEST:
-                whatToDo = AgentAction.MOVE_WEST;
+                if(!obstWest){
+                    if (!hasFlag || !enemyWestImmediate) {
+                        whatToDo = AgentAction.MOVE_WEST;
+                    }else if(!hasFlag || !enemyNorthImmediate){
+                        whatToDo = AgentAction.MOVE_NORTH;
+                    } else if(!hasFlag || !enemySouthImmediate){
+                        whatToDo = AgentAction.MOVE_SOUTH;
+                    }else if(!hasFlag || !enemyEastImmediate){
+                        whatToDo = AgentAction.MOVE_EAST;
+                    }else{
+                        whatToDo = AgentAction.DO_NOTHING;
+                    }
+                }else if(Math.random() < 0.5 && !obstNorth){
+                    whatToDo = AgentAction.MOVE_NORTH;
+                }
+                else if(!obstSouth){
+                    whatToDo = AgentAction.MOVE_SOUTH;
+                }else{
+                    whatToDo = AgentAction.MOVE_EAST;
+                }
                 break;
             case NORTHWEST:
-                whatToDo = (Math.random() < 0.5) ? (AgentAction.MOVE_NORTH) : (AgentAction.MOVE_WEST);
+                /*if(!obstNorth && !obstWest){
+                    whatToDo = (Math.random() < 0.75) ? (AgentAction.MOVE_WEST) : (AgentAction.MOVE_NORTH);
+                }else{
+                    if(!obstEast){
+                        whatToDo = AgentAction.MOVE_EAST;
+                    }
+                    else{
+                        whatToDo = AgentAction.MOVE_SOUTH;
+                    }
+                }*/
+                if(!obstNorth){
+                    whatToDo = AgentAction.MOVE_NORTH;
+                }else if(!obstWest){
+                    whatToDo = AgentAction.MOVE_WEST;
+                }else if(!obstSouth){
+                    whatToDo = AgentAction.MOVE_SOUTH;
+                }else if(!obstEast){
+                    whatToDo = AgentAction.MOVE_EAST;
+                }
                 break;
         }
-        //System.out.println("Agent " + agentNum + " moved " + getDirectionName(place.dir));
         return whatToDo;
     }
 
     public String getNameFromAgentAction(int action){
-        String name = "do nothing";
+        String name = "does nothing";
 
         switch(action){
             case AgentAction.MOVE_NORTH:
-                name = "north";
+                name = "moves north";
                 break;
             case AgentAction.MOVE_EAST:
-                name = "east";
+                name = "moves east";
                 break;
             case AgentAction.MOVE_SOUTH:
-                name = "south";
+                name = "moves south";
                 break;
             case AgentAction.MOVE_WEST:
-                name = "west";
+                name = "moves west";
                 break;
             case AgentAction.PLANT_HYPERDEADLY_PROXIMITY_MINE:
-                name = "plant mine";
+                name = "plants a mine";
                 break;
         }
         return name;
@@ -244,33 +406,38 @@ public class Tharpoon extends Agent {
                 return AgentAction.DO_NOTHING;
             }
         }
-        haveBothAgentsFoundTheBase = true;
-        System.out.println("both agents have now found the base");
-
         return bothAgentsFoundBase(inEnvironment);
     }
 
     public int bothAgentsFoundBase(AgentEnvironment inEnvironment){
+        haveBothAgentsFoundTheBase = true;
+        System.out.println("both agents have now found the base");
         map = makeEmptyMap();
         setBaseCoordinates();
         setMyPosition();
         setAgentPositions();
         mapInitialized = true;
-        return AgentAction.DO_NOTHING;
+        return seek(enemyBase);
     }
 
     public void setAgentPositions(){
         agentPositions.get(agentNum - 1).set(myPosition.x, myPosition.y);
+        setMapSquare(myPosition, 'a');
         System.out.println("agent " + agentNum + " has position (" + myPosition.x + ", " + myPosition.y + ")");
         int otherAgent = (agentNum == 1) ? (2) : (1);
         Integer otherAgentY = (ourBaseSouth) ? (myPosition.y + 2) : (myPosition.y -2);
         agentPositions.get(otherAgent - 1).set(myPosition.x, otherAgentY);
+        setMapSquare(agentPositions.get(otherAgent-1), 'a');
         System.out.println("agent " + otherAgent + " has position (" + myPosition.x + ", " + otherAgentY + ")");
     }
 
     public void setMyPosition(){
         myPosition.x = (enemyBaseEast) ? (1) : (knownMapHeight);
         myPosition.y = (ourBaseNorth) ? (ourBaseY + 1) : (ourBaseY - 1);
+    }
+
+    public void setMapSquare(Coordinate<Integer> pos, char c){
+        map[pos.x -1][pos.y-1] = c;
     }
 
     public void setBaseCoordinates(){
@@ -360,6 +527,9 @@ public class Tharpoon extends Agent {
 
     public void queryEnvironment(AgentEnvironment inEnvironment){
 
+        //do I currently have the flag
+        hasFlag = inEnvironment.hasFlag();
+
         //direction of our base
         ourBaseWest = inEnvironment.isBaseWest(inEnvironment.OUR_TEAM, false);
         ourBaseEast = inEnvironment.isBaseEast(inEnvironment.OUR_TEAM, false);
@@ -376,7 +546,7 @@ public class Tharpoon extends Agent {
         enemyBaseEast = inEnvironment.isBaseEast(inEnvironment.ENEMY_TEAM, false);
         enemyBaseWest = inEnvironment.isBaseWest(inEnvironment.ENEMY_TEAM, false);
         enemyBaseNorth = inEnvironment.isBaseNorth(inEnvironment.ENEMY_TEAM, false);
-        enemyBaseSouth = inEnvironment.isBaseNorth(inEnvironment.ENEMY_TEAM, false);
+        enemyBaseSouth = inEnvironment.isBaseSouth(inEnvironment.ENEMY_TEAM, false);
 
         //immediate presence of enemy base
         enemyBaseEastImmediate = inEnvironment.isBaseEast(inEnvironment.ENEMY_TEAM, true);
@@ -389,6 +559,12 @@ public class Tharpoon extends Agent {
         obstSouth = inEnvironment.isObstacleSouthImmediate();
         obstEast = inEnvironment.isObstacleEastImmediate();
         obstWest = inEnvironment.isObstacleWestImmediate();
+
+        //immediate presence of enemy
+        enemyNorthImmediate = inEnvironment.isAgentNorth(inEnvironment.ENEMY_TEAM, true);
+        enemyEastImmediate = inEnvironment.isAgentEast(inEnvironment.ENEMY_TEAM, true);
+        enemySouthImmediate = inEnvironment.isAgentSouth(inEnvironment.ENEMY_TEAM, true);
+        enemyWestImmediate = inEnvironment.isAgentWest(inEnvironment.ENEMY_TEAM, true);
 
         //update the direction for all points of interest
         for(int i = 0; i < pointsOfInterest.size(); i++){
