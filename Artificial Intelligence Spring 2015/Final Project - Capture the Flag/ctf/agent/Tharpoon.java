@@ -53,6 +53,10 @@ public class Tharpoon extends Agent {
     //map stuff
     private static int knownMapHeight = 2;
     private static boolean mapInitialized = false;
+
+    Place ourBase;
+    Place enemyBase;
+    ArrayList<Place> pointsOfInterest;
     private int ourBaseX;
     private int ourBaseY;
     private int enemyBaseX;
@@ -62,6 +66,13 @@ public class Tharpoon extends Agent {
     private enum direction {NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST}
     private enum state {INITIALIZE, SEEK_ENEMY_BASE, SEEK_OUR_BASE, RETRIEVE_FRIENDLY_FLAG }
     private state currentState;
+
+    public class Place{
+        Place(String name){this.name = name;}
+        String name;
+        direction dir;
+        Coordinate<Integer> position;
+    }
 
     public class Coordinate<N> {
         public N x;
@@ -100,6 +111,12 @@ public class Tharpoon extends Agent {
         for(int i = 0; i < MAX_NUM_AGENTS; i++){
             agentPositions.add(new Coordinate<Integer>());
         }
+        ourBase = new Place("ourBase");
+        enemyBase = new Place("enemyBase");
+        pointsOfInterest = new ArrayList<Place>();
+
+        pointsOfInterest.add(ourBase);
+        pointsOfInterest.add(enemyBase);
     }
 
     // implements Agent.getMove() interface
@@ -115,16 +132,19 @@ public class Tharpoon extends Agent {
                     whatToDo = seekBase_InitializeMap(inEnvironment);
                 }
                 else{
-                    System.out.println("Agent " + agentNum + " stayed still");
+                    currentState = state.SEEK_ENEMY_BASE;
+                    System.out.println(" agent " + agentNum + " current state is SEEK_ENEMY_BASE");
                 }
                 break;
 
             case SEEK_ENEMY_BASE:
-                Boolean amIAtSpawnFlag = amIAtSpawn(inEnvironment);
+                printPointsOfInterest();
+                whatToDo = seek(enemyBase);
                 break;
 
             case SEEK_OUR_BASE:
-
+                printPointsOfInterest();
+                whatToDo = seek(ourBase);
                 break;
 
             default:
@@ -132,7 +152,63 @@ public class Tharpoon extends Agent {
                 whatToDo = AgentAction.DO_NOTHING;
                 break;
         }
+        System.out.println("agent " + agentNum + " " + getNameFromAgentAction(whatToDo));
         return whatToDo;
+    }
+
+    public int seek(Place place){
+        int whatToDo = AgentAction.DO_NOTHING;
+        switch(place.dir){
+            case NORTH:
+                whatToDo = AgentAction.MOVE_NORTH;
+                break;
+            case NORTHEAST:
+                whatToDo = (Math.random() < 0.5) ? (AgentAction.MOVE_NORTH) : (AgentAction.MOVE_EAST);
+                break;
+            case EAST:
+                whatToDo = AgentAction.MOVE_EAST;
+                break;
+            case SOUTHEAST:
+                whatToDo = (Math.random() < 0.5) ? (AgentAction.MOVE_SOUTH) : (AgentAction.MOVE_EAST);
+                break;
+            case SOUTH:
+                whatToDo = AgentAction.MOVE_SOUTH;
+                break;
+            case SOUTHWEST:
+                whatToDo = (Math.random() < 0.5) ? (AgentAction.MOVE_SOUTH) : (AgentAction.MOVE_WEST);
+                break;
+            case WEST:
+                whatToDo = AgentAction.MOVE_WEST;
+                break;
+            case NORTHWEST:
+                whatToDo = (Math.random() < 0.5) ? (AgentAction.MOVE_NORTH) : (AgentAction.MOVE_WEST);
+                break;
+        }
+        //System.out.println("Agent " + agentNum + " moved " + getDirectionName(place.dir));
+        return whatToDo;
+    }
+
+    public String getNameFromAgentAction(int action){
+        String name = "do nothing";
+
+        switch(action){
+            case AgentAction.MOVE_NORTH:
+                name = "north";
+                break;
+            case AgentAction.MOVE_EAST:
+                name = "east";
+                break;
+            case AgentAction.MOVE_SOUTH:
+                name = "south";
+                break;
+            case AgentAction.MOVE_WEST:
+                name = "west";
+                break;
+            case AgentAction.PLANT_HYPERDEADLY_PROXIMITY_MINE:
+                name = "plant mine";
+                break;
+        }
+        return name;
     }
 
     public int seekBase_InitializeMap(AgentEnvironment inEnvironment){
@@ -313,5 +389,81 @@ public class Tharpoon extends Agent {
         obstSouth = inEnvironment.isObstacleSouthImmediate();
         obstEast = inEnvironment.isObstacleEastImmediate();
         obstWest = inEnvironment.isObstacleWestImmediate();
+
+        //update the direction for all points of interest
+        for(int i = 0; i < pointsOfInterest.size(); i++){
+            if(pointsOfInterest.get(i).name == "ourBase"){
+                if(ourBaseNorth && ourBaseEast){
+                    pointsOfInterest.get(i).dir = direction.NORTHEAST;
+                }else if(ourBaseEast && ourBaseSouth){
+                    pointsOfInterest.get(i).dir = direction.SOUTHEAST;
+                }else if(ourBaseWest && ourBaseSouth){
+                    pointsOfInterest.get(i).dir = direction.SOUTHWEST;
+                } else if(ourBaseWest && ourBaseNorth){
+                    pointsOfInterest.get(i).dir = direction.NORTHWEST;
+                }else if(ourBaseNorth){
+                    pointsOfInterest.get(i).dir = direction.NORTH;
+                }else if(ourBaseEast){
+                    pointsOfInterest.get(i).dir = direction.EAST;
+                }else if(ourBaseWest){
+                    pointsOfInterest.get(i).dir = direction.WEST;
+                } else if(ourBaseSouth){
+                    pointsOfInterest.get(i).dir = direction.SOUTH;
+                }
+            }
+            else if (pointsOfInterest.get(i).name == "enemyBase"){
+                if(enemyBaseNorth && enemyBaseEast){
+                    pointsOfInterest.get(i).dir = direction.NORTHEAST;
+                }else if(enemyBaseEast && enemyBaseSouth){
+                    pointsOfInterest.get(i).dir = direction.SOUTHEAST;
+                }else if(enemyBaseWest && enemyBaseSouth){
+                    pointsOfInterest.get(i).dir = direction.SOUTHWEST;
+                } else if(enemyBaseWest && enemyBaseNorth){
+                    pointsOfInterest.get(i).dir = direction.NORTHWEST;
+                }else if(enemyBaseNorth){
+                    pointsOfInterest.get(i).dir = direction.NORTH;
+                }else if(enemyBaseEast){
+                    pointsOfInterest.get(i).dir = direction.EAST;
+                }else if(enemyBaseWest){
+                    pointsOfInterest.get(i).dir = direction.WEST;
+                } else if(enemyBaseSouth){
+                    pointsOfInterest.get(i).dir = direction.SOUTH;
+                }
+            }
+        }
+    }
+
+    String getDirectionName(direction dir){
+        switch(dir){
+            case NORTH:
+                return "north";
+            case NORTHEAST:
+                return "northeast";
+            case EAST:
+                return "east";
+            case SOUTHEAST:
+                return "southeast";
+            case SOUTH:
+                return "south";
+            case SOUTHWEST:
+                return "southwest";
+            case WEST:
+                return "west";
+            case NORTHWEST:
+                return "northwest";
+        }
+        return "error";
+    }
+
+    void printPointsOfInterest() {
+        System.out.print("agent " + agentNum + " ");
+        for(int i = 0; i < pointsOfInterest.size(); i++){
+
+            String name = pointsOfInterest.get(i).name;
+            direction dir = pointsOfInterest.get(i).dir;
+            System.out.print(name + ": " + getDirectionName(dir) + " ");
+        }
+        System.out.println();
     }
 }
+
