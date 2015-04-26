@@ -275,8 +275,8 @@ public class TharpoonOld extends Agent {
                 else{
                     whatToDo = AgentAction.MOVE_WEST;
                 }
-                break;
-            case SOUTHEAST:
+                breacase SOUTHEAST:k;
+
                 if(!obstEast){
                     whatToDo = AgentAction.MOVE_EAST;
                 }else if(!obstSouth && !(!hasFlag && myPosition.x == ourBase.position.x && myPosition.y == ourBase.position.y - 1)){
