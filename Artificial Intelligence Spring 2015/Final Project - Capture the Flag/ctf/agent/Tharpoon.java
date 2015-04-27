@@ -332,18 +332,18 @@ public class Tharpoon extends Agent {
 
         direction directionToGo = place.dir;
 
-        if(oscillatingMoveCheck()){
-            directionToGo = getDirectionFromAgentAction(getXMovesBack(2));
-        }
+        //if(oscillatingMoveCheck()){
+        //    directionToGo = getDirectionFromAgentAction(getXMovesBack(2));
+        //}
 
         //int tagEnemyWithOurFlag = checkForSurroundingEnemyAgentsWithOurFlag();
         //if(tagEnemyWithOurFlag != doNothing){
         //    return tagEnemyWithOurFlag;
         //}
 
-        if(smallCircleCheck()){
-            return goRandomOpenDirection();
-        }
+        //if(smallCircleCheck()){
+        //    return goRandomOpenDirection();
+        //}
 
         switch (directionToGo) {
             case NORTH:
@@ -355,7 +355,6 @@ public class Tharpoon extends Agent {
                     //whatToDo = goRandomOpenDirection();
                     whatToDo = preferInOrder(direction.NORTH, direction.EAST, direction.WEST, direction.SOUTH);
                 }
-
                 break;
             case NORTHEAST:
                 if(okayToGoNorth() && okayToGoEast()){
@@ -363,13 +362,12 @@ public class Tharpoon extends Agent {
                     whatToDo = pickRandomlyBetween(direction.NORTH, direction.EAST);
                 }else if (okayToGoNorth() || okayToGoEast()){
                     whatToDo = preferInOrder(direction.EAST, direction.NORTH);
-                }else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
-                whatToDo = moveToOneOfLeastVisitedSquares();
+                //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
+                //whatToDo = moveToOneOfLeastVisitedSquares();
                 }else{
                     //whatToDo = goRandomOpenDirection();
                     whatToDo = preferInOrder(direction.EAST, direction.NORTH, direction.SOUTH, direction.WEST);
                 }
-
                 break;
             case NORTHWEST:
                 if(okayToGoNorth() && okayToGoWest()){
@@ -377,8 +375,8 @@ public class Tharpoon extends Agent {
                     //whatToDo = preferInOrder(direction.WEST, direction.NORTH);
                 }else if(okayToGoNorth() || okayToGoWest()){
                     whatToDo = preferInOrder(direction.WEST, direction.NORTH);
-               }else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
-                    whatToDo = moveToOneOfLeastVisitedSquares();
+               //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
+               //     whatToDo = moveToOneOfLeastVisitedSquares();
                 }else{
                     //whatToDo = goRandomOpenDirection();
                     whatToDo = preferInOrder(direction.WEST, direction.NORTH, direction.SOUTH, direction.EAST);
@@ -387,8 +385,8 @@ public class Tharpoon extends Agent {
             case SOUTH:
                 if(okayToGoSouth()){
                     whatToDo = moveSouth();
-                }else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
-                    whatToDo = moveToOneOfLeastVisitedSquares();
+                //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
+                //    whatToDo = moveToOneOfLeastVisitedSquares();
                 }else{
                     //whatToDo = goRandomOpenDirection();
                     whatToDo = preferInOrder(direction.SOUTH, direction.EAST, direction.WEST, direction.NORTH);
@@ -401,8 +399,8 @@ public class Tharpoon extends Agent {
                     //whatToDo = preferInOrder(direction.EAST, direction.SOUTH);
                 }else if(okayToGoSouth() || okayToGoEast()){
                     whatToDo = preferInOrder(direction.EAST, direction.SOUTH);
-                }else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
-                    whatToDo = moveToOneOfLeastVisitedSquares();
+                //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
+                //    whatToDo = moveToOneOfLeastVisitedSquares();
                 }else{
                     //whatToDo = goRandomOpenDirection();
                     whatToDo = preferInOrder(direction.EAST, direction.SOUTH, direction.NORTH, direction.WEST);
@@ -414,8 +412,8 @@ public class Tharpoon extends Agent {
                     //whatToDo = preferInOrder(direction.WEST, direction.SOUTH);
                 }else if(okayToGoSouth() || okayToGoWest()){
                     whatToDo = preferInOrder(direction.WEST, direction.SOUTH);
-                }else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
-                    whatToDo = moveToOneOfLeastVisitedSquares();
+                //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
+                //    whatToDo = moveToOneOfLeastVisitedSquares();
                 }else{
                     //whatToDo = goRandomOpenDirection();
                     whatToDo = preferInOrder(direction.WEST, direction.SOUTH, direction.NORTH, direction.EAST);
@@ -425,19 +423,18 @@ public class Tharpoon extends Agent {
             case EAST:
                 if(okayToGoEast()){
                     whatToDo = moveEast();
-                }else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
-                    whatToDo = moveToOneOfLeastVisitedSquares();
+                //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
+                //    whatToDo = moveToOneOfLeastVisitedSquares();
                 }else{
                     //whatToDo = goRandomOpenDirection();
                     whatToDo = preferInOrder(direction.EAST, direction.SOUTH, direction.NORTH, direction.WEST);
                 }
-
                 break;
             case WEST:
                 if(okayToGoWest()){
                     whatToDo = moveWest();
-                }else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
-                    whatToDo = moveToOneOfLeastVisitedSquares();
+                //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
+                //    whatToDo = moveToOneOfLeastVisitedSquares();
                 }else{
                     //whatToDo = goRandomOpenDirection();
                     whatToDo = preferInOrder(direction.WEST, direction.NORTH, direction.SOUTH, direction.EAST);
