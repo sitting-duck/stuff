@@ -172,6 +172,10 @@ public class Tharpoon extends Agent {
         int whatToDo = AgentAction.DO_NOTHING;
         queryEnvironment(inEnvironment);
 
+        if(hasFlag){
+            currentState = objective.SEEK_OUR_BASE;
+        }
+
         switch(currentState){
             case INITIALIZE:
                 if(haveBothAgentsFoundTheBase == false){

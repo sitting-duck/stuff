@@ -16,9 +16,9 @@ public class Tharpoon extends Agent {
         public Integer number;
         public char name;
         public objective currentObjective;
-        public Coordinate<Integer> spawn;
-        public Coordinate<Integer> position;
-        public ArrayList<Coordinate<Integer>> squaresTravelled;
+        public Coordinate spawn;
+        public Coordinate position;
+        public ArrayList<Coordinate> squaresTravelled;
         public ArrayList<Integer> movesMade;
         public boolean hasFlag;
         public boolean foundBase;
@@ -26,9 +26,9 @@ public class Tharpoon extends Agent {
         public Agent() {
             number = -1;
             currentObjective = objective.INITIALIZE;
-            spawn = new Coordinate<Integer>();
-            position = new Coordinate<Integer>();
-            squaresTravelled = new ArrayList<Coordinate<Integer>>();
+            spawn = new Coordinate();
+            position = new Coordinate();
+            squaresTravelled = new ArrayList<Coordinate>();
             movesMade = new ArrayList<Integer>();
             hasFlag = false;
             foundBase = false;
@@ -38,37 +38,37 @@ public class Tharpoon extends Agent {
     private class Place {
         String name;
         direction dir;
-        Coordinate<Integer> position;
+        Coordinate position;
 
         Place(String name) {
             this.name = name;
-            position = new Coordinate<Integer>();
+            position = new Coordinate();
         }
     }
 
-    private class Coordinate<N> {
-        public N x;
-        public N y;
+    private class Coordinate{
+        public Integer x;
+        public Integer y;
 
         public Coordinate() {
         }
 
-        public Coordinate(N x, N y) {
+        public Coordinate(Integer x, Integer y) {
             this.x = x;
             this.y = y;
         }
 
-        public Coordinate(Coordinate<N> otherCoordinate){
+        public Coordinate(Coordinate otherCoordinate){
             this.x = otherCoordinate.x;
             this.y = otherCoordinate.y;
         }
 
-        public void set(N x, N y) {
+        public void set(Integer x, Integer y) {
             this.x = x;
             this.y = y;
         }
 
-        public void set(Coordinate<N> otherCoordinate) {
+        public void set(Coordinate otherCoordinate) {
             this.x = otherCoordinate.x;
             this.y = otherCoordinate.y;
         }
@@ -77,8 +77,24 @@ public class Tharpoon extends Agent {
             return "(" + x + ", " + y + ")";
         }
 
-        public boolean isEqualTo(Coordinate<N> otherCoordinate){
+        public boolean isEqualTo(Coordinate otherCoordinate){
             return ((this.x == otherCoordinate.x) && (this.y == otherCoordinate.y));
+        }
+
+        public Coordinate oneNorth(){
+            return new Coordinate(this.x, this.y - 1);
+        }
+
+        public Coordinate oneSouth(){
+            return new Coordinate(x, y + 1);
+        }
+
+        public Coordinate oneEast(){
+            return new Coordinate(x + 1, y);
+        }
+
+        public Coordinate oneWest(){
+            return new Coordinate(x - 1, y);
         }
     }
 
@@ -93,14 +109,18 @@ public class Tharpoon extends Agent {
 
     //Map
     private static char[][] map;
+    private static int[][] timesVisited;
     private int mapHeight = 10;         //it is known that mapHeight == mapLength
     Place ourBase;
     Place enemyBase;
     Place defenseWallCenter;
     ArrayList<Place> pointsOfInterest = new ArrayList<Place>();
-    ArrayList<Coordinate<Integer>> possibleMines = new ArrayList<Coordinate<Integer>>();
+    ArrayList<Coordinate> possibleMines = new ArrayList<Coordinate>();
 
     private enum direction {NORTH, EAST, SOUTH, WEST, SOUTHWEST, SOUTHEAST, NORTHEAST, NORTHWEST, DONOTHING}
+
+    //Strategy
+    boolean oneDefenderOneOffender = false;
 
 
     //Environment Variables
@@ -174,6 +194,7 @@ public class Tharpoon extends Agent {
 
         //Map
         makeEmptyMap();
+        makeEmptyTimesVisited();
         ourBase = new Place("ourBase");
         enemyBase = new Place("enemyBase");
         defenseWallCenter = new Place("defenseWallCenter");
@@ -189,17 +210,20 @@ public class Tharpoon extends Agent {
         //init
         queryEnvironment(inEnvironment);
 
+        //some initilizations before we start seeking
         if (me.currentObjective == objective.INITIALIZE) {
             determineMySpawnAndInitialPosition();
             if (me.number == agents.size() - 1) {
                 determineBasePositions();
-                determineDefenseWallCenterPosition();
             }
-            if(me.number == 0){
-                me.currentObjective = objective.SEEK_ENEMY_BASE;
-            }
-            else{
+
+            //determine which agents seek what based on which strategy we are using
+            if(me.number == 1 && oneDefenderOneOffender){
+                determineDefenseWallCenterPositionAndDirection();
                 me.currentObjective = objective.DEFEND_OUR_BASE;
+                System.out.println("agent " + me.number  + " is defender");
+            }else{
+                me.currentObjective = objective.SEEK_ENEMY_BASE;
             }
         }
 
@@ -207,8 +231,6 @@ public class Tharpoon extends Agent {
         addSurroundingObstaclesToMap(inEnvironment);
         if (me.hasFlag) {
             me.currentObjective = objective.SEEK_OUR_BASE;
-        }else{
-            me.currentObjective = objective.SEEK_ENEMY_BASE;
         }
 
         switch (me.currentObjective) {
@@ -232,12 +254,71 @@ public class Tharpoon extends Agent {
     }
 
     public int defend(Place place){
+        determineDefenseWallCenterPositionAndDirection();
+
         int whatToDo = doNothing;
 
+        if(inDefendingWallArea()){
+            System.out.println("create wall");
+            whatToDo = createDefendingWall();
+        }else{
+            System.out.println("seek wall center which is " + getDirectionName(defenseWallCenter.dir));
+            whatToDo = seek(defenseWallCenter);
+        }
+
+        return whatToDo;
+    }
+
+    public boolean inDefendingWallArea(){
+        return (me.position.isEqualTo(defenseWallCenter.position) ||
+                me.position.isEqualTo(defenseWallCenter.position.oneNorth()) ||
+                me.position.isEqualTo(defenseWallCenter.position.oneSouth()));
     }
 
     public int createDefendingWall(){
 
+        boolean mineNorth = possibleMines.contains(me.position.oneNorth());
+        boolean mineSouth = possibleMines.contains(me.position.oneSouth());
+        boolean mineEast = possibleMines.contains(me.position.oneEast());
+        boolean mineWest = possibleMines.contains(me.position.oneWest());
+        boolean onMine = possibleMines.contains(me.position);
+
+        boolean oneNorth = me.position.isEqualTo(defenseWallCenter.position.oneNorth());
+        boolean oneSouth = me.position.isEqualTo(defenseWallCenter.position.oneSouth());
+        boolean onCenter = me.position.isEqualTo(defenseWallCenter.position);
+
+        int whatToDo = doNothing;
+
+        //if I am on the wall center and there's not a mine or an obstacle south, move south
+        if(onCenter && !mineSouth && !obstSouth) {
+            whatToDo = moveSouth();
+
+            //If I am one south of the center and I am not standing on a mine, plant one
+        }else if(oneSouth && !onMine) {
+            whatToDo = plantMine();
+
+            //if I am one south of the center and I am standing on a mine, move north
+        }else if(oneSouth && onMine){
+            whatToDo = moveNorth();
+
+            //if there is not a mine on defense wall center, put one there
+        }else if (onCenter && !onMine){
+            whatToDo = plantMine();
+
+        //if I am on the defense wall center and I am standing on a mine, move north
+        }else if(me.position.isEqualTo(defenseWallCenter.position) && onMine){
+            whatToDo = moveNorth();
+
+            //if I am one north of the defense wall center and I am not standing on a mine, plant one
+        }else if(oneNorth && !onMine){
+            whatToDo = plantMine();
+
+        //if I am one north of the defense wall center and I am standing on a mine, seek enemy base because I have built the little wall
+        }else if(oneNorth && onMine){
+            me.currentObjective = objective.SEEK_ENEMY_BASE;
+            whatToDo = seek(enemyBase);
+        }
+        return whatToDo;
     }
 
     public int seek(Place place) {
@@ -255,10 +336,10 @@ public class Tharpoon extends Agent {
             directionToGo = getDirectionFromAgentAction(getXMovesBack(2));
         }
 
-        int tagEnemyWithOurFlag = checkForSurroundingEnemyAgentsWithOurFlag();
-        if(tagEnemyWithOurFlag != doNothing){
-            return tagEnemyWithOurFlag;
-        }
+        //int tagEnemyWithOurFlag = checkForSurroundingEnemyAgentsWithOurFlag();
+        //if(tagEnemyWithOurFlag != doNothing){
+        //    return tagEnemyWithOurFlag;
+        //}
 
         if(smallCircleCheck()){
             return goRandomOpenDirection();
@@ -274,7 +355,10 @@ public class Tharpoon extends Agent {
                 //whatToDo = preferInOrder(direction.NORTH, direction.EAST, direction.WEST, direction.SOUTH);
                 break;
             case NORTHEAST:
-                if(okayToGoNorth() || okayToGoEast()){
+                if(okayToGoNorth() && okayToGoEast()){
+                    //whatToDo = preferInOrder(direction.EAST, direction.NORTH);
+                    whatToDo = pickRandomlyBetween(direction.NORTH, direction.EAST);
+                }else if (okayToGoNorth() || okayToGoEast()){
                     whatToDo = preferInOrder(direction.EAST, direction.NORTH);
                 }else{
                     whatToDo = goRandomOpenDirection();
@@ -282,7 +366,10 @@ public class Tharpoon extends Agent {
                 //whatToDo = preferInOrder(direction.EAST, direction.NORTH, direction.SOUTH, direction.WEST);
                 break;
             case NORTHWEST:
-                if(okayToGoNorth() || okayToGoWest()){
+                if(okayToGoNorth() && okayToGoWest()){
+                    whatToDo = pickRandomlyBetween(direction.NORTH, direction.WEST);
+                    //whatToDo = preferInOrder(direction.WEST, direction.NORTH);
+                }else if(okayToGoNorth() || okayToGoWest()){
                     whatToDo = preferInOrder(direction.WEST, direction.NORTH);
                 }else{
                     whatToDo = goRandomOpenDirection();
@@ -298,7 +385,10 @@ public class Tharpoon extends Agent {
                 //whatToDo = preferInOrder(direction.SOUTH, direction.EAST, direction.WEST, direction.NORTH);
                 break;
             case SOUTHEAST:
-                if(okayToGoSouth() || okayToGoEast()){
+                if(okayToGoSouth() && okayToGoEast()){
+                    whatToDo = pickRandomlyBetween(direction.SOUTH, direction.EAST);
+                    //whatToDo = preferInOrder(direction.EAST, direction.SOUTH);
+                }else if(okayToGoSouth() || okayToGoEast()){
                     whatToDo = preferInOrder(direction.EAST, direction.SOUTH);
                 }else{
                     whatToDo = goRandomOpenDirection();
@@ -306,7 +396,10 @@ public class Tharpoon extends Agent {
                 //whatToDo = preferInOrder(direction.EAST, direction.SOUTH, direction.NORTH, direction.WEST);
                 break;
             case SOUTHWEST:
-                if(okayToGoSouth() || okayToGoWest()){
+                if(okayToGoSouth() && okayToGoWest()){
+                    whatToDo = pickRandomlyBetween(direction.SOUTH, direction.WEST);
+                    //whatToDo = preferInOrder(direction.WEST, direction.SOUTH);
+                }else if(okayToGoSouth() || okayToGoWest()){
                     whatToDo = preferInOrder(direction.WEST, direction.SOUTH);
                 }else{
                     whatToDo = goRandomOpenDirection();
@@ -335,6 +428,49 @@ public class Tharpoon extends Agent {
 
     //MAP FUNCTIONS//MAP FUNCTIONS //MAP FUNCTIONS //MAP FUNCTIONS //MAP FUNCTIONS //MAP FUNCTIONS //MAP FUNCTIONS //MAP FUNCTIONS
 
+    public direction getLeastVisitedSurroundingSquares(){
+        ArrayList<Coordinate> leastVisited;
+
+        int lowest = 200;
+
+        int numNorth = (okayToGoNorth())? (getNumTimesVisited(me.position.oneNorth())) : (200);
+
+        int numEast = (okayToGoEast()) ? (getNumTimesVisited(me.position.oneEast())) : (200);
+
+        int numSouth = (okayToGoSouth()) ? (getNumTimesVisited(me.position.oneSouth())) : (200);
+
+        int numWest = (okayToGoWest()) ? (getNumTimesVisited(me.position.oneWest())) : (200);
+
+        if(numNorth < lowest){
+            lowest = numNorth;
+        }
+        if(numEast < lowest){
+            lowest = numEast;
+        }
+        if(numSouth < lowest){
+            lowest = numSouth;
+        }
+        if(numWest < lowest){
+            lowest = numWest;
+        }
+        if(numNorth == lowest){
+            leastVisited.add(direction.NORTH);
+        }
+        if(numEast == lowest){
+            leastVisited.add(direction.EAST);
+        }
+        if(numSouth == lowest){
+            leastVisited.add(direction.SOUTH);
+        }
+        if(numWest == lowest){
+            leastVisited.add(direction.WEST);
+        }
+    }
+
+    public int getNumTimesVisited(Coordinate pos){
+        return timesVisited[pos.x][pos.y];
+    }
+
     public int checkForSurroundingEnemyAgentsWithOurFlag(){
         int whatToDo = doNothing;
         if(enemyNorthImmediate && enemyHasOurFlag){
@@ -350,62 +486,6 @@ public class Tharpoon extends Agent {
         return whatToDo;
     }
 
-    public int pickARandomOpenDirectionOld(){
-        double num = Math.random();
-
-        if(directionsOkay(direction.NORTH, direction.EAST)){
-            if(num < 0.5){
-                return moveNorth();
-            }else{
-                return moveEast();
-            }
-        }else if(directionsOkay(direction.NORTH, direction.SOUTH)){
-            if(num < 0.5){
-                return moveNorth();
-            }else{
-                return moveSouth();
-            }
-        }else if(directionsOkay(direction.NORTH, direction.WEST)){
-            if(num < 0.5){
-                return moveNorth();
-            }else{
-                return moveWest();
-            }
-        }else if(directionsOkay(direction.EAST, direction.SOUTH)){
-            if(num < 0.5){
-                return moveEast();
-            }else{
-                return moveSouth();
-            }
-        }else if(directionsOkay(direction.EAST, direction.WEST)){
-            if(num < 0.5){
-                return moveEast();
-            }else{
-                return moveWest();
-            }
-        }
-        else if(okayToGoNorth()){
-            if(num < 0.5){
-                return moveNorth();
-            }
-        }else if(okayToGoEast()){
-            if(num < 0.5){
-                return moveEast();
-            }
-        }else if(okayToGoSouth()){
-            if(num < 0.5){
-                return moveSouth();
-            }
-        }else if(okayToGoWest()){
-            if(num < 0.5){
-                return moveWest();
-            }
-        }else{
-            return doNothing;
-        }
-        return doNothing;
-    }
-
     public int goRandomOpenDirection(){
         ArrayList<direction> freeDirections = freeDirections();
         direction dir = direction.DONOTHING;
@@ -417,12 +497,37 @@ public class Tharpoon extends Agent {
                 break;
             }
         }
-        return getAgentActionFromDirection(dir);
+        return move(dir);
+    }
+
+    public int pickRandomlyBetween(direction firstDir, direction secondDir){
+        direction dir = direction.DONOTHING;
+
+        int num = randomInt(1, 2);
+        return (num == 1) ? (move(firstDir)) : (move(secondDir));
     }
 
     public int randomInt(int min, int max){
         rand = new Random();
         return rand.nextInt((max - min) + 1) + min;
+    }
+
+    public int pickRandomlyBetween(ArrayList<direction> directions){
+        direction dir = direction.DONOTHING;
+
+        int num = randomInt(1, freeDirections.size());
+        for(int i = 0; i < directions.size(); i++){
+            if(num == i){
+                dir = directions.get(i);
+                break;
+            }
+        }
+        return move(dir);
+    }
+
+    public int moveToOneOfLeastVisitedSquares(){
+        int whatToDo = pickRandomlyBetween(getLeastVisitedSurroundingSquares());
+        return whatToDo;
     }
 
     public ArrayList<direction> freeDirections(){
@@ -468,23 +573,22 @@ public class Tharpoon extends Agent {
             }
                 d++;
         }*/
-        Coordinate<Integer> fourPositionsBack = getXPositionsBack(4);
+        Coordinate fourPositionsBack = getXPositionsBack(4);
         if(fourPositionsBack == me.position){
             //then I have gone in a small circle
-            System.out.println("mp: " + me.position.toString() + " 4pb: " + fourPositionsBack.toString());
-            System.out.println("CIRCLE!!!");
+            //System.out.println("mp: " + me.position.toString() + " 4pb: " + fourPositionsBack.toString());
+            //System.out.println("CIRCLE!!!");
             hasCircle = true;
         }
         return hasCircle;
     }
 
-    public Coordinate<Integer> getLastPosition(){
+    public Coordinate getLastPosition(){
         return me.squaresTravelled.get(me.squaresTravelled.size() - 2);
     }
 
-    public Coordinate<Integer> getXPositionsBack(Integer x){
-        Coordinate<Integer> xPosback = me.squaresTravelled.get(me.squaresTravelled.size() - (x + 1));
-        System.out.println(x + " positions back " + xPosback.toString());
+    public Coordinate getXPositionsBack(Integer x){
+        Coordinate xPosback = me.squaresTravelled.get(me.squaresTravelled.size() - (x + 1));
         return xPosback;
     }
 
@@ -546,9 +650,9 @@ public class Tharpoon extends Agent {
             return moveSouth();
         }else if(getLastMove() == moveSouth && okayToGoNorth()){
             return moveNorth();
-        }else if(getLastMove() == moveEast && okayToGoWest()){
+        }else if (getLastMove() == moveEast && okayToGoWest()){
             return moveWest();
-        }else if(getLastMove() == moveWest && okayToGoEast()){
+        }else if (getLastMove() == moveWest && okayToGoEast()){
             return moveEast();
         }else{
             return doNothing;
@@ -564,28 +668,28 @@ public class Tharpoon extends Agent {
     }
 
     public int moveNorth(){
-        Coordinate<Integer> newPosition = new Coordinate<Integer>(me.position.x, me.position.y - 1);
+        Coordinate newPosition = new Coordinate(me.position.x, me.position.y - 1);
         changeMyPosition(me.position, newPosition);
         me.movesMade.add(moveNorth);
         return moveNorth;
     }
 
     public int moveEast(){
-        Coordinate<Integer> newPosition = new Coordinate<Integer>(me.position.x + 1, me.position.y);
+        Coordinate newPosition = new Coordinate(me.position.x + 1, me.position.y);
         changeMyPosition(me.position, newPosition);
         me.movesMade.add(moveEast);
         return moveEast;
     }
 
     public int moveSouth(){
-        Coordinate<Integer> newPosition = new Coordinate<Integer>(me.position.x, me.position.y + 1);
+        Coordinate newPosition = new Coordinate(me.position.x, me.position.y + 1);
         changeMyPosition(me.position, newPosition);
         me.movesMade.add(moveSouth);
         return moveSouth;
     }
 
     public int moveWest(){
-        Coordinate<Integer> newPosition = new Coordinate<Integer>(me.position.x - 1, me.position.y);
+        Coordinate newPosition = new Coordinate(me.position.x - 1, me.position.y);
         changeMyPosition(me.position, newPosition);
         me.movesMade.add(moveWest);
         return moveWest;
@@ -755,20 +859,40 @@ public class Tharpoon extends Agent {
         System.out.println("ourBase: " + ourBase.position.toString());
     }
 
-    public void determineDefenseWallCenterPosition(){
+    public void determineDefenseWallCenterPositionAndDirection(){
+
         if(enemyBaseWest){
             defenseWallCenter.position.x = ourBase.position.x - 2;
         }else{
             defenseWallCenter.position.x = ourBase.position.x + 2;
         }
         defenseWallCenter.position.y = ourBase.position.y;
+        System.out.println("determined defense wall center " + defenseWallCenter.position.toString());
+
+        if(positionIsNorthEast(defenseWallCenter.position)){
+            defenseWallCenter.dir = direction.NORTHEAST;
+        }else if(positionIsNorthWest(defenseWallCenter.position)){
+            defenseWallCenter.dir = direction.NORTHWEST;
+        }else if(positionIsSouthEast(defenseWallCenter.position)){
+            defenseWallCenter.dir = direction.SOUTHEAST;
+        }else if(positionIsSouthWest(defenseWallCenter.position)){
+            defenseWallCenter.dir = direction.SOUTHWEST;
+        }else if(positionIsNorth(defenseWallCenter.position)){
+            defenseWallCenter.dir = direction.NORTH;
+        }else if(positionIsEast(defenseWallCenter.position)){
+            defenseWallCenter.dir = direction.EAST;
+        }else if(positionIsSouth(defenseWallCenter.position)){
+            defenseWallCenter.dir = direction.SOUTH;
+        }else{
+            defenseWallCenter.dir = direction.WEST;
+        }
     }
 
-    public void setMapSquare(Coordinate<Integer> pos, char c) {
+    public void setMapSquare(Coordinate pos, char c) {
         map[pos.x][pos.y] = c;
     }
 
-    public void moveMeOnMap(Coordinate<Integer> source, Coordinate<Integer> destination) {
+    public void moveMeOnMap(Coordinate source, Coordinate destination) {
         if(blockedInThreeDirections()){
             setMapSquare(source, 'X');
         }else {
@@ -777,20 +901,33 @@ public class Tharpoon extends Agent {
         setMapSquare(destination, me.name);
     }
 
-    public void changeMyPosition(Coordinate<Integer> source, Coordinate<Integer> destination) {
-        me.squaresTravelled.add(new Coordinate<Integer>(destination));
+    public void updateTimesVisited(Coordinate pos){
+        timesVisited[pos.x][pos.y]++;
+    }
+
+    public void changeMyPosition(Coordinate source, Coordinate destination) {
+        me.squaresTravelled.add(new Coordinate(destination));
+        updateTimesVisited(destination);
         moveMeOnMap(source, destination);
         me.position.set(destination);
     }
 
-    public char[][] makeEmptyMap() {
+    public void makeEmptyMap() {
         map = new char[mapHeight][mapHeight];
         for (int i = 0; i < mapHeight; i++) {
             for (int j = 0; j < mapHeight; j++) {
                 map[i][j] = '.';
             }
         }
-        return map;
+    }
+
+    public void makeEmptyTimesVisited(){
+        timesVisited = new int[mapHeight][mapHeight];
+        for(int i = 0; i < mapHeight; i++){
+            for(int j = 0; j < mapHeight; j++){
+                map[i][j] = 0;
+            }
+        }
     }
 
     public void printMap() {
@@ -815,25 +952,25 @@ public class Tharpoon extends Agent {
     //ENVIRONMENT FUNCTIONS//ENVIRONMENT FUNCTIONS //ENVIRONMENT FUNCTIONS //ENVIRONMENT FUNCTIONS //ENVIRONMENT FUNCTIONS //ENVIRONMENT FUNCTIONS
 
     public boolean okayToGoNorth() {
-        Coordinate<Integer> oneNorth = new Coordinate<Integer>(me.position.x, me.position.y - 1);
+        Coordinate oneNorth = new Coordinate(me.position.x, me.position.y - 1);
         boolean hasPossibleMine = possibleMines.contains(oneNorth);
         return ((me.hasFlag && enemyNorthImmediate) || friendlyNorthImmediate || obstNorth || (ourBaseNorthImmediate && !me.hasFlag) || hasPossibleMine) ? (false) : (true);
     }
 
     public boolean okayToGoEast() {
-        Coordinate<Integer> oneEast = new Coordinate<Integer>(me.position.x + 1, me.position.y);
+        Coordinate oneEast = new Coordinate(me.position.x + 1, me.position.y);
         boolean hasPossibleMine = possibleMines.contains(oneEast);
         return ((me.hasFlag && enemyEastImmediate) || friendlyEastImmediate || obstEast || (ourBaseEastImmediate && !me.hasFlag) || hasPossibleMine) ? (false) : (true);
     }
 
     public boolean okayToGoWest() {
-        Coordinate<Integer> oneWest = new Coordinate<Integer>(me.position.x - 1, me.position.y);
+        Coordinate oneWest = new Coordinate(me.position.x - 1, me.position.y);
         boolean hasPossibleMine = possibleMines.contains(oneWest);
         return ((me.hasFlag && enemyWestImmediate)|| friendlyWestImmediate || obstWest || (ourBaseWestImmediate && !me.hasFlag) || hasPossibleMine) ? (false) : (true);
     }
 
     public boolean okayToGoSouth() {
-        Coordinate<Integer> oneSouth = new Coordinate<Integer>(me.position.x, me.position.y + 1);
+        Coordinate oneSouth = new Coordinate(me.position.x, me.position.y + 1);
         boolean hasPossibleMine = possibleMines.contains(oneSouth);
         return ((me.hasFlag && enemySouthImmediate) || friendlySouthImmediate || obstSouth || (ourBaseSouthImmediate && !me.hasFlag) || hasPossibleMine) ? (false) : (true);
     }
@@ -931,6 +1068,38 @@ public class Tharpoon extends Agent {
                 }
             }
         }
+    }
+
+    public boolean positionIsNorth(Coordinate pos){
+        return (me.position.y > pos.y);
+    }
+
+    public boolean positionIsSouth(Coordinate pos){
+        return (me.position.y < pos.y);
+    }
+
+    public boolean positionIsEast(Coordinate pos){
+        return (me.position.x < pos.x);
+    }
+
+    public boolean positionIsWest(Coordinate pos){
+        return (me.position.x > pos.x);
+    }
+
+    public boolean positionIsNorthEast(Coordinate pos){
+        return (positionIsNorth(pos) && positionIsEast(pos));
+    }
+
+    public boolean positionIsSouthEast(Coordinate pos){
+        return (positionIsSouth(pos) && positionIsEast(pos));
+    }
+
+    public boolean positionIsNorthWest(Coordinate pos){
+        return (positionIsNorth(pos) && positionIsWest(pos));
+    }
+
+    public boolean positionIsSouthWest(Coordinate pos){
+        return (positionIsSouth(pos) && positionIsWest(pos));
     }
 
     public boolean blockedInThreeDirections() {
