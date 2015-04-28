@@ -10,12 +10,12 @@ import ctf.common.AgentEnvironment;
 import ctf.agent.Agent;
 import ctf.common.AgentAction;
 
-public class Tharpoon extends Agent {
+public class Tharpoon5 extends Agent {
 
     private class Agent {
         public Integer number;
         public char name;
-        public objective currentObjective;
+        public ArrayList<objective> objectives;
         public Coordinate spawn;
         public Coordinate position;
         public ArrayList<Coordinate> squaresTravelled;
@@ -24,13 +24,89 @@ public class Tharpoon extends Agent {
 
         public Agent() {
             number = -1;
-            currentObjective = objective.INITIALIZE;
+            objectives = new ArrayList<objective>();
+            pushObjective(objective.INITIALIZE);
             spawn = new Coordinate();
             position = new Coordinate();
             squaresTravelled = new ArrayList<Coordinate>();
             movesMade = new ArrayList<Integer>();
             hasFlag = false;
-            //foundBase = false;
+        }
+
+        public objective getCurrentObjective() {
+            return objectives.get(objectives.size() - 1);
+        }
+
+        public String getCurrentObjectiveString(){
+
+            String objectiveString = "";
+
+            switch(getCurrentObjective()){
+                case INITIALIZE:
+                    objectiveString = "initialize";
+                    break;
+                case SEEK_ENEMY_BASE:
+                    objectiveString = "SEEK ENEMY BASE";
+                    break;
+                case SEEK_OUR_BASE:
+                    objectiveString = "SEEK OUR BASE";
+                    break;
+                case RETRIEVE_FRIENDLY_FLAG:
+                    objectiveString = "SEEK FRIENDLY FLAG";
+                    break;
+                case DEFEND_OUR_BASE:
+                    objectiveString = "DEFEND OUR BASE";
+                    break;
+                case MOVE_AROUND_OBSTACLE:
+                    objectiveString = "MOVE AROUND OBSTACLE";
+                    break;
+            }
+            return objectiveString;
+        }
+
+        public objective getXObjectivesBack(int x) {
+            return objectives.get((objectives.size() - 1) - x);
+        }
+
+        public Agent setNewCurrentObjective(objective newObjective) {
+            popObjective();
+            pushObjective(newObjective);
+            return this;
+        }
+
+        public Agent setNewBaseObjective(objective newObjective){
+            objectives.set(0, newObjective);
+            return this;
+        }
+
+        public objective getBaseObjective(){
+            return objectives.get(0);
+        }
+
+        public Agent pushObjective(objective newObjective) {
+            objectives.add(newObjective);
+            return this;
+        }
+
+        public Agent popObjective() {
+            objectives.remove(objectives.size() - 1);
+            return this;
+        }
+
+        public Coordinate oneNorth() {
+            return position.oneNorth();
+        }
+
+        public Coordinate oneEast() {
+            return position.oneEast();
+        }
+
+        public Coordinate oneSouth() {
+            return position.oneSouth();
+        }
+
+        public Coordinate oneWest() {
+            return position.oneWest();
         }
     }
 
@@ -103,7 +179,7 @@ public class Tharpoon extends Agent {
     private Agent me;
     private Agent otherAgent;
 
-    private enum objective {INITIALIZE, SEEK_ENEMY_BASE, SEEK_OUR_BASE, RETRIEVE_FRIENDLY_FLAG, DEFEND_OUR_BASE}
+    private enum objective {INITIALIZE, SEEK_ENEMY_BASE, SEEK_OUR_BASE, RETRIEVE_FRIENDLY_FLAG, DEFEND_OUR_BASE, MOVE_AROUND_OBSTACLE}
 
 
     //Map
@@ -127,15 +203,15 @@ public class Tharpoon extends Agent {
     private boolean obstSouth;
     private boolean obstEast;
     private boolean obstWest;
-    private boolean blockedNorthEast;
-    private boolean blockedSouthEast;
-    private boolean blockedNorthWest;
-    private boolean blockedSouthWest;
-    private boolean blockedNorthEastSouth;
-    private boolean blockedEastSouthWest;
-    private boolean blockedSouthWestNorth;
-    private boolean blockedWestNorthEast;
-    private boolean blockedEveryDirection;
+    private boolean obstNorthEast;
+    private boolean obstSouthEast;
+    private boolean obstNorthWest;
+    private boolean obstSouthWest;
+    private boolean obstNorthEastSouth;
+    private boolean obstEastSouthWest;
+    private boolean obstSouthWestNorth;
+    private boolean obstWestNorthEast;
+    private boolean obstEveryDirection;
 
     private boolean ourBaseNorth;
     private boolean ourBaseSouth;
@@ -179,7 +255,7 @@ public class Tharpoon extends Agent {
     Random rand;
 
 
-    public Tharpoon() {
+    public Tharpoon5() {
 
         //Agent
         if (agents.size() == MAX_NUM_AGENTS) {
@@ -210,29 +286,22 @@ public class Tharpoon extends Agent {
         queryEnvironment(inEnvironment);
 
         //some initilizations before we start seeking
-        if (me.currentObjective == objective.INITIALIZE) {
+        if (me.getCurrentObjective() == objective.INITIALIZE) {
             determineMySpawnAndInitialPosition();
             if (me.number == agents.size() - 1) {
                 determineBasePositions();
-            }
-
-            //determine which agents seek what based on which strategy we are using
-            if(me.number == 1 && oneDefenderOneOffender){
-                determineDefenseWallCenterPositionAndDirection();
-                me.currentObjective = objective.DEFEND_OUR_BASE;
-                System.out.println("agent " + me.number  + " is defender");
-            }else{
-                me.currentObjective = objective.SEEK_ENEMY_BASE;
             }
         }
 
         amIAtSpawn();
         addSurroundingObstaclesToMap(inEnvironment);
         if (me.hasFlag) {
-            me.currentObjective = objective.SEEK_OUR_BASE;
+            me.setNewBaseObjective(objective.SEEK_OUR_BASE);
+        }else{
+            me.setNewBaseObjective(objective.SEEK_ENEMY_BASE);
         }
 
-        switch (me.currentObjective) {
+        switch (me.getCurrentObjective()) {
             case SEEK_ENEMY_BASE:
                 whatToDo = seek(enemyBase);
                 break;
@@ -241,6 +310,13 @@ public class Tharpoon extends Agent {
                 break;
             case DEFEND_OUR_BASE:
                 whatToDo = defend(ourBase);
+                break;
+            case MOVE_AROUND_OBSTACLE:
+                if(me.getBaseObjective() == objective.SEEK_OUR_BASE){
+                    whatToDo = goAroundObstacle(ourBase);
+                }else if(me.getBaseObjective() == objective.SEEK_ENEMY_BASE){
+                    whatToDo = goAroundObstacle(enemyBase);
+                }
         }
 
         //print only after every complete move (ie, both agents have moved)
@@ -250,6 +326,97 @@ public class Tharpoon extends Agent {
 
         return whatToDo;
 
+    }
+
+    public int seek2(Place pointOfInterest){
+        int whatToDo = AgentAction.DO_NOTHING;
+
+        switch(pointOfInterest.dir){
+            case NORTH:
+                if(okayToGoNorth()){
+                    whatToDo = moveNorth();
+                }
+                break;
+            case NORTHEAST:
+                // pick north or east for move with 50/50 chance
+                if( Math.random() < 0.5 && okayToGoNorth() ) {
+                    whatToDo = moveNorth();
+                }
+                else if( okayToGoEast() ) {
+                    whatToDo = moveEast();
+                }
+                else if( okayToGoNorth() ) {
+                    whatToDo = moveNorth();
+                }break;
+            case NORTHWEST:
+                // pick north or west for move with 50/50 chance
+                if( Math.random() < 0.5 && okayToGoNorth() ) {
+                    whatToDo = moveNorth();
+                }
+                else if( okayToGoWest() ) {
+                    whatToDo = moveWest();
+                }
+                else if( okayToGoNorth() ) {
+                    whatToDo = moveNorth();
+                }
+                break;
+            case SOUTH:
+                if( okayToGoSouth() ) {
+                    // move south
+                    whatToDo = moveSouth();
+                }
+                break;
+            case SOUTHEAST:
+                if( Math.random() < 0.5 && okayToGoSouth() ) {
+                    whatToDo = moveSouth();
+                }
+                else if( okayToGoEast() ) {
+                    whatToDo = moveEast();
+                }
+                else if( okayToGoSouth() ) {
+                    whatToDo = moveEast();
+                }
+                break;
+            case SOUTHWEST:
+                if( Math.random() < 0.5 && okayToGoSouth()) {
+                    whatToDo = moveSouth();
+                }
+                else if( okayToGoWest() ) {
+                    whatToDo = moveWest();
+                }
+                else if( okayToGoSouth() ) {
+                    whatToDo = moveSouth();
+                }
+                break;
+            case EAST:
+                if( okayToGoEast() ) {
+                    whatToDo = moveEast();
+                }
+                break;
+            case WEST:
+                if( okayToGoWest() ) {
+                    whatToDo = moveWest();
+                }break;
+            default:
+                if( okayToGoNorth() ) {
+                    whatToDo = moveNorth();
+                }
+                else if( okayToGoSouth() ) {
+                    whatToDo = moveSouth();
+                }
+                else if( okayToGoEast() ) {
+                    whatToDo = moveEast();
+                }
+                else if( okayToGoWest() ) {
+                    whatToDo = moveWest();
+                }
+                else {
+                    // completely obst!
+                    whatToDo = AgentAction.DO_NOTHING;
+                }
+        }
+        System.out.println("agent " + me.name + me.number + " " + getNameFromAgentAction(whatToDo) + " to " + me.position.toString());
+        return whatToDo;
     }
 
     public int defend(Place place){
@@ -304,7 +471,7 @@ public class Tharpoon extends Agent {
         }else if (onCenter && !onMine){
             whatToDo = plantMine();
 
-        //if I am on the defense wall center and I am standing on a mine, move north
+            //if I am on the defense wall center and I am standing on a mine, move north
         }else if(me.position.isEqualTo(defenseWallCenter.position) && onMine){
             whatToDo = moveNorth();
 
@@ -312,9 +479,9 @@ public class Tharpoon extends Agent {
         }else if(oneNorth && !onMine){
             whatToDo = plantMine();
 
-        //if I am one north of the defense wall center and I am standing on a mine, seek enemy base because I have built the little wall
+            //if I am one north of the defense wall center and I am standing on a mine, seek enemy base because I have built the little wall
         }else if(oneNorth && onMine){
-            me.currentObjective = objective.SEEK_ENEMY_BASE;
+            me.setNewCurrentObjective(objective.SEEK_ENEMY_BASE);
             whatToDo = seek(enemyBase);
         }
         return whatToDo;
@@ -323,17 +490,22 @@ public class Tharpoon extends Agent {
     public int seek(Place place) {
 
         int whatToDo = doNothing;
+        System.out.println("agent " + me.name + " has obj " + me.getCurrentObjectiveString());
 
-        if (blockedInThreeDirections()) {
+        if (obstInThreeDirections()) {
+            whatToDo = getAgentActionFromDirection(getOnlyNonObstDirection());
+            return whatToDo;
+        }
+        if(blockedInThreeDirections()){
             whatToDo = getAgentActionFromDirection(getOnlyFreeDirection());
             return whatToDo;
         }
 
         direction directionToGo = place.dir;
 
-        if(oscillatingMoveCheck()){
-            directionToGo = getDirectionFromAgentAction(getXMovesBack(2));
-        }
+        //if(oscillatingMoveCheck()){
+        //    directionToGo = getDirectionFromAgentAction(getXMovesBack(2));
+        //}
 
         //int tagEnemyWithOurFlag = checkForSurroundingEnemyAgentsWithOurFlag();
         //if(tagEnemyWithOurFlag != doNothing){
@@ -348,21 +520,37 @@ public class Tharpoon extends Agent {
             case NORTH:
                 if (okayToGoNorth()) {
                     whatToDo = moveNorth();
-                //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
-                //    whatToDo = moveToOneOfLeastVisitedSquares();
+                    //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
+                    //    whatToDo = moveToOneOfLeastVisitedSquares();
                 }else{
-                    //whatToDo = goRandomOpenDirection();
-                    whatToDo = preferInOrder(direction.NORTH, direction.EAST, direction.WEST, direction.SOUTH);
+                    if(obstNorth){
+                        me.pushObjective(objective.MOVE_AROUND_OBSTACLE);
+                        whatToDo = goAroundObstacle(place);
+                    }
+                    else{
+                        whatToDo = moveRandomlyOneOfTheseDirectionsIfOpenOrElseDoNothing(direction.EAST, direction.WEST);
+                    }//whatToDo = goRandomOpenDirection();
+                    //whatToDo = preferInOrder(direction.NORTH, direction.EAST, direction.WEST, direction.SOUTH);
                 }
                 break;
             case NORTHEAST:
                 if(okayToGoNorth() && okayToGoEast()){
                     //whatToDo = preferInOrder(direction.EAST, direction.NORTH);
-                    whatToDo = pickRandomlyBetween(direction.NORTH, direction.EAST);
+                    whatToDo = pickRandomlyBetweenAndMove(direction.NORTH, direction.EAST);
                 }else if (okayToGoNorth() || okayToGoEast()){
-                    whatToDo = preferInOrder(direction.EAST, direction.NORTH);
-                //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
-                //whatToDo = moveToOneOfLeastVisitedSquares();
+                    direction dir = pickRandomlyBetween(direction.EAST, direction.NORTH);
+                    if(okayToGo(dir)){
+                        whatToDo = move(dir);
+                    }else {
+                        if (dir == direction.EAST) {
+                            whatToDo = moveNorth();
+                        } else {
+                            whatToDo = moveEast();
+                        }
+                    }
+                    //whatToDo = preferInOrder(direction.EAST, direction.NORTH);
+                    //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
+                    //whatToDo = moveToOneOfLeastVisitedSquares();
                 }else{
                     //whatToDo = goRandomOpenDirection();
                     whatToDo = preferInOrder(direction.EAST, direction.NORTH, direction.SOUTH, direction.WEST);
@@ -370,12 +558,22 @@ public class Tharpoon extends Agent {
                 break;
             case NORTHWEST:
                 if(okayToGoNorth() && okayToGoWest()){
-                    whatToDo = pickRandomlyBetween(direction.NORTH, direction.WEST);
+                    whatToDo = pickRandomlyBetweenAndMove(direction.NORTH, direction.WEST);
                     //whatToDo = preferInOrder(direction.WEST, direction.NORTH);
                 }else if(okayToGoNorth() || okayToGoWest()){
-                    whatToDo = preferInOrder(direction.WEST, direction.NORTH);
-               //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
-               //     whatToDo = moveToOneOfLeastVisitedSquares();
+                    direction dir = pickRandomlyBetween(direction.WEST, direction.NORTH);
+                    if(okayToGo(dir)){
+                        whatToDo = move(dir);
+                    }else{
+                        if(dir == direction.WEST){
+                            whatToDo = moveNorth();
+                        }else{
+                            whatToDo = moveWest();
+                        }
+                    }
+                    //whatToDo = preferInOrder(direction.WEST, direction.NORTH);
+                    //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
+                    //     whatToDo = moveToOneOfLeastVisitedSquares();
                 }else{
                     //whatToDo = goRandomOpenDirection();
                     whatToDo = preferInOrder(direction.WEST, direction.NORTH, direction.SOUTH, direction.EAST);
@@ -384,22 +582,38 @@ public class Tharpoon extends Agent {
             case SOUTH:
                 if(okayToGoSouth()){
                     whatToDo = moveSouth();
-                //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
-                //    whatToDo = moveToOneOfLeastVisitedSquares();
+                    //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
+                    //    whatToDo = moveToOneOfLeastVisitedSquares();
                 }else{
+                    if(obstSouth){
+                        me.pushObjective(objective.MOVE_AROUND_OBSTACLE);
+                        whatToDo = goAroundObstacle(place);
+                    }else{
+                        whatToDo = moveRandomlyOneOfTheseDirectionsIfOpenOrElseDoNothing(direction.EAST, direction.WEST);
+                    }
                     //whatToDo = goRandomOpenDirection();
-                    whatToDo = preferInOrder(direction.SOUTH, direction.EAST, direction.WEST, direction.NORTH);
+                    //whatToDo = preferInOrder(direction.SOUTH, direction.EAST, direction.WEST, direction.NORTH);
                 }
 
                 break;
             case SOUTHEAST:
                 if(okayToGoSouth() && okayToGoEast()){
-                    whatToDo = pickRandomlyBetween(direction.SOUTH, direction.EAST);
+                    whatToDo = pickRandomlyBetweenAndMove(direction.SOUTH, direction.EAST);
                     //whatToDo = preferInOrder(direction.EAST, direction.SOUTH);
                 }else if(okayToGoSouth() || okayToGoEast()){
-                    whatToDo = preferInOrder(direction.EAST, direction.SOUTH);
-                //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
-                //    whatToDo = moveToOneOfLeastVisitedSquares();
+                    direction dir = pickRandomlyBetween(direction.SOUTH, direction.EAST);
+                    if(okayToGo(dir)){
+                        whatToDo = move(dir);
+                    }else{
+                        if(dir == direction.SOUTH){
+                            whatToDo = moveEast();
+                        }else{
+                            whatToDo = moveSouth();
+                        }
+                    }
+                    //whatToDo = preferInOrder(direction.EAST, direction.SOUTH);
+                    //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
+                    //    whatToDo = moveToOneOfLeastVisitedSquares();
                 }else{
                     //whatToDo = goRandomOpenDirection();
                     whatToDo = preferInOrder(direction.EAST, direction.SOUTH, direction.NORTH, direction.WEST);
@@ -407,12 +621,22 @@ public class Tharpoon extends Agent {
                 break;
             case SOUTHWEST:
                 if(okayToGoSouth() && okayToGoWest()){
-                    whatToDo = pickRandomlyBetween(direction.SOUTH, direction.WEST);
+                    whatToDo = pickRandomlyBetweenAndMove(direction.SOUTH, direction.WEST);
                     //whatToDo = preferInOrder(direction.WEST, direction.SOUTH);
                 }else if(okayToGoSouth() || okayToGoWest()){
-                    whatToDo = preferInOrder(direction.WEST, direction.SOUTH);
-                //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
-                //    whatToDo = moveToOneOfLeastVisitedSquares();
+                    direction dir = pickRandomlyBetween(direction.SOUTH, direction.WEST);
+                    if(okayToGo(dir)){
+                        whatToDo = move(dir);
+                    }else{
+                        if(dir == direction.SOUTH){
+                            whatToDo = moveWest();
+                        }else{
+                            whatToDo = moveSouth();
+                        }
+                    }
+                    //whatToDo = preferInOrder(direction.WEST, direction.SOUTH);
+                    //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
+                    //    whatToDo = moveToOneOfLeastVisitedSquares();
                 }else{
                     //whatToDo = goRandomOpenDirection();
                     whatToDo = preferInOrder(direction.WEST, direction.SOUTH, direction.NORTH, direction.EAST);
@@ -422,24 +646,108 @@ public class Tharpoon extends Agent {
             case EAST:
                 if(okayToGoEast()){
                     whatToDo = moveEast();
-                //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
-                //    whatToDo = moveToOneOfLeastVisitedSquares();
+                    //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
+                    //    whatToDo = moveToOneOfLeastVisitedSquares();
                 }else{
-                    //whatToDo = goRandomOpenDirection();
-                    whatToDo = preferInOrder(direction.EAST, direction.SOUTH, direction.NORTH, direction.WEST);
+                    if(obstEast){
+                        whatToDo = goAroundObstacle(place);
+                    }else{
+                        whatToDo = moveRandomlyOneOfTheseDirectionsIfOpenOrElseDoNothing(direction.NORTH, direction.SOUTH);
+                    }
+                    //whatToDo = preferInOrder(direction.EAST, direction.SOUTH, direction.NORTH, direction.WEST);
                 }
                 break;
             case WEST:
                 if(okayToGoWest()){
                     whatToDo = moveWest();
-                //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
-                //    whatToDo = moveToOneOfLeastVisitedSquares();
+                    //}else if(me.currentObjective == objective.SEEK_ENEMY_BASE){
+                    //    whatToDo = moveToOneOfLeastVisitedSquares();
                 }else{
+                    if(obstWest){
+                        whatToDo = goAroundObstacle(place);
+                    }else{
+                        whatToDo = moveRandomlyOneOfTheseDirectionsIfOpenOrElseDoNothing(direction.NORTH, direction.SOUTH);
+                    }
                     //whatToDo = goRandomOpenDirection();
-                    whatToDo = preferInOrder(direction.WEST, direction.NORTH, direction.SOUTH, direction.EAST);
+                    //whatToDo = preferInOrder(direction.WEST, direction.NORTH, direction.SOUTH, direction.EAST);
                 }
                 break;
         }
+        return whatToDo;
+    }
+
+    public int goAroundObstacle(Place pointOfInterest){
+
+        int whatToDo = doNothing;
+
+        System.out.println("hit obst on the way to " + pointOfInterest.name);
+
+        //WALLS
+
+        //EAST WALL
+        //if obstEast and objective is south or southeast, keep going south until obstSouth or !obstEast
+
+        //if obstEast and objective is north or northeast, keep going north until obstNorth or !obstEast
+
+        //if obstEast and objective is east,
+            //if last move was moveNorth keep going north until !obstEast or obstNorth
+
+            //if last move was moveSouth keep going south until !obstEast or obstSouth
+
+        //if obstEast and objective is west, go west
+
+        //WEST WALL
+        //if obstWest and objective is south or southwest, keep going south until obstSouth or !obstWest
+
+        //if obstWest and objective is north or northwest, keep going north until obstNorth or !obstWest
+
+        //if obstWest and objective is west,
+            //if last move was moveNorth keep going north until !obstWest or obstNorth
+
+            //if last move was moveSouth keep going south until !obstWest or obstSouth
+
+        //if obstWest and objective is east, go east
+
+        //NORTH WALL
+        //if obstNorth and objective is east or northeast, keep going east until obstEast or !obstNorth
+
+        //if obstNorth and objective is west or northwest, keep going west until obstWest or !obstNorth
+
+        //if obstNorth and objective is north,
+            //if last move was moveEast keep going east until !obstNorth or obstEast
+
+            //if last move was moveWest keep going west until !obstNorth or obstWest
+
+        //if obstNorth and objective is south, go south
+
+        //SOUTH WALL
+        //if obstSouth and objective is east or southeast, keep going east until obstEast or !obstSouth
+
+        //if obstSouth and objective is west or southwest, keep going west until obstWest or !obstSouth
+
+        //if obstSouth and objective is south,
+        //if last move was moveEast keep going east until !obstSouth or obstEast
+
+        //if last move was moveWest keep going west until !obstSouth or obstWest
+
+        //if obstSouth and objective is north, go north
+
+        //CORNERS
+        //if obstEast and obstSouth, we are in a corner,
+            //if our last move was moveSouth, keep going west until !obstSouth or obstWest
+
+            //if our last move was moveEast, keep going north until !obstEast or obstNorth
+
+        //if obstSouth and obstWest, we are in a corner, keep going north until !obstWest or obstNorth
+            //if our last move was moveWest, keep going north until !obstWest or obstNorth
+
+            //if our last move was moveSouth, keep going east until !obstSouth or obstEast
+
+        //if obstWest and obstNorth, we are in a corner, keep going east until !obstNorth or obstEast
+            //if our last move was moveWest, keep going south until !obstWest or obstSouth
+
+            //if our last move was moveNorth, keep going east until !obstNorth or obstEast
+
         return whatToDo;
     }
 
@@ -518,11 +826,122 @@ public class Tharpoon extends Agent {
         return move(dir);
     }
 
-    public int pickRandomlyBetween(direction firstDir, direction secondDir){
+    public int moveRandomlyOneOfTheseDirectionsIfOpenOrElseDoNothing(direction firstDir, direction secondDir){
+        direction dir = pickRandomlyBetween(firstDir, secondDir);
+
+        if(okayToGo(dir)){
+            return move(dir);
+        }else if(dir == firstDir && okayToGo(secondDir)){
+            return move(secondDir);
+        }else{
+            return doNothing;
+        }
+    }
+
+    public int moveRandomlyOneOfTheseDirectionsIfOpenOrElseDoNothing(direction firstDir, direction secondDir, direction thirdDir){
+
+        boolean firstDirBad = false;
+        boolean secondDirBad = false;
+        boolean thirdDirBad = false;
+
+        while(true){
+            direction dir = pickRandomlyBetween(firstDir, secondDir, thirdDir);
+            if(okayToGo(dir)){
+                return move(dir);
+            }
+            if(dir == firstDir){
+                firstDirBad = true;
+            }
+            if(dir == secondDir){
+                secondDirBad = true;
+            }
+            if(dir == thirdDir){
+                thirdDirBad = true;
+            }
+            if(firstDirBad && secondDirBad && thirdDirBad){
+                return doNothing;
+            }
+        }
+    }
+
+    public int moveRandomlyOneOfTheseDirectionsIfOpenOrElseDoNothing(direction firstDir, direction secondDir, direction thirdDir, direction fourthDir){
+
+        boolean firstDirBad = false;
+        boolean secondDirBad = false;
+        boolean thirdDirBad = false;
+        boolean fourthDirBad = false;
+
+        while(true){
+            direction dir = pickRandomlyBetween(firstDir, secondDir, thirdDir, fourthDir);
+            if(okayToGo(dir)){
+                return move(dir);
+            }
+            if(dir == firstDir){
+                firstDirBad = true;
+            }
+            if(dir == secondDir){
+                secondDirBad = true;
+            }
+            if(dir == thirdDir){
+                thirdDirBad = true;
+            }
+            if(dir == fourthDir){
+                fourthDirBad = true;
+            }
+            if(firstDirBad && secondDirBad && thirdDirBad && fourthDirBad){
+                return doNothing;
+            }
+        }
+    }
+
+    public direction pickRandomlyBetween(direction firstDir, direction secondDir){
         direction dir = direction.DONOTHING;
 
         int num = randomInt(1, 2);
-        return (num == 1) ? (move(firstDir)) : (move(secondDir));
+        return (num == 1) ? (firstDir) : (secondDir);
+    }
+
+    public direction pickRandomlyBetween(direction firstDir, direction secondDir, direction thirdDir){
+        direction dir = direction.DONOTHING;
+
+        int num = randomInt(1, 3);
+        switch(num){
+            case 1:
+                return firstDir;
+            case 2:
+                return secondDir;
+            case 3:
+                return thirdDir;
+        }
+        return dir;
+    }
+
+    public direction pickRandomlyBetween(direction firstDir, direction secondDir, direction thirdDir, direction fourthDir){
+        direction dir = direction.DONOTHING;
+
+        int num = randomInt(1, 4);
+
+        switch(num){
+            case 1:
+                return firstDir;
+            case 2:
+                return secondDir;
+            case 3:
+                return thirdDir;
+            case 4:
+                return fourthDir;
+        }
+        return dir;
+    }
+
+    public int pickRandomlyBetweenAndMove(direction firstDir, direction secondDir, direction thirdDir, direction fourthDir){
+        direction dir = pickRandomlyBetween(firstDir, secondDir, thirdDir, fourthDir);
+        return move(dir);
+    }
+
+    public int pickRandomlyBetweenAndMove(direction firstDir, direction secondDir){
+        direction dir = pickRandomlyBetween(firstDir, secondDir);
+        return move(dir);
     }
 
     public int randomInt(int min, int max){
@@ -530,7 +949,7 @@ public class Tharpoon extends Agent {
         return rand.nextInt((max - min) + 1) + min;
     }
 
-    public int pickRandomlyBetween(ArrayList<direction> directions){
+    public int pickRandomlyBetweenDirectionsAndMove(ArrayList<direction> directions){
         direction dir = direction.DONOTHING;
 
         int num = randomInt(1, directions.size());
@@ -544,7 +963,7 @@ public class Tharpoon extends Agent {
     }
 
     public int moveToOneOfLeastVisitedSquares(){
-        int whatToDo = pickRandomlyBetween(getLeastVisitedSurroundingSquares());
+        int whatToDo = pickRandomlyBetweenDirectionsAndMove(getLeastVisitedSurroundingSquares());
         return whatToDo;
     }
 
@@ -794,11 +1213,11 @@ public class Tharpoon extends Agent {
             obstWest  = (inEnvironment.isObstacleWestImmediate() || (map[me.position.x - 1][me.position.y] == 'X'));
         }
 
-        blockedNorthEastSouth = (obstNorth && obstEast && obstSouth);
-        blockedEastSouthWest = (obstEast && obstSouth && obstWest);
-        blockedSouthWestNorth = (obstSouth && obstWest && obstNorth);
-        blockedWestNorthEast = (obstWest && obstNorth && obstEast);
-        blockedEveryDirection = (obstWest && obstNorth && obstEast && obstSouth);
+        obstNorthEastSouth = (obstNorth && obstEast && obstSouth);
+        obstEastSouthWest = (obstEast && obstSouth && obstWest);
+        obstSouthWestNorth = (obstSouth && obstWest && obstNorth);
+        obstWestNorthEast = (obstWest && obstNorth && obstEast);
+        obstEveryDirection = (obstWest && obstNorth && obstEast && obstSouth);
 
         if (obstNorth && me.position.y != 0) {
             map[me.position.x][me.position.y - 1] = 'X';
@@ -813,7 +1232,7 @@ public class Tharpoon extends Agent {
             map[me.position.x - 1][me.position.y] = 'X';
         }
 
-        //if(blockedInThreeDirections()){map[me.position.x][me.position.y] = 'X';}
+        //if(obstInThreeDirections()){map[me.position.x][me.position.y] = 'X';}
     }
 
     public void determineMySpawnAndInitialPosition() {
@@ -915,7 +1334,7 @@ public class Tharpoon extends Agent {
     }
 
     public void moveMeOnMap(Coordinate source, Coordinate destination) {
-        if(blockedInThreeDirections()){
+        if(obstInThreeDirections()){
             setMapSquare(source, 'X');
         }else {
             setMapSquare(source, ' ');
@@ -1033,10 +1452,10 @@ public class Tharpoon extends Agent {
         obstEast  = inEnvironment.isObstacleEastImmediate();
         obstWest  = inEnvironment.isObstacleWestImmediate();
 
-        blockedNorthEast = (obstNorth && obstEast);
-        blockedSouthEast = (obstSouth && obstEast);
-        blockedNorthWest = (obstNorth && obstWest);
-        blockedSouthWest = (obstSouth && obstWest);
+        obstNorthEast = (obstNorth && obstEast);
+        obstSouthEast = (obstSouth && obstEast);
+        obstNorthWest = (obstNorth && obstWest);
+        obstSouthWest = (obstSouth && obstWest);
 
         //immediate presence of enemy
         enemyNorthImmediate = inEnvironment.isAgentNorth(inEnvironment.ENEMY_TEAM, true);
@@ -1124,19 +1543,53 @@ public class Tharpoon extends Agent {
         return (positionIsSouth(pos) && positionIsWest(pos));
     }
 
-    public boolean blockedInThreeDirections() {
-        return (blockedNorthEastSouth || blockedEastSouthWest || blockedSouthWestNorth || blockedWestNorthEast);
+    public boolean obstInThreeDirections() {
+        return (obstNorthEastSouth || obstEastSouthWest || obstSouthWestNorth || obstWestNorthEast);
+    }
+
+    public boolean blockedInThreeDirections(){
+        return (blockedEastSouthWest() || blockedNorthEastSouth() || blockedSouthWestNorth() || blockedSouthWestNorth());
+    }
+
+    public boolean blockedNorthEastSouth(){
+        return (!okayToGoNorth() && !okayToGoEast() && !okayToGoSouth());
+    }
+
+    public boolean blockedEastSouthWest(){
+        return (!okayToGoEast() && !okayToGoSouth() && !okayToGoWest());
+    }
+
+    public boolean blockedSouthWestNorth(){
+        return (!okayToGoSouth() && !okayToGoWest() && !okayToGoNorth());
+    }
+
+    public boolean blockedWestNorthEast(){
+        return (!okayToGoWest() && !okayToGoNorth() && !okayToGoEast());
+    }
+
+    public direction getOnlyNonObstDirection() {
+        direction freeDirection = direction.EAST;
+        if (obstNorthEastSouth) {
+            freeDirection = direction.WEST;
+        } else if (obstEastSouthWest) {
+            freeDirection = direction.NORTH;
+        } else if (obstSouthWestNorth) {
+            freeDirection = direction.EAST;
+        } else if (obstWestNorthEast) {
+            freeDirection = direction.SOUTH;
+        }
+        return freeDirection;
     }
 
     public direction getOnlyFreeDirection() {
-        direction freeDirection = direction.EAST;
-        if (blockedNorthEastSouth) {
+        direction freeDirection = direction.DONOTHING;
+        if (blockedNorthEastSouth()) {
             freeDirection = direction.WEST;
-        } else if (blockedEastSouthWest) {
+        } else if (blockedEastSouthWest()) {
             freeDirection = direction.NORTH;
-        } else if (blockedSouthWestNorth) {
+        } else if (blockedSouthWestNorth()) {
             freeDirection = direction.EAST;
-        } else if (blockedWestNorthEast) {
+        } else if (blockedWestNorthEast()) {
             freeDirection = direction.SOUTH;
         }
         return freeDirection;
