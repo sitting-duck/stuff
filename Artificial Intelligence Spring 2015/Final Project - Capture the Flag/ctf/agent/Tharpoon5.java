@@ -32,7 +32,6 @@ public class Tharpoon5 extends Agent {
             objectives = new ArrayList<objective>();
             pushObjective(objective.INITIALIZE);
             directionsToGo = new ArrayList<direction>();
-            pushDirectionToGo(direction.DONOTHING);
             obstacles = new ArrayList<obstacle>();
             ////
 
@@ -131,6 +130,20 @@ public class Tharpoon5 extends Agent {
 
         public Agent popObstacle() {
             obstacles.remove(obstacles.size() - 1);
+            return this;
+        }
+
+        public Agent clearObstacles(){
+            obstacles.clear();
+            return this;
+        }
+
+        public Agent removeObstacleInDirection(direction dir){
+            for(int i = 0; i < obstacles.size(); i++){
+                if(obstacles.get(i) == getObstacleDirectionFromDirection(dir)){
+                    obstacles.remove(i);
+                }
+            }
             return this;
         }
 
@@ -569,7 +582,6 @@ public class Tharpoon5 extends Agent {
                     whatToDo = moveNorth();
                 }else{
                     me.pushObjective(objective.MOVE_AROUND_OBSTACLE);
-                    me.pushObstacle(obstacle.NORTH_WALL);
                     whatToDo = goAroundObstacle(place);
                 }
                 break;
@@ -577,69 +589,42 @@ public class Tharpoon5 extends Agent {
                 if(okayToGoNorth() && okayToGoEast()){
                     //whatToDo = preferInOrder(direction.EAST, direction.NORTH);
                     whatToDo = pickRandomlyBetweenAndMove(direction.NORTH, direction.EAST);
-                }else if (okayToGoNorth() || okayToGoEast()){
-                    direction dir = pickRandomlyBetween(direction.EAST, direction.NORTH);
-                    if(okayToGo(dir)) {
-                        whatToDo = move(dir);
-                    }else{
-                        me.pushObjective(objective.MOVE_AROUND_OBSTACLE);
-                        me.pushObstacle(getObstacleDirectionFromDirection(dir));
-                        whatToDo = goAroundObstacle(place);
-                    }
+                }else{
+                    me.pushObjective(objective.MOVE_AROUND_OBSTACLE);
+                    whatToDo = goAroundObstacle(place);
                 }
                 break;
             case NORTHWEST:
                 if(okayToGoNorth() && okayToGoWest()){
                     whatToDo = pickRandomlyBetweenAndMove(direction.NORTH, direction.WEST);
                     //whatToDo = preferInOrder(direction.WEST, direction.NORTH);
-                }else if(okayToGoNorth() || okayToGoWest()){
-                    direction dir = pickRandomlyBetween(direction.WEST, direction.NORTH);
-                    if(okayToGo(dir)) {
-                        whatToDo = move(dir);
-                    }
-                    else{
-                        me.pushObjective(objective.MOVE_AROUND_OBSTACLE);
-                        me.pushObstacle(getObstacleDirectionFromDirection(dir));
-                        whatToDo = goAroundObstacle(place);
-                    }
-                }
+                }else{
+                    me.pushObjective(objective.MOVE_AROUND_OBSTACLE);
+                    whatToDo = goAroundObstacle(place);
+                 }
                 break;
             case SOUTH:
                 if(okayToGoSouth()){
                     whatToDo = moveSouth();
                 }else{
-                        me.pushObjective(objective.MOVE_AROUND_OBSTACLE);
-                        me.pushObstacle(obstacle.SOUTH_WALL);
-                        whatToDo = goAroundObstacle(place);
+                    me.pushObjective(objective.MOVE_AROUND_OBSTACLE);
+                    whatToDo = goAroundObstacle(place);
                 }
                 break;
             case SOUTHEAST:
                 if(okayToGoSouth() && okayToGoEast()){
                     whatToDo = pickRandomlyBetweenAndMove(direction.SOUTH, direction.EAST);
-                }else if(okayToGoSouth() || okayToGoEast()) {
-                    direction dir = pickRandomlyBetween(direction.SOUTH, direction.EAST);
-                    if (okayToGo(dir)) {
-                        whatToDo = move(dir);
-                    } else{
-                        me.pushObjective(objective.MOVE_AROUND_OBSTACLE);
-                        me.pushObstacle(getObstacleDirectionFromDirection(dir));
-                        whatToDo = goAroundObstacle(place);
-                    }
+                }else{
+                    me.pushObjective(objective.MOVE_AROUND_OBSTACLE);
+                    whatToDo = goAroundObstacle(place);
                 }
                 break;
             case SOUTHWEST:
                 if(okayToGoSouth() && okayToGoWest()){
                     whatToDo = pickRandomlyBetweenAndMove(direction.SOUTH, direction.WEST);
-                }else if(okayToGoSouth() || okayToGoWest()){
-                    direction dir = pickRandomlyBetween(direction.SOUTH, direction.WEST);
-                    if(okayToGo(dir)) {
-                        whatToDo = move(dir);
-                    }
-                    else{
-                        me.pushObjective(objective.MOVE_AROUND_OBSTACLE);
-                        me.pushObstacle(getObstacleDirectionFromDirection(dir));
-                        whatToDo = goAroundObstacle(place);
-                    }
+                }else{
+                    me.pushObjective(objective.MOVE_AROUND_OBSTACLE);
+                    whatToDo = goAroundObstacle(place);
                 }
                 break;
             case EAST:
@@ -647,7 +632,6 @@ public class Tharpoon5 extends Agent {
                     whatToDo = moveEast();
                 }else{
                     me.pushObjective(objective.MOVE_AROUND_OBSTACLE);
-                    me.pushObstacle(obstacle.EAST_WALL);
                     whatToDo = goAroundObstacle(place);
                 }
                 break;
@@ -656,7 +640,6 @@ public class Tharpoon5 extends Agent {
                     whatToDo = moveWest();
                 }else{
                     me.pushObjective(objective.MOVE_AROUND_OBSTACLE);
-                    me.pushObstacle(obstacle.WEST_WALL);
                     whatToDo = goAroundObstacle(place);
                 }
                 break;
@@ -665,554 +648,490 @@ public class Tharpoon5 extends Agent {
         return whatToDo;
     }
 
-    public void determineDirectionToGoAroundWall(Place pointOfInterest){
+    public void determineDirectionToGoAroundObstacles(Place pointOfInterest){
 
-        obstacle obst = me.getCurrentObstacle();
+
+        //TUNNELS
+        if(!okayToGoEast() && !okayToGoWest()){
+            System.out.println("ew tunnel");
+            direction nonEastOrWestDir = pickRandomlyBetween(direction.SOUTH, direction.NORTH);
+
+            if(pointOfInterest.dir == direction.NORTHEAST) {
+                me.pushDirectionToGo(direction.NORTH);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.SOUTHEAST){
+                me.pushDirectionToGo(direction.SOUTH);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.EAST){
+                me.pushDirectionToGo(nonEastOrWestDir);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.WEST){
+                me.pushDirectionToGo(nonEastOrWestDir);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.NORTHWEST){
+                me.pushDirectionToGo(direction.NORTH);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.SOUTHWEST){
+                me.pushDirectionToGo(direction.SOUTH);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.SOUTH){
+                me.pushDirectionToGo(direction.SOUTH);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.NORTH){
+                me.pushDirectionToGo(direction.NORTH);
+                return;
+            }
+        }
+
+        if(!okayToGoNorth() && !okayToGoSouth()){
+            System.out.println("ns tunnel");
+            direction nonNorthOrSouthDir = pickRandomlyBetween(direction.EAST, direction.WEST);
+
+            if(pointOfInterest.dir == direction.NORTHEAST) {
+                me.pushDirectionToGo(direction.EAST);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.SOUTHEAST){
+                me.pushDirectionToGo(direction.EAST);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.EAST){
+                me.pushDirectionToGo(direction.EAST);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.WEST){
+                me.pushDirectionToGo(direction.WEST);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.NORTHWEST){
+                me.pushDirectionToGo(direction.WEST);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.SOUTHWEST){
+                me.pushDirectionToGo(direction.WEST);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.SOUTH){
+                me.pushDirectionToGo(nonNorthOrSouthDir);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.NORTH){
+                me.pushDirectionToGo(nonNorthOrSouthDir);
+                return;
+            }
+
+        }
+
+    //CORNERS
+        //if obstEast and obstNorth
+        if(!okayToGoEast() && !okayToGoNorth()){
+            System.out.println("ne corner");
+            direction nonNorthOrEastDir = pickRandomlyBetween(direction.SOUTH, direction.WEST);
+
+            if(pointOfInterest.dir == direction.NORTHEAST) {
+                me.pushDirectionToGo(nonNorthOrEastDir);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.SOUTHEAST){
+                me.pushDirectionToGo(direction.SOUTH);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.EAST){
+                me.pushDirectionToGo(nonNorthOrEastDir);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.WEST){
+                me.pushDirectionToGo(direction.WEST);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.NORTHWEST){
+                me.pushDirectionToGo(direction.WEST);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.SOUTHWEST){
+                me.pushDirectionToGo(nonNorthOrEastDir);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.SOUTH){
+                me.pushDirectionToGo(direction.SOUTH);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.NORTH){
+                me.pushDirectionToGo(nonNorthOrEastDir);
+                return;
+            }
+        }
+
+        //if obstEast and obstSouth
+        if(!okayToGoEast() && !okayToGoSouth()) {
+            System.out.println("se corner");
+            direction nonSouthOrEastDir = pickRandomlyBetween(direction.NORTH, direction.WEST);
+
+            if (pointOfInterest.dir == direction.NORTHEAST) {
+                me.pushDirectionToGo(nonSouthOrEastDir);
+                return;
+            }
+
+            if (pointOfInterest.dir == direction.SOUTHEAST) {
+                me.pushDirectionToGo(nonSouthOrEastDir);
+                return;
+            }
+
+            if (pointOfInterest.dir == direction.EAST) {
+                me.pushDirectionToGo(nonSouthOrEastDir);
+                return;
+            }
+
+            if (pointOfInterest.dir == direction.WEST) {
+                me.pushDirectionToGo(direction.WEST);
+                return;
+            }
+
+            if (pointOfInterest.dir == direction.NORTHWEST) {
+                me.pushDirectionToGo(nonSouthOrEastDir);
+                return;
+            }
+
+            if (pointOfInterest.dir == direction.SOUTHWEST) {
+                me.pushDirectionToGo(direction.WEST);
+                return;
+            }
+
+            if (pointOfInterest.dir == direction.NORTH) {
+                me.pushDirectionToGo(direction.NORTH);
+                return;
+            }
+
+            if (pointOfInterest.dir == direction.SOUTH) {
+                me.pushDirectionToGo(nonSouthOrEastDir);
+                return;
+            }
+        }
+
+        //if obstWest and obstSouth
+        if(!okayToGoWest() && !okayToGoSouth()){
+            System.out.println("sw corner");
+            direction nonSouthOrWestDir = pickRandomlyBetween(direction.NORTH, direction.EAST);
+
+            if(pointOfInterest.dir == direction.NORTHEAST) {
+                me.pushDirectionToGo(nonSouthOrWestDir);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.SOUTHEAST){
+                me.pushDirectionToGo(direction.EAST);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.EAST){
+                me.pushDirectionToGo(direction.EAST);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.WEST){
+                me.pushDirectionToGo(nonSouthOrWestDir);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.NORTHWEST){
+                me.pushDirectionToGo(direction.NORTH);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.SOUTHWEST){
+                me.pushDirectionToGo(nonSouthOrWestDir);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.NORTH){
+                me.pushDirectionToGo(direction.NORTH);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.SOUTH){
+                me.pushDirectionToGo(nonSouthOrWestDir);
+                return;
+            }
+        }
+
+        //if obstWest and obstNorth
+        if(!okayToGoWest() && !okayToGoNorth()){
+            System.out.println("nw corner");
+            direction nonNorthOrWestDir = pickRandomlyBetween(direction.SOUTH, direction.EAST);
+
+            if(pointOfInterest.dir == direction.NORTHEAST) {
+                me.pushDirectionToGo(direction.EAST);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.SOUTHEAST){
+                me.pushDirectionToGo(nonNorthOrWestDir);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.EAST){
+                me.pushDirectionToGo(direction.EAST);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.WEST){
+                me.pushDirectionToGo(nonNorthOrWestDir);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.NORTHWEST){
+                me.pushDirectionToGo(nonNorthOrWestDir);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.SOUTHWEST){
+                me.pushDirectionToGo(direction.SOUTH);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.SOUTH){
+                me.pushDirectionToGo(direction.SOUTH);
+                return;
+            }
+
+            if(pointOfInterest.dir == direction.NORTH){
+                me.pushDirectionToGo(nonNorthOrWestDir);
+                return;
+            }
+        }
+
         int numMovesBack = 1;
 
         //WALLS
 
         //EAST WALL//EAST WALL //EAST WALL //EAST WALL //EAST WALL //EAST WALL //EAST WALL //EAST WALL //EAST WALL //EAST WALL //EAST WALL //EAST WALL //EAST WALL //EAST WALL
         //if obstEast and objective is south or southeast, keep going south until obstSouth or !obstEast
-        if(obst == obstacle.EAST_WALL && (pointOfInterest.dir == direction.SOUTH || pointOfInterest.dir == direction.SOUTHEAST)){
-            //if(okayToGoSouth()){
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.SOUTH) + " around " + me.getCurrentObstacleString());
+        if(!okayToGoEast() && (pointOfInterest.dir == direction.SOUTH || pointOfInterest.dir == direction.SOUTHEAST)){
+            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.SOUTH) + " around east wall");
             me.pushDirectionToGo(direction.SOUTH);
             return;
-            //}else{
-            //    direction dir = pickRandomlyBetween(direction.NORTH, direction.WEST);
-            //    while(!okayToGo(dir)){
-            //        dir = pickRandomlyBetween(direction.NORTH, direction.WEST);
-            //    }
-            //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-            //    me.pushDirectionToGo(dir);
-            //    return;
-            //}
-
         }
 
         //if obstEast and objective is north or northeast, keep going north until obstNorth or !obstEast
-        if(obst == obstacle.EAST_WALL && (pointOfInterest.dir == direction.NORTH || pointOfInterest.dir == direction.NORTHEAST)){
-            //if(okayToGoNorth()){
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.NORTH) + " around " + me.getCurrentObstacleString());
+        if(!okayToGoEast() && (pointOfInterest.dir == direction.NORTH || pointOfInterest.dir == direction.NORTHEAST)){
+            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.NORTH) + " around east wall");
             me.pushDirectionToGo(direction.NORTH);
             return;
-            //}else{
-            //    direction dir = pickRandomlyBetween(direction.SOUTH, direction.WEST);
-            //    while(!okayToGo(dir)){
-            //        dir = pickRandomlyBetween(direction.SOUTH, direction.WEST);
-            //    }
-            //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.NORTH) + " around " + me.getCurrentObstacleString());
-            //    me.pushDirectionToGo(dir);
-            //    return;
-            //}
-
         }
 
         //if obstEast and objective is east,
-        if(obst == obstacle.EAST_WALL && (pointOfInterest.dir == direction.EAST)){
+        if(!okayToGoEast() && (pointOfInterest.dir == direction.EAST)){
+            direction nonEastDir = pickRandomlyBetween(direction.SOUTH, direction.NORTH);
 
-            numMovesBack = 1;
-            while(me.getXMovesMadeBack(numMovesBack) == moveEast){
-                numMovesBack++;
-            }
-            int lastNonEastMove = me.getXMovesMadeBack(numMovesBack);
-
-            System.out.println("agent " + me.name + " last move made was: " + getNameFromAgentAction(lastNonEastMove));
-
-            //if last move was moveNorth keep going north until !obstEast or obstNorth
-            if(lastNonEastMove == moveNorth){
-                //if(okayToGoNorth()){
-                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.NORTH) + " around " + me.getCurrentObstacleString());
+            if(nonEastDir == direction.NORTH){
+                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.NORTH) + " around east wall");
                 me.pushDirectionToGo(direction.NORTH);
                 return;
-                //}else{
-                //    direction dir = pickRandomlyBetween(direction.SOUTH, direction.WEST);
-                //    while(!okayToGo(dir)){
-                //        dir = pickRandomlyBetween(direction.SOUTH, direction.WEST);
-                //    }
-                //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-                //    me.pushDirectionToGo(dir);
-                //    return;
-                //}
             }
 
-            //if last move was moveSouth keep going south until !obstEast or obstSouth
-            if(lastNonEastMove == moveSouth) {
-                //if(okayToGoSouth()){
-                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.SOUTH) + " around " + me.getCurrentObstacleString());
+            if(nonEastDir == direction.SOUTH) {
+                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.SOUTH) + " around east wall");
                 me.pushDirectionToGo(direction.SOUTH);
                 return;
-                //}else{
-                //    direction dir = pickRandomlyBetween(direction.NORTH, direction.WEST);
-                //    while(!okayToGo(dir)){
-                //        dir = pickRandomlyBetween(direction.NORTH, direction.WEST);
-                //    }
-                //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-                //    me.pushDirectionToGo(dir);
-                //    return;
-                //}
             }
         }
 
         //if obstEast and objective is west, go west
-        if(obst == obstacle.EAST_WALL && (pointOfInterest.dir == direction.WEST || pointOfInterest.dir == direction.SOUTHWEST || pointOfInterest.dir == direction.NORTHWEST)) {
-            //if (okayToGoWest()) {
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.WEST) + " around " + me.getCurrentObstacleString());
+        if(!okayToGoEast() && (pointOfInterest.dir == direction.WEST || pointOfInterest.dir == direction.SOUTHWEST || pointOfInterest.dir == direction.NORTHWEST)) {
+            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.WEST) + " around east wall");
             me.pushDirectionToGo(direction.WEST);
             return;
-            //} else {
-            //    direction dir = pickRandomlyBetween(direction.NORTH, direction.SOUTH);
-            //    while (!okayToGo(dir)) {
-            //        dir = pickRandomlyBetween(direction.NORTH, direction.SOUTH);
-            //    }
-            //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-            //    me.pushDirectionToGo(dir);
-            //    return;
-            //}
         }
 
 
         //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL
         //if obstWest and objective is south or southwest, keep going south until obstSouth or !obstWest
-        if(obst == obstacle.WEST_WALL && (pointOfInterest.dir == direction.SOUTH || pointOfInterest.dir == direction.SOUTHWEST)){
-            //if(okayToGoSouth()){
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.SOUTH) + " around " + me.getCurrentObstacleString());
+        if(!okayToGoWest() && (pointOfInterest.dir == direction.SOUTH || pointOfInterest.dir == direction.SOUTHWEST)){
+            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.SOUTH) + " around west wall");
             me.pushDirectionToGo(direction.SOUTH);
             return;
-            //}else{
-            //    direction dir = pickRandomlyBetween(direction.NORTH, direction.EAST);
-            //    while(!okayToGo(dir)){
-            //        dir = pickRandomlyBetween(direction.NORTH, direction.EAST);
-            //    }
-            //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-            //    me.pushDirectionToGo(dir);
-            //    return;
-            //}
         }
 
         //if obstWest and objective is north or northwest, keep going north until obstNorth or !obstWest
-        if(obst == obstacle.WEST_WALL && (pointOfInterest.dir == direction.NORTH || pointOfInterest.dir == direction.NORTHWEST)){
-            //if(okayToGoNorth()){
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.NORTH) + " around " + me.getCurrentObstacleString());
+        if(!okayToGoWest() && (pointOfInterest.dir == direction.NORTH || pointOfInterest.dir == direction.NORTHWEST)){
+            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.NORTH) + " around west wall");
             me.pushDirectionToGo(direction.NORTH);
             return;
-            //}else{
-            //    direction dir = pickRandomlyBetween(direction.SOUTH, direction.EAST);
-            //    while(!okayToGo(dir)){
-            //        dir = pickRandomlyBetween(direction.SOUTH, direction.EAST);
-            //    }
-            //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-            //    me.pushDirectionToGo(dir);
-            //    return;
-            //}
         }
 
         //if obstWest and objective is west,
-        if(obst == obstacle.WEST_WALL && (pointOfInterest.dir == direction.WEST)){
-
-            numMovesBack = 1;
-            while(me.getXMovesMadeBack(numMovesBack) == moveWest){
-                numMovesBack++;
-            }
-            int lastNonWestMove = me.getXMovesMadeBack(numMovesBack);
-
-            System.out.println("agent " + me.name + " last move made was: " + getNameFromAgentAction(lastNonWestMove));
+        if(!okayToGoWest() && (pointOfInterest.dir == direction.WEST)){
+            direction nonWestDir = pickRandomlyBetween(direction.SOUTH, direction.NORTH);
 
             //if last move was moveNorth keep going north until !obstWest or obstNorth
-            if(lastNonWestMove == moveNorth) {
-                //if(okayToGoNorth()){
-                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.NORTH) + " around " + me.getCurrentObstacleString());
+            if(nonWestDir == direction.NORTH) {
+                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.NORTH) + " around west wall");
                 me.pushDirectionToGo(direction.NORTH);
                 return;
-                //}else{
-                //    direction dir = pickRandomlyBetween(direction.SOUTH, direction.EAST);
-                //    while(!okayToGo(dir)){
-                //        dir = pickRandomlyBetween(direction.SOUTH, direction.EAST);
-                //    }
-                //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-                //    me.pushDirectionToGo(dir);
-                //    return;
-                //}
             }
 
             //if last move was moveSouth keep going south until !obstWest or obstSouth
-            if(lastNonWestMove == moveSouth) {
-                //if(okayToGoSouth()){
-                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.SOUTH) + " around " + me.getCurrentObstacleString());
+            if(nonWestDir == direction.SOUTH) {
+                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.SOUTH) + " around west wall");
                 me.pushDirectionToGo(direction.SOUTH);
                 return;
-                //}else{
-                //    direction dir = pickRandomlyBetween(direction.NORTH, direction.EAST);
-                //    while(!okayToGo(dir)){
-                //        dir = pickRandomlyBetween(direction.NORTH, direction.EAST);
-                //    }
-                //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-                //    me.pushDirectionToGo(dir);
-                //    return;
-                //}
             }
         }
 
         //if obstWest and objective is east, go east
-        if(obst == obstacle.WEST_WALL && (pointOfInterest.dir == direction.EAST || pointOfInterest.dir == direction.SOUTHEAST || pointOfInterest.dir == direction.NORTHEAST)){
-            //if(okayToGoEast()){
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.EAST) + " around " + me.getCurrentObstacleString());
+        if(!okayToGoWest() && (pointOfInterest.dir == direction.EAST || pointOfInterest.dir == direction.SOUTHEAST || pointOfInterest.dir == direction.NORTHEAST)){
+            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.EAST) + " around west wall");
             me.pushDirectionToGo(direction.EAST);
             return;
-            //}else{
-            //    direction dir = pickRandomlyBetween(direction.NORTH, direction.SOUTH);
-            //    while(!okayToGo(dir)){
-            //        dir = pickRandomlyBetween(direction.NORTH, direction.SOUTH);
-            //    }
-            //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-            //    me.pushDirectionToGo(dir);
-            //    return;
-            //}
         }
 
         //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL
         //if obstNorth and objective is east or northeast, keep going east until obstEast or !obstNorth
-        if(obst == obstacle.NORTH_WALL && (pointOfInterest.dir == direction.EAST || pointOfInterest.dir == direction.NORTHEAST)){
-            //if(okayToGoEast()){
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.EAST) + " around " + me.getCurrentObstacleString());
+        if(!okayToGoNorth() && (pointOfInterest.dir == direction.EAST || pointOfInterest.dir == direction.NORTHEAST)){
+            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.EAST) + " around north wall");
             me.pushDirectionToGo(direction.EAST);
             return;
-            //}else{
-            //    direction dir = pickRandomlyBetween(direction.WEST, direction.SOUTH);
-            //    while(!okayToGo(dir)){
-            //        dir = pickRandomlyBetween(direction.WEST, direction.SOUTH);
-            //    }
-            //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-            //    me.pushDirectionToGo(dir);
-            //    return;
-            //}
         }
 
         //if obstNorth and objective is west or northwest, keep going west until obstWest or !obstNorth
-        if(obst == obstacle.NORTH_WALL && (pointOfInterest.dir == direction.WEST || pointOfInterest.dir == direction.NORTHWEST)){
-            //if(okayToGoWest()){
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.WEST) + " around " + me.getCurrentObstacleString());
+        if(!okayToGoNorth() && (pointOfInterest.dir == direction.WEST || pointOfInterest.dir == direction.NORTHWEST)){
+            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.WEST) + " around north wall");
             me.pushDirectionToGo(direction.WEST);
             return;
-            //}else{
-            //    direction dir = pickRandomlyBetween(direction.EAST, direction.SOUTH);
-            //    while(!okayToGo(dir)){
-            //        dir = pickRandomlyBetween(direction.EAST, direction.SOUTH);
-            //    }
-            //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-            //    me.pushDirectionToGo(dir);
-            //    return;
-            //}
         }
 
         //if obstNorth and objective is north,
-        if(obst == obstacle.NORTH_WALL && (pointOfInterest.dir == direction.NORTH)){
-
-            numMovesBack = 1;
-            while(me.getXMovesMadeBack(numMovesBack) == moveNorth){
-                numMovesBack++;
-            }
-            int lastNonNorthMove = me.getXMovesMadeBack(numMovesBack);
-
-            System.out.println("agent " + me.name + " last move made was: " + getNameFromAgentAction(lastNonNorthMove));
+        if(!okayToGoNorth() && (pointOfInterest.dir == direction.NORTH)){
+            direction nonNorthDir = pickRandomlyBetween(direction.EAST, direction.WEST);
 
             //if last move was moveEast keep going east until !obstNorth or obstEast
-            if(lastNonNorthMove == moveEast) {
-                //    if(okayToGoEast()){
-                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.EAST) + " around " + me.getCurrentObstacleString());
+            if(nonNorthDir == direction.EAST) {
+                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.EAST) + " around north wall");
                 me.pushDirectionToGo(direction.EAST);
                 return;
-                //    }else{
-                //        direction dir = pickRandomlyBetween(direction.WEST, direction.SOUTH);
-                //        while(!okayToGo(dir)){
-                //            dir = pickRandomlyBetween(direction.WEST, direction.SOUTH);
-                //        }
-                //        System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-                //        me.pushDirectionToGo(dir);
-                //        return;
-                //    }
             }
 
             //if last move was moveWest keep going west until !obstNorth or obstWest
-            if(lastNonNorthMove == moveWest) {
-                //if(okayToGoWest()){
-                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.WEST) + " around " + me.getCurrentObstacleString());
+            if(nonNorthDir == direction.WEST) {
+                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.WEST) + " around north wall");
                 me.pushDirectionToGo(direction.WEST);
                 return;
-                //}else{
-                //    direction dir = pickRandomlyBetween(direction.EAST, direction.SOUTH);
-                //    while(!okayToGo(dir)){
-                //        dir = pickRandomlyBetween(direction.EAST, direction.SOUTH);
-                //    }
-                //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-                //    me.pushDirectionToGo(dir);
-                //    return;
-                //}
             }
         }
 
 
         //if obstNorth and objective is south, go south
-        if(obst == obstacle.NORTH_WALL && (pointOfInterest.dir == direction.EAST || pointOfInterest.dir == direction.SOUTHEAST || pointOfInterest.dir == direction.NORTHEAST)){
-            //if(okayToGoSouth()){
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.SOUTH) + " around " + me.getCurrentObstacleString());
+        if(!okayToGoNorth() && (pointOfInterest.dir == direction.EAST || pointOfInterest.dir == direction.SOUTHEAST || pointOfInterest.dir == direction.NORTHEAST)){
+            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.SOUTH) + " around north wall");
             me.pushDirectionToGo(direction.SOUTH);
             return;
-            //}else{
-            //    direction dir = pickRandomlyBetween(direction.WEST, direction.EAST);
-            //    while(!okayToGo(dir)){
-            //        dir = pickRandomlyBetween(direction.WEST, direction.EAST);
-            //    }
-            //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-            //    me.pushDirectionToGo(dir);
-            //    return;
-            //}
         }
 
         //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL
         //if obstSouth and objective is east or southeast, keep going east until obstEast or !obstSouth
-        if(obst == obstacle.SOUTH_WALL && (pointOfInterest.dir == direction.EAST || pointOfInterest.dir == direction.SOUTHEAST)){
-            //if(okayToGoEast()){
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.EAST) + " around " + me.getCurrentObstacleString());
+        if(!okayToGoSouth() && (pointOfInterest.dir == direction.EAST || pointOfInterest.dir == direction.SOUTHEAST)){
+            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.EAST) + " around south wall");
             me.pushDirectionToGo(direction.EAST);
             return;
-            //}else{
-            //    direction dir = pickRandomlyBetween(direction.WEST, direction.NORTH);
-            //    while(!okayToGo(dir)){
-            //        dir = pickRandomlyBetween(direction.WEST, direction.NORTH);
-            //    }
-            //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-            //    me.pushDirectionToGo(dir);
-            //    return;
-            //}
         }
 
         //if obstSouth and objective is west or southwest, keep going west until obstWest or !obstSouth
-        if(obst == obstacle.SOUTH_WALL && (pointOfInterest.dir == direction.WEST || pointOfInterest.dir == direction.SOUTHWEST)){
-            //if(okayToGoWest()){
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.WEST) + " around " + me.getCurrentObstacleString());
+        if(!okayToGoSouth() && (pointOfInterest.dir == direction.WEST || pointOfInterest.dir == direction.SOUTHWEST)){
+            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.WEST) + " around south wall");
             me.pushDirectionToGo(direction.WEST);
             return;
-            //}else{
-            //    direction dir = pickRandomlyBetween(direction.EAST, direction.NORTH);
-            //    while(!okayToGo(dir)){
-            //        dir = pickRandomlyBetween(direction.EAST, direction.NORTH);
-            //    }
-            //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-            //    me.pushDirectionToGo(dir);
-            //    return;
-            //}
         }
 
         //if obstSouth and objective is south,
-        if(obst == obstacle.SOUTH_WALL && (pointOfInterest.dir == direction.SOUTH)){
-
-            numMovesBack = 1;
-            while(me.getXMovesMadeBack(numMovesBack) == moveSouth){
-                numMovesBack++;
-            }
-            int lastNonSouthMove = me.getXMovesMadeBack(numMovesBack);
-
-            System.out.println("agent " + me.name + " last move made was: " + getNameFromAgentAction(lastNonSouthMove));
+        if(!okayToGoSouth() && (pointOfInterest.dir == direction.SOUTH)){
+            direction nonSouthDir = pickRandomlyBetween(direction.EAST, direction.WEST);
 
             //if last move was moveEast keep going east until !obstSouth or obstEast
-            if(lastNonSouthMove == moveEast) {
-                //if(okayToGoEast()){
-                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.EAST) + " around " + me.getCurrentObstacleString());
+            if(nonSouthDir == direction.EAST) {
+                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.EAST) + " around south wall");
                 me.pushDirectionToGo(direction.EAST);
                 return;
-                //}else{
-                //    direction dir = pickRandomlyBetween(direction.WEST, direction.NORTH);
-                //    while(!okayToGo(dir)){
-                //        dir = pickRandomlyBetween(direction.WEST, direction.NORTH);
-                //    }
-                //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-                //    me.pushDirectionToGo(dir);
-                //    return;
-                //}
             }
 
             //if last move was moveWest keep going west until !obstSouth or obstWest
-            if(lastNonSouthMove == moveWest) {
-                //if(okayToGoWest()){
-                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.WEST) + " around " + me.getCurrentObstacleString());
+            if(nonSouthDir == direction.WEST) {
+                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.WEST) + " around south wall");
                 me.pushDirectionToGo(direction.WEST);
                 return;
-                //}else{
-                //    direction dir = pickRandomlyBetween(direction.EAST, direction.NORTH);
-                //    while(!okayToGo(dir)){
-                //        dir = pickRandomlyBetween(direction.EAST, direction.NORTH);
-                //    }
-                //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-                //    me.pushDirectionToGo(dir);
-                //    return;
-                //}
             }
         }
 
         //if obstSouth and objective is north, go north
-        if(obst == obstacle.SOUTH_WALL && (pointOfInterest.dir == direction.NORTH || pointOfInterest.dir == direction.NORTHEAST || pointOfInterest.dir == direction.NORTHWEST)){
-            //if(okayToGoNorth()){
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.NORTH) + " around " + me.getCurrentObstacleString());
+        if(!okayToGoSouth() && (pointOfInterest.dir == direction.NORTH || pointOfInterest.dir == direction.NORTHEAST || pointOfInterest.dir == direction.NORTHWEST)){
+            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.NORTH) + " around south wall");
             me.pushDirectionToGo(direction.NORTH);
             return;
-            //}else{
-            //    direction dir = pickRandomlyBetween(direction.WEST, direction.EAST);
-            //    while(!okayToGo(dir)){
-            //        dir = pickRandomlyBetween(direction.WEST, direction.EAST);
-            //    }
-            //    System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(dir) + " around " + me.getCurrentObstacleString());
-            //    me.pushDirectionToGo(dir);
-            //    return;
-            //}
         }
-    }
-
-
-
-    public void determineDirectionToGoAroundObstacle(Place pointOfInterest){
-        //int lastNonEastMove = me.getLastNonDirMove(direction.EAST);
-        //int lastNonSouthMove = me.getLastNonDirMove(direction.SOUTH);
-        //int lastNonWestMove = me.getLastNonDirMove(direction.WEST);
-        //int lastNonNorthMove = me.getLastNonDirMove(direction.NORTH);
-
-        //int lastNonSouthOrWestMove = me.getLastNonDirMove(direction.WEST, direction.SOUTH);
-        //int lastNonNorthOrWestMove = me.getLastNonDirMove(direction.WEST, direction.NORTH);
-
-        obstacle currentObstacle = me.getCurrentObstacle();
-
-        if(me.obstacles.size() == 1){
-            //we are trying to get around a wall
-            determineDirectionToGoAroundWall(pointOfInterest);
-            return;
-        }
-
-        if(me.obstacles.size() == 2){
-            //we are in a corner
-
-
-            System.out.println("CORNER!!!");
-            //CORNERS
-
-            //if obstEast and obstNorth
-            int lastNonNorthOrEastMove = me.getLastNonDirMove(direction.EAST, direction.NORTH);
-            if(!okayToGoEast() && !okayToGoNorth()){
-                if(pointOfInterest.dir == direction.NORTHEAST) {
-                    me.pushDirectionToGo(getDirectionFromAgentAction(lastNonNorthOrEastMove));
-                }
-
-                if(pointOfInterest.dir == direction.SOUTHEAST){
-                    me.pushDirectionToGo(getDirectionFromAgentAction(moveSouth));
-                }
-
-                if(pointOfInterest.dir == direction.EAST){
-                    me.pushDirectionToGo(getDirectionFromAgentAction(lastNonNorthOrEastMove));
-                }
-
-                if(pointOfInterest.dir == direction.WEST){
-                    me.pushDirectionToGo(getDirectionFromAgentAction(moveWest));
-                }
-
-                if(pointOfInterest.dir == direction.NORTHWEST){
-                    me.pushDirectionToGo(getDirectionFromAgentAction(moveWest));
-                }
-
-                if(pointOfInterest.dir == direction.SOUTHWEST){
-                    me.pushDirectionToGo(getDirectionFromAgentAction(lastNonNorthOrEastMove));
-                }
-
-                if(pointOfInterest.dir == direction.SOUTH){
-                    me.pushDirectionToGo(getDirectionFromAgentAction(moveSouth));
-                }
-
-                if(pointOfInterest.dir == direction.NORTH){
-                    me.pushDirectionToGo(getDirectionFromAgentAction(lastNonNorthOrEastMove));
-                }
-            }
-
-            int lastNonSouthOrEastMove = me.getLastNonDirMove(direction.EAST, direction.SOUTH);
-            //if obstEast and obstSouth
-            if(!okayToGoEast() && !okayToGoSouth()){
-
-                if(pointOfInterest.dir == direction.NORTHEAST) {
-                    me.pushDirectionToGo(getDirectionFromAgentAction(lastNonSouthOrEastMove));
-                }
-
-                if(pointOfInterest.dir == direction.SOUTHEAST){
-                    me.pushDirectionToGo(getDirectionFromAgentAction(lastNonSouthOrEastMove));
-                }
-
-                if(pointOfInterest.dir == direction.EAST){
-                    me.pushDirectionToGo(getDirectionFromAgentAction(lastNonSouthOrEastMove));
-                }
-
-                if(pointOfInterest.dir == direction.WEST){
-                    me.pushDirectionToGo(getDirectionFromAgentAction(moveWest));
-                }
-
-                if(pointOfInterest.dir == direction.NORTHWEST){
-                    me.pushDirectionToGo(getDirectionFromAgentAction(lastNonSouthOrEastMove));
-                }
-
-                if(pointOfInterest.dir == direction.SOUTHWEST){
-                    me.pushDirectionToGo(getDirectionFromAgentAction(moveWest));
-                }
-
-                if(pointOfInterest.dir == direction.NORTH){
-                    me.pushDirectionToGo(getDirectionFromAgentAction(moveNorth));
-                }
-
-                if(pointOfInterest.dir == direction.SOUTH){
-                    me.pushDirectionToGo(getDirectionFromAgentAction(lastNonSouthOrEastMove));
-                }
-
-                //if our last move was moveSouth, keep going west until !obstSouth or obstWest
-
-                //if our last move was moveEast, keep going north until !obstEast or obstNorth
-            }
-
-
-            //if obstSouth and obstWest, we are in a corner, keep going north until !obstWest or obstNorth
-                //if our last move was moveWest, keep going north until !obstWest or obstNorth
-
-                //if our last move was moveSouth, keep going east until !obstSouth or obstEast
-
-            //if obstWest and obstNorth, we are in a corner, keep going east until !obstNorth or obstEast
-                //if our last move was moveWest, keep going south until !obstWest or obstSouth
-
-                //if our last move was moveNorth, keep going east until !obstNorth or obstEast
-        }
-
+        System.out.println("nothing was set");
     }
 
     public int goAroundObstacle(Place pointOfInterest){
 
-        //int whatToDo = doNothing;
-        obstacle obst = me.getCurrentObstacle();
-
-        if((me.getCurrentDirectionToGo() == direction.DONOTHING) || (me.obstacles.size() > 1)){
-            determineDirectionToGoAroundObstacle(pointOfInterest);
+        //if this is our first encounter with this obstacle, we choose a direction to go
+        if(me.directionsToGo.size() == 0){
+            determineDirectionToGoAroundObstacles(pointOfInterest);
         }
-
+        //other wise we keep going in that direction until one of the obstacles surrounding us is gone
         direction currentDir = me.getCurrentDirectionToGo();
-        direction obstDir = getDirectionFromObstacleDirection(obst);
 
-        if(okayToGo(obstDir)){
-            me.popObjective();
-            me.popDirectionToGo();
-            me.popObstacle();
-            return move(obstDir);
-        }else if(okayToGo(currentDir)){
+        if(okayToGo(currentDir)){
             return move(currentDir);
-        }
-        else{
-            //are in a corner
-            //me.pushObstacle(obst);
+        }else{
             me.popDirectionToGo();
-            me.pushObstacle(getObstacleDirectionFromDirection(currentDir));
-            return goAroundObstacle(pointOfInterest);
+            me.popObjective();
+            System.out.println("agent " + me.name + " got around obstacle");
+            return seek(pointOfInterest);
         }
+    }
+
+    public ArrayList<obstacle> getSurroundingObstacles(){
+        ArrayList<obstacle> obstacles = new ArrayList<obstacle>();
+        if(!okayToGo(direction.NORTH)){
+            obstacles.add(obstacle.NORTH_WALL);
+        }
+        if(!okayToGo(direction.EAST)){
+            obstacles.add(obstacle.EAST_WALL);
+        }
+        if (!okayToGo(direction.SOUTH)){
+            obstacles.add(obstacle.SOUTH_WALL);
+        }
+        if(!okayToGo(direction.WEST)){
+            obstacles.add(obstacle.WEST_WALL);
+        }
+        return obstacles;
     }
 
     //MAP FUNCTIONS//MAP FUNCTIONS //MAP FUNCTIONS //MAP FUNCTIONS //MAP FUNCTIONS //MAP FUNCTIONS //MAP FUNCTIONS //MAP FUNCTIONS
@@ -1242,7 +1161,7 @@ public class Tharpoon5 extends Agent {
         if(numWest < lowest){
             lowest = numWest;
         }
-        if(numNorth == lowest) {
+        if (numNorth == lowest) {
             leastVisited.add(direction.NORTH);
         }
         if(numEast == lowest) {
@@ -1620,6 +1539,17 @@ public class Tharpoon5 extends Agent {
             whatToDo = doNothing;
         }
         return whatToDo;
+    }
+
+    public boolean okayToGo(ArrayList<direction> directions){
+        boolean okayToGoAllDirections = true;
+        for(int i = 0; i < directions.size(); i++){
+            if(!okayToGo(directions.get(i))){
+                okayToGoAllDirections = false;
+                break;
+            }
+        }
+        return okayToGoAllDirections;
     }
 
     public boolean okayToGo(direction dir){
@@ -2195,5 +2125,13 @@ public class Tharpoon5 extends Agent {
                 break;
         }
         return dir;
+    }
+
+    public ArrayList<direction> getDirectionsFromObstacles(ArrayList<obstacle> obstacles){
+        ArrayList<direction> directions = new ArrayList<direction>();
+        for(int i = 0; i < obstacles.size(); i++){
+            directions.add(getDirectionFromObstacleDirection(obstacles.get(i)));
+        }
+        return directions;
     }
 }
