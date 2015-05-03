@@ -1,5 +1,6 @@
 package ctf.agent;
 
+import java.util.Collections;
 import java.util.Random;
 import java.lang.Integer;
 import java.lang.System;
@@ -12,6 +13,132 @@ import ctf.common.AgentAction;
 
 
 public class Tharpoon5 extends Agent {
+
+    class AStarSearch{
+
+        class Tile implements {
+            public Tile(){}
+
+            Coordinate position;
+            Integer g;
+            Integer h;
+            Integer score;
+        }
+
+        public ArrayList<Coordinate> open = new ArrayList<Coordinate>();
+        public ArrayList<Coordinate> closed = new ArrayList<Coordinate>();
+
+        AStarSearch(){}
+
+        public ArrayList<Coordinate> getWalkableKnownTilesAdjacentTo(Coordinate position){
+            ArrayList<Coordinate> adjacentTiles = new ArrayList<Coordinate>();
+            Coordinate oneNorth = position.oneNorth();
+            Coordinate oneEast = position.oneEast();
+            Coordinate oneSouth = position.oneSouth();
+            Coordinate oneWest = position.oneWest();
+
+            if(open.contains(oneNorth)){
+                adjacentTiles.add(oneNorth);
+            }
+            if(open.contains(oneEast)){
+                adjacentTiles.add(oneEast);
+            }
+            if(open.contains(oneSouth)){
+                adjacentTiles.add(oneSouth);
+            }
+            if(open.contains(oneWest)){
+                adjacentTiles.add(oneWest);
+            }
+            return adjacentTiles;
+        }
+
+        public ArrayList<Coordinate> getWalkableTilesAdjacentToMyPosition(){
+            ArrayList<Coordinate> adjacentTiles = new ArrayList<Coordinate>();
+            Coordinate oneNorth = me.position.oneNorth();
+            Coordinate oneEast = me.position.oneEast();
+            Coordinate oneSouth = me.position.oneSouth();
+            Coordinate oneWest = me.position.oneWest();
+
+            if(okayToGoNorth()){
+                adjacentTiles.add(oneNorth);
+            }
+            if(okayToGoEast()){
+                adjacentTiles.add(oneEast);
+            }
+            if(okayToGoSouth()){
+                adjacentTiles.add(oneSouth);
+            }
+            if(okayToGoWest()){
+                adjacentTiles.add(oneWest);
+            }
+            return adjacentTiles;
+        }
+
+        public ArrayList<Coordinate> computeShortestPathUsingKnownTilesFromSrcToDest(Coordinate source, Coordinate destination){
+
+        }
+
+        public ArrayList<Coordinate> computeShortestPathUsingKnownTilesFromMyPositionToDestination(Coordinate source, Coordinate destination){
+            ArrayList<Coordinate> adjacentCoordinates = getWalkableTilesAdjacentToMyPosition();
+            ArrayList<Tile> adjacentTiles = new ArrayList<Tile>();
+            for(int i = 0; i < adjacentCoordinates.size(); i++){
+                Tile newTile = new Tile();
+                newTile.position = adjacentCoordinates.get(i);
+                newTile.g = 1;
+                newTile.h = manhattanDistance(newTile.position, destination);
+                newTile.score = newTile.g + newTile.h;
+                adjacentTiles.add(newTile);
+            }
+
+            //now pick the one with the lowest score, if there are multiple with the same lowest score, just choose the one added last
+            Collections.sort(adjacentTiles, compareTileByScore);
+        }
+
+        public int compareTileByScore(Tile first, Tile second){
+            if(first.score > second.score){
+                return -1;
+            }else if(first.score == second.score){
+                return 0;
+            }else{
+                return 1;
+            }
+        }
+
+        public Tile returnMostRecentlyAddedWithLowestScore(ArrayList<Tile> tiles){
+            for(int i = 0; i < tiles.size(); i++){
+
+            }
+        }
+
+        public AStarSearch addToOpenList(Coordinate position){
+            if(!open.contains(position)){
+                open.add(position);
+            }
+            return this;
+        }
+
+        public AStarSearch addToClosedList(Coordinate position){
+            if(!closed.contains(position)){
+                closed.add(position);
+            }
+            return this;
+        }
+
+        public boolean isWalkable(Coordinate position){
+            return false;
+        }
+
+        public int computeScore(Coordinate squareToBeScored, Coordinate source, Coordinate destination){
+            return 0;
+        }
+
+        public int manhattanDistance(Coordinate point1, Coordinate point2){
+            int distanceHorizontal = Math.abs(point1.x - point2.x);
+            int distanceVertical = Math.abs(point1.y - point2.y);
+
+            return (distanceHorizontal + distanceVertical) - 1;
+        }
+    }
 
     enum obstacle {NONE, NORTH_WALL, EAST_WALL, SOUTH_WALL, WEST_WALL}
 
@@ -33,8 +160,6 @@ public class Tharpoon5 extends Agent {
             pushObjective(objective.INITIALIZE);
             directionsToGo = new ArrayList<direction>();
             obstacles = new ArrayList<obstacle>();
-            ////
-
             
             spawn = new Coordinate();
             position = new Coordinate();
@@ -78,77 +203,6 @@ public class Tharpoon5 extends Agent {
         public Agent popMoveMade() {
             movesMade.remove(movesMade.size() - 1);
             return this;
-        }
-
-        public String getCurrentObstacleString(){
-
-            String obstacleString = "";
-
-            switch(getCurrentObstacle()){
-                case NONE:
-                    obstacleString = "none";
-                    break;
-                case NORTH_WALL:
-                    obstacleString = "NORTH_WALL";
-                    break;
-                case EAST_WALL:
-                    obstacleString = "EAST_WALL";
-                    break;
-                case SOUTH_WALL:
-                    obstacleString = "SOUTH_WALL";
-                    break;
-                case WEST_WALL:
-                    obstacleString = "WEST_WALL";
-                    break;
-            }
-            return obstacleString;
-        }
-
-        public obstacle getCurrentObstacle() {
-            return obstacles.get(obstacles.size() - 1);
-        }
-
-        public Agent setNewCurrentObjective(obstacle newObstacle) {
-            popObstacle();
-            pushObstacle(newObstacle);
-            return this;
-        }
-
-        public Agent setNewBaseObstacle(obstacle newObstacle){
-            obstacles.set(0, newObstacle);
-            return this;
-        }
-
-        public obstacle getBaseObstacle(){
-            return obstacles.get(0);
-        }
-
-        public Agent pushObstacle(obstacle newObstacle) {
-            obstacles.add(newObstacle);
-            return this;
-        }
-
-        public Agent popObstacle() {
-            obstacles.remove(obstacles.size() - 1);
-            return this;
-        }
-
-        public Agent clearObstacles(){
-            obstacles.clear();
-            return this;
-        }
-
-        public Agent removeObstacleInDirection(direction dir){
-            for(int i = 0; i < obstacles.size(); i++){
-                if(obstacles.get(i) == getObstacleDirectionFromDirection(dir)){
-                    obstacles.remove(i);
-                }
-            }
-            return this;
-        }
-
-        public objective getXObstaclesBack(int x) {
-            return objectives.get((objectives.size() - 1) - x);
         }
 
         public String getCurrentObjectiveString(){
@@ -244,6 +298,77 @@ public class Tharpoon5 extends Agent {
             return directionsToGo.get((directionsToGo.size() - 1) - x);
         }
 
+        public String getCurrentObstacleString(){
+
+            String obstacleString = "";
+
+            switch(getCurrentObstacle()){
+                case NONE:
+                    obstacleString = "none";
+                    break;
+                case NORTH_WALL:
+                    obstacleString = "NORTH_WALL";
+                    break;
+                case EAST_WALL:
+                    obstacleString = "EAST_WALL";
+                    break;
+                case SOUTH_WALL:
+                    obstacleString = "SOUTH_WALL";
+                    break;
+                case WEST_WALL:
+                    obstacleString = "WEST_WALL";
+                    break;
+            }
+            return obstacleString;
+        }
+
+        public obstacle getCurrentObstacle() {
+            return obstacles.get(obstacles.size() - 1);
+        }
+
+        public Agent setNewCurrentObjective(obstacle newObstacle) {
+            popObstacle();
+            pushObstacle(newObstacle);
+            return this;
+        }
+
+        public Agent setNewBaseObstacle(obstacle newObstacle){
+            obstacles.set(0, newObstacle);
+            return this;
+        }
+
+        public obstacle getBaseObstacle(){
+            return obstacles.get(0);
+        }
+
+        public Agent pushObstacle(obstacle newObstacle) {
+            obstacles.add(newObstacle);
+            return this;
+        }
+
+        public Agent popObstacle() {
+            obstacles.remove(obstacles.size() - 1);
+            return this;
+        }
+
+        public Agent clearObstacles(){
+            obstacles.clear();
+            return this;
+        }
+
+        public Agent removeObstacleInDirection(direction dir){
+            for(int i = 0; i < obstacles.size(); i++){
+                if(obstacles.get(i) == getObstacleDirectionFromDirection(dir)){
+                    obstacles.remove(i);
+                }
+            }
+            return this;
+        }
+
+        public objective getXObstaclesBack(int x) {
+            return objectives.get((objectives.size() - 1) - x);
+        }
+
         public Coordinate oneNorth() {
             return position.oneNorth();
         }
@@ -258,6 +383,21 @@ public class Tharpoon5 extends Agent {
 
         public Coordinate oneWest() {
             return position.oneWest();
+        }
+
+        public Coordinate one(direction dir){
+            switch(dir){
+                case NORTH:
+                    return oneNorth();
+                case EAST:
+                    return oneEast();
+                case SOUTH:
+                    return oneSouth();
+                case WEST:
+                    return oneWest();
+                default:
+                    return this.position;
+            }
         }
     }
 
@@ -307,6 +447,21 @@ public class Tharpoon5 extends Agent {
             return ((this.x == otherCoordinate.x) && (this.y == otherCoordinate.y));
         }
 
+        public Coordinate one(direction dir){
+            switch(dir){
+                case NORTH:
+                    return oneNorth();
+                case EAST:
+                    return oneEast();
+                case SOUTH:
+                    return oneSouth();
+                case WEST:
+                    return oneWest();
+                default:
+                    return this;
+            }
+        }
+
         public Coordinate oneNorth(){
             return new Coordinate(this.x, this.y - 1);
         }
@@ -335,13 +490,14 @@ public class Tharpoon5 extends Agent {
 
     //Map
     private static char[][] map;
-    private int[][] timesVisited;
+    private static int[][] timesVisited;
     private int mapHeight = 10;         //it is known that mapHeight == mapLength
-    Place ourBase;
-    Place enemyBase;
-    Place defenseWallCenter;
-    ArrayList<Place> pointsOfInterest = new ArrayList<Place>();
-    ArrayList<Coordinate> possibleMines = new ArrayList<Coordinate>();
+    private Place ourBase;
+    private Place enemyBase;
+    private Place defenseWallCenter;
+    private ArrayList<Place> pointsOfInterest = new ArrayList<Place>();
+    private ArrayList<Coordinate> possibleMines = new ArrayList<Coordinate>();
+    private static AStarSearch shortestPathSearchController;
 
     private enum direction {NORTH, EAST, SOUTH, WEST, SOUTHWEST, SOUTHEAST, NORTHEAST, NORTHWEST, DONOTHING}
 
@@ -427,6 +583,7 @@ public class Tharpoon5 extends Agent {
         pointsOfInterest.add(ourBase);
         pointsOfInterest.add(enemyBase);
         pointsOfInterest.add(defenseWallCenter);
+        shortestPathSearchController = new AStarSearch();
     }
 
     public int getMove(AgentEnvironment inEnvironment) {
@@ -472,78 +629,10 @@ public class Tharpoon5 extends Agent {
 
         //print only after every complete move (ie, both agents have moved)
         if (me.number == 1) {
-            printMap();
+            //printMap();
+            printMapAndTimesVisited();
         }
 
-        return whatToDo;
-
-    }
-
-    public int defend(Place place){
-        determineDefenseWallCenterPositionAndDirection();
-
-        int whatToDo = doNothing;
-
-        if(inDefendingWallArea()){
-            System.out.println("create wall");
-            whatToDo = createDefendingWall();
-        }else{
-            System.out.println("seek wall center which is " + getDirectionName(defenseWallCenter.dir));
-            whatToDo = seek(defenseWallCenter);
-        }
-
-        return whatToDo;
-    }
-
-    public boolean inDefendingWallArea(){
-        return (me.position.isEqualTo(defenseWallCenter.position) ||
-                me.position.isEqualTo(defenseWallCenter.position.oneNorth()) ||
-                me.position.isEqualTo(defenseWallCenter.position.oneSouth()));
-    }
-
-    public int createDefendingWall(){
-
-        boolean mineNorth = possibleMines.contains(me.position.oneNorth());
-        boolean mineSouth = possibleMines.contains(me.position.oneSouth());
-        boolean mineEast = possibleMines.contains(me.position.oneEast());
-        boolean mineWest = possibleMines.contains(me.position.oneWest());
-        boolean onMine = possibleMines.contains(me.position);
-
-        boolean oneNorth = me.position.isEqualTo(defenseWallCenter.position.oneNorth());
-        boolean oneSouth = me.position.isEqualTo(defenseWallCenter.position.oneSouth());
-        boolean onCenter = me.position.isEqualTo(defenseWallCenter.position);
-
-        int whatToDo = doNothing;
-
-        //if I am on the wall center and there's not a mine or an obstacle south, move south
-        if(onCenter && !mineSouth && !obstSouth) {
-            whatToDo = moveSouth();
-
-            //If I am one south of the center and I am not standing on a mine, plant one
-        }else if(oneSouth && !onMine) {
-            whatToDo = plantMine();
-
-            //if I am one south of the center and I am standing on a mine, move north
-        }else if(oneSouth && onMine){
-            whatToDo = moveNorth();
-
-            //if there is not a mine on defense wall center, put one there
-        }else if (onCenter && !onMine){
-            whatToDo = plantMine();
-
-            //if I am on the defense wall center and I am standing on a mine, move north
-        }else if(me.position.isEqualTo(defenseWallCenter.position) && onMine){
-            whatToDo = moveNorth();
-
-            //if I am one north of the defense wall center and I am not standing on a mine, plant one
-        }else if(oneNorth && !onMine){
-            whatToDo = plantMine();
-
-            //if I am one north of the defense wall center and I am standing on a mine, seek enemy base because I have built the little wall
-        }else if(oneNorth && onMine){
-            me.setNewCurrentObjective(objective.SEEK_ENEMY_BASE);
-            whatToDo = seek(enemyBase);
-        }
         return whatToDo;
     }
 
@@ -650,11 +739,19 @@ public class Tharpoon5 extends Agent {
 
     public void determineDirectionToGoAroundObstacles(Place pointOfInterest){
 
+        me.obstacles = new ArrayList<obstacle>(getSurroundingObstacles());
 
         //TUNNELS
         if(!okayToGoEast() && !okayToGoWest()){
             System.out.println("ew tunnel");
-            direction nonEastOrWestDir = pickRandomlyBetween(direction.SOUTH, direction.NORTH);
+            direction nonEastOrWestDir;
+
+            if(me.hasFlag){
+                nonEastOrWestDir = pickRandomlyBetween(direction.SOUTH, direction.NORTH);
+            }else{
+                //if I don't have the flag, prefer less visited squares
+                nonEastOrWestDir = getLeastVisitedFrom(direction.SOUTH, direction.NORTH);
+            }
 
             if(pointOfInterest.dir == direction.NORTHEAST) {
                 me.pushDirectionToGo(direction.NORTH);
@@ -699,7 +796,14 @@ public class Tharpoon5 extends Agent {
 
         if(!okayToGoNorth() && !okayToGoSouth()){
             System.out.println("ns tunnel");
-            direction nonNorthOrSouthDir = pickRandomlyBetween(direction.EAST, direction.WEST);
+
+            direction nonNorthOrSouthDir;
+            if(me.hasFlag){
+                nonNorthOrSouthDir = pickRandomlyBetween(direction.EAST, direction.WEST);
+            }else{
+                //if I don't have the flag, prefer less visited squares
+                nonNorthOrSouthDir = getLeastVisitedFrom(direction.EAST, direction.WEST);
+            }
 
             if(pointOfInterest.dir == direction.NORTHEAST) {
                 me.pushDirectionToGo(direction.EAST);
@@ -747,7 +851,14 @@ public class Tharpoon5 extends Agent {
         //if obstEast and obstNorth
         if(!okayToGoEast() && !okayToGoNorth()){
             System.out.println("ne corner");
-            direction nonNorthOrEastDir = pickRandomlyBetween(direction.SOUTH, direction.WEST);
+
+            direction nonNorthOrEastDir;
+            if(me.hasFlag){
+                nonNorthOrEastDir = pickRandomlyBetween(direction.SOUTH, direction.WEST);
+            }else{
+                //if I don't have the flag, prefer less visited squares
+                nonNorthOrEastDir = getLeastVisitedFrom(direction.SOUTH, direction.WEST);
+            }
 
             if(pointOfInterest.dir == direction.NORTHEAST) {
                 me.pushDirectionToGo(nonNorthOrEastDir);
@@ -793,7 +904,14 @@ public class Tharpoon5 extends Agent {
         //if obstEast and obstSouth
         if(!okayToGoEast() && !okayToGoSouth()) {
             System.out.println("se corner");
-            direction nonSouthOrEastDir = pickRandomlyBetween(direction.NORTH, direction.WEST);
+
+            direction nonSouthOrEastDir;
+            if(me.hasFlag){
+                nonSouthOrEastDir = pickRandomlyBetween(direction.NORTH, direction.WEST);
+            }else{
+                //if I don't have the flag, prefer less visited squares
+                nonSouthOrEastDir = getLeastVisitedFrom(direction.NORTH, direction.WEST);
+            }
 
             if (pointOfInterest.dir == direction.NORTHEAST) {
                 me.pushDirectionToGo(nonSouthOrEastDir);
@@ -839,7 +957,14 @@ public class Tharpoon5 extends Agent {
         //if obstWest and obstSouth
         if(!okayToGoWest() && !okayToGoSouth()){
             System.out.println("sw corner");
-            direction nonSouthOrWestDir = pickRandomlyBetween(direction.NORTH, direction.EAST);
+
+            direction nonSouthOrWestDir;
+            if(me.hasFlag){
+                nonSouthOrWestDir = pickRandomlyBetween(direction.NORTH, direction.EAST);
+            }else{
+                //if I don't have the flag, prefer less visited squares
+                nonSouthOrWestDir = getLeastVisitedFrom(direction.NORTH, direction.EAST);
+            }
 
             if(pointOfInterest.dir == direction.NORTHEAST) {
                 me.pushDirectionToGo(nonSouthOrWestDir);
@@ -885,7 +1010,14 @@ public class Tharpoon5 extends Agent {
         //if obstWest and obstNorth
         if(!okayToGoWest() && !okayToGoNorth()){
             System.out.println("nw corner");
-            direction nonNorthOrWestDir = pickRandomlyBetween(direction.SOUTH, direction.EAST);
+
+            direction nonNorthOrWestDir;
+            if(me.hasFlag){
+                nonNorthOrWestDir = pickRandomlyBetween(direction.SOUTH, direction.EAST);
+            }else{
+                //if I don't have the flag, prefer less visited squares
+                nonNorthOrWestDir = getLeastVisitedFrom(direction.SOUTH, direction.EAST);
+            }
 
             if(pointOfInterest.dir == direction.NORTHEAST) {
                 me.pushDirectionToGo(direction.EAST);
@@ -948,8 +1080,15 @@ public class Tharpoon5 extends Agent {
         }
 
         //if obstEast and objective is east,
-        if(!okayToGoEast() && (pointOfInterest.dir == direction.EAST)){
-            direction nonEastDir = pickRandomlyBetween(direction.SOUTH, direction.NORTH);
+        if(!okayToGoEast() && (pointOfInterest.dir == direction.EAST || pointOfInterest.dir == direction.WEST || pointOfInterest.dir == direction.SOUTHWEST || pointOfInterest.dir == direction.NORTHWEST)){
+
+            direction nonEastDir;
+            if(me.hasFlag){
+                nonEastDir = pickRandomlyBetween(direction.SOUTH, direction.NORTH, direction.WEST);
+            }else{
+                //if I don't have the flag, prefer less visited squares
+                nonEastDir = getLeastVisitedFrom(direction.SOUTH, direction.NORTH, direction.WEST);
+            }
 
             if(nonEastDir == direction.NORTH){
                 System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.NORTH) + " around east wall");
@@ -962,15 +1101,13 @@ public class Tharpoon5 extends Agent {
                 me.pushDirectionToGo(direction.SOUTH);
                 return;
             }
-        }
 
-        //if obstEast and objective is west, go west
-        if(!okayToGoEast() && (pointOfInterest.dir == direction.WEST || pointOfInterest.dir == direction.SOUTHWEST || pointOfInterest.dir == direction.NORTHWEST)) {
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.WEST) + " around east wall");
-            me.pushDirectionToGo(direction.WEST);
-            return;
+            if(nonEastDir == direction.WEST) {
+                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.WEST) + " around east wall");
+                me.pushDirectionToGo(direction.WEST);
+                return;
+            }
         }
-
 
         //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL //WEST WALL
         //if obstWest and objective is south or southwest, keep going south until obstSouth or !obstWest
@@ -988,8 +1125,15 @@ public class Tharpoon5 extends Agent {
         }
 
         //if obstWest and objective is west,
-        if(!okayToGoWest() && (pointOfInterest.dir == direction.WEST)){
-            direction nonWestDir = pickRandomlyBetween(direction.SOUTH, direction.NORTH);
+        if(!okayToGoWest() && (pointOfInterest.dir == direction.WEST || pointOfInterest.dir == direction.EAST || pointOfInterest.dir == direction.SOUTHEAST || pointOfInterest.dir == direction.NORTHEAST)){
+
+            direction nonWestDir;
+            if(me.hasFlag){
+                nonWestDir = pickRandomlyBetween(direction.SOUTH, direction.NORTH, direction.EAST);
+            }else{
+                //if I don't have the flag, prefer less visited squares
+                nonWestDir = getLeastVisitedFrom(direction.SOUTH, direction.NORTH, direction.EAST);
+            }
 
             //if last move was moveNorth keep going north until !obstWest or obstNorth
             if(nonWestDir == direction.NORTH) {
@@ -1004,13 +1148,12 @@ public class Tharpoon5 extends Agent {
                 me.pushDirectionToGo(direction.SOUTH);
                 return;
             }
-        }
 
-        //if obstWest and objective is east, go east
-        if(!okayToGoWest() && (pointOfInterest.dir == direction.EAST || pointOfInterest.dir == direction.SOUTHEAST || pointOfInterest.dir == direction.NORTHEAST)){
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.EAST) + " around west wall");
-            me.pushDirectionToGo(direction.EAST);
-            return;
+            if(nonWestDir == direction.EAST) {
+                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.EAST) + " around west wall");
+                me.pushDirectionToGo(direction.EAST);
+                return;
+            }
         }
 
         //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL //NORTH WALL
@@ -1029,8 +1172,15 @@ public class Tharpoon5 extends Agent {
         }
 
         //if obstNorth and objective is north,
-        if(!okayToGoNorth() && (pointOfInterest.dir == direction.NORTH)){
-            direction nonNorthDir = pickRandomlyBetween(direction.EAST, direction.WEST);
+        if(!okayToGoNorth() && (pointOfInterest.dir == direction.NORTH || pointOfInterest.dir == direction.SOUTH || pointOfInterest.dir == direction.SOUTHWEST || pointOfInterest.dir == direction.SOUTHEAST)){
+
+            direction nonNorthDir;
+            if(me.hasFlag){
+                nonNorthDir = pickRandomlyBetween(direction.EAST, direction.WEST, direction.SOUTH);
+            }else{
+                //if I don't have the flag, prefer less visited squares
+                nonNorthDir = getLeastVisitedFrom(direction.EAST, direction.WEST, direction.SOUTH);
+            }
 
             //if last move was moveEast keep going east until !obstNorth or obstEast
             if(nonNorthDir == direction.EAST) {
@@ -1045,14 +1195,12 @@ public class Tharpoon5 extends Agent {
                 me.pushDirectionToGo(direction.WEST);
                 return;
             }
-        }
 
-
-        //if obstNorth and objective is south, go south
-        if(!okayToGoNorth() && (pointOfInterest.dir == direction.EAST || pointOfInterest.dir == direction.SOUTHEAST || pointOfInterest.dir == direction.NORTHEAST)){
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.SOUTH) + " around north wall");
-            me.pushDirectionToGo(direction.SOUTH);
-            return;
+            if(nonNorthDir == direction.SOUTH) {
+                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.SOUTH) + " around north wall");
+                me.pushDirectionToGo(direction.SOUTH);
+                return;
+            }
         }
 
         //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL //SOUTH WALL
@@ -1071,8 +1219,15 @@ public class Tharpoon5 extends Agent {
         }
 
         //if obstSouth and objective is south,
-        if(!okayToGoSouth() && (pointOfInterest.dir == direction.SOUTH)){
-            direction nonSouthDir = pickRandomlyBetween(direction.EAST, direction.WEST);
+        if(!okayToGoSouth() && (pointOfInterest.dir == direction.SOUTH || pointOfInterest.dir == direction.NORTH || pointOfInterest.dir == direction.NORTHEAST || pointOfInterest.dir == direction.NORTHWEST)){
+
+            direction nonSouthDir;
+            if(me.hasFlag){
+                nonSouthDir = pickRandomlyBetween(direction.EAST, direction.WEST, direction.NORTH);
+            }else{
+                //if I don't have the flag, prefer less visited squares
+                nonSouthDir = getLeastVisitedFrom(direction.EAST, direction.WEST, direction.NORTH);
+            }
 
             //if last move was moveEast keep going east until !obstSouth or obstEast
             if(nonSouthDir == direction.EAST) {
@@ -1087,34 +1242,15 @@ public class Tharpoon5 extends Agent {
                 me.pushDirectionToGo(direction.WEST);
                 return;
             }
+
+            if(nonSouthDir == direction.NORTH) {
+                System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.NORTH) + " around south wall");
+                me.pushDirectionToGo(direction.NORTH);
+                return;
+            }
         }
 
-        //if obstSouth and objective is north, go north
-        if(!okayToGoSouth() && (pointOfInterest.dir == direction.NORTH || pointOfInterest.dir == direction.NORTHEAST || pointOfInterest.dir == direction.NORTHWEST)){
-            System.out.println("agent " + me.name + me.number + " decided to go " + getDirectionName(direction.NORTH) + " around south wall");
-            me.pushDirectionToGo(direction.NORTH);
-            return;
-        }
-        System.out.println("nothing was set");
-    }
-
-    public int goAroundObstacle(Place pointOfInterest){
-
-        //if this is our first encounter with this obstacle, we choose a direction to go
-        if(me.directionsToGo.size() == 0){
-            determineDirectionToGoAroundObstacles(pointOfInterest);
-        }
-        //other wise we keep going in that direction until one of the obstacles surrounding us is gone
-        direction currentDir = me.getCurrentDirectionToGo();
-
-        if(okayToGo(currentDir)){
-            return move(currentDir);
-        }else{
-            me.popDirectionToGo();
-            me.popObjective();
-            System.out.println("agent " + me.name + " got around obstacle");
-            return seek(pointOfInterest);
-        }
+        System.out.println("NOTHING WAS SET");
     }
 
     public ArrayList<obstacle> getSurroundingObstacles(){
@@ -1128,10 +1264,129 @@ public class Tharpoon5 extends Agent {
         if (!okayToGo(direction.SOUTH)){
             obstacles.add(obstacle.SOUTH_WALL);
         }
-        if(!okayToGo(direction.WEST)){
+        if(!okayToGo(direction.WEST)) {
             obstacles.add(obstacle.WEST_WALL);
         }
         return obstacles;
+    }
+
+    public int goAroundObstacle(Place pointOfInterest){
+
+        //case where we are blocked on three sides, there is only one way to go
+        if(blockedInThreeDirections()){
+            me.popObjective();
+            return move(getOnlyFreeDirection());
+        }
+
+        //if this is our first encounter with this obstacle, we choose a direction to go
+        if(me.directionsToGo.size() == 0){
+            determineDirectionToGoAroundObstacles(pointOfInterest);
+        }
+
+        //other wise we keep going in that direction until one of the obstacles surrounding us is gone
+        direction currentDir = me.getCurrentDirectionToGo();
+
+        if(anyObstaclesNoLongerPresent()){
+            removeObstaclesNoLongerPresent();
+        }
+        //if there are actually no obstacles around us, go back to seek function
+        if(me.obstacles.size() == 0){
+            me.popDirectionToGo();
+            me.popObjective();
+            System.out.println("agent " + me.name + " got around obstacle");
+            return seek(pointOfInterest);
+        }
+        if(okayToGo(currentDir)){
+            return move(currentDir);
+        }else{
+            me.popDirectionToGo();
+            return goAroundObstacle(pointOfInterest);
+        }
+    }
+
+    public boolean anyObstaclesNoLongerPresent(){
+        for(int i = 0; i < me.obstacles.size(); i++){
+            if(okayToGo(getDirectionFromObstacleDirection(me.obstacles.get(i)))){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removeObstaclesNoLongerPresent(){
+        for(int i = 0; i < me.obstacles.size(); i++){
+            if(okayToGo(getDirectionFromObstacleDirection(me.obstacles.get(i)))){
+                me.obstacles.remove(i);
+            }
+        }
+    }
+
+    public int defend(Place place){
+        determineDefenseWallCenterPositionAndDirection();
+
+        int whatToDo = doNothing;
+
+        if(inDefendingWallArea()){
+            System.out.println("create wall");
+            whatToDo = createDefendingWall();
+        }else{
+            System.out.println("seek wall center which is " + getDirectionName(defenseWallCenter.dir));
+            whatToDo = seek(defenseWallCenter);
+        }
+
+        return whatToDo;
+    }
+
+    public boolean inDefendingWallArea(){
+        return (me.position.isEqualTo(defenseWallCenter.position) ||
+                me.position.isEqualTo(defenseWallCenter.position.oneNorth()) ||
+                me.position.isEqualTo(defenseWallCenter.position.oneSouth()));
+    }
+
+    public int createDefendingWall(){
+
+        boolean mineNorth = possibleMines.contains(me.position.oneNorth());
+        boolean mineSouth = possibleMines.contains(me.position.oneSouth());
+        boolean mineEast = possibleMines.contains(me.position.oneEast());
+        boolean mineWest = possibleMines.contains(me.position.oneWest());
+        boolean onMine = possibleMines.contains(me.position);
+
+        boolean oneNorth = me.position.isEqualTo(defenseWallCenter.position.oneNorth());
+        boolean oneSouth = me.position.isEqualTo(defenseWallCenter.position.oneSouth());
+        boolean onCenter = me.position.isEqualTo(defenseWallCenter.position);
+
+        int whatToDo = doNothing;
+
+        //if I am on the wall center and there's not a mine or an obstacle south, move south
+        if(onCenter && !mineSouth && !obstSouth) {
+            whatToDo = moveSouth();
+
+            //If I am one south of the center and I am not standing on a mine, plant one
+        }else if(oneSouth && !onMine) {
+            whatToDo = plantMine();
+
+            //if I am one south of the center and I am standing on a mine, move north
+        }else if(oneSouth && onMine){
+            whatToDo = moveNorth();
+
+            //if there is not a mine on defense wall center, put one there
+        }else if (onCenter && !onMine){
+            whatToDo = plantMine();
+
+            //if I am on the defense wall center and I am standing on a mine, move north
+        }else if(me.position.isEqualTo(defenseWallCenter.position) && onMine){
+            whatToDo = moveNorth();
+
+            //if I am one north of the defense wall center and I am not standing on a mine, plant one
+        }else if(oneNorth && !onMine){
+            whatToDo = plantMine();
+
+            //if I am one north of the defense wall center and I am standing on a mine, seek enemy base because I have built the little wall
+        }else if(oneNorth && onMine){
+            me.setNewCurrentObjective(objective.SEEK_ENEMY_BASE);
+            whatToDo = seek(enemyBase);
+        }
+        return whatToDo;
     }
 
     //MAP FUNCTIONS//MAP FUNCTIONS //MAP FUNCTIONS //MAP FUNCTIONS //MAP FUNCTIONS //MAP FUNCTIONS //MAP FUNCTIONS //MAP FUNCTIONS
@@ -1174,6 +1429,52 @@ public class Tharpoon5 extends Agent {
             leastVisited.add(direction.WEST);
         }
         return leastVisited;
+    }
+
+    public direction getLeastVisitedFrom(direction firstDirection, direction secondDirection){
+        int lowest = 200;
+
+        int numFirst = (okayToGo(firstDirection))?(getNumTimesVisited(me.one(firstDirection))):(200);
+        int numSecond = (okayToGo(secondDirection))?(getNumTimesVisited(me.one(secondDirection))):(200);
+
+        if(numFirst < lowest){
+            lowest = numFirst;
+        }
+        if(numSecond < lowest){
+            lowest = numSecond;
+        }
+        if(numFirst == lowest){
+            return firstDirection;
+        }else{
+            return secondDirection;
+        }
+    }
+
+    public direction getLeastVisitedFrom(direction firstDirection, direction secondDirection, direction thirdDirection){
+        int lowest = 200;
+
+        int numFirst = (okayToGo(firstDirection))?(getNumTimesVisited(me.one(firstDirection))):(200);
+        int numSecond = (okayToGo(secondDirection))?(getNumTimesVisited(me.one(secondDirection))):(200);
+        int numThird = (okayToGo(thirdDirection))?(getNumTimesVisited(me.one(thirdDirection))):(200);
+
+        if(numFirst < lowest){
+            lowest = numFirst;
+        }
+        if(numSecond < lowest){
+            lowest = numSecond;
+        }
+        if(numThird < lowest){
+            lowest = numThird;
+        }
+        if(numFirst == lowest){
+            return firstDirection;
+        }
+        else if(numSecond == lowest){
+            return secondDirection;
+        }
+        else{
+            return thirdDirection;
+        }
     }
 
     public int getNumTimesVisited(Coordinate pos){
@@ -1299,7 +1600,7 @@ public class Tharpoon5 extends Agent {
         return dir;
     }
 
-    public direction pickRandomlyBetween(direction firstDir, direction secondDir, direction thirdDir, direction fourthDir){
+    public direction pickRandomlyBetween(direction firstDir, direction secondDir, direction thirdDir, direction fourthDir) {
         direction dir = direction.DONOTHING;
 
         int num = randomInt(1, 4);
@@ -1317,7 +1618,7 @@ public class Tharpoon5 extends Agent {
         return dir;
     }
 
-    public int pickRandomlyBetweenAndMove(direction firstDir, direction secondDir, direction thirdDir, direction fourthDir){
+    public int pickRandomlyBetweenAndMove(direction firstDir, direction secondDir, direction thirdDir, direction fourthDir) {
         direction dir = pickRandomlyBetween(firstDir, secondDir, thirdDir, fourthDir);
         return move(dir);
     }
@@ -1332,7 +1633,7 @@ public class Tharpoon5 extends Agent {
         return rand.nextInt((max - min) + 1) + min;
     }
 
-    public int pickRandomlyBetweenDirectionsAndMove(ArrayList<direction> directions){
+    public direction pickRandomlyBetween(ArrayList<direction> directions){
         direction dir = direction.DONOTHING;
 
         int num = randomInt(1, directions.size());
@@ -1342,12 +1643,20 @@ public class Tharpoon5 extends Agent {
                 break;
             }
         }
-        return move(dir);
+        return dir;
+    }
+
+    public int pickRandomlyBetweenAndMove(ArrayList<direction> directions){
+        return move(pickRandomlyBetween(directions));
     }
 
     public int moveToOneOfLeastVisitedSquares(){
-        int whatToDo = pickRandomlyBetweenDirectionsAndMove(getLeastVisitedSurroundingSquares());
+        int whatToDo = pickRandomlyBetweenAndMove(getLeastVisitedSurroundingSquares());
         return whatToDo;
+    }
+
+    public direction pickOneOfLeastVisitedSquares(){
+        return pickRandomlyBetween(getLeastVisitedSurroundingSquares());
     }
 
     public ArrayList<direction> freeDirections(){
@@ -1629,18 +1938,20 @@ public class Tharpoon5 extends Agent {
 
         if (obstNorth && me.position.y != 0) {
             map[me.position.x][me.position.y - 1] = 'X';
+            shortestPathSearchController.addToClosedList(me.position.oneNorth());
         }
         if (obstEast && me.position.x != mapHeight - 1) {
             map[me.position.x + 1][me.position.y] = 'X';
+            shortestPathSearchController.addToClosedList(me.position.oneEast());
         }
         if (obstSouth && me.position.y != mapHeight - 1) {
             map[me.position.x][me.position.y + 1] = 'X';
+            shortestPathSearchController.addToClosedList(me.position.oneSouth());
         }
         if (obstWest && me.position.x != 0) {
             map[me.position.x - 1][me.position.y] = 'X';
+            shortestPathSearchController.addToClosedList(me.position.oneWest());
         }
-
-        //if(obstInThreeDirections()){map[me.position.x][me.position.y] = 'X';}
     }
 
     public void determineMySpawnAndInitialPosition() {
@@ -1728,7 +2039,7 @@ public class Tharpoon5 extends Agent {
             defenseWallCenter.dir = direction.SOUTHWEST;
         }else if(positionIsNorth(defenseWallCenter.position)){
             defenseWallCenter.dir = direction.NORTH;
-        }else if(positionIsEast(defenseWallCenter.position)){
+        } else if(positionIsEast(defenseWallCenter.position)){
             defenseWallCenter.dir = direction.EAST;
         }else if(positionIsSouth(defenseWallCenter.position)){
             defenseWallCenter.dir = direction.SOUTH;
@@ -1744,6 +2055,7 @@ public class Tharpoon5 extends Agent {
     public void moveMeOnMap(Coordinate source, Coordinate destination) {
         if(obstInThreeDirections()){
             setMapSquare(source, 'X');
+            shortestPathSearchController.addToClosedList(source);
         }else {
             setMapSquare(source, ' ');
         }
@@ -1756,7 +2068,8 @@ public class Tharpoon5 extends Agent {
 
     public void changeMyPosition(Coordinate source, Coordinate destination) {
         me.squaresTravelled.add(new Coordinate(destination));
-        //updateTimesVisited(destination);
+        shortestPathSearchController.addToOpenList(destination);
+        updateTimesVisited(destination);
         moveMeOnMap(source, destination);
         me.position.set(destination);
     }
@@ -1796,6 +2109,29 @@ public class Tharpoon5 extends Agent {
             System.out.println();
         }
         System.out.println("----------");
+    }
+
+    public void printMapAndTimesVisited() {
+
+        map[ourBase.position.x][ourBase.position.y] = 'O';
+        map[enemyBase.position.x][enemyBase.position.y] = 'E';
+
+        for (int i = 0; i < agents.size(); i++) {
+            map[agents.get(i).position.x][agents.get(i).position.y] = agents.get(i).name;
+        }
+
+        System.out.println("----------   ----------");
+        for (int i = 0; i < mapHeight; i++) {
+            for (int j = 0; j < mapHeight; j++) {
+                System.out.print(map[j][i]);
+            }
+            System.out.print("   ");
+            for (int j = 0; j < mapHeight; j++) {
+                System.out.print(timesVisited[j][i]);
+            }
+            System.out.println();
+        }
+        System.out.println("----------   ----------");
     }
 
     //ENVIRONMENT FUNCTIONS//ENVIRONMENT FUNCTIONS //ENVIRONMENT FUNCTIONS //ENVIRONMENT FUNCTIONS //ENVIRONMENT FUNCTIONS //ENVIRONMENT FUNCTIONS
