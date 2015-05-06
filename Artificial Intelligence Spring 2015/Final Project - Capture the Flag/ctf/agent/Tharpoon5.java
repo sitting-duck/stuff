@@ -15,52 +15,7 @@ import ctf.common.AgentAction;
 
 public class Tharpoon5 extends Agent {
 
-    class AStarSearch{
-
-        class Tile implements Comparator<Tile> {
-            public Tile(){
-                parent = null;
-                position = new Coordinate();
-                g = -1;
-                h = -1;
-                score = -1;
-            }
-            public Tile(Tile otherTile){
-                parent = otherTile.parent;
-                position = otherTile.position;
-                g = otherTile.g;
-                h = otherTile.h;
-                score = otherTile.score;
-            }
-
-            Tile parent;
-            Coordinate position;
-            Integer g;
-            Integer h;
-            Integer score;
-
-            public int compare(Tile first, Tile second){
-                if(first.score < second.score){
-                    return -1;
-                }else if(first.score == second.score){
-                    return 0;
-                }else{
-                    return 1;
-                }
-            }
-        }
-
-        class PossibleSolution implements Comparator<ArrayList<Tile>>{
-            public int compare(ArrayList<Tile> first, ArrayList<Tile> second){
-                if(first.size() < second.size()){
-                    return -1;
-                }else if (first.size() == second.size()){
-                    return 0;
-                }else{
-                    return 1;
-                }
-            }
-        }
+    class AStarSearch {
 
         public ArrayList<Tile> queue = new ArrayList<Tile>();
         public ArrayList<Tile> visitedTiles = new ArrayList<Tile>();
@@ -69,29 +24,76 @@ public class Tharpoon5 extends Agent {
         public ArrayList<Coordinate> open = new ArrayList<Coordinate>();
         public ArrayList<Coordinate> closed = new ArrayList<Coordinate>();
 
-        AStarSearch(){}
-
-        public ArrayList<Coordinate> getWalkableKnownCoordinatesAdjacentTo(Coordinate position){
-            ArrayList<Coordinate> adjacentCoordinates = new ArrayList<Coordinate>();
-            Coordinate oneNorth = position.oneNorth();
-            Coordinate oneEast = position.oneEast();
-            Coordinate oneSouth = position.oneSouth();
-            Coordinate oneWest = position.oneWest();
-
-            if(isInList(open, oneNorth)){
-                adjacentCoordinates.add(oneNorth);
-            }
-            if(isInList(open, oneEast)){
-                adjacentCoordinates.add(oneEast);
-            }
-            if(isInList(open, oneSouth)){
-                adjacentCoordinates.add(oneSouth);
-            }
-            if(isInList(open, oneWest)){
-                adjacentCoordinates.add(oneWest);
-            }
-            return adjacentCoordinates;
+        AStarSearch() {
         }
+    }
+
+    class Tile implements Comparator<Tile> {
+        public Tile(){
+            parent = null;
+            position = new Coordinate();
+            g = -1;
+            h = -1;
+            score = -1;
+        }
+        public Tile(Tile otherTile){
+            parent = otherTile.parent;
+            position = otherTile.position;
+            g = otherTile.g;
+            h = otherTile.h;
+            score = otherTile.score;
+        }
+
+        Tile parent;
+        Coordinate position;
+        Integer g;
+        Integer h;
+        Integer score;
+
+        public int compare(Tile first, Tile second){
+            if(first.score < second.score){
+                return -1;
+            }else if(first.score == second.score){
+                return 0;
+            }else{
+                return 1;
+            }
+        }
+    }
+
+    class PossibleSolution implements Comparator<ArrayList<Tile>>{
+        public int compare(ArrayList<Tile> first, ArrayList<Tile> second){
+            if(first.size() < second.size()){
+                return -1;
+            }else if (first.size() == second.size()){
+                return 0;
+            }else{
+                return 1;
+            }
+        }
+    }
+
+    public ArrayList<Coordinate> getWalkableKnownCoordinatesAdjacentTo(Coordinate position){
+        ArrayList<Coordinate> adjacentCoordinates = new ArrayList<Coordinate>();
+        Coordinate oneNorth = position.oneNorth();
+        Coordinate oneEast = position.oneEast();
+        Coordinate oneSouth = position.oneSouth();
+        Coordinate oneWest = position.oneWest();
+
+        if(isInList(astar.open, oneNorth)){
+            adjacentCoordinates.add(oneNorth);
+        }
+        if(isInList(astar.open, oneEast)){
+            adjacentCoordinates.add(oneEast);
+        }
+        if(isInList(astar.open, oneSouth)){
+            adjacentCoordinates.add(oneSouth);
+        }
+        if(isInList(astar.open, oneWest)){
+            adjacentCoordinates.add(oneWest);
+        }
+        return adjacentCoordinates;
+    }
 
         public ArrayList<Coordinate> getWalkableCoordinatesAdjacentToMyPosition(){
             ArrayList<Coordinate> adjacentTiles = new ArrayList<Coordinate>();
@@ -117,199 +119,178 @@ public class Tharpoon5 extends Agent {
 
         public void addToQueue(ArrayList<Tile> list){
             for(int i = 0; i < list.size(); i++){
-                queue.add(new Tile(list.get(i)));
+                astar.queue.add(new Tile(list.get(i)));
             }
         }
 
-        /*public ArrayList<Coordinate> computeShortestPathUsingKnownTilesFromSrcToDestination(Coordinate source, Coordinate destination){
-            ArrayList<Tile> shortestPath = new ArrayList<Tile>();
-            ArrayList<Coordinate> adjacentCoordinates = new ArrayList<Coordinate>();
-            ArrayList<Tile> adjacentTiles = new ArrayList<Tile>();
-            Tile newTile;
+    //astar functions which for some reason work only out side the class def :/
 
-            Coordinate position = source;
-            for(int i = 0; ; i++){
-                adjacentCoordinates = getWalkableKnownCoordinatesAdjacentTo(position);
-                adjacentTiles = adjacentCoordinatesToTiles(adjacentCoordinates, destination);
+    public ArrayList<Coordinate> shortestPath(Coordinate source, Coordinate destination){
 
-                Collections.sort(adjacentTiles, new Tile());
-                newTile = new Tile(adjacentTiles.get(0));
+        ArrayList<Tile> adjacentTiles;
+        //ArrayList<Coordinate> adjacentToDestination = getWalkableKnownCoordinatesAdjacentTo(destination);
+        //ArrayList<Tile> possibleSolution = new ArrayList<Tile>();
+        Tile currentTile = initialTile(source, destination);
 
-                if(newTile.position.isEqualTo(destination)){
-                    //we have finished the path
-                    break;
-                }
-                shortestPath.add(newTile);
-                position = newTile.position;
-            }
-            return tilesToCoordinates(shortestPath);
-        }*/
+        //make sure that the enemy base and our base positions are visible to the search algo
+        if(!isInList(astar.open, ourBase.position)){
+            astar.open.add(ourBase.position);
+        }
+        if(!isInList(astar.open, enemyBase.position)){
+            astar.open.add(enemyBase.position);
+        }
 
-        public ArrayList<Coordinate> shortestPath(Coordinate source, Coordinate destination){
+        //the initial tile has been visited so add it
+        astar.visitedTiles.add(currentTile);
+        makeEmptyAstarMap();
 
-            ArrayList<Tile> adjacentTiles;
-            //ArrayList<Tile> possibleSolution = new ArrayList<Tile>();
-            Tile currentTile = initialTile(source, destination);
-            visitedTiles.add(currentTile);
-            makeEmptyAstarMap();
+        for(int i = 0; ; i++){
 
-            for(int i = 0; ; i++){
-
-                //check to see if the current position is the goal position
-                if(currentTile.position.isEqualTo(destination)){
-                    //then we have found a solution, add it to the list of possible solutions
-                    possibleSolutions.add(solutionPathFromNode(currentTile));
-                }
-
-                expand(currentTile, destination);
-
-                if(queue.size() != 0){
-                    Collections.sort(queue, new Tile());
-                    currentTile = queue.get(0);
-                    queue.remove(0);
-                    astarmap[currentTile.position.y][currentTile.position.x] = '?';
-                    printAStarMap();
-                }else{
-
-                    //queue is empty, there is nothing else to search
-                    break;
-                }
+            //check to see if the current position is the goal position
+            if(currentTile.position.isEqualTo(destination)){
+                //then we have found a solution, add it to the list of possible solutions
+                astar.possibleSolutions.add(solutionPathFromNode(currentTile));
             }
 
+            expand(currentTile, destination);
+
+            if(astar.queue.size() != 0){
+                Collections.sort(astar.queue, new Tile());
+                currentTile = astar.queue.get(0);
+                astar.queue.remove(0);
+                astarmap[currentTile.position.y][currentTile.position.x] = '?';
+                printAStarMap();
+            }else{
+
+                //queue is empty, there is nothing else to search
+                break;
+            }
+        }
+        if(astar.possibleSolutions.size() != 0){
+            //there was a solution
             ArrayList<Coordinate> shortestPath = chooseBestSolution();
             return shortestPath;
+        }else{
+            return new ArrayList<Coordinate>();
         }
 
-        public ArrayList<Coordinate> chooseBestSolution(){
+    }
 
-            //first we are going to sort possibleSolutions by size (size is num tiles travelled)
-            Collections.sort(possibleSolutions, new PossibleSolution());
-            ArrayList<Coordinate> solution = new ArrayList<Coordinate>();
-            for(int i = 0; i < possibleSolutions.get(0).size(); i++){
-                solution.add(new Coordinate(possibleSolutions.get(0).get(i).position));
-            }
-            return solution;
+    public ArrayList<Coordinate> chooseBestSolution(){
+
+        //first we are going to sort possibleSolutions by size (size is num tiles travelled)
+        Collections.sort(astar.possibleSolutions, new PossibleSolution());
+        ArrayList<Coordinate> solution = new ArrayList<Coordinate>();
+        for(int i = 0; i < astar.possibleSolutions.get(0).size(); i++){
+            solution.add(new Coordinate(astar.possibleSolutions.get(0).get(i).position));
         }
+        return solution;
+    }
 
-        public ArrayList<Tile> solutionPathFromNode(Tile tile){
-            ArrayList<Tile> possibleSolution = new ArrayList<Tile>();
-            possibleSolution.add(tile);
-            while(true){
-                tile = tile.parent;
-                if(tile == null){
-                    break;
-                }else{
-                    possibleSolution.add(tile);
-                }
-            }
-            return possibleSolution;
-        }
-
-        public boolean isInTileList(ArrayList<Tile> list, Tile tile){
-            for(int i = 0; i < list.size(); i++){
-                if(tile.position.isEqualTo(list.get(i).position)){
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public void expand(Tile currentTile, Coordinate destination){
-
-            //generate the child nodes of the current node and if they haven't been visited yet, place them in the queue
-            ArrayList<Tile> adjacentTiles = getWalkableKnownTilesAdjacentTo(currentTile, destination);
-
-            for(int i = 0; i < adjacentTiles.size(); i++){
-                if(!isInTileList(visitedTiles, adjacentTiles.get(i))){
-                    visitedTiles.add(adjacentTiles.get(i));
-                    queue.add(adjacentTiles.get(i));
-                }
-            }
-        }
-
-        public ArrayList<Tile> getWalkableKnownTilesAdjacentTo(Tile currentTile, Coordinate destination){
-            ArrayList<Coordinate> adjacentCoordinates = getWalkableKnownCoordinatesAdjacentTo(currentTile.position);
-            ArrayList<Tile> adjacentTiles = adjacentCoordinatesToTiles(currentTile, adjacentCoordinates, destination);
-            return adjacentTiles;
-        }
-
-        public Tile initialTile(Coordinate coordinate, Coordinate destination){
-            Tile newTile = new Tile();
-            newTile.position = coordinate;
-            newTile.g = 0;
-            newTile.h = manhattanDistance(coordinate, destination);
-            newTile.score = newTile.g + newTile.h;
-            return newTile;
-        }
-
-        public ArrayList<Tile> adjacentCoordinatesToTiles(Tile parentTile, ArrayList<Coordinate> list, Coordinate destination){
-            ArrayList<Tile> adjacentTiles = new ArrayList<Tile>();
-            for(int i = 0; i < list.size(); i++){
-                Tile newTile = new Tile();
-                newTile.parent = parentTile;
-                newTile.position = list.get(i);
-                newTile.g = parentTile.g + 1;
-                newTile.h = manhattanDistance(newTile.position, destination);
-                newTile.score = newTile.g + newTile.h;
-                adjacentTiles.add(newTile);
-            }
-            return adjacentTiles;
-        }
-
-        public ArrayList<Coordinate> tilesToCoordinates(ArrayList<Tile> list){
-            ArrayList<Coordinate> coordinates = new ArrayList<Coordinate>();
-            for(int i = 0; i < list.size(); i++){
-                Coordinate newCoordinate = new Coordinate(list.get(i).position);
-                coordinates.add(newCoordinate);
-            }
-            return coordinates;
-        }
-
-        public int compareTileByScore(Tile first, Tile second){
-            if(first.score > second.score){
-                return -1;
-            }else if(first.score == second.score){
-                return 0;
+    public ArrayList<Tile> solutionPathFromNode(Tile tile){
+        ArrayList<Tile> possibleSolution = new ArrayList<Tile>();
+        possibleSolution.add(tile);
+        while(true){
+            tile = tile.parent;
+            if(tile == null){
+                break;
             }else{
-                return 1;
+                possibleSolution.add(tile);
             }
         }
+        return possibleSolution;
+    }
 
-        public AStarSearch addToOpenList(Coordinate position){
-            if(!open.contains(position)){
-                open.add(position);
+    public boolean isInTileList(ArrayList<Tile> list, Tile tile){
+        for(int i = 0; i < list.size(); i++){
+            if(tile.position.isEqualTo(list.get(i).position)){
+                return true;
             }
-            return this;
         }
+        return false;
+    }
 
-        public AStarSearch addToClosedList(Coordinate position){
-            if(!closed.contains(position)){
-                closed.add(position);
+    public void expand(Tile currentTile, Coordinate destination){
+
+        //generate the child nodes of the current node and if they haven't been visited yet, place them in the queue
+        ArrayList<Tile> adjacentTiles = getWalkableKnownTilesAdjacentTo(currentTile, destination);
+
+        for(int i = 0; i < adjacentTiles.size(); i++){
+            if(!isInTileList(astar.visitedTiles, adjacentTiles.get(i))){
+                astar.visitedTiles.add(adjacentTiles.get(i));
+                astar.queue.add(adjacentTiles.get(i));
             }
-            return this;
         }
+    }
 
-        public boolean isWalkable(Coordinate position){
-            return false;
+    public ArrayList<Tile> getWalkableKnownTilesAdjacentTo(Tile currentTile, Coordinate destination){
+        ArrayList<Coordinate> adjacentCoordinates = getWalkableKnownCoordinatesAdjacentTo(currentTile.position);
+        ArrayList<Tile> adjacentTiles = adjacentCoordinatesToTiles(currentTile, adjacentCoordinates, destination);
+        return adjacentTiles;
+    }
+
+    public Tile initialTile(Coordinate coordinate, Coordinate destination){
+        Tile newTile = new Tile();
+        newTile.position = coordinate;
+        newTile.g = 0;
+        newTile.h = manhattanDistance(coordinate, destination);
+        newTile.score = newTile.g + newTile.h;
+        return newTile;
+    }
+
+    public ArrayList<Tile> adjacentCoordinatesToTiles(Tile parentTile, ArrayList<Coordinate> list, Coordinate destination){
+        ArrayList<Tile> adjacentTiles = new ArrayList<Tile>();
+        for(int i = 0; i < list.size(); i++){
+            Tile newTile = new Tile();
+            newTile.parent = parentTile;
+            newTile.position = list.get(i);
+            newTile.g = parentTile.g + 1;
+            newTile.h = manhattanDistance(newTile.position, destination);
+            newTile.score = newTile.g + newTile.h;
+            adjacentTiles.add(newTile);
         }
+        return adjacentTiles;
+    }
 
-        public int computeScore(Coordinate squareToBeScored, Coordinate source, Coordinate destination){
+    public ArrayList<Coordinate> tilesToCoordinates(ArrayList<Tile> list){
+        ArrayList<Coordinate> coordinates = new ArrayList<Coordinate>();
+        for(int i = 0; i < list.size(); i++){
+            Coordinate newCoordinate = new Coordinate(list.get(i).position);
+            coordinates.add(newCoordinate);
+        }
+        return coordinates;
+    }
+
+    public int compareTileByScore(Tile first, Tile second){
+        if(first.score > second.score){
+            return -1;
+        }else if(first.score == second.score){
             return 0;
+        }else{
+            return 1;
         }
+    }
 
-        public int manhattanDistance(Coordinate point1, Coordinate point2){
-            int distanceHorizontal = Math.abs(point1.x - point2.x);
-            int distanceVertical = Math.abs(point1.y - point2.y);
-
-            return (distanceHorizontal + distanceVertical) - 1;
+    public AStarSearch addToOpenList(Coordinate position){
+        if(!astar.open.contains(position)){
+            astar.open.add(position);
         }
+        return astar;
+    }
 
-        public Coordinate closestToPositionFromList(Coordinate position, ArrayList<Coordinate> list){
-            int lowestManhattanDistance = 999999999;
-            for(int i = 0; i < list.size(); i++){
-                
-            }
+    public AStarSearch addToClosedList(Coordinate position){
+        if(!astar.closed.contains(position)){
+            astar.closed.add(position);
         }
+        return astar;
+    }
+
+    public boolean isWalkable(Coordinate position){
+        return false;
+    }
+
+    public int computeScore(Coordinate squareToBeScored, Coordinate source, Coordinate destination){
+        return 0;
     }
 
     enum obstacle {NONE, NORTH_WALL, EAST_WALL, SOUTH_WALL, WEST_WALL}
@@ -739,7 +720,7 @@ public class Tharpoon5 extends Agent {
     private Agent me;
     private Agent otherAgent;
 
-    private enum objective {INITIALIZE, SEEK_ENEMY_BASE, SEEK_OUR_BASE, RETRIEVE_FRIENDLY_FLAG, DEFEND_OUR_BASE, MOVE_AROUND_OBSTACLE}
+    private enum objective {INITIALIZE, SEEK_ENEMY_BASE, SEEK_ENEMY_BASE_VIA_KNOWN_SHORTEST_PATH,  SEEK_OUR_BASE, SEEK_OUR_BASE_VIA_KNOWN_SHORTEST_PATH, RETRIEVE_FRIENDLY_FLAG, DEFEND_OUR_BASE, MOVE_AROUND_OBSTACLE}
 
 
     //Map
@@ -748,8 +729,9 @@ public class Tharpoon5 extends Agent {
     private int mapHeight = 10;         //it is known that mapHeight == mapLength
     private Place ourBase;
     private Place enemyBase;
+    private Place seekPoint;
     private Place defenseWallCenter;
-    private ArrayList<Place> pointsOfInterest = new ArrayList<Place>();
+    private ArrayList<Place> pointsOfInterest;
     private ArrayList<Coordinate> possibleMines = new ArrayList<Coordinate>();
 
     private enum direction {NORTH, EAST, SOUTH, WEST, SOUTHWEST, SOUTHEAST, NORTHEAST, NORTHWEST, DONOTHING}
@@ -831,6 +813,7 @@ public class Tharpoon5 extends Agent {
             ourBaseFound = false;
             shortestPathFromOurBaseToEnemyBase.clear();
             astar = new AStarSearch();
+            shortestPathFromOurBaseToEnemyBase.clear();
         }
         me = new Agent();
         agents.add(me);
@@ -844,6 +827,7 @@ public class Tharpoon5 extends Agent {
         ourBase = new Place("ourBase");
         enemyBase = new Place("enemyBase");
         defenseWallCenter = new Place("defenseWallCenter");
+        pointsOfInterest = new ArrayList<Place>();
         pointsOfInterest.add(ourBase);
         pointsOfInterest.add(enemyBase);
         pointsOfInterest.add(defenseWallCenter);
@@ -861,9 +845,7 @@ public class Tharpoon5 extends Agent {
         //some initilizations before we start seeking
         if (me.getCurrentObjective() == objective.INITIALIZE) {
             determineMySpawnAndInitialPosition();
-            if (me.number == agents.size() - 1) {
-                determineBasePositions();
-            }
+            determineBasePositions();
         }
 
         amIAtSpawn();
@@ -876,20 +858,84 @@ public class Tharpoon5 extends Agent {
             me.setNewBaseObjective(objective.SEEK_ENEMY_BASE);
         }
 
+        //in the case that we have found the shortest path, we will create a seekpoint to get on the path, and then
+        //we will follow that path
+        if(enemyBaseFound && ourBaseFound){
+
+            shortestPathFromOurBaseToEnemyBase = shortestPath(getPointOfInterestByName("ourBase").position, getPointOfInterestByName("enemyBase").position);
+
+            if(shortestPathFromOurBaseToEnemyBase.size() != 0){
+                seekPoint = new Place("seekPoint");
+                seekPoint.position = closestToPositionFromList(me.position, shortestPathFromOurBaseToEnemyBase);
+                seekPoint.dir = getDirectionOfPointRelativeToMe(seekPoint.position);
+            }
+            if(me.hasFlag && shortestPathFromOurBaseToEnemyBase.size() != 0){
+                if(IAmOnShortestPath()){
+                    me.objectives.clear();
+                    me.pushObjective(objective.SEEK_OUR_BASE_VIA_KNOWN_SHORTEST_PATH);
+                }else{
+                    me.setNewBaseObjective(objective.SEEK_OUR_BASE_VIA_KNOWN_SHORTEST_PATH);
+                }
+            }else if(!me.hasFlag && shortestPathFromOurBaseToEnemyBase.size() != 0){
+                if(IAmOnShortestPath()){
+                    me.objectives.clear();
+                    me.pushObjective(objective.SEEK_ENEMY_BASE_VIA_KNOWN_SHORTEST_PATH);
+                }else{
+                    me.setNewBaseObjective(objective.SEEK_ENEMY_BASE_VIA_KNOWN_SHORTEST_PATH);
+                }
+            }
+        }
+
         switch (me.getCurrentObjective()) {
             case SEEK_ENEMY_BASE:
-                whatToDo = seek(enemyBase);
+                whatToDo = seek(getPointOfInterestByName("enemyBase"));
+                break;
+            case SEEK_ENEMY_BASE_VIA_KNOWN_SHORTEST_PATH:
+                if(!IAmOnShortestPath()){
+                    whatToDo = seek(seekPoint);
+                }else{
+                    if(me.position.isEqualTo(enemyBase.position)){
+                        //we are already at the enemy base
+                        return doNothing;
+                    }
+                    int index = getIndexOfPointInList(shortestPathFromOurBaseToEnemyBase, me.position);
+                    Coordinate whereToGo = shortestPathFromOurBaseToEnemyBase.get(index - 1);
+                    direction directionOfPointRelativeTome = getDirectionOfPointRelativeToMe(whereToGo);
+                    if(okayToGo(directionOfPointRelativeTome)){
+                        whatToDo = move(getDirectionOfPointRelativeToMe(whereToGo));
+                    }else{
+                        whatToDo = seek(getPointOfInterestByName("enemyBase"));
+                    }
+                }
                 break;
             case SEEK_OUR_BASE:
-                whatToDo = seek(ourBase);
+                whatToDo = seek(getPointOfInterestByName("ourBase"));
+                break;
+            case SEEK_OUR_BASE_VIA_KNOWN_SHORTEST_PATH:
+                if(!IAmOnShortestPath()){
+                    whatToDo = seek(seekPoint);
+                }else{
+                    if(me.position.isEqualTo(ourBase.position)){
+                        //we are already at our base
+                        return doNothing;
+                    }
+                    int index = getIndexOfPointInList(shortestPathFromOurBaseToEnemyBase, me.position);
+                    Coordinate whereToGo = shortestPathFromOurBaseToEnemyBase.get(index + 1);
+                    direction directionOfPointRelativeTome = getDirectionOfPointRelativeToMe(whereToGo);
+                    if(okayToGo(directionOfPointRelativeTome)){
+                        whatToDo = move(getDirectionOfPointRelativeToMe(whereToGo));
+                    }else{
+                        whatToDo = seek(getPointOfInterestByName("ourBase"));
+                    }
+                }
                 break;
             case DEFEND_OUR_BASE:
                 whatToDo = defend(ourBase);
                 break;
             case MOVE_AROUND_OBSTACLE:
-                if(me.getBaseObjective() == objective.SEEK_OUR_BASE){
+                if(me.getBaseObjective() == objective.SEEK_OUR_BASE || me.getBaseObjective() == objective.SEEK_OUR_BASE_VIA_KNOWN_SHORTEST_PATH){
                     whatToDo = goAroundObstacle(ourBase);
-                }else if(me.getBaseObjective() == objective.SEEK_ENEMY_BASE){
+                }else if(me.getBaseObjective() == objective.SEEK_ENEMY_BASE || me.getBaseObjective() == objective.SEEK_ENEMY_BASE_VIA_KNOWN_SHORTEST_PATH){
                     whatToDo = goAroundObstacle(enemyBase);
                 }
         }
@@ -897,8 +943,6 @@ public class Tharpoon5 extends Agent {
         //print only after every complete move (ie, both agents have moved)
         if (me.number == 1) {
             if(enemyBaseFound && ourBaseFound){
-                //shortestPathFromOurBaseToEnemyBase = astar.computeShortestPathUsingKnownTilesFromSrcToDestination(ourBase.position, enemyBase.position);
-                shortestPathFromOurBaseToEnemyBase = astar.shortestPath(ourBase.position, enemyBase.position);
                 printMapAndTimesVisitedWithShortestPath(shortestPathFromOurBaseToEnemyBase);
             }else{
                 //printMap();
@@ -914,6 +958,7 @@ public class Tharpoon5 extends Agent {
         int whatToDo = doNothing;
         System.out.println("agent " + me.name + " has obj " + me.getCurrentObjectiveString());
 
+        //these two checks need to be separate because only in the case where there is an obstacle on three sides, will we put an x in that square
         if (obstInThreeDirections()) {
             whatToDo = move(getOnlyNonObstDirection());
             return whatToDo;
@@ -1010,6 +1055,20 @@ public class Tharpoon5 extends Agent {
         return whatToDo;
     }
 
+    public Place getPointOfInterestByName(String name){
+        for(int i = 0; i < pointsOfInterest.size(); i++){
+            Place currentPointOfInterest = pointsOfInterest.get(i);
+            if(currentPointOfInterest.name == name){
+                return currentPointOfInterest;
+            }
+        }
+        return new Place("none found");
+    }
+
+    public boolean IAmOnShortestPath(){
+        return (isInList(shortestPathFromOurBaseToEnemyBase, me.position));
+    }
+
     public void checkForPresenceOfBase(){
         if(ourBaseNorthImmediate || ourBaseEastImmediate || ourBaseSouthImmediate || ourBaseWestImmediate){
             ourBaseFound = true;
@@ -1028,12 +1087,12 @@ public class Tharpoon5 extends Agent {
             System.out.println("ew tunnel");
             direction nonEastOrWestDir;
 
-            if(me.hasFlag){
+           //if(me.hasFlag){
                 nonEastOrWestDir = pickRandomlyBetween(direction.SOUTH, direction.NORTH);
-            }else{
+            //}else{
                 //if I don't have the flag, prefer less visited squares
-                nonEastOrWestDir = getLeastVisitedFrom(direction.SOUTH, direction.NORTH);
-            }
+            //    nonEastOrWestDir = getLeastVisitedFrom(direction.SOUTH, direction.NORTH);
+            //}
 
             if(pointOfInterest.dir == direction.NORTHEAST) {
                 me.pushDirectionToGo(direction.NORTH);
@@ -1080,12 +1139,12 @@ public class Tharpoon5 extends Agent {
             System.out.println("ns tunnel");
 
             direction nonNorthOrSouthDir;
-            if(me.hasFlag){
+            //if(me.hasFlag){
                 nonNorthOrSouthDir = pickRandomlyBetween(direction.EAST, direction.WEST);
-            }else{
+            //}else{
                 //if I don't have the flag, prefer less visited squares
-                nonNorthOrSouthDir = getLeastVisitedFrom(direction.EAST, direction.WEST);
-            }
+            //    nonNorthOrSouthDir = getLeastVisitedFrom(direction.EAST, direction.WEST);
+            //}
 
             if(pointOfInterest.dir == direction.NORTHEAST) {
                 me.pushDirectionToGo(direction.EAST);
@@ -1135,12 +1194,12 @@ public class Tharpoon5 extends Agent {
             System.out.println("ne corner");
 
             direction nonNorthOrEastDir;
-            if(me.hasFlag){
+            //if(me.hasFlag){
                 nonNorthOrEastDir = pickRandomlyBetween(direction.SOUTH, direction.WEST);
-            }else{
+            //}else{
                 //if I don't have the flag, prefer less visited squares
-                nonNorthOrEastDir = getLeastVisitedFrom(direction.SOUTH, direction.WEST);
-            }
+            //    nonNorthOrEastDir = getLeastVisitedFrom(direction.SOUTH, direction.WEST);
+            //}
 
             if(pointOfInterest.dir == direction.NORTHEAST) {
                 me.pushDirectionToGo(nonNorthOrEastDir);
@@ -1188,12 +1247,12 @@ public class Tharpoon5 extends Agent {
             System.out.println("se corner");
 
             direction nonSouthOrEastDir;
-            if(me.hasFlag){
+            //if(me.hasFlag){
                 nonSouthOrEastDir = pickRandomlyBetween(direction.NORTH, direction.WEST);
-            }else{
+            //}else{
                 //if I don't have the flag, prefer less visited squares
-                nonSouthOrEastDir = getLeastVisitedFrom(direction.NORTH, direction.WEST);
-            }
+            //    nonSouthOrEastDir = getLeastVisitedFrom(direction.NORTH, direction.WEST);
+            //}
 
             if (pointOfInterest.dir == direction.NORTHEAST) {
                 me.pushDirectionToGo(nonSouthOrEastDir);
@@ -1241,12 +1300,12 @@ public class Tharpoon5 extends Agent {
             System.out.println("sw corner");
 
             direction nonSouthOrWestDir;
-            if(me.hasFlag){
+            //if(me.hasFlag){
                 nonSouthOrWestDir = pickRandomlyBetween(direction.NORTH, direction.EAST);
-            }else{
+            //}else{
                 //if I don't have the flag, prefer less visited squares
-                nonSouthOrWestDir = getLeastVisitedFrom(direction.NORTH, direction.EAST);
-            }
+            //    nonSouthOrWestDir = getLeastVisitedFrom(direction.NORTH, direction.EAST);
+            //}
 
             if(pointOfInterest.dir == direction.NORTHEAST) {
                 me.pushDirectionToGo(nonSouthOrWestDir);
@@ -1294,12 +1353,12 @@ public class Tharpoon5 extends Agent {
             System.out.println("nw corner");
 
             direction nonNorthOrWestDir;
-            if(me.hasFlag){
+            //if(me.hasFlag){
                 nonNorthOrWestDir = pickRandomlyBetween(direction.SOUTH, direction.EAST);
-            }else{
+            //}else{
                 //if I don't have the flag, prefer less visited squares
-                nonNorthOrWestDir = getLeastVisitedFrom(direction.SOUTH, direction.EAST);
-            }
+            //    nonNorthOrWestDir = getLeastVisitedFrom(direction.SOUTH, direction.EAST);
+            //}
 
             if(pointOfInterest.dir == direction.NORTHEAST) {
                 me.pushDirectionToGo(direction.EAST);
@@ -1557,6 +1616,7 @@ public class Tharpoon5 extends Agent {
         //case where we are blocked on three sides, there is only one way to go
         if(blockedInThreeDirections()){
             me.popObjective();
+            me.popDirectionToGo();
             return move(getOnlyFreeDirection());
         }
 
@@ -1596,10 +1656,14 @@ public class Tharpoon5 extends Agent {
     }
 
     public void removeObstaclesNoLongerPresent(){
+        ArrayList<Integer> obstaclesToRemove = new ArrayList<Integer>();
         for(int i = 0; i < me.obstacles.size(); i++){
             if(okayToGo(getDirectionFromObstacleDirection(me.obstacles.get(i)))){
-                me.obstacles.remove(i);
+                obstaclesToRemove.add(i);
             }
+        }
+        for(int j = 0; j < obstaclesToRemove.size(); j++){
+            me.obstacles.remove(obstaclesToRemove.get(j));
         }
     }
 
@@ -2220,19 +2284,19 @@ public class Tharpoon5 extends Agent {
 
         if (obstNorth && me.position.y != 0) {
             map[me.position.y - 1][me.position.x] = 'X';
-            astar.addToClosedList(me.position.oneNorth());
+            addToClosedList(me.position.oneNorth());
         }
         if (obstEast && me.position.x != mapHeight - 1) {
             map[me.position.y][me.position.x + 1] = 'X';
-            astar.addToClosedList(me.position.oneEast());
+            addToClosedList(me.position.oneEast());
         }
         if (obstSouth && me.position.y != mapHeight - 1) {
             map[me.position.y + 1][me.position.x] = 'X';
-            astar.addToClosedList(me.position.oneSouth());
+            addToClosedList(me.position.oneSouth());
         }
         if (obstWest && me.position.x != 0) {
             map[me.position.y][me.position.x - 1] = 'X';
-            astar.addToClosedList(me.position.oneWest());
+            addToClosedList(me.position.oneWest());
         }
     }
 
@@ -2338,9 +2402,10 @@ public class Tharpoon5 extends Agent {
     public void moveMeOnMap(Coordinate source, Coordinate destination) {
         if(obstInThreeDirections()){
             setMapSquare(source, 'X');
-            astar.addToClosedList(source);
+            addToClosedList(source);
         }else {
             setMapSquare(source, ' ');
+            addToOpenList(destination);
         }
         setMapSquare(destination, me.name);
     }
@@ -2351,7 +2416,6 @@ public class Tharpoon5 extends Agent {
 
     public void changeMyPosition(Coordinate source, Coordinate destination) {
         me.squaresTravelled.add(new Coordinate(destination));
-        astar.addToOpenList(destination);
         updateTimesVisited(destination);
         moveMeOnMap(source, destination);
         me.position.set(destination);
@@ -2370,7 +2434,11 @@ public class Tharpoon5 extends Agent {
         astarmap = new char[mapHeight][mapHeight];
         for (int i = 0; i < mapHeight; i++) {
             for (int j = 0; j < mapHeight; j++) {
-                astarmap[i][j] = '.';
+                if(isInList(astar.open, new Coordinate(j, i))){
+                    astarmap[i][j] = ' ';
+                }else{
+                    astarmap[i][j] = '.';
+                }
             }
         }
     }
@@ -2441,8 +2509,7 @@ public class Tharpoon5 extends Agent {
         System.out.println("----------   ----------");
     }
 
-    public void
-    printMapAndTimesVisitedWithShortestPath(ArrayList<Coordinate> path) {
+    public void printMapAndTimesVisitedWithShortestPath(ArrayList<Coordinate> path) {
 
         map[ourBase.position.y][ourBase.position.x] = 'O';
         map[enemyBase.position.y][enemyBase.position.x] = 'E';
@@ -2489,6 +2556,16 @@ public class Tharpoon5 extends Agent {
         return false;
     }
 
+    //returns -1 if point is not in the list
+    public int getIndexOfPointInList(ArrayList<Coordinate> list, Coordinate point){
+        for(int i = 0; i < list.size(); i++){
+            if(point.isEqualTo(list.get(i))){
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public boolean isSamePositionAsAnyAgent(Coordinate position){
         for (int i = 0; i < agents.size(); i++) {
             if(position.isEqualTo(agents.get(i).position)){
@@ -2497,8 +2574,6 @@ public class Tharpoon5 extends Agent {
         }
         return false;
     }
-
-
 
     //ENVIRONMENT FUNCTIONS//ENVIRONMENT FUNCTIONS //ENVIRONMENT FUNCTIONS //ENVIRONMENT FUNCTIONS //ENVIRONMENT FUNCTIONS //ENVIRONMENT FUNCTIONS
 
@@ -2619,6 +2694,53 @@ public class Tharpoon5 extends Agent {
                 }
             }
         }
+    }
+
+    public direction getDirectionOfPointRelativeToMe(Coordinate point){
+        if(positionIsNorth(point) && positionIsEast(point)){
+            return direction.NORTHEAST;
+        }else if(positionIsEast(point) && positionIsSouth(point)){
+            return direction.SOUTHEAST;
+        }else if(positionIsSouth(point) && positionIsWest(point)){
+            return direction.SOUTHWEST;
+        }else if(positionIsNorth(point) && positionIsWest(point)){
+            return direction.NORTHWEST;
+        }else if(positionIsNorth(point)){
+            return direction.NORTH;
+        }else if(positionIsEast(point)){
+            return direction.EAST;
+        }else if (positionIsSouth(point)){
+            return direction.SOUTH;
+        }else{
+            return direction.WEST;
+        }
+    }
+
+    public int manhattanDistance(Coordinate point1, Coordinate point2){
+        int distanceHorizontal = Math.abs(point1.x - point2.x);
+        int distanceVertical = Math.abs(point1.y - point2.y);
+
+        return (distanceHorizontal + distanceVertical) - 1;
+    }
+
+    public Coordinate closestToPositionFromList(Coordinate position, ArrayList<Coordinate> list){
+        int lowestManhattanDistance = 999999999;
+        int currentManhattanDistance = 99999999;
+        for(int i = 0; i < list.size(); i++){
+            currentManhattanDistance = manhattanDistance(list.get(i), position);
+            if(currentManhattanDistance < lowestManhattanDistance){
+                lowestManhattanDistance = currentManhattanDistance;
+            }
+        }
+
+        Coordinate closestPoint = new Coordinate();
+        for(int i = 0; i < list.size(); i++){
+            currentManhattanDistance = manhattanDistance(list.get(i), position);
+            if(currentManhattanDistance == lowestManhattanDistance){
+                closestPoint = list.get(i);
+            }
+        }
+        return closestPoint;
     }
 
     public boolean positionIsNorth(Coordinate pos){
