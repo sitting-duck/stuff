@@ -15,7 +15,7 @@ import ctf.common.AgentAction;
 
 public class Tharpoon5 extends Agent {
 
-    class AStarSearch {
+    private class AStarSearch {
 
         public ArrayList<Tile> queue = new ArrayList<Tile>();
         public ArrayList<Tile> visitedTiles = new ArrayList<Tile>();
@@ -28,7 +28,7 @@ public class Tharpoon5 extends Agent {
         }
     }
 
-    class Tile implements Comparator<Tile> {
+    private class Tile implements Comparator<Tile> {
         public Tile(){
             parent = null;
             position = new Coordinate();
@@ -61,7 +61,7 @@ public class Tharpoon5 extends Agent {
         }
     }
 
-    class PossibleSolution implements Comparator<ArrayList<Tile>>{
+    private class PossibleSolution implements Comparator<ArrayList<Tile>>{
         public int compare(ArrayList<Tile> first, ArrayList<Tile> second){
             if(first.size() < second.size()){
                 return -1;
@@ -809,11 +809,12 @@ public class Tharpoon5 extends Agent {
         //Agent
         if (agents.size() == MAX_NUM_AGENTS) {
             agents.clear();
+
             enemyBaseFound = false;
             ourBaseFound = false;
+
             shortestPathFromOurBaseToEnemyBase.clear();
             astar = new AStarSearch();
-            shortestPathFromOurBaseToEnemyBase.clear();
         }
         me = new Agent();
         agents.add(me);
@@ -1613,6 +1614,14 @@ public class Tharpoon5 extends Agent {
 
     public int goAroundObstacle(Place pointOfInterest){
 
+        if(amIAtSpawn()){
+            if(me.directionsToGo.size() != 0){
+                me.directionsToGo.clear();
+            }
+            me.popObjective();
+            return seek(pointOfInterest);
+        }
+
         //case where we are blocked on three sides, there is only one way to go
         if(blockedInThreeDirections()){
             me.popObjective();
@@ -1642,7 +1651,10 @@ public class Tharpoon5 extends Agent {
             return move(currentDir);
         }else{
             me.popDirectionToGo();
-            return goAroundObstacle(pointOfInterest);
+            me.popObjective();
+            return seek(pointOfInterest);
+            //return goAroundObstacle(pointOfInterest);
+
         }
     }
 
