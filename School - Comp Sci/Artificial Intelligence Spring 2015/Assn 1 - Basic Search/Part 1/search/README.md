@@ -57,35 +57,35 @@ to run from the command line, navigate to the project folder and run:
 
 #### Command Breakdown
 
-	search: the name of the program
-	
-	-cost:  An optional flag.  Adding -cost indicates that the search should take into account the cost of each move.  Whether or not there is a variable cost for each move will most likely affect what the final solution turns out to be.  The cost will be measured as the number of slots between the initial and final position of the tile being moved.
+search: the name of the program
 
-	**Examples**
-		Initial State: BxW
-		Final State: xBW
-		Cost: 1
-		
-		Initial State: xBBBWWW
-		Final State: BBBxWWW
-		Cost: 3
-		
-	<BFS|DFS|UCS|GS|A-star>: a non-optional parameter indicating what type of search should be used to generate the solution to the puzzle.
-	BFS == breadth first search
-	DFS == depth first search
-	UCS == uniform cost search (all moves have the same cost, adding the -cost flag doesn't 	matter in this case)
-	GS == greedy best first search
+-cost:  An optional flag.  Adding -cost indicates that the search should take into account the cost of each move.  Whether or not there is a variable cost for each move will most likely affect what the final solution turns out to be.  The cost will be measured as the number of slots between the initial and final position of the tile being moved.
+
+**Examples**
+	Initial State: BxW
+	Final State: xBW
+	Cost: 1
 	
-	<inputfile> you will put the name of your own input file. It must be a .txt file.
-	The input file will contain one string. That string is the encoding your puzzle's initial state. 
+	Initial State: xBBBWWW
+	Final State: BBBxWWW
+	Cost: 3
 	
-	**Example valid puzzle encodings:**
-		xBW
-		BxW
-		WxB
-		WBBx
-		
-	**Example Invalid puzzle encodings:**
-		BBWW * missing x for empty slot
-		xxBBWW	* can only have one empty slot
-		BBBxWW	* number of black and white tiles must be equal
+<BFS|DFS|UCS|GS|A-star>: a non-optional parameter indicating what type of search should be used to generate the solution to the puzzle.
+BFS == breadth first search
+DFS == depth first search
+UCS == uniform cost search (all moves have the same cost, adding the -cost flag doesn't 	matter in this case)
+GS == greedy best first search
+
+<inputfile> you will put the name of your own input file. It must be a .txt file.
+The input file will contain one string. That string is the encoding your puzzle's initial state. 
+
+**Example valid puzzle encodings:**
+	xBW
+	BxW
+	WxB
+	WBBx
+	
+**Example Invalid puzzle encodings:**
+	BBWW * missing x for empty slot
+	xxBBWW	* can only have one empty slot
+	BBBxWW	* number of black and white tiles must be equal
