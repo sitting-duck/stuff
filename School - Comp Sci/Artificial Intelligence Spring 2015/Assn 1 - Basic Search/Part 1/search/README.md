@@ -3,7 +3,7 @@ Ashley Tharp
 ### Abstract
 This program solves a puzzle using various search techniques. Some search techniques produce optimal solutions, other search techniques produce suboptimal solutions in less time.
 
-#### Description of the puzzle:
+#### Description of the puzzle
 		Example Puzzle: BBBxWWW
 
 		The puzzle is a one dimensional set of tiles.  There are an equal number of black tiles and white tiles.  Each tile takes up one slot in the puzzle.  The puzzle has enough slots for an equal number of black tiles and whites and one empty slot.
