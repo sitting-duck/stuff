@@ -51,8 +51,9 @@ Developed on Windows using Microsoft Visual Studio 2013
 
 ## HOW TO RUN:
 
-to run from the command line, navigate to the project folder and run
-	search [-cost] <BFS|DFS|UCS|GS|A-star> <inputfile>
+to run from the command line, navigate to the project folder and run:
+
+		search [-cost] <BFS|DFS|UCS|GS|A-star> <inputfile>
 
 #### Command Breakdown
 
