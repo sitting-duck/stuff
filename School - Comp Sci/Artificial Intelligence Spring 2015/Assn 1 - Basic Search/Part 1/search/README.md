@@ -4,9 +4,12 @@ Ashley Tharp
 This program solves a puzzle using various search techniques. Some search techniques produce optimal solutions, other search techniques produce suboptimal solutions in less time.
 
 #### Description of the puzzle:
-		Example Puzzle: "\u25A0"\u25A0\u25A0 \u25A1\u25A1\u25A1
+		Example Puzzle: BBBxWWW
 
 		The puzzle is a one dimensional set of tiles.  There are an equal number of black tiles and white tiles.  Each tile takes up one slot in the puzzle.  The puzzle has enough slots for an equal number of black tiles and whites and one empty slot.
+		B - black tile
+		x - empty slot
+		W - white tile
 		
 		Puzzle Solution:
 			A puzzle is in a solved state if all the black tiles are to the left of the empty slot, and all the white tiles are to the right of the empty slot. (the implications of this is that the empty slot will always be in the center slot, and that there will always be an odd number of slots.)
@@ -14,17 +17,17 @@ This program solves a puzzle using various search techniques. Some search techni
 			There can be more than one possible solution to this puzzle.
 			
 		Example Solved Puzzles:
-			\u25A0 \u25A1
-			\u25A0\u25A0 \u25A1\u25A1
-			\u25A0\u25A0\u25A0 \u25A1\u25A1\u25A1
-			\u25A0\u25A0\u25A0\u25A0 \u25A1\u25A1\u25A1\u25A1
+			BxW
+			BBxWW
+			BBBxWWW
+			BBBBxWWWW
 			
 		Example Unsolved Puzzles:
-			\u25A0\u25A1    *the empty slot is not in the center, the white tile is not to the right of the empty slot
+			BWx   *the empty slot is not in the center, the white tile is not to the right of the empty slot
 			
-			\u25A1 \u25A1\u25A0 *all the black tiles must be to left, all the white tiles must be to the right in order for the puzzle to be solved.
+			xBBWW *all the black tiles must be to left, all the white tiles must be to the right in order for the puzzle to be solved.
 			
-			 \u25A0\u25A0\u25A0\u25A1\u25A1\u25A1 *the slot is on the left, not in the center :(
+			BBxBWWW
 			 
 		How to solve the puzzle:
 			The puzzle can be solved by moving the tiles.  
