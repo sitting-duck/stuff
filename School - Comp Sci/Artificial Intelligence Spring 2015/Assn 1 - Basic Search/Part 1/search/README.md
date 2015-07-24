@@ -62,6 +62,7 @@ search: the name of the program
 -cost:  An optional flag.  Adding -cost indicates that the search should take into account the cost of each move.  Whether or not there is a variable cost for each move will most likely affect what the final solution turns out to be.  The cost will be measured as the number of slots between the initial and final position of the tile being moved.
 
 **Examples**
+
 	Initial State: BxW
 	Final State: xBW
 	Cost: 1
@@ -80,12 +81,14 @@ GS == greedy best first search
 The input file will contain one string. That string is the encoding your puzzle's initial state. 
 
 **Example valid puzzle encodings:**
+
 	xBW
 	BxW
 	WxB
 	WBBx
 	
 **Example Invalid puzzle encodings:**
+
 	BBWW * missing x for empty slot
 	xxBBWW	* can only have one empty slot
 	BBBxWW	* number of black and white tiles must be equal
