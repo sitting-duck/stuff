@@ -7,6 +7,7 @@ This program solves a puzzle using various search techniques. Some search techni
 Example Puzzle: BBBxWWW
 
 The puzzle is a one dimensional set of tiles.  There are an equal number of black tiles and white tiles.  Each tile takes up one slot in the puzzle.  The puzzle has enough slots for an equal number of black tiles and whites and one empty slot.
+
 B - black tile
 x - empty slot
 W - white tile
@@ -41,7 +42,7 @@ Some solutions take less moves than others.
 ### Source Files:
 **Problem.h, Problem.cpp** - Holds queues of nodes. Sort the queues in different ways and applies different heuristics to the nodes dependent on which type of search is being applied. 
 
-**Node.h, Node.cpp** - Node model class.  Think of a solution to this problem as a node path down a search tree. Think of each node as a move in the solution.  The node class stores the encoding of the actual move and other information about the move.  For example, if there are any heuristics that measure the relative "quality" of a move, that value would be stored in the node class.
+**Node.h, Node.cpp** - Node model class.  Think of a solution to this problem as a node path down a search tree. Think of each node as a move in the solution.  The node class stores the encoding of the actual move and other information about the move.  For example, if there are any heuristics that measure the relative "quality" of a move, that value would be stored in the node instance.
 
 **init.cpp** - grabs command line input, input validation and warnings, 
 
@@ -71,7 +72,7 @@ search: the name of the program
 	Final State: BBBxWWW
 	Cost: 3
 	
-<BFS|DFS|UCS|GS|A-star>: a non-optional parameter indicating what type of search should be used to generate the solution to the puzzle.
+\<BFS|DFS|UCS|GS|A-star\>: a non-optional parameter indicating what type of search should be used to generate the solution to the puzzle.
 BFS == breadth first search
 DFS == depth first search
 UCS == uniform cost search (all moves have the same cost, adding the -cost flag doesn't 	matter in this case)
