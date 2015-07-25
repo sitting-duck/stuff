@@ -72,11 +72,14 @@ to run from the command line, navigate to the project folder and run:
 	Final State: BBBxWWW
 	Cost: 3
 	
-**\<BFS|DFS|UCS|GS|A-star\>:** a non-optional parameter indicating what type of search should be used to generate the solution to the puzzle.
+**\<BFS|DFS|UCS|GS|A-star\>:** a non-optional parameter indicating what type of search should be used to generate the solution to the puzzle. (enter only one of the options)
 
 BFS == breadth first search
-DFS == depth first search
+ 
+DFS == depth first search 
+
 UCS == uniform cost search (all moves have the same cost, adding the -cost flag doesn't 	matter in this case)
+
 GS == greedy best first search
 
 <inputfile> you will put the name of your own input file. It must be a .txt file.
