@@ -111,5 +111,5 @@ current node. In this way, we are storing all the possible puzzle paths as a tre
 
 All the child nodes we got from the expansion we throw in the queue. *(we make sure that we set a parent pointer in each node, and this is what makes this a search tree and not just a list of nodes)*
 
-Now that we have done an expansion, we have to decide which of the child nodes we just generated is going to be the new current node.  We do that in Problem::chooseNextToExpand().  
+Now that we have done an expansion, we have to decide which of the child nodes we just generated is going to be the new current node.  We do that in Problem::chooseNextToExpand().  There are ample comments in the source code to help you understand what is going on here.
 
