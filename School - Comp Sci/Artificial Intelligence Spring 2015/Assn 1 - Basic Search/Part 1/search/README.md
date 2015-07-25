@@ -58,9 +58,9 @@ to run from the command line, navigate to the project folder and run:
 
 #### Command Breakdown
 
-search: the name of the program
+**search:** the name of the program
 
--cost:  An optional flag.  Adding -cost indicates that the search should take into account the cost of each move.  Whether or not there is a variable cost for each move will most likely affect what the final solution turns out to be.  The cost will be measured as the number of slots between the initial and final position of the tile being moved.
+**-cost:**  An optional flag.  Adding -cost indicates that the search should take into account the cost of each move.  Whether or not there is a variable cost for each move will most likely affect what the final solution turns out to be.  The cost will be measured as the number of slots between the initial and final position of the tile being moved.
 
 **Examples**
 
@@ -72,7 +72,8 @@ search: the name of the program
 	Final State: BBBxWWW
 	Cost: 3
 	
-\<BFS|DFS|UCS|GS|A-star\>: a non-optional parameter indicating what type of search should be used to generate the solution to the puzzle.
+**\<BFS|DFS|UCS|GS|A-star\>:** a non-optional parameter indicating what type of search should be used to generate the solution to the puzzle.
+
 BFS == breadth first search
 DFS == depth first search
 UCS == uniform cost search (all moves have the same cost, adding the -cost flag doesn't 	matter in this case)
