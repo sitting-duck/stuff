@@ -10,13 +10,15 @@
 void main(int argc, char* argv[])
 {
 
+	//this flag indicates whether each move in the solution of the puzzle will have a //measurable cost. We initialize to false here, and it will be set to true if the user
+	//indicates s/he wants cost to be measured from the command line.
 	bool evaluateCost = false;
 
 	//print out command line arguments
-	for(int count = 0; count < argc; count++)
-	{
-		std::cout << "argv[" << count << "] : " << argv[count] << std::endl;
-	}
+	//for(int count = 0; count < argc; count++)
+	//{
+	//	std::cout << "argv[" << count << "] : " << argv[count] << std::endl;
+	//}
 
 	//initialize strings to put the params into
 	char filename[30] = { 0 };
@@ -24,6 +26,8 @@ void main(int argc, char* argv[])
 	char searchTypeParam[10] = { 0 };
 	std::string searchType;
 
+	//if there is a dash at the beginning of the second command line argument, the user 
+	//has entered a flag.
 	if(argv[1][0] == '-')
 	{
 		//if(strcmp(argv[1], "-cost") != 0)
@@ -69,23 +73,26 @@ void main(int argc, char* argv[])
 	initialStateFileName.assign(filename);
 	searchType.assign(searchTypeParam);
 
-	
-
-	//we have the file name now from the command line args so let's open the file...
+	//create a file stream
 	std::ifstream initialStateFile;
 
+	//open the file using the filename we grabbed from the command line
 	initialStateFile.open(initialStateFileName);
 
+	//make a string to hold what we grab from the file.
+	//This string is going to encode the initial state of the puzzle
 	std::string initialState;
 
-	//and get the initial tile configuration state from this file...
+	//grab the string
 	std::getline(initialStateFile, initialState);	
 
+	//close the file
 	initialStateFile.close();
 
 	//now we have what we need, so we can make the problem instance
 	Problem problem(initialState, searchType, evaluateCost);
 
+	//and then we call search on the problem we just created.
 	problem.search();
 }
 

@@ -12,6 +12,8 @@ B - black tile
 x - empty slot
 W - white tile
 
+This program will solve the puzzle for a maximum of 6 black and 6 white tiles.
+
 ####Puzzle Solution:
 A puzzle is in a solved state if all the black tiles are to the left of the empty slot, and all the white tiles are to the right of the empty slot. (the implications of this is that the empty slot will always be in the center slot, and that there will always be an odd number of slots.)
 
@@ -82,7 +84,7 @@ UCS == uniform cost search (all moves have the same cost, adding the -cost flag 
 
 GS == greedy best first search
 
-<inputfile> you will put the name of your own input file. It must be a .txt file.
+**\<inputfile\>:** you will put the name of your own input file. It must be a .txt file.
 The input file will contain one string. That string is the encoding your puzzle's initial state. 
 
 **Example valid puzzle encodings:**
@@ -97,3 +99,17 @@ The input file will contain one string. That string is the encoding your puzzle'
 	BBWW * missing x for empty slot
 	xxBBWW	* can only have one empty slot
 	BBBxWW	* number of black and white tiles must be equal
+	
+### Comments on the implementation:
+
+A high level explanation is thus: We start with the root node.  The root node represents the initial puzzle state. We expand the root node.
+
+**expanding a node:** A node essentially represents a puzzle state.  From each puzzle state
+we can reach other adjacent puzzle states by making one move.  When we expand a node,
+we are generating all the adjacent states as nodes, and setting them as children of the 
+current node. In this way, we are storing all the possible puzzle paths as a tree.
+
+All the child nodes we got from the expansion we throw in the queue. *(we make sure that we set a parent pointer in each node, and this is what makes this a search tree and not just a list of nodes)*
+
+Now that we have done an expansion, we have to decide which of the child nodes we just generated is going to be the new current node.  We do that in Problem::chooseNextToExpand().  
+
