@@ -7,7 +7,6 @@
 #include <list>
 #include <vector>
 #include <set>
-
 #include "Node.h"
 
 class Problem
@@ -28,16 +27,31 @@ public:
 
 	//this will hold all the nodes, the rest of the program will just pass around pointers to these nodes
 	unsigned int chunkSize;
+	
+	/*the purpose of keeping this node storage array is so that we can pass around references to the nodes instead of actual copies of the nodes.*/
 	Node* nodeStorage;
 	unsigned int nodesInStorage;
 
-	//this queue will hold the set of unvisited states. Each state must be checked that it has not yet been visited before it can be entered into this queue
+	//this queue will hold the set of unvisited states. Each state must be checked that it has not yet been visited before it can be entered into this queue. This queue represents what is sometimes called the "frontier" in search algorithms.  It holds the set of unexplored nodes on the "edgeC" of the known tree.
 	std::list<Node*> queue;
 
-	//the set of all visited states
+	/*
+	the set of all visited states.  
+	Note: we have to have this set in order to avoid cycles in our search tree. I will elaborate with an example.  Imagine that most of the puzzle remains in a certain state, but I decide to move one tile back and forth between two slots over and over, those moves are valid, but if I have made that move before while the puzzle is in this state, in this puzzle game, there is no reason to keep trying that move over and over.  
+	
+	If we allowed repeat moves, we would end up generating and having to search an infinite search tree, which would not be good :(, so, to avoid certain doom, we check if a puzzle state has already been generated before we add the corresponding node to the frontier queue.
+	*/
 	std::set<std::string> visitedStates;
 
-	//solutions
+	/*solutions
+	this puzzle can have more than one solution. 
+	If the chosen search type is optimal, the solutions will be sorted and the shortest 
+	solution will be returned.
+	Now, when I say solution, I am referring to the steps in order to solve the puzzle.  
+	I am not referring to the state in which it is solved.  
+	Also, keep in mind, as long as all the black tiles are on the left side, and all the white
+	tiles are on the right side, it does not matter the order of the tiles.
+	*/
 	std::vector<std::vector<Node*>> solutions;
 
 	//constructors
