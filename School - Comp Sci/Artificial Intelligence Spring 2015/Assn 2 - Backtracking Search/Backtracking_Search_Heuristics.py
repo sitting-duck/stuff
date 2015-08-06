@@ -7,18 +7,30 @@ from Node import Node
 
 class Backtracking_Search_Heuristics:
 
+
     def chooseNextVariable(self, csp):
+	"""
+	    the point of this function is to choose the next variable to be assigned.  Why do we need to choose the variables in a particular order?  Technically, we could brute force this and just crunch
+	    out all possible combinations of variable assignments, and then check each one against the constraints, but we have some heuristics to help us avoid computing variable assignment combinations
+	    of lesser "quality".
+
+	    One heuristic for measuring the relative quality of a variable concerning whether its assignment should be computed first is the number of values in it's domain.
+	    If we assign varianles with the smallest domains first, we reduce branching at the top of the search tree, thus reducing problem complexity considerably.
+
+	    :param csp: the current state of the constraint satisfaction problem
+	    :return: the next variable to be assigned
+	    """
 
         # first we need to find the least num values
-        minNumVal = 999
+        minimumNumberOfValues = 999
         for var in csp.variables:
-            if len(var.domain) < minNumVal:
-                minNumVal = len(var.domain)
+            if len(var.domain) < minimumNumberOfValues:
+                minimumNumberOfValues = len(var.domain)
 
         # now we need to know if there are any ties.
         numValTies = []
         for var in csp.variables:
-            if len(var.domain) == minNumVal:
+            if len(var.domain) == minimumNumberOfValues:
                 numValTies.append(var)
 
         # if there is no tie we return

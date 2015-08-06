@@ -7,8 +7,14 @@ class Variable:
     left, or there are no possible valid assignments for this variable"""
 
     def __init__(self, varNameArg, domainArg = [], degreeArg = 0):
+
+	    # name of the variable
         self.name = varNameArg
+
+        # the set of possible values that can be assigned to this variable.  (Note: there may be values in the domain that violate constraints, it the point of this
+	    # program to eliminate all values that violate constraints from the domain of every variable)
         self.domain = domainArg
+
         self.degree = degreeArg
 
     def degree(self):

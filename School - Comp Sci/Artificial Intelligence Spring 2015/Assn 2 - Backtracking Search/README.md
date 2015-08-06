@@ -1,25 +1,45 @@
-READ ME
+***Abstract/Conceptual Explanation***
 
-This program is written in Python so there is no need to compile it.
-It can be easily run in a Python IDE of your choice or via the command line.
+The program solves a constraint satisfaction problem.  This program uses a backtracking search to find a set of variables that satisfies all the problem constraints.  
 
-main.py <file.var> <file.con> <flag>
-
-This class represents a contraint satisfaction problem.  Before we get into the nitty gritty of what's in this class, let's start with a 
-high level explanation of what a constraint satisfaction problem is.
-Definition:
-conceptually, a constraint is a rule or requirement, and we could say, for a example, some set of things, satisfy those constraints.
-Example:
- a possible constraint would be "all numbers in this set of numbers must be over 5", and an example set that satisfies that constraint
-could be: {6, 100, 32, 41, 99}, and an example set that does not validate that constraint could be {-3, 2}
-so now we know conceptually what a constraint is, and what it means to satisfy a constraint, so, it would follow that a constraint
-satisfaction problem would concern sets and constraints.
+****Example****
+Imagine that there are 2 variables, A, and B. A, and B, are integer variables. There are two constraints.  Constraint 1 is that all variables must have positive values.  Constraint 2 is that A must be numerically higher than B.  The domain of A is {-1, -2, 1, 2} The domain of B is {-1, 1}.  A possible valid solution to this problem is {A=2, B=1}.
 
 Constraint satisfaction problems are of interest in Artificial Intelligence.
 Constraint satisfaction problems often exhibit high complexity, requiring a combination of heuristics and combinatorial search to be
 solved in a reasonable amount of time.
 
-Formally, a constraint satisfaction problem is defined as a triple \langle X,D,C \rangle, where [1]
-X = \{X_1, \ldots,X_n\} is a set of variables,
-D = \{D_1, \ldots, D_n\} is a set of the respective domains of values, and
-C = \{C_1, \ldots, C_m\} is a set of constraints.
+**Running the Program**
+This program is written in Python so there is no need to compile it.
+It can be easily run in a Python IDE of your choice or via the command line if you have Python installed.
+
+main.py <file.var> <file.con> <flag>
+
+<file.var> is a file containing all the problem variables. A .var file will be formatted like this:
+
+A: 1 2 3 4 5
+B: 1 2 3 4 5
+C: 1 2 3 4 5
+D: 1 2 3 4 5
+E: 1 2 3
+F: 1 2 
+
+The first token is the name of the variable followed by a colon.  All tokens remaining on the same line are values in the domain of that variable.  In the example above, variable A has a domain of {1, 2, 3, 4, 5} ie. A can be assigned any one of those values.
+
+<file.con> is a file containing all of the program constraints.  A .con file will be formatted like this:
+
+A > B
+B > F
+A > C
+C > E
+A > D
+D = E
+A ! B
+
+
+The valid constraint operators are <, >, !, and =.
+All constraints in this program are binary constraints to make computation simpler.
+It is possible for a constraint to contain more than two variables, but it is also possible to break a multi-variable constraint into several binary constraints.
+
+<flag> - this third argument is a consistency enforcing procedure flag.  At the time of this writing, this feature has not been added, so this parameter will always be "none"
+
