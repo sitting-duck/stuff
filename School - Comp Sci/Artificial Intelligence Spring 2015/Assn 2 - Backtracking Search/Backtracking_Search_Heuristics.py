@@ -12,50 +12,63 @@ class Backtracking_Search_Heuristics:
 	"""
 	    the point of this function is to choose the next variable to be assigned.  Why do we need to choose the variables in a particular order?  Technically, we could brute force this and just crunch
 	    out all possible combinations of variable assignments, and then check each one against the constraints, but we have some heuristics to help us avoid computing variable assignment combinations
-	    of lesser "quality".
+	    of lesser "quality". By assigning variables of higher "quality" first, we reduce branching higher in the search and thus reduce problem complexity considerably.
 
-	    One heuristic for measuring the relative quality of a variable concerning whether its assignment should be computed first is the number of values in it's domain.
-	    If we assign varianles with the smallest domains first, we reduce branching at the top of the search tree, thus reducing problem complexity considerably.
+	    In order to choose the next variable, our first choice is the variable with the least number of values in it's domain.
+	     If there are ties, our second choice is the variable with with the highest degree.
+	     The degree of a variable is the number of a constraints on it.
+	     As a last resort if there are still ties, we will make the arbitrary choice of the variable that is lowest alphabetically.
+	     This arbitrary is not that significant since the variables have little difference in "quality"
+
+	     One heuristic for measuring the relative quality of a variable concerning whether its assignment should be computed first is the number of values in it's domain.
+	     If we assign varianles with the smallest domains first, we reduce branching at the top of the search tree, thus reducing problem complexity considerably.
+	    Another heuristic for measuring the quality of a variable is to count the number of constraints on that variable.  A variable with more constraints on it will have fewer valid
+	    assinments and thus assigning it higher in the search tree (earlier in the problem solution) will reduce branching and problem complexity as well.
+	    This is often used as a tie breaker after the number of values heuristic.
 
 	    :param csp: the current state of the constraint satisfaction problem
 	    :return: the next variable to be assigned
 	    """
 
-        # first we need to find the least num values
+        # first we need to find the variable with the least number of values in its domain
+		# One heuristic for measuring the relative quality of a variable concerning whether its assignment should be computed first is the number of values in it's domain.
+	    # If we assign varianles with the smallest domains first, we reduce branching at the top of the search tree, thus reducing problem complexity considerably.
         minimumNumberOfValues = 999
         for var in csp.variables:
             if len(var.domain) < minimumNumberOfValues:
                 minimumNumberOfValues = len(var.domain)
 
-        # now we need to know if there are any ties.
+        # now we need to know if there are any ties for minimum number of values. If there is a tie we will break the tie using the degree heuristic
         numValTies = []
         for var in csp.variables:
             if len(var.domain) == minimumNumberOfValues:
                 numValTies.append(var)
 
-        # if there is no tie we return
+        # if there are no ties we simply return the variable with the least number of values
         if len(numValTies) == 1:
             return numValTies.pop(0)
         else:
             # but otherwise we have to deal with the ties
 
-            # we use the degree heuristic to break this tie
+            # we use the degree heuristic to break this tie.
+            # the degree of a variable is the number of constraints on it.
+            # a vsriable with more constraints will have a higher degree
             greatestDegree = 0
             for var in csp.variables:
                 if var.degree > greatestDegree:
                     greatestDegree = var.degree
 
-            # now we need to see if there are any ties
+            # now we need to see if there are any ties, ie, variables of equal degree
             degreeTies = []
             for var in csp.variables:
                 if var.degree == greatestDegree:
                     degreeTies.append(var)
 
-            # if there is no tie we return the var with highest degree
+            # if there are no ties we return the var with highest degree
             if len(degreeTies) == 1:
                 return degreeTies.pop(0)
             else:
-                # in this case we are going to break ties alphabetically
+                # if there are ties then we return the variable that is the lowest alphabetically
                 lowestAlpha = 'Z'
                 for dties in degreeTies:
                     if dties.name < lowestAlpha:
@@ -66,20 +79,18 @@ class Backtracking_Search_Heuristics:
                         return dties
 
     def getOrderedValues(self, currentVariable, currentNode):
-         #now we're going to generate the next level of the tree
+        """generates the children of the current node.  The children will be placed in order of importantance from left to right"""
 
         # edge case : only one value
         if len(currentVariable.domain) == 1:
             return currentVariable.domain.pop(0)
 
         # a dictionary holding the num affected values for each value assignment
+        # For example, if no variables are allowed to have the same value, if I assign a value to one variable, it will affect the domains of all the other variables because they can't use it now.
         valueEffectDict = {}
-
-        constraintsWithVar = []
         constraintsWithVar = self.getConstraintsWithVar(currentVariable, currentNode.currentcsp)
-        # for con in constraintsContainingCurrentVariable:
-        #     print con.var1 + con.operator + con.var2
 
+		# Here we are basically creating a dictionary of the number of values (including the values of other variables) affected by an assignment of the current value.
         for val in currentVariable.domain:
             for con in constraintsWithVar:
                 for var in currentNode.currentcsp.variables:
@@ -91,7 +102,7 @@ class Backtracking_Search_Heuristics:
                             else:
                                 valueEffectDict[val] = int(valueEffectDict.get(val) + 1)
 
-        # now let's sort the values by num effects on other values and then makes nodes out of them
+        # sort the values by num effects on other values and then makes nodes out of them
         sortedVarValuesTuples = sorted(valueEffectDict.items(), key=operator.itemgetter(1))
 
         print "value effects: " + str(sortedVarValuesTuples)

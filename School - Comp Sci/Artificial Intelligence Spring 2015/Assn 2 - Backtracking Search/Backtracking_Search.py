@@ -25,13 +25,11 @@ class Backtracking_Search:
         # them back
         self.remainingVariables = self.csp.variables
 
+        self.solution = {}
+
         self.bsh = Backtracking_Search_Heuristics()
 
     def backtrack(self, currentNode):
-        print "call"
-        print "current csp vars"
-        for var in currentNode.currentcsp.variables:
-            print var.name
 
         # if the assignment of the current node is valid then we return it as the solution
         if self.csp.isCompleteAndValid(self.currentNode.assignment):
@@ -54,16 +52,13 @@ class Backtracking_Search:
         for child in newChildren:
             print "current child assn: " + str(child.assignment)
             if self.csp.isCompleteAndValid(child.assignment):
-                print "finished with : "
-                child.printAssignment
+                self.solution = child.assignment
+                print "valid solution: " + str(child.assignment)
                 return True
 
             currentNode = child
             #print "currentNode assn: " + str(currentNode.assignment)
             result = self.backtrack(currentNode)
-
-
-
 
         return False
 

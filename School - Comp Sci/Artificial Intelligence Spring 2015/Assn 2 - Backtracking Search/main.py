@@ -4,21 +4,32 @@ __author__ = 'ashley'
 
 import argparse
 import init
+from Node import Node
 from CSP import CSP
 from Backtracking_Search import Backtracking_Search
 
-#variable and constraint containers
+# variables: each variable has a name and a domain.  The domain is a set of possible values for the variable.
 variables = []
+
+# constraints: constraints are applied to variable assignments.  If a variable assignment violates any of the problem constraints, the solution is invalid.
 constraints = []
 
 
 if __name__ == "__main__":
 
-    # get args from the command line
+    # inititalize the argument parser so we can get the arguments from the command line
     parser = argparse.ArgumentParser(description = 'take var file, constraint file, and consisitency enforcing procedure')
+
+    # grab the file name for the variables file
     parser.add_argument('varFileName')
+
+    # grab the file name for the constraints file
     parser.add_argument('constraintFileName')
+
+    # grab the consistency enforcing procedure flag. (not implemented at this point, will always be "none"
     parser.add_argument('consistencyEnforcingProcedureFlag')
+
+    # parse the args and put them in args
     args = parser.parse_args()
 
     # collect all the variables from file
@@ -37,7 +48,10 @@ if __name__ == "__main__":
     bsearch = Backtracking_Search(csp)
 
     # start the search at the root of the search tree
-    bsearch.backtrack(bsearch.root)
+    solution = bsearch.backtrack(bsearch.root)
+
+    print "\n\nsolution:" + str(bsearch.solution)
+
 
 
 

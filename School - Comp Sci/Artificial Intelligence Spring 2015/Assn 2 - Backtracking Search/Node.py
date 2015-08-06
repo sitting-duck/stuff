@@ -2,10 +2,19 @@ __author__ = 'ashley'
 
 class Node:
     """ This node class is specific to CSPs.  It contains handles to its parent, sibling, and child nodes, and the current state of the CSP.  Each node in the search tree can be considered a
-     step in the solutino of the constraint satisfaction problem (CSP)."""
+     step in the solutino of the constraint satisfaction problem (CSP).
+
+     It is important to understand that this node represents a CSP state, it does not represent a variable.
+     """
     def __init__(self, parentArg = None, rightSiblingArg = None, currentcspArg = None):
+
+	    # the parent node of the current node.  The parent node represents the step previous to the current step.  We go back in time by tracing up the tree.
         self.parent = parentArg
+
+	    # the right sibling of the current node.  Can be useful to have right sibling for printing in level order.
         self.rightSibling = rightSiblingArg
+
+	    # the children of the current node.  The set of children is the set of possible steps/states that can be reached from the current step/state.
         self.children = []
 
         # the assignment list contains a list of variables and their assignments.  Each variable is assigned a value from its domain in each step of the solution.
@@ -18,8 +27,4 @@ class Node:
         self.currentcsp = currentcspArg
 
     def printAssignment(self):
-        for var in self.assignment:
-            print var.name + ": " + str(self.assignment[var])
-        print "\n"
-
         print str(self.assignment)

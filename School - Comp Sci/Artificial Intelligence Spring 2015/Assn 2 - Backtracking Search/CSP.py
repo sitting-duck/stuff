@@ -5,11 +5,20 @@ class CSP:
     """CSP ie Constraint Satisfaction Problem contains a set of Variables to be solved"""
 
     def __init__(self, variablesArg, constraintsArg, consistencyEnforcingProcedureArg):
+
+	    # the set of problem variables
         self.variables = variablesArg
+
+	    # the set of problem constraints
         self.constraints = constraintsArg
+
+	    # not yet implemented, will always be "none"
         self.consistencyEnforcingProcedure = consistencyEnforcingProcedureArg
 
-        # calculate the degree for each var
+        # calculate the degree for each var.
+	    # the degree of a var is the number of constraints that concern that variable.
+	    # a variable with more constraints will have a higher degree.
+	    # a variable with a higher degree is of interest because determining it's value earlier reduces branching higher in the tree reducing problem complexity considerably.
         for con in self.constraints:
             for var in self.variables:
                 if con.var1 == var.name:
@@ -20,10 +29,8 @@ class CSP:
     # checks the assignment passed to it against the constraints of this CSP
     def isCompleteAndValid(self, assignmentArg):
 
-        # check that every variable has an assignment
-        #print "len of assn " + str(len(assignmentArg)) + " how many vars " + str(len(self.variables))
+        # check that every variable has an assignment. The assignment is complete isf every variable has a value assignment.
         if len(assignmentArg) != len(self.variables):
-            #print "assn is not valid"
             return False
 
         # check that all constraints are valid
