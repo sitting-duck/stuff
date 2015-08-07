@@ -65,17 +65,20 @@ It can be easily run in a Python IDE of your choice or via the command line if y
 
 **\<file.var\>** is a file containing all the problem variables. A .var file will be formatted like this:
 
+```
 A: 1 2 3 4 5
 B: 1 2 3 4 5
 C: 1 2 3 4 5
 D: 1 2 3 4 5
 E: 1 2 3
 F: 1 2 
+```
 
 The first token is the name of the variable followed by a colon.  All tokens remaining on the same line are values in the domain of that variable.  In the example above, variable A has a domain of {1, 2, 3, 4, 5} ie. A can be assigned any one of those values.
 
 **\<file.con\>** is a file containing all of the program constraints.  A .con file will be formatted like this:
 
+```
 A > B
 B > F
 A > C
@@ -83,6 +86,7 @@ C > E
 A > D
 D = E
 A ! B
+```
 
 
 The valid constraint operators are <, >, !, and =.
