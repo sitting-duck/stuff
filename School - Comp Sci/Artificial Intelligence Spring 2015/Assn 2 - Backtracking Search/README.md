@@ -60,8 +60,6 @@ Written in Python
 Developed with Pycharm IDE on Windows 8.
 
 It can be easily run in a Python IDE of your choice or via the command line if you have Python installed.
-(note: for some reason this program executes lightning fast in Pycharm, but really slow on the command line, I still haven't gotten to the
-bottom of this)
 
 **Command Line Invokation:** main.py <file.var> <file.con> <flag>
 
