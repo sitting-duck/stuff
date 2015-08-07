@@ -63,9 +63,6 @@ class Backtracking_Search:
             self.backtrack(currentNode)
 
 
-    #for some reason after we eliminate all the vars we are not backtracking back upward
-
-
 
 
 
