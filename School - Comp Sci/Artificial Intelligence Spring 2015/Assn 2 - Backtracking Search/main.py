@@ -48,17 +48,9 @@ if __name__ == "__main__":
     bsearch = Backtracking_Search(csp)
 
     # start the search at the root of the search tree
-    solution = bsearch.backtrack(bsearch.root)
+    bsearch.backtrack(bsearch.root)
 
-    print "\n\nsolution:" + str(bsearch.solution)
+    print "\nsolutions found:"
 
-
-
-
-
-
-
-
-
-
-
+    for solution in bsearch.solutions:
+        print "solution:" + str(solution)

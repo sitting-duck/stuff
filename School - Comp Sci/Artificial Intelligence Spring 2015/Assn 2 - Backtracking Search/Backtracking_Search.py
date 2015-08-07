@@ -25,7 +25,7 @@ class Backtracking_Search:
         # them back
         self.remainingVariables = self.csp.variables
 
-        self.solution = {}
+        self.solutions = []
 
         self.bsh = Backtracking_Search_Heuristics()
 
@@ -48,19 +48,20 @@ class Backtracking_Search:
         # get the values from this variables domain and put them in the order that we want to test them
         sortedVarValues = self.bsh.getOrderedValues(currentVariable, self.currentNode)
         newChildren = self.bsh.createChildNodes(sortedVarValues, currentNode, currentVariable)
-
+        print "children created: "
         for child in newChildren:
-            print "current child assn: " + str(child.assignment)
+            print child.assignment
+
+        # check all generated children to see if they are valid solutions
+        for child in newChildren:
             if self.csp.isCompleteAndValid(child.assignment):
-                self.solution = child.assignment
+                self.solutions.append(child.assignment)
                 print "valid solution: " + str(child.assignment)
-                return True
 
             currentNode = child
-            #print "currentNode assn: " + str(currentNode.assignment)
-            result = self.backtrack(currentNode)
 
-        return False
+            self.backtrack(currentNode)
+
 
     #for some reason after we eliminate all the vars we are not backtracking back upward
 
