@@ -30,10 +30,17 @@ class MainWindow(wx.Frame): # it should be noted that in wxPython Frame actually
 		"Exit",									# the name of the menu option
 		"Terminate the program")				# the caption that will show in that status bar at the bottom of the window
 		
+		filemenu.AppendSeparator()
 		
+		menuOpen = filemenu.Append(wx.ID_OPEN,   # the widget id
+		"Open",									# the name of the menu option
+		"Open a file to edit")					# the caption that will show in that status bar at the bottom of the window
+		
+				
 		# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 		#												BIND THE MENU ITEMS
 		# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+		
 		# use bind to bind OnAbout function to "About" menu item
 		self.Bind(wx.EVT_MENU,					# the code for the "select menu item" event
 		self.OnAbout,							# the method that will be executed when the menu item is selected
@@ -44,9 +51,13 @@ class MainWindow(wx.Frame): # it should be noted that in wxPython Frame actually
 		self.OnExit, 							# the method that will be executed when the menu item is selected
 		menuExit)								# the "Exit" menu item we are binding to the main window
 		
+		# use bind to bind onOpen function to "Open" menu item
+		self.Bind(wx.EVT_MENU,					# the code for the "select menu item" event
+		self.onOpen,							# the method that will be executed when the menu item is selected
+		menuOpen)								# the "Open" menu item we are binding to the main window
 		
 		# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-		#												ATTACH THE MENU TO THE WINDOW
+		#											ATTACH THE MENU TO THE WINDOW
 		# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 		#Creating the menu bar
 		menuBar = wx.MenuBar()
@@ -54,7 +65,9 @@ class MainWindow(wx.Frame): # it should be noted that in wxPython Frame actually
 		self.SetMenuBar(menuBar)		 		# adding the MenuBar to the Frame content
 		self.Show(True)
 		
-		
+		# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+				#												MENU CALLBACKS
+		# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #	
 	def OnAbout(self, event):
 		"""When the user selects "About" from the file menu a message dialog box pops up with a description about the program, and an OK button"""
 		dialog = wx.MessageDialog(self,
@@ -68,6 +81,20 @@ class MainWindow(wx.Frame): # it should be noted that in wxPython Frame actually
 	def OnExit(self, event):
 		"""When the user selects "Exit" from the file menu, this function is called and the program exits"""
 		self.Close(True)						# Close the Frame
+		
+	def onOpen(self, event):
+		"""Open a file"""
+		self.dirname = ''
+		dialog = wx.FileDialog(self, "Choose a file", self.dirname, "", "*.*", wx.OPEN)
+		if dialog.ShowModal() == wx.ID_OK:  # if a file was chosen successfully, instead of hitting cancel for example
+											# "Modal" means that the user cannot do anything on the application until he clicks OK or Cancel.
+			self.filename = dialog.GetFilename()
+			self.dirname = dialog.GetDirectory()
+			file = open(os.path.join(self.dirname, self.filename), 'r')
+			file.close()
+		dialog.Destroy()
+			
+		
 		
 		
 app = wx.App(False)
