@@ -1,4 +1,5 @@
 import wx
+import os
 
 # in order to run this you need to make sure that you have Python and wxPython both installed.
 # they must both be either 32 bit or 64 bit, but they must both be the same
@@ -88,9 +89,10 @@ class MainWindow(wx.Frame): # it should be noted that in wxPython Frame actually
 		dialog = wx.FileDialog(self, "Choose a file", self.dirname, "", "*.*", wx.OPEN)
 		if dialog.ShowModal() == wx.ID_OK:  # if a file was chosen successfully, instead of hitting cancel for example
 											# "Modal" means that the user cannot do anything on the application until he clicks OK or Cancel.
-			self.filename = dialog.GetFilename()
-			self.dirname = dialog.GetDirectory()
-			file = open(os.path.join(self.dirname, self.filename), 'r')
+			self.filename = dialog.GetFilename()								# get the filename from the dialog
+			self.dirname = dialog.GetDirectory()								# get the name of the folder from the dialog
+			file = open(os.path.join(self.dirname, self.filename), 'r')			# open the file
+			self.control.SetValue(file.read())									# 
 			file.close()
 		dialog.Destroy()
 			
