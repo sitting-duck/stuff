@@ -1,6 +1,7 @@
 [Android Dev](https://github.com/sitting-duck/stuff/tree/master/Android%20Dev): a place where I put some little practice projects for reference for my Android Dev.
-	[GoogleCloudMessagingQuickStartExampleApp](https://github.com/sitting-duck/stuff/tree/master/Android%20Dev/GoogleCloudMessagingQuickStartExampleApp/google-services): nothing to see here really, I've just added comments for my own personal reference to this demo project
-	[PlayingWithBroadcastReceivers](https://github.com/sitting-duck/stuff/tree/master/Android%20Dev/PlayingWithBroadcastReceivers): well commented, I guess useful for understanding the use of Broadcast receivers, which you will need to know to use Google Cloud Messaging services
+	- [GoogleCloudMessagingQuickStartExampleApp](https://github.com/sitting-duck/stuff/tree/master/Android%20Dev/GoogleCloudMessagingQuickStartExampleApp/google-services): nothing to see here really, I've just added comments for my own personal reference to this demo project
+	
+	- [PlayingWithBroadcastReceivers](https://github.com/sitting-duck/stuff/tree/master/Android%20Dev/PlayingWithBroadcastReceivers): well commented, I guess useful for understanding the use of Broadcast receivers, which you will need to know to use Google Cloud Messaging services
 	
 [Messing With wxPython](https://github.com/sitting-duck/stuff/tree/master/Messing%20With%20wxPython): wxPython is a neat little toolkit for making quick and dirty natives GUIs in Python. 
 	[simpletexteditor](https://github.com/sitting-duck/stuff/blob/master/Messing%20With%20wxPython/simpletexteditor.py): little text editor. todo: add drag and drop feature
