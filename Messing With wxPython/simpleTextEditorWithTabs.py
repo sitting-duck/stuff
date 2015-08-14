@@ -7,9 +7,12 @@ import os
 class MainWindow(wx.Frame): # it should be noted that in wxPython Frame actually means Window in the typical sense, don't get it confused
 	"""We simply derive a new class of Frame"""
 	def __init__(self, parent, title):
-		wx.Frame.__init__(self, parent, title=title, size=(200, 100))
-		self.control = wx.TextCtrl(self, style=wx.TE_MULTILINE)
-		self.CreateStatusBar() # a status bar in the bottom of the window
+		wx.Frame.__init__(self, parent, title=title, size=(500, 500))
+		
+		self.tabController = wx.Notebook(self, style=wx.NB_TOP)			# create the tabcontroller and place the tabs at the top
+		
+		# self.tabController.control = wx.TextCtrl(self.tabController, style=wx.TE_MULTILINE)		# set the tabController as a text_cntrl
+		self.CreateStatusBar() 										# a status bar in the bottom of the window
 		
 		#setting up the menu
 		filemenu = wx.Menu()
@@ -66,7 +69,7 @@ class MainWindow(wx.Frame): # it should be noted that in wxPython Frame actually
 		self.Show(True)
 		
 		# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-				#												MENU CALLBACKS
+		#													MENU CALLBACKS
 		# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #	
 	def onOpen(self, event):
 		"""Open a file"""
@@ -77,8 +80,15 @@ class MainWindow(wx.Frame): # it should be noted that in wxPython Frame actually
 			self.filename = dialog.GetFilename()								# get the filename from the dialog
 			self.dirname = dialog.GetDirectory()								# get the name of the folder from the dialog
 			file = open(os.path.join(self.dirname, self.filename), 'r')			# open the file
-			self.control.SetValue(file.read())									# 
+			textFromFileJustOpened = file.read()								# read the text from the file									 
+			
+			text_ctrl = wx.TextCtrl(self.tabController, style=wx.TE_MULTILINE)	# create the notebook page as a wx.TextCtrl
+			text_ctrl.SetValue(textFromFileJustOpened)							# set its' content to be the text from the file we just opened
+			
+			self.tabController.AddPage(text_ctrl, self.filename, select=True)	# add the file just opened as a new tab
+			
 			file.close()
+			
 		dialog.Destroy()
 	
 	def OnAbout(self, event):
