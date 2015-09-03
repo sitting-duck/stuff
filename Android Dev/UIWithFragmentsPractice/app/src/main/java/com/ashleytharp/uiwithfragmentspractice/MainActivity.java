@@ -1,12 +1,13 @@
 package com.ashleytharp.uiwithfragmentspractice;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements IOnHeadlineSelectedListener  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +26,7 @@ public class MainActivity extends FragmentActivity {
 
             //FragmentManager manages Fragment lifecycle mostly
             getSupportFragmentManager().beginTransaction()                  //Fragment transactions are essentially for adding, removing, and animating auch fragment transitions
-                    .add(R.id.fragment_container, firstFragment)            //add HeadlinesFragment we just made to the root FragmentActivity
+                    .add(R.id.fragment_container, firstFragment, "")            //add HeadlinesFragment we just made to the root FragmentActivity
                     .commit();                                              //schedules this transaction to be executed on the main thread as soon as it becomes available again
                                                                             //note: this HeadlinesFragment was added at runtime, which means we can mess with it, it is not carved in stone
 
@@ -52,5 +53,35 @@ public class MainActivity extends FragmentActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onArticleSelected(int position) {
+        // The user selected the headline of an article from the HeadlinesFragment so we're going to display the selected article
+
+        ArticleFragment articleFragment = (ArticleFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_article);
+
+        if(articleFragment != null){
+            //if article fragment is available, we're in two pane layout
+
+            articleFragment.updateArticleView(position);
+        }else{
+            //otherwise we're in the one pane layout and must swap fragments
+            ArticleFragment newArticleFragment = new ArticleFragment();
+            Bundle args = new Bundle();
+            args.putInt(ArticleFragment.ARG_POSITION, position);
+            newArticleFragment.setArguments(args);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+            //replace whatever is in the fragment_container view with this fragment
+            //and add the transaction to the back stack so the user can navigate back,
+            transaction.replace(R.id.fragment_container, newArticleFragment);
+            transaction.addToBackStack(null);
+
+            //commit the transaction
+            transaction.commit();
+        }
+
     }
 }

@@ -1,8 +1,10 @@
 package com.ashleytharp.uiwithfragmentspractice;
 
 import android.app.Activity;
-import android.app.ListFragment;
+import android.os.Build;
+import android.support.v4.app.ListFragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
@@ -26,6 +29,8 @@ import com.ashleytharp.uiwithfragmentspractice.dummy.DummyContent;
  */
 //public class HeadlinesFragment extends Fragment implements AbsListView.OnItemClickListener {
 public class HeadlinesFragment extends ListFragment {
+
+    private static final String TAG = "HeadlinesFragment";
 
     /**
      * Container activity must implement this interface
@@ -58,8 +63,8 @@ public class HeadlinesFragment extends ListFragment {
     public static HeadlinesFragment newInstance(String param1, String param2) {
         HeadlinesFragment fragment = new HeadlinesFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        //args.putString(ARG_PARAM1, param1);
+        //args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -75,14 +80,21 @@ public class HeadlinesFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        //we need to se a different list item layout for devices olser than honey comb
+        int layout = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
+                android.R.layout.simple_list_item_activated_1 : android.R.layout.simple_list_item_1;
+
+        //crate an array adapter for the list view, using the Ipsum headlines array
+        setListAdapter(new ArrayAdapter<String>(getActivity(), layout, Ipsum.Headlines));
+
+        //if (getArguments() != null) {
+        //    mParam1 = getArguments().getString(ARG_PARAM1);
+        //    mParam2 = getArguments().getString(ARG_PARAM2);
+        //}
 
         // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
+        //mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
+        //        android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
     }
 
     @Override
@@ -95,14 +107,14 @@ public class HeadlinesFragment extends ListFragment {
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
+       // mListView.setOnItemClickListener(this);
 
         return view;
     }
 
     @Override
     public void onAttach(Activity activityThisFragmentWasAttachedTo) {
-        super.onAttach(activity);
+        super.onAttach(activityThisFragmentWasAttachedTo);
 
         //the container activity must implement the IOnHeadlineSelectedListener interface (callback)
         //this makes sense because any class that contains this headlines fragment is going to have to handle what happens
@@ -120,15 +132,31 @@ public class HeadlinesFragment extends ListFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mHeadlineSelectedListener = null;
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
+    public void onStart(){
+        super.onStart();
+
+        //when in two pane layout, set the listview to highlight the selected list item
+        if(getFragmentManager().findFragmentById(R.id.fragment_article) != null){
+            getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        }
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        //if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+        //}
+        if(mHeadlineSelectedListener == null){
+            Log.e(TAG, "ERROR: HeadlinesFragment has not been attached to any activity.  In order to attach a callback to an article click, please attach the HeadlinesFragment to a parent activity before handling any callbacks on clicks.");
+        }else{
+            //if an article has been selected, we are going to use the callback we made to notify the parent activity.
+            mHeadlineSelectedListener.onArticleSelected(position);
         }
     }
 
