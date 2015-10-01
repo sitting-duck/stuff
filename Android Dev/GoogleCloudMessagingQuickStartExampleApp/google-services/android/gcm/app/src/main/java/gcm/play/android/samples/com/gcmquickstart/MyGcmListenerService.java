@@ -28,6 +28,10 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
+//this class is used to receive simple downstream messages captured by GcmReceiver.  GcmReceiver extends
+//WakefulBroadcastReceiver, guaranteeing that the CPU is awake so that your listener service can complete
+//its task. By overriding the method GcmListenerService.onMessageReceived, you can perform actions based on the
+//received message.
 public class MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
