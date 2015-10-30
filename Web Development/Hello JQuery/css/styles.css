@@ -1,0 +1,45 @@
+body{
+
+	color: white;
+	background-color: #282828;
+
+}
+
+/* this styles the click me button */
+.click_me_button{
+	
+	/*font-family: Courier New", Courier, monospace;*/
+	color: black;
+	background-color: white;
+	padding: 2px 6px 2px 6px;
+	right: 1px solid #333333;
+	border-bottom: 1px solid #333333;
+	border-left: 1px solid #CCCCCC;
+	
+}
+
+a.click_me_button:link {
+	
+	text-decoration: none;
+	
+}
+
+a.cick_me_button:hover {
+	
+	text-decoration: underline
+
+}
+
+/* this centers the div that the click me button will be inside */
+div.center-div{
+
+	position: absolute;
+	margin: auto;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 100px;
+	height: 100px;
+
+}
