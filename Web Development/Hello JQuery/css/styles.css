@@ -22,16 +22,17 @@ a.click_me_button:link {
 	
 	text-decoration: none;
 	
+	
 }
 
-a.cick_me_button:hover {
+a.click_me_button:hover {
 	
 	text-decoration: underline
 
 }
 
 /* this centers the div that the click me button will be inside */
-div.center-div{
+div.center-div {
 
 	position: absolute;
 	margin: auto;
@@ -41,5 +42,19 @@ div.center-div{
 	left: 0;
 	width: 100px;
 	height: 100px;
+
+}
+
+
+/* this hides the hex color input field and the go button... */
+.input_field_go_button {
+
+	visibility: hidden;
+
+}
+
+.hex_color_input {
+
+	visibility: hidden;
 
 }

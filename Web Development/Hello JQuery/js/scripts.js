@@ -5,7 +5,10 @@ $(document).ready(function () {
 	$(#click_me_button).on('click', function (event) {
 	
 		//prevents the url from adding '#' at the end
-		event.preventDefault();
+		event.preventDefault
+		
+		//first create the hex color input field
+		$(document.body).append("test");
 	
 	});
 	
