@@ -42,10 +42,9 @@ $(document).ready(function () {
 		console.log(hex_string_was_valid);
 		
 		if(hex_string_was_valid){
-			
-			var style_sheet = getStyleSheet();
-			
-			style_sheet.body.backgroud-color =  String(hex_color_string));
+
+			//todo: add feature where if user forgets '#' char it will still work
+			$(document.body).css("background-color", hex_color_string);
 			
 		}
 		
@@ -55,7 +54,7 @@ $(document).ready(function () {
 function isValidHexColorString(inputString){
 
 	//todo: test this regex for all hex values
-	return /(^#?[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(inputString);
+	return /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(inputString);
 	
 }
 
