@@ -22,13 +22,19 @@ $(document).ready(function () {
 			
 			
 		//grab the hex color string input field
-		$hex_field = $('hex_color_string_input_field');
+		$hex_field = $('#hex_color_string_input_field');
 		
 		//get the string from the hex color input field
-		var hex_color_string = $hex_field.text();
+		var hex_color_string = $hex_field.val();
+		//console.log(hex_color_string);
+		
+		//create an html string from that string
+		var open_p = '<p>';  var close_p = '</p>'		
+		var html_hex_string = open_p.concat(hex_color_string).concat(close_p);
+		console.log(html_hex_string);
 		
 		//for testing for now display the hex string below hello world
-		$(hex_color_string).appendTo($hw);
+		$(html_hex_string).appendTo($hw);
 		
 	});
 });

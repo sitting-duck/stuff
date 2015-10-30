@@ -32,6 +32,43 @@ a.button:hover {
 }
 
 
+/* for divs */
+
+.center{
+
+	margin: 0 auto;
+	width: 100px;
+	height: 100px;
+
+}
+
+div.outer-div {
+
+	padding: 30px;
+
+}
+
+div.inner-div{
+
+	margin: auto;
+	width: 200px;
+	height: 200px;
+	border-radius: 3px;
+}
+
+div.center-div{
+
+	position: absolute;
+	margin: auto;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 100px;
+	height: 100px;
+
+}
+
 /*
 go_button:active {
 	position:relative;
