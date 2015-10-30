@@ -6,7 +6,7 @@ body{
 }
 
 /* this styles the click me button */
-.click_me_button{
+.click_me_button_type{
 	
 	/*font-family: Courier New", Courier, monospace;*/
 	color: black;
@@ -18,14 +18,13 @@ body{
 	
 }
 
-a.click_me_button:link {
+a.click_me_button_type:link {
 	
 	text-decoration: none;
-	
-	
+		
 }
 
-a.click_me_button:hover {
+a.click_me_button_type:hover {
 	
 	text-decoration: underline
 

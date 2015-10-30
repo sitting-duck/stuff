@@ -2,10 +2,12 @@ $(document).ready(function () {
 		
 	
 	//function for when the click me button is clicked.  (when clicked it will append the hex color input form to the document)
-	$(#click_me_button).on('click', function (event) {
+	$('#click_me_button').on('click', function (event) {
+	
+		console.log("clicked");
 	
 		//prevents the url from adding '#' at the end
-		event.preventDefault
+		event.preventDefault();
 		
 		//first create the hex color input field
 		$(document.body).append("test");
