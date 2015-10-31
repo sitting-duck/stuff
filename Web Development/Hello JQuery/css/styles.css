@@ -1,4 +1,4 @@
-body{
+body {
 
 	color: white;
 	background-color: #282828;
@@ -6,7 +6,7 @@ body{
 }
 
 /* this styles the click me button */
-.click_me_button_type{
+.button_type{
 	
 	/*font-family: Courier New", Courier, monospace;*/
 	color: black;
@@ -44,16 +44,8 @@ div.center-div {
 
 }
 
-
-/* this hides the hex color input field and the go button... */
-.input_field_go_button {
-
-	visibility: hidden;
-
-}
-
 .hex_color_input {
 
-	visibility: hidden;
+	
 
 }
