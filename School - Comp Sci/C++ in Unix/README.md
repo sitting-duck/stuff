@@ -1,0 +1,3 @@
+this class was pretty terrible and useless so expext all the code in this folder to be typical noobish computer science homework project assignments. 
+
+I don't really blame the teacher tho, did the best he could with what he had...
