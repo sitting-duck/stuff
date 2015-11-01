@@ -38,10 +38,11 @@ $(document).ready(function () {
 		
 		function isValidHexColorString(inputString){
 
-		//todo: test this regex for all hex values
-		return /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(inputString);
+			//todo: test this regex for all hex values
+			return /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(inputString);
 	
 		}
 		
 	});
+	
 });

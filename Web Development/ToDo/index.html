@@ -1,3 +1,6 @@
+
+<!-- a simple to do list -->
+
 <!doctype html>
 
 <html lang="en">
@@ -13,19 +16,21 @@
 </head>
 
 <body>  
-  
-  <script src="js/jquery-2.1.4.min.js"></script>
-  <script src="js/jquery-form-plugin.js"></script>
+
+	<!-- form for entering to do items -->
+	<form>
+	
+		Add to do item: <br>
+		<input type="text" id="input_field">
+		<a href="#" class="button" id="add_button">add</a>
+	
+	</form>
+	
+	<!-- to do list -->
+	<ol type="1" id="list"></ol>
+
+  <script src="js/jquery-2.1.4.min.js"></script>  
   <script src="js/scripts.js"></script>
   
-  <!-- the click me button -->
-  <div id="outer-div-hello-jquery" class="center-div">
-  
-	<div class="hex_color_form_container"></div>
-	<div class="hex_color_form_container"></div>
-	<div class="hex_color_form_container"></div>
-	
-  </div>
-    
 </body>
 </html>
