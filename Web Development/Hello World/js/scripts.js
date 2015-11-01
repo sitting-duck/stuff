@@ -36,19 +36,12 @@ $(document).ready(function () {
 			
 		}
 		
+		function isValidHexColorString(inputString){
+
+		//todo: test this regex for all hex values
+		return /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(inputString);
+	
+		}
+		
 	});
 });
-
-function isValidHexColorString(inputString){
-
-	//todo: test this regex for all hex values
-	return /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(inputString);
-	
-}
-
-function getStyleSheet(){
-
-	//at the moment there is only one style sheet
-	return document.stylesheets[0];
-
-}
