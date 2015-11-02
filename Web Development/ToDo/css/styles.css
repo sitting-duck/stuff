@@ -5,7 +5,6 @@ body {
 
 }
 
-/* this styles the click me button */
 .button{
 	
 	/*font-family: Courier New", Courier, monospace;*/
@@ -18,29 +17,34 @@ body {
 	
 }
 
-a.click_me_button_type:link {
+.x_button{
 	
-	text-decoration: none;
-		
+	/*font-family: Courier New", Courier, monospace;*/
+	color: black;
+	background-color: white;
+	/*padding: 2px 6px 2px 6px;*/
+	/*right: 1px solid #333333;*/
+	border-bottom: 1px solid #333333;
+	border-left: 1px solid #CCCCCC;
+	margin: 2px;
+	
 }
 
-a.click_me_button_type:hover {
-	
-	text-decoration: underline
-
-}
-
-/* this centers the div that the click me button will be inside */
-div.center-div {
+/* style the container that contains the list */
+#list_container {
 
 	position: absolute;
-	margin: auto;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	width: 100px;
-	height: 100px;
+	margin: 10px;
+	width: auto;
+	height: auto;
+
+}
+
+.list_item {
+
+	width: auto;
+	height: auto;
+	margin: 3px;
 
 }
 
