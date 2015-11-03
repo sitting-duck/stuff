@@ -26,8 +26,10 @@ body {
 	/*right: 1px solid #333333;*/
 	border-bottom: 1px solid #333333;
 	border-left: 1px solid #CCCCCC;
-	margin: 2px;
-	
+	margin: 2px;	
+	position: absolute;
+	right: 0px;
+	display: inline;
 }
 
 /* style the container that contains the list */
@@ -40,12 +42,28 @@ body {
 
 }
 
+.to_do_span {
+
+	float: left;
+	display: inline;
+
+}
+
+.div_list_item {
+
+	float: left;
+	text-align: left;
+	width: 100%;
+	display: block;
+
+}
+
 .list_item {
 
 	width: auto;
 	height: auto;
 	margin: 3px;
-
+	
 }
 
 .hex_color_input {

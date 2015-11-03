@@ -12,6 +12,13 @@ $(document).ready (function () {
 	
 		//grab the text from the to do input field
 		var to_do_item_text = input_field.val();
+		
+		//we do not add empty items to the list
+		if(to_do_item_text === ""){
+			
+			return;
+		
+		}
 
 		//reset the input field to be empty so user can enter next item
 		input_field.val("");
@@ -25,8 +32,8 @@ $(document).ready (function () {
 		//"<a href='#' class='x_button' id='" + item_number + "'>X</a>" + "</li>" +
 		//"</div>";
 		var list_item = 
-		'<li class="list_item">' + to_do_item_text + 
-		'<a href="#" class="x_button" id="' + item_number + '">X</a></li>';			
+		'<li class="list_item">' + '<div id="div_list_item">' + to_do_item_text + '   ' +
+		'<a href="#" class="x_button" id="' + item_number + '">X</a></div></li>';			
 		
 		console.log(list_item);
 	
