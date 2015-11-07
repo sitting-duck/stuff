@@ -1,12 +1,8 @@
 # CS 3340.501 - 2012
-# Group/Term Project: Towers of Hanoi game
+#Towers of Hanoi
 #
-# Group Members:
 #
 # Ashley Tharp
-# Lina Khalil
-# Shazim Mohammad
-# Fraz Jamil 
 #
 
 
