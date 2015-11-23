@@ -18,13 +18,9 @@ use Illuminate\Http\Request;
  * Display all tasks
  */
 Route::get('/', function () {
-
-	//create a view composed of all the tasks in the list
-	$tasks = Task::orderBy('created_at', 'asc')->get();
-
-	return view('tasks', [
-		'tasks' => $tasks
-	]);
+    return view('tasks', [
+    	'tasks' => Task::orderBy('created_at', 'asc')->get()
+    ]);
 });
 
 /**
