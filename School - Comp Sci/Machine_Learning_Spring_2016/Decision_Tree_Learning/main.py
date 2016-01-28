@@ -10,8 +10,5 @@ def main():
 
     data = Training_Data(fileinput.input())
 
-    for cat in data.categories:
-        cat.print_me()
-
 if __name__ == '__main__':
     main()
