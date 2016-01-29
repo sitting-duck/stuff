@@ -142,7 +142,19 @@ class Training_Data:
                 known_attr_names.append(token)
 
         for name in known_attr_names:
-            known_attrs.append(copy.deepcopy(Attribute(name, num_classes)))
+            temp_attr = copy.deepcopy(Attribute(name))
+            i = 0
+            while i < num_classes:
+                temp_attr.class_count_vector.append(0)
+                i += 1
+            known_attrs.append(temp_attr)
+
+
+
+        #name_index = 0
+        #while name_index < len(known_attr_names):
+        #    known_attrs.append(Attribute(known_attr_names[name_index], num_classes))
+        #    name_index += 1
 
         return known_attrs
 
