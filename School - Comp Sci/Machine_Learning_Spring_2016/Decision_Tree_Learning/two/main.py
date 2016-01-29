@@ -22,15 +22,15 @@ def test_get_tokenized_data(problem):
 
 def test_get_row(problem):
     test_row = ['Day', 'Outlook', 'Temp', 'Humidity', 'Wind', 'PlayTennis']
-    assert problem.get_row(0) == test_row, 'get_row is broken'
+    assert problem.training_data.get_row(0) == test_row, 'get_row is broken'
 
 def test_get_column(problem):
     test_column = ['Day', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14']
-    assert problem.get_column(0) == test_column, 'get_column is broken'
+    assert problem.training_data.get_column(0) == test_column, 'get_column is broken'
 
 def test_get_category_names(problem):
     test_names = ['Outlook', 'Temp', 'Humidity', 'Wind']
-    assert problem.get_category_names() == test_names, 'get_category_names_is_broken'
+    assert problem.training_data.get_category_names() == test_names, 'get_category_names_is_broken'
 
 if __name__ == '__main__':
     main()

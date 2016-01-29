@@ -1,38 +1,26 @@
 
-import fileinput
+from Training_Data import Training_Data
 
 class Problem:
 
-    tokenized_data = []
+    training_data = Training_Data()
 
     #every category will contain an attribute dictionary
     categories = {}
 
     def __init__(self):
-        self.tokenized_data =self. get_tokenized_data()
-
-    def get_tokenized_data(self):
-        tokenized_data = []
-        data = fileinput.input()
-        for line in data:
-            tokens = line.split()
-            tokenized_data.append(tokens)
-        return tokenized_data
-
-    def get_categories(self):
         pass
 
-    def get_category_names(self):
-        temp_row = self.get_row(0)
-        del temp_row[0]
-        del temp_row[-1]
-        return temp_row
+    def create_categories(self):
+        pass
 
-    def get_row(self, index):
-        return self.tokenized_data[index]
+    def create_category_from_column(self, index):
+        column = self.get_column()
 
-    def get_column(self, index):
-        temp_column = []
-        for row in self.tokenized_data:
-            temp_column.append(row[index])
-        return temp_column
+    def get_unique_attribute_names(self):
+
+        pass
+
+    def get_tokenized_data(self):
+        return self.training_data.get_tokenized_data()
+
