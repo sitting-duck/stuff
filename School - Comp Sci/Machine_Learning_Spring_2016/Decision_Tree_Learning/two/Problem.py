@@ -8,7 +8,11 @@ class Problem:
     def __init__(self):
         pass
 
+    def calculate_entropy_for_training_set(self):
+        class_values = self.training_data.get_class_values_for_training_set()
+        num_values = len(class_values)
 
+        proportion_to_class_type_for_training_set = self.training_data.get_proportion_to_class_type_for_training_set_dictionary()
 
     def get_categories(self):
         return self.training_data.get_categories()

@@ -73,6 +73,23 @@ class Training_Data:
         last_column = self.get_index_of_class_column()
         return self.get_unique_attribute_names_from_column(last_column)
 
+    def get_number_of_training_examples_of_class_type(self, type):
+        num_of_specified_type = 0
+        class_values = self.get_class_values_for_training_set()
+        for value in class_values:
+            if value == type:
+                num_of_specified_type += 1
+        return num_of_specified_type
+
+    def get_proportion_to_class_type_for_training_set_dictionary(self):
+        class_types = self.get_set_of_unique_class_types()
+
+        proportion_to_class_type_for_training_set = {}
+        for type in class_types:
+            num_of_type = self.get_number_of_training_examples_of_class_type(type)
+            proportion_to_class_type_for_training_set[type] = num_of_type
+        return proportion_to_class_type_for_training_set
+
     # note: this is referring to the actual column data, not just the attribute data.
     # the data is still pretty raw when this function is called
     def get_unique_attribute_names_from_column(self, index):

@@ -31,6 +31,7 @@ def run_training_data_tests(problem):
     test_create_category_tuple_from_column(problem)
     test_create_categories_from_training_data(problem)
     test_get_class_values_for_training_set(problem)
+    test_get_number_of_training_examples_of_class_type(problem)
 
 def run_curiosity_tests():
     run_test_copy_triple_nested_dictionaries()
@@ -132,6 +133,19 @@ def test_get_class_values_for_training_set(problem):
 
     #throw an error if they are not the same
     assert test_values == actual_values, 'get_class_values_for_training_set() is broken'
+    
+def test_get_number_of_training_examples_of_class_type(problem):
+    
+    # what the count values should actually be
+    test_num_type_yes = 9
+    test_num_type_no = 5
+    
+    # what the function actually returned
+    actual_num_type_yes = problem.training_data.get_number_of_training_examples_of_class_type('y')
+    actual_num_type_no = problem.training_data.get_number_of_training_examples_of_class_type('n')
+    
+    assert test_num_type_yes == actual_num_type_yes, 'get_number_of_training_examples_of_class_type() is broken'
+    assert test_num_type_no == actual_num_type_no, 'get_number_of_training_examples_of_class_type() is broken'
 
 # CURIOSITY TESTS
 def run_test_copy_triple_nested_dictionaries():
