@@ -80,10 +80,6 @@ class Training_Data:
                 return column_number
             column_number += 1
 
-    #def get_entropy_for_category(self, category):
-    #    category_number = self.get_column_number_for_category(category)
-    #    return self.get_entropy_for_category_number(category_number)
-
     def get_entropy_for_categories(self):
         print "enter get entropy func"
         for category in self.categories:
@@ -100,9 +96,12 @@ class Training_Data:
                 class_value_index = self.get_column_number_for_class_value(example.class_value)
 
                 print "attr val ind: " + str(attribute_value_index)
-                print "class val ind: " + str(class_value_index)
-                print "class count vector: " + str(category.attributes[attribute_value_index].class_count_vector)
-                category.attributes[attribute_value_index].class_count_vector[class_value_index] += 1
+                #category.attributes[attribute_value_index].class_count_vector[class_value_index] += 1
+                category.attributes[attribute_value_index].increment_for_class_by_index(class_value_index)
+
+                print "status for " + category.name
+                for da_attr in category.attributes:
+                    da_attr.print_me()
 
         #testing
         for cat in self.categories:
@@ -115,26 +114,6 @@ class Training_Data:
         category_index = self.get_column_number_for_category(category.name)
         print "\tcat index was: " + str(category_index)
         return training_example.attrbute_values_vector[category_index]
-
-    #    column = self.get_columns()[category_index]
-    #    print "len(col): " + str(len(column))
-    #    class_column = self.get_columns()[-1]
-
-    #    row_index = 0
-    #    class_category_index = 0
-    #    attr_index = 0
-
-    #    while row_index < len(column):
-    #        while attr_index < len(self.categories[category_index].attributes):
-    #            while class_category_index < len(self.class_category.attributes):
-    #                if class_column[row_index] == class_column[class_category_index]:
-    #                    self.categories[attr_index].class_count_vector[class_category_index] += 1
-    #                class_category_index += 1
-    #                print 'cci: ' + class_category_index
-    #            attr_index += 1
-    #        row_index += 1
-
-    #    self.print_categories()
 
     def get_column_number_for_category_attribute(self, category, attribute):
         attr_index = 0
@@ -157,15 +136,13 @@ class Training_Data:
             if class_token not in known_classes:
                 known_classes.append(class_token)
         num_classes = len(known_classes)
-        print "num classes in unique was: " + str(num_classes)
 
         for token in column_tokens:
             if token not in known_attr_names:
                 known_attr_names.append(token)
-                known_attrs.append(Attribute(token, num_classes))
 
-        for attr in known_attrs:
-            attr.print_me()
+        for name in known_attr_names:
+            known_attrs.append(copy.deepcopy(Attribute(name, num_classes)))
 
         return known_attrs
 
