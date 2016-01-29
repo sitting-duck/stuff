@@ -1,4 +1,5 @@
 import fileinput
+import copy
 
 class Training_Data:
 
@@ -21,11 +22,41 @@ class Training_Data:
                 temp_tokenized_data.append(tokens)
             return temp_tokenized_data
 
+    def create_categories(self):
+            pass
+
+    def create_category_from_column(self, index):
+        column = self.get_column()
+        name = column[0]
+
+    # note: this is referring to the actual column data, not just the attribute data.
+    # the data is still pretty raw when this function is called
+    def get_unique_attribute_names_from_column(self, index):
+
+        column = self.get_column(index)
+
+        # add all names not seen before to the list of attr names
+        # note: attribute names cannot be the same as a category name
+        known_attribute_names = []
+        for item in column:
+            if item not  in known_attribute_names and item not in self.get_category_names():
+                known_attribute_names.append(item)
+
+        return known_attribute_names
+
     def get_category_names(self):
-        temp_row = self.get_row(0)
+        temp_row = copy.deepcopy(self.get_row(0))
         del temp_row[0]
         del temp_row[-1]
         return temp_row
+
+    def get_counter_name(self):
+        temp_row = copy.deepcopy(self.get_row(0))
+        return temp_row[0]
+
+    def get_class_name(self):
+        temp_row = copy.deepcopy(self.get_row(0))
+        return temp_row[-1]
 
     def get_row(self, index):
         return self.tokenized_data[index]
