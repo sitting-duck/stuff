@@ -11,5 +11,5 @@ class Category:
 
     def print_me(self):
         print self.name
-        print self.attributes
-        print self.class_count_vector
+        for attr in self.attributes:
+            attr.print_me()
