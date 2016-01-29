@@ -23,12 +23,17 @@ class Training_Data:
                 temp_tokenized_data.append(tokens)
             return temp_tokenized_data
 
+    def get_categories(self):
+        assert self.categories != {}, 'error: categories have not been created from training data. call create_categories_from_training_data()'
+
+        return self.categories
+
     def create_categories_from_training_data(self):
 
         categories = {}
 
         # last column before the class column
-        last_category_column = self.get_index_of_last_data_column()
+        last_category_column = self.get_index_of_class_column()
 
         for i in range(1, last_category_column):
             current_category = self.create_category_tuple_from_column(i)
@@ -65,7 +70,7 @@ class Training_Data:
     # this is a classification problem, so this function will mine from the training data, the set of types
     # any training instance can be classified as
     def get_set_of_unique_class_types(self):
-        last_column = self.get_index_of_last_data_column()
+        last_column = self.get_index_of_class_column()
         return self.get_unique_attribute_names_from_column(last_column)
 
     # note: this is referring to the actual column data, not just the attribute data.
@@ -92,6 +97,11 @@ class Training_Data:
         del temp_row[-1]
         return temp_row
 
+    def get_class_values_for_training_set(self):
+        class_column = copy.deepcopy(self.get_column(self.get_index_of_class_column()))
+        del class_column[0]
+        return class_column
+
     def get_counter_name(self):
         temp_row = copy.deepcopy(self.get_row(0))
         return temp_row[0]
@@ -109,5 +119,5 @@ class Training_Data:
             temp_column.append(row[index])
         return temp_column
 
-    def get_index_of_last_data_column(self):
+    def get_index_of_class_column(self):
         return len(self.tokenized_data[0]) - 1

@@ -24,12 +24,13 @@ def run_training_data_tests(problem):
     test_get_column(problem)
     test_get_category_names(problem)
     test_get_unique_attribute_names_from_column(problem)
-    test_get_index_of_last_data_column(problem)
+    test_get_index_of_class_column(problem)
     test_get_set_of_unique_class_types(problem)
     test_get_category_name_from_column(problem)
     test_create_attribute_dictionary_from_column(problem)
     test_create_category_tuple_from_column(problem)
-    create_categories_from_training_data(problem)
+    test_create_categories_from_training_data(problem)
+    test_get_class_values_for_training_set(problem)
 
 def run_curiosity_tests():
     run_test_copy_triple_nested_dictionaries()
@@ -81,8 +82,8 @@ def test_get_unique_attribute_names_from_column(problem):
     assert output_for_column_3 == test_unique_names_for_humidity, 'get_unique attrbute names broke for humidity'
     assert output_for_column_4 == test_unique_names_for_wind, 'get_unique attrbute names broke for wind'
 
-def test_get_index_of_last_data_column(problem):
-    assert problem.training_data.get_index_of_last_data_column() == 5, 'get_index_last_data_column() is broken'
+def test_get_index_of_class_column(problem):
+    assert problem.training_data.get_index_of_class_column() == 5, 'get_index_last_data_column() is broken'
 
 def test_get_set_of_unique_class_types(problem):
 
@@ -107,7 +108,7 @@ def test_create_category_tuple_from_column(problem):
     test_category_tuple = ('Wind', {'w' : { 'n' : 0, 'y' : 0}, 's' : {'n' : 0, 'y':  0}})
     assert test_category_tuple == problem.training_data.create_category_tuple_from_column(4)
 
-def create_categories_from_training_data(problem):
+def test_create_categories_from_training_data(problem):
 
     # what the categories dictionary should look like
     test_categories = \
@@ -121,6 +122,16 @@ def create_categories_from_training_data(problem):
     # what the create_categories_from_training_data() function actually returned
     actual_categories = problem.training_data.create_categories_from_training_data()
     assert test_categories == actual_categories
+
+def test_get_class_values_for_training_set(problem):
+    # what the class values should be for this training set
+    test_values = ['n', 'n', 'y', 'y', 'y', 'n', 'y', 'n', 'y', 'y', 'y', 'y', 'y', 'n']
+
+    # what the get function actually returned
+    actual_values = problem.training_data.get_class_values_for_training_set()
+
+    #throw an error if they are not the same
+    assert test_values == actual_values, 'get_class_values_for_training_set() is broken'
 
 # CURIOSITY TESTS
 def run_test_copy_triple_nested_dictionaries():
