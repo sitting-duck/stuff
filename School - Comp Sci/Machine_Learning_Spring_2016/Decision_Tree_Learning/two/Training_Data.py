@@ -23,8 +23,20 @@ class Training_Data:
                 temp_tokenized_data.append(tokens)
             return temp_tokenized_data
 
-    def create_categories(self):
-            pass
+    def create_categories_from_training_data(self):
+
+        categories = {}
+
+        # last column before the class column
+        last_category_column = self.get_index_of_last_data_column()
+
+        for i in range(1, last_category_column):
+            current_category = self.create_category_tuple_from_column(i)
+            name = current_category[0]
+            attribute_dictionary = current_category[1]
+            categories[name] = attribute_dictionary
+
+        return categories
 
     def create_category_tuple_from_column(self, index):
 
