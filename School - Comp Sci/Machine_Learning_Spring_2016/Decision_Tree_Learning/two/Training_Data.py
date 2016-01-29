@@ -138,3 +138,6 @@ class Training_Data:
 
     def get_index_of_class_column(self):
         return len(self.tokenized_data[0]) - 1
+
+    def get_number_training_examples(self):
+        return len(self.tokenized_data) - 1

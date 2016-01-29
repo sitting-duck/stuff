@@ -14,6 +14,10 @@ class Problem:
 
         proportion_to_class_type_for_training_set = self.training_data.get_proportion_to_class_type_for_training_set_dictionary()
 
+        for key, value in proportion_to_class_type_for_training_set.iteritems():
+            pass
+            #Hi = (-1)*(value/num_values)(math.log(, 2))*(value/num_values)
+
     def get_categories(self):
         return self.training_data.get_categories()
 

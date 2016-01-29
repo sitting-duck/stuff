@@ -33,6 +33,7 @@ def run_training_data_tests(problem):
     test_get_class_values_for_training_set(problem)
     test_get_number_of_training_examples_of_class_type(problem)
     test_get_proportion_to_class_type_for_training_set_dictionary(problem)
+    test_get_number_training_examples(problem)
 
 def run_curiosity_tests():
     run_test_copy_triple_nested_dictionaries()
@@ -159,6 +160,17 @@ def test_get_proportion_to_class_type_for_training_set_dictionary(problem):
 
     # throw an error if they are not the same
     assert test_proportion_to_class_type_for_training_set == actual_proportion_to_class_type_for_training_set, 'get_proportion_to_class_type_for_training_set_dictionary() is broken'
+
+def test_get_number_training_examples(problem):
+
+    # what the value should be
+    test_number_of_training_examples = 14
+
+    # what the get function actually returns
+    actual_number_of_training_examples = problem.training_data.get_number_training_examples()
+
+    # throw an error if they are not the same
+    assert test_number_of_training_examples == actual_number_of_training_examples, 'get_number_of_training_examples_is_broken'
 
 # CURIOSITY TESTS
 def run_test_copy_triple_nested_dictionaries():
