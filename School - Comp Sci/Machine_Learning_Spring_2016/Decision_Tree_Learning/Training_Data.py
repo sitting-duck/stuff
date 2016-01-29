@@ -163,6 +163,10 @@ class Training_Data:
             if token not in known_attr_names:
                 known_attr_names.append(token)
                 known_attrs.append(Attribute(token, num_classes))
+
+        for attr in known_attrs:
+            attr.print_me()
+
         return known_attrs
 
     def get_columns(self):

@@ -10,9 +10,10 @@ class Attribute:
     def __init__(self, name, num_classes):
         self.name = name
         self.num_classes = num_classes
-        for i in range(0,num_classes):
-            self.class_count_vector.append(0)
-        print "in attr const class_count_vector: " + str(self.class_count_vector)
+
+        if len(self.class_count_vector) != self.num_classes:
+            for i in range(0,num_classes):
+                self.class_count_vector.append(0)
 
 
     def increment_for_class_by_index(self, class_index):
