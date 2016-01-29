@@ -4,6 +4,7 @@ import copy
 class Training_Data:
 
     tokenized_data = []
+    categories = {}
 
     def __init__(self):
         self.tokenized_data =self. get_tokenized_data()
@@ -25,15 +26,24 @@ class Training_Data:
     def create_categories(self):
             pass
 
-    def create_category_from_column(self, index):
+    def create_category_from_column_and_add_to_category_dictionary(self, index):
         column = self.get_column()
         name = column[0]
+
+       # TODO
+
+    def get_set_of_unique_class_types(self):
+        last_column = self.get_index_of_last_data_column()
+        return self.get_unique_attribute_names_from_column(last_column)
 
     # note: this is referring to the actual column data, not just the attribute data.
     # the data is still pretty raw when this function is called
     def get_unique_attribute_names_from_column(self, index):
 
-        column = self.get_column(index)
+        column = copy.deepcopy(self.get_column(index))
+
+        #delete the category name from this data column
+        del column[0]
 
         # add all names not seen before to the list of attr names
         # note: attribute names cannot be the same as a category name
@@ -66,3 +76,6 @@ class Training_Data:
         for row in self.tokenized_data:
             temp_column.append(row[index])
         return temp_column
+
+    def get_index_of_last_data_column(self):
+        return len(self.tokenized_data[0]) - 1

@@ -13,26 +13,7 @@ def main():
 def run_tests(problem):
     run_training_data_tests(problem)
     run_problem_tests(problem)
-
-    run_test_copy_triple_nested_dictionaries()
-
-def run_test_copy_triple_nested_dictionaries():
-
-    test_attributes_outlook = {'s' : { 'n' : 3, 'y' : 4}, 'o' : {'n' : 0, 'y':  2}, 'r' : {'n' : 2, 'y' : 3}}
-    test_attributes_temp = {'h' : { 'n' : 2, 'y' : 2}, 'm' : {'n' : 2, 'y':  4}, 'c' : {'n' : 1, 'y' : 3}}
-    test_attributes_humidity = {'h' : { 'n' : 4, 'y' : 3}, 'n' : {'n' : 1, 'y':  6}}
-    test_attributes_wind = {'w' : { 'n' : 2, 'y' : 6}, 's' : {'n' : 3, 'y':  3}}
-
-    test_categories = {'Outlook' : test_attributes_outlook, 'Temp' : test_attributes_temp, 'Humidity' : test_attributes_humidity, 'Wind' : test_attributes_wind}
-
-    #so, now we are going to do a deep copy, and then alter the second one.  If they are not equal, then we have correctly done a deep copy and passed the test
-    copy_test_categories = copy.deepcopy(test_categories)
-
-    # renames the key "Outlook" to be "new_key"
-    copy_test_categories['new_key'] =copy_test_categories.pop('Outlook')
-
-    # these two separete dictionaries should not be the same, if they are it means they share the same memory space and we have a problem because we have not truly made a deep copy
-    assert copy_test_categories != test_categories, 'there was a problem making a deep copy of the trip nested dictionary'
+    run_curiosity_tests()
 
 def run_problem_tests(problem):
     pass
@@ -43,7 +24,14 @@ def run_training_data_tests(problem):
     test_get_column(problem)
     test_get_category_names(problem)
     test_get_unique_attribute_names_from_column(problem)
+    test_get_index_of_last_data_column(problem)
+    test_get_set_of_unique_class_types(problem)
 
+def run_curiosity_tests():
+    run_test_copy_triple_nested_dictionaries()
+
+
+# TRAINING DATA TESTS
 def test_get_tokenized_data(problem):
     tokenized_data = problem.get_tokenized_data()
     assert len(tokenized_data[0]) == 6, "improper row length"
@@ -88,6 +76,39 @@ def test_get_unique_attribute_names_from_column(problem):
     assert output_for_column_2 == test_unique_names_for_temp, 'get_unique attrbute names broke for temp'
     assert output_for_column_3 == test_unique_names_for_humidity, 'get_unique attrbute names broke for humidity'
     assert output_for_column_4 == test_unique_names_for_wind, 'get_unique attrbute names broke for wind'
+
+def test_get_index_of_last_data_column(problem):
+    assert problem.training_data.get_index_of_last_data_column() == 5, 'get_index_last_data_column() is broken'
+
+def test_get_set_of_unique_class_types(problem):
+
+    # what the set should be
+    test_set_of_unique_class_types = ['n', 'y']
+
+    # what the function actually returned
+    actual_set_of_unique_class_types = problem.training_data.get_set_of_unique_class_types()
+
+    # these sets should be the same and if they are not we have a problem
+    assert test_set_of_unique_class_types == actual_set_of_unique_class_types, 'get_set_of_unique_training_types() is broken'
+
+# CURIOSITY TESTS
+def run_test_copy_triple_nested_dictionaries():
+
+    test_attributes_outlook = {'s' : { 'n' : 3, 'y' : 4}, 'o' : {'n' : 0, 'y':  2}, 'r' : {'n' : 2, 'y' : 3}}
+    test_attributes_temp = {'h' : { 'n' : 2, 'y' : 2}, 'm' : {'n' : 2, 'y':  4}, 'c' : {'n' : 1, 'y' : 3}}
+    test_attributes_humidity = {'h' : { 'n' : 4, 'y' : 3}, 'n' : {'n' : 1, 'y':  6}}
+    test_attributes_wind = {'w' : { 'n' : 2, 'y' : 6}, 's' : {'n' : 3, 'y':  3}}
+
+    test_categories = {'Outlook' : test_attributes_outlook, 'Temp' : test_attributes_temp, 'Humidity' : test_attributes_humidity, 'Wind' : test_attributes_wind}
+
+    #so, now we are going to do a deep copy, and then alter the second one.  If they are not equal, then we have correctly done a deep copy and passed the test
+    copy_test_categories = copy.deepcopy(test_categories)
+
+    # renames the key "Outlook" to be "new_key"
+    copy_test_categories['new_key'] =copy_test_categories.pop('Outlook')
+
+    # these two separete dictionaries should not be the same, if they are it means they share the same memory space and we have a problem because we have not truly made a deep copy
+    assert copy_test_categories != test_categories, 'there was a problem making a deep copy of the trip nested dictionary'
 
 if __name__ == '__main__':
     main()
