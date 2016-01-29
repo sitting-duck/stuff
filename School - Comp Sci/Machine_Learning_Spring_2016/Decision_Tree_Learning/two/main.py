@@ -1,6 +1,7 @@
 
 __author__ = 'ashley tharp'
 
+import copy
 from Problem import Problem
 
 def main():
@@ -12,6 +13,26 @@ def main():
 def run_tests(problem):
     run_training_data_tests(problem)
     run_problem_tests(problem)
+
+    run_test_copy_triple_nested_dictionaries()
+
+def run_test_copy_triple_nested_dictionaries():
+
+    test_attributes_outlook = {'s' : { 'n' : 3, 'y' : 4}, 'o' : {'n' : 0, 'y':  2}, 'r' : {'n' : 2, 'y' : 3}}
+    test_attributes_temp = {'h' : { 'n' : 2, 'y' : 2}, 'm' : {'n' : 2, 'y':  4}, 'c' : {'n' : 1, 'y' : 3}}
+    test_attributes_humidity = {'h' : { 'n' : 4, 'y' : 3}, 'n' : {'n' : 1, 'y':  6}}
+    test_attributes_wind = {'w' : { 'n' : 2, 'y' : 6}, 's' : {'n' : 3, 'y':  3}}
+
+    test_categories = {'Outlook' : test_attributes_outlook, 'Temp' : test_attributes_temp, 'Humidity' : test_attributes_humidity, 'Wind' : test_attributes_wind}
+
+    #so, now we are going to do a deep copy, and then alter the second one.  If they are not equal, then we have correctly done a deep copy and passed the test
+    copy_test_categories = copy.deepcopy(test_categories)
+
+    # renames the key "Outlook" to be "new_key"
+    copy_test_categories['new_key'] =copy_test_categories.pop('Outlook')
+
+    # these two separete dictionaries should not be the same, if they are it means they share the same memory space and we have a problem because we have not truly made a deep copy
+    assert copy_test_categories != test_categories, 'there was a problem making a deep copy of the trip nested dictionary'
 
 def run_problem_tests(problem):
     pass
