@@ -16,7 +16,7 @@ def run_tests(problem):
     run_curiosity_tests()
 
 def run_problem_tests(problem):
-    pass
+    test_calculate_entropy_for_training_set(problem)
 
 def run_training_data_tests(problem):
     test_get_tokenized_data(problem)
@@ -38,6 +38,17 @@ def run_training_data_tests(problem):
 def run_curiosity_tests():
     run_test_copy_triple_nested_dictionaries()
 
+# PROBLEM TESTS
+def test_calculate_entropy_for_training_set(problem):
+
+    # value that the training set entropy is supposed to be
+    test_training_set_entropy = 0.940
+
+    #value that the calculate training set entropy actually returned
+    actual_training_set_entropy = problem.calculate_entropy_for_training_set()
+
+    # throw an error if they are not the same
+    assert test_training_set_entropy == actual_training_set_entropy, 'calculate_entropy_for_training_set() is broken'
 
 # TRAINING DATA TESTS
 def test_get_tokenized_data(problem):
@@ -124,7 +135,7 @@ def test_create_categories_from_training_data(problem):
 
     # what the create_categories_from_training_data() function actually returned
     actual_categories = problem.training_data.create_categories_from_training_data()
-    assert test_categories == actual_categories
+    assert test_categories == actual_categories, 'create_categories_from_training_data() is broken'
 
 def test_get_class_values_for_training_set(problem):
     # what the class values should be for this training set
