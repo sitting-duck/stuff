@@ -26,6 +26,9 @@ def run_training_data_tests(problem):
     test_get_unique_attribute_names_from_column(problem)
     test_get_index_of_last_data_column(problem)
     test_get_set_of_unique_class_types(problem)
+    test_get_category_name_from_column(problem)
+    test_create_attribute_dictionary_from_column(problem)
+    test_create_category_tuple_from_column(problem)
 
 def run_curiosity_tests():
     run_test_copy_triple_nested_dictionaries()
@@ -90,6 +93,18 @@ def test_get_set_of_unique_class_types(problem):
 
     # these sets should be the same and if they are not we have a problem
     assert test_set_of_unique_class_types == actual_set_of_unique_class_types, 'get_set_of_unique_training_types() is broken'
+
+def test_get_category_name_from_column(problem):
+    test_name = 'Outlook'
+    assert test_name == problem.training_data.get_category_name_from_column(1)
+
+def test_create_attribute_dictionary_from_column(problem):
+    test_outlook_dictionary = {'s' : { 'n' : 0, 'y' : 0}, 'o' : {'n' : 0, 'y':  0}, 'r' : {'n' : 0, 'y' : 0}}
+    assert test_outlook_dictionary == problem.training_data.create_attribute_dictionary_from_column(1)
+
+def test_create_category_tuple_from_column(problem):
+    test_category_tuple = ('Wind', {'w' : { 'n' : 0, 'y' : 0}, 's' : {'n' : 0, 'y':  0}})
+    assert test_category_tuple == problem.training_data.create_category_tuple_from_column(4)
 
 # CURIOSITY TESTS
 def run_test_copy_triple_nested_dictionaries():

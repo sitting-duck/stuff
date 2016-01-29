@@ -26,12 +26,32 @@ class Training_Data:
     def create_categories(self):
             pass
 
-    def create_category_from_column_and_add_to_category_dictionary(self, index):
-        column = self.get_column()
-        name = column[0]
+    def create_category_tuple_from_column(self, index):
 
-       # TODO
+        # the name of the category
+        category_name = self.get_category_name_from_column(index)
 
+        # for every every unique attribute in this column, create a dictionary with a dictionary inside of
+        # if containing all the unique class types and their counts set to zero
+        # what this data structure is essentially saying is that this category has these attributes, and
+        # they have not been classified as any type any number of times
+        # so their count is of course initialized to zero
+        attribute_dictionary = self.create_attribute_dictionary_from_column(index)
+
+        return (category_name, attribute_dictionary)
+
+    def create_attribute_dictionary_from_column(self, index):
+        attribute_dictionary = {}
+        for unique_attribute_name in self.get_unique_attribute_names_from_column(index):
+            attribute_dictionary[unique_attribute_name] = {'n' : 0, 'y' : 0}
+        return attribute_dictionary
+
+    def get_category_name_from_column(self, index):
+        column = self.get_column(index)
+        return copy.deepcopy(column[0])
+
+    # this is a classification problem, so this function will mine from the training data, the set of types
+    # any training instance can be classified as
     def get_set_of_unique_class_types(self):
         last_column = self.get_index_of_last_data_column()
         return self.get_unique_attribute_names_from_column(last_column)
