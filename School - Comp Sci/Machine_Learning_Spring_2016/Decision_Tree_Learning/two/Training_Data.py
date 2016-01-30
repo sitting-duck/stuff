@@ -112,11 +112,20 @@ class Training_Data:
     def get_class_type_frequency_dictionary_for_category(self, category, training_set):
 
         # if the category doesn't exist in the current training set throw an error
-        assert self.has_category(category, training_set) == False, 'error: training set does not have category %s' % category
+        assert self.has_category(category, training_set) == True, 'error: training set does not have category %s' % category
 
         # get the list of unique attributes for the given category
-        attributes = self.get_unique_attribute_names_from_column()
-        #derp
+        attributes = self.get_unique_attributes_for_category(category, training_set)
+
+        class_type_frequency_dictionary = {}
+
+        for attribute in attributes:
+            class_type_frequency_attribute_tuple = self.get_class_type_frequency_for_attribute_tuple(category, attribute, training_set)
+            attribute_name = class_type_frequency_attribute_tuple[0]
+            attribute_frequency_dictionary = class_type_frequency_attribute_tuple[1]
+            class_type_frequency_dictionary[attribute_name] = attribute_frequency_dictionary
+
+        return class_type_frequency_dictionary
 
     # this function is going to return a tuple with the attribute name as the first item and a dictionary
     # containing the count of attributes classified as each class type for the given attribute.
@@ -148,7 +157,6 @@ class Training_Data:
     def get_unique_attributes_for_category(self, category, training_set):
         index = self.get_index_of_column_for_category(category, training_set)
         return self.get_unique_attribute_names_from_column(index, training_set)
-        #todo: test
 
     # note: this is referring to the actual column data, not just the attribute data.
     # the data is still pretty raw when this function is called

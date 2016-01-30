@@ -91,8 +91,11 @@ def run_training_set_tests(problem):
     # as the second item
     test_get_class_type_frequency_for_attribute_tuple(problem)
 
+    # returns a dictionary containing all the counts of all class types for all attributes of the given category
+    test_get_class_type_frequency_dictionary_for_category(problem)
+
 def run_curiosity_tests():
-    run_test_copy_triple_nested_dictionaries()
+    test_copy_double_nested_dictionaries()
 
 # PROBLEM TESTS
 def test_calculate_entropy_for_training_set(problem):
@@ -345,11 +348,30 @@ def test_get_class_type_frequency_for_attribute_tuple(problem):
     expected = ('r', {'y' : 3, 'n' : 2})
     actual = problem.training_set.get_class_type_frequency_for_attribute_tuple('Outlook', 'r', problem.get_training_set())
     assert expected == actual, 'get_class_frequency_for_attribute_tuple() is broken'
+    
+def test_get_class_type_frequency_dictionary_for_category(problem):
+    
+    expected_attributes_outlook = {'s' : { 'n' : 3, 'y' : 2}, 'o' : {'n' : 0, 'y':  4}, 'r' : {'n' : 2, 'y' : 3}}
+    expected_attributes_temp = {'h' : { 'n' : 2, 'y' : 2}, 'm' : {'n' : 2, 'y':  4}, 'c' : {'n' : 1, 'y' : 3}}
+    expected_attributes_humidity = {'h' : { 'n' : 4, 'y' : 3}, 'n' : {'n' : 1, 'y':  6}}
+    expected_attributes_wind = {'w' : { 'n' : 2, 'y' : 6}, 's' : {'n' : 3, 'y':  3}}
+    
+    training_set = problem.get_training_set()
+    
+    actual_attributes_outlook = problem.training_set.get_class_type_frequency_dictionary_for_category('Outlook', training_set)
+    actual_attributes_temp = problem.training_set.get_class_type_frequency_dictionary_for_category('Temp', training_set)
+    actual_attributes_humidity = problem.training_set.get_class_type_frequency_dictionary_for_category('Humidity', training_set)
+    actual_attributes_wind = problem.training_set.get_class_type_frequency_dictionary_for_category('Wind', training_set)
+    
+    assert expected_attributes_outlook == actual_attributes_outlook, 'test_get_class_tye_frequency_dictionary() is broken'
+    assert expected_attributes_temp == actual_attributes_temp, 'test_get_class_tye_frequency_dictionary() is broken'
+    assert expected_attributes_humidity == actual_attributes_humidity, 'test_get_class_tye_frequency_dictionary() is broken'
+    assert expected_attributes_wind == actual_attributes_wind, 'test_get_class_tye_frequency_dictionary() is broken'
 
 # CURIOSITY TESTS
-def run_test_copy_triple_nested_dictionaries():
+def test_copy_double_nested_dictionaries():
 
-    test_attributes_outlook = {'s' : { 'n' : 3, 'y' : 4}, 'o' : {'n' : 0, 'y':  2}, 'r' : {'n' : 2, 'y' : 3}}
+    test_attributes_outlook = {'s' : { 'n' : 3, 'y' : 2}, 'o' : {'n' : 0, 'y':  4}, 'r' : {'n' : 2, 'y' : 3}}
     test_attributes_temp = {'h' : { 'n' : 2, 'y' : 2}, 'm' : {'n' : 2, 'y':  4}, 'c' : {'n' : 1, 'y' : 3}}
     test_attributes_humidity = {'h' : { 'n' : 4, 'y' : 3}, 'n' : {'n' : 1, 'y':  6}}
     test_attributes_wind = {'w' : { 'n' : 2, 'y' : 6}, 's' : {'n' : 3, 'y':  3}}
@@ -360,10 +382,10 @@ def run_test_copy_triple_nested_dictionaries():
     copy_test_categories = copy.deepcopy(test_categories)
 
     # renames the key "Outlook" to be "new_key"
-    copy_test_categories['new_key'] =copy_test_categories.pop('Outlook')
+    copy_test_categories['new_key'] = copy_test_categories.pop('Outlook')
 
-    # these two separete dictionaries should not be the same, if they are it means they share the same memory space and we have a problem because we have not truly made a deep copy
-    assert copy_test_categories != test_categories, 'there was a problem making a deep copy of the trip nested dictionary'
+    # these two separate dictionaries should not be the same, if they are it means they share the same memory space and we have a problem because we have not truly made a deep copy
+    assert copy_test_categories != test_categories, 'there was a problem making a deep copy of the double nested dictionary'
 
 if __name__ == '__main__':
     main()
