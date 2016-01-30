@@ -36,6 +36,9 @@ def run_training_set_tests(problem):
     test_get_category_names(problem)
 
     # returns the set of attribute types for a category
+    test_get_unique_attributes_for_category(problem)
+
+    # returns the set of attribute types from category column in the training data
     test_get_unique_attribute_names_from_column(problem)
 
     # returns the index of the last column of the training set
@@ -133,6 +136,23 @@ def test_get_category_names(problem):
     test_names = ['Outlook', 'Temp', 'Humidity', 'Wind']
     assert problem.training_set.get_category_names(problem.get_training_set()) == test_names, 'get_category_names_is_broken'
 
+def test_get_unique_attributes_for_category(problem):
+    test_unique_names_for_outlook = ['s', 'o', 'r']
+    test_unique_names_for_temp = ['h', 'm', 'c']
+    test_unique_names_for_humidity = ['h', 'n']
+    test_unique_names_for_wind = ['w', 's']
+
+    training_set = problem.get_training_set()
+    output_for_column_1 = problem.training_set.get_unique_attributes_for_category('Outlook', training_set)
+    output_for_column_2 = problem.training_set.get_unique_attributes_for_category('Temp', training_set)
+    output_for_column_3 = problem.training_set.get_unique_attributes_for_category('Humidity', training_set)
+    output_for_column_4 = problem.training_set.get_unique_attributes_for_category('Wind', training_set)
+
+    assert output_for_column_1 == test_unique_names_for_outlook, 'get_unique attribute names for category broke for outlook'
+    assert output_for_column_2 == test_unique_names_for_temp, 'get_unique attribute names for category broke for temp'
+    assert output_for_column_3 == test_unique_names_for_humidity, 'get_unique attribute names for category broke for humidity'
+    assert output_for_column_4 == test_unique_names_for_wind, 'get_unique attribute names for category broke for wind'
+
 def test_get_unique_attribute_names_from_column(problem):
     test_unique_names_for_outlook = ['s', 'o', 'r']
     test_unique_names_for_temp = ['h', 'm', 'c']
@@ -145,10 +165,10 @@ def test_get_unique_attribute_names_from_column(problem):
     output_for_column_3 = problem.training_set.get_unique_attribute_names_from_column(3, training_set)
     output_for_column_4 = problem.training_set.get_unique_attribute_names_from_column(4, training_set)
 
-    assert output_for_column_1 == test_unique_names_for_outlook, 'get_unique attrbute names broke for outlook'
-    assert output_for_column_2 == test_unique_names_for_temp, 'get_unique attrbute names broke for temp'
-    assert output_for_column_3 == test_unique_names_for_humidity, 'get_unique attrbute names broke for humidity'
-    assert output_for_column_4 == test_unique_names_for_wind, 'get_unique attrbute names broke for wind'
+    assert output_for_column_1 == test_unique_names_for_outlook, 'get_unique attribute names from column broke for outlook'
+    assert output_for_column_2 == test_unique_names_for_temp, 'get_unique attribute names from column broke for temp'
+    assert output_for_column_3 == test_unique_names_for_humidity, 'get_unique attribute names from column broke for humidity'
+    assert output_for_column_4 == test_unique_names_for_wind, 'get_unique attribute names from column broke for wind'
 
 def test_get_index_of_class_column(problem):
     assert problem.training_set.get_index_of_class_column(problem.get_training_set()) == 5, 'get_index_last_data_column() is broken'

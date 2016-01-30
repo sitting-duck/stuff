@@ -115,7 +115,8 @@ class Training_Data:
         assert self.has_category(category, training_set) == False, 'error: training set does not have category %s' % category
 
         # get the list of unique attributes for the given category
-        #todo: finish this
+        attributes = self.get_unique_attribute_names_from_column()
+        #derp
 
     # this function is going to return a tuple with the attribute name as the first item and a dictionary
     # containing the count of attributes classified as each class type for the given attribute.
@@ -143,6 +144,11 @@ class Training_Data:
             i += 1
 
         return reduced_training_set
+
+    def get_unique_attributes_for_category(self, category, training_set):
+        index = self.get_index_of_column_for_category(category, training_set)
+        return self.get_unique_attribute_names_from_column(index, training_set)
+        #todo: test
 
     # note: this is referring to the actual column data, not just the attribute data.
     # the data is still pretty raw when this function is called
