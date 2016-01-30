@@ -22,25 +22,71 @@ def run_problem_tests(problem):
     test_calculate_entropy_for_training_set(problem)
 
 def run_training_set_tests(problem):
+
+    # takes the text data from the input file and returns a 2D list of the training data
     test_get_tokenized_data(problem)
+
+    # returns the row including the training data id and class of the training set
     test_get_row(problem)
+
+    #returns the column including the category name of the training set
     test_get_column(problem)
+
+    # returns a list of the category names in the order they are listed in the training set
     test_get_category_names(problem)
+
+    # returns the set of attribute types for a category
     test_get_unique_attribute_names_from_column(problem)
+
+    # returns the index of the last column of the training set
     test_get_index_of_class_column(problem)
+
+    # returns the set of class types for a category
     test_get_set_of_unique_class_types(problem)
+
+    # takes an index and returns the category name for that column
     test_get_category_name_from_column(problem)
+
+    # takes an index and returns a dictionary with the count for all the attributes for a category set to zero
     test_create_attribute_dictionary_from_column(problem)
+
+    # takes an index and returns a tuple with the name of the category and a dictionary of all its attributes with
+    # their counts set to zero
     test_create_category_tuple_from_column(problem)
+
+    # returns a dictionary of all the categories with attribute counts all set to zero#
     test_create_categories_from_training_set(problem)
+
+    # return the set of class types for the training set
     test_get_class_values_for_training_set(problem)
+
+    # returns the number of training examples that have been classified a certain way
+    # useful for calculating entropy
     test_get_number_of_training_examples_of_class_type(problem)
+
+    # returns a dictionary with the counts for each class type
     test_get_class_type_frequency_dictionary(problem)
+
+    # returns the number of training examples in the given training set
     test_get_number_training_examples(problem)
+
+    # returns a bool indicating whether a training set has some category
+    # useful for input validation
     test_has_category(problem)
+
+    # returns the index of the column for given category in the training set
     test_get_index_of_column_for_category(problem)
+
+    # returns the actual column in the training set for given category
     test_get_column_for_category(problem)
+
+    # returns a reduced training set where the only examples remaining are those with a given attriute for the given category
     get_training_set_for_single_attribute(problem)
+
+    # takes a category, attribute, and training set
+    # returns a tuple with the attribute name as the first item and a dictionary containing the counts for each class type
+    # as the second item
+    test_get_class_type_frequency_for_attribute_tuple(problem)
 
 def run_curiosity_tests():
     run_test_copy_triple_nested_dictionaries()
@@ -253,6 +299,7 @@ def get_training_set_for_single_attribute(problem):
     # the training set that should be returned
     test_training_set = \
     [
+        ['Day', 'Outlook', 'Temp', 'Humidity', 'Wind', 'PlayTennis'],
         ['1', 's', 'h', 'h', 'w', 'n'],
         ['2', 's', 'h', 'h', 's', 'n'],
         ['8', 's', 'm', 'h', 'w', 'n'],
@@ -263,10 +310,21 @@ def get_training_set_for_single_attribute(problem):
     # the actual set returned by the function
     actual_training_set = problem.training_set.get_training_set_for_single_attribute('Outlook', 's', problem.get_training_set())
 
-    for i in range(0, len(actual_training_set)):
-        print str(actual_training_set[i])
-
     assert test_training_set == actual_training_set, 'get_training_set_for_single_attribute_is_broken()'
+
+def test_get_class_type_frequency_for_attribute_tuple(problem):
+
+    expected = ('s', {'y' : 2, 'n' : 3})
+    actual = problem.training_set.get_class_type_frequency_for_attribute_tuple('Outlook', 's', problem.get_training_set())
+    assert expected == actual, 'get_class_frequency_for_attribute_tuple() is broken'
+
+    expected = ('o', {'y' : 4, 'n' : 0})
+    actual = problem.training_set.get_class_type_frequency_for_attribute_tuple('Outlook', 'o', problem.get_training_set())
+    assert expected == actual, 'get_class_frequency_for_attribute_tuple() is broken'
+
+    expected = ('r', {'y' : 3, 'n' : 2})
+    actual = problem.training_set.get_class_type_frequency_for_attribute_tuple('Outlook', 'r', problem.get_training_set())
+    assert expected == actual, 'get_class_frequency_for_attribute_tuple() is broken'
 
 # CURIOSITY TESTS
 def run_test_copy_triple_nested_dictionaries():

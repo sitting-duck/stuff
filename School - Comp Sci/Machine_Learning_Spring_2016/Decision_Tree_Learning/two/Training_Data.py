@@ -97,9 +97,9 @@ class Training_Data:
                 num_of_specified_type += 1
         return num_of_specified_type
 
-    # simply returns the count of training examples clasified as each class type
+    # simply returns the count of training examples classified as each class type
     def get_class_type_frequency_dictionary(self, training_set):
-        class_types = self.get_set_of_unique_class_types(training_set)
+        class_types = self.get_set_of_unique_class_types(self.training_set)
 
         proportion_to_class_type_for_training_set = {}
         for type in class_types:
@@ -115,24 +115,27 @@ class Training_Data:
         assert self.has_category(category, training_set) == False, 'error: training set does not have category %s' % category
 
         # get the list of unique attributes for the given category
-        self.g
+        #todo: finish this
 
     # this function is going to return a tuple with the attribute name as the first item and a dictionary
     # containing the count of attributes classified as each class type for the given attribute.
     # this will later be used to compute the conditional entropy of a category
-    def get_proportion_to_class_type_for_attribute_tuple(self, category, attribute, training_set):
+    def get_class_type_frequency_for_attribute_tuple(self, category, attribute, training_set):
 
         #get all the training examples where the column contains the given attribute
-        pass
+        single_attribute_training_set = self.get_training_set_for_single_attribute(category, attribute, training_set)
 
         # get class type frequency dictionary on the training set we just made that only concerns our given attribute
+        class_type_frequency = self.get_class_type_frequency_dictionary(single_attribute_training_set)
 
-        # todo: finish
+        return (attribute, class_type_frequency)
 
     def get_training_set_for_single_attribute(self, category, attribute, training_set):
         reduced_training_set = []
         category_column = self.get_column_for_category(category, training_set)
 
+
+        reduced_training_set.append(training_set[0])
         i = 0
         for item in category_column:
             if item == attribute:
@@ -177,6 +180,10 @@ class Training_Data:
         temp_row = copy.deepcopy(self.get_row(0, training_set))
         return temp_row[0]
 
+    # do not confuse class with category.  Class is what we classify a training example as
+    # a category is a variable that can have an attribute value.
+    # the value of the attributes for the categories of a training example determine what the
+    # classification is of the training example
     def get_class_name(self, training_set):
         temp_row = copy.deepcopy(self.get_row(0, training_set))
         return temp_row[-1]
@@ -193,7 +200,6 @@ class Training_Data:
     def get_column_for_category(self, category, training_set):
         index = self.get_index_of_column_for_category(category, training_set)
         return self.get_column(index, training_set)
-        #todo: test this func
 
     def get_index_of_column_for_category(self, category, training_set):
 
