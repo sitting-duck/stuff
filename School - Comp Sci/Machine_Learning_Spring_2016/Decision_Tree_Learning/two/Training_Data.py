@@ -107,6 +107,16 @@ class Training_Data:
             proportion_to_class_type_for_training_set[type] = num_of_type
         return proportion_to_class_type_for_training_set
 
+    def get_class_type_frequency_dictionary_for_all_categories(self, training_set):
+        categories = self.get_category_names(training_set)
+
+        dictionary = {}
+        for category in categories:
+            dictionary[category] = self.get_class_type_frequency_dictionary_for_category(category, training_set)
+
+        return dictionary
+    #todo: test
+
     # returns a dictionary that contains all the attributes for the given category and
     # the count that each attribute has been classified as each class type
     def get_class_type_frequency_dictionary_for_category(self, category, training_set):

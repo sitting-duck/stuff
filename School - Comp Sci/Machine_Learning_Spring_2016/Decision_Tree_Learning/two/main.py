@@ -94,6 +94,9 @@ def run_training_set_tests(problem):
     # returns a dictionary containing all the counts of all class types for all attributes of the given category
     test_get_class_type_frequency_dictionary_for_category(problem)
 
+    # returns a dictionary containing the counts for all variables in the given training set
+    test_get_class_type_frequency_dictionary_for_all_categories(problem)
+
 def run_curiosity_tests():
     test_copy_double_nested_dictionaries()
 
@@ -367,6 +370,20 @@ def test_get_class_type_frequency_dictionary_for_category(problem):
     assert expected_attributes_temp == actual_attributes_temp, 'test_get_class_tye_frequency_dictionary() is broken'
     assert expected_attributes_humidity == actual_attributes_humidity, 'test_get_class_tye_frequency_dictionary() is broken'
     assert expected_attributes_wind == actual_attributes_wind, 'test_get_class_tye_frequency_dictionary() is broken'
+
+def test_get_class_type_frequency_dictionary_for_all_categories(problem):
+
+    expected_dictionary = \
+    {
+        'Outlook' : {'s' : { 'n' : 3, 'y' : 2}, 'o' : {'n' : 0, 'y':  4}, 'r' : {'n' : 2, 'y' : 3}},
+        'Temp' : {'h' : { 'n' : 2, 'y' : 2}, 'm' : {'n' : 2, 'y':  4}, 'c' : {'n' : 1, 'y' : 3}},
+        'Humidity' : {'h' : { 'n' : 4, 'y' : 3}, 'n' : {'n' : 1, 'y':  6}},
+        'Wind' : {'w' : { 'n' : 2, 'y' : 6}, 's' : {'n' : 3, 'y':  3}}
+    }
+
+    actual_dictionary = problem.training_set.get_class_type_frequency_dictionary_for_all_categories(problem.get_training_set())
+
+    assert expected_dictionary == actual_dictionary, 'test_get_class_type_frequency_dictionary_for_all_categories() is broken'
 
 # CURIOSITY TESTS
 def test_copy_double_nested_dictionaries():
