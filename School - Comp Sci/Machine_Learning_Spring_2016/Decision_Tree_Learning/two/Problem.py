@@ -20,21 +20,22 @@ class Problem:
         if(self.decision_tree.get_num_nodes() == 0):
             # create the root node
             pass
+        # todo: finish this
 
-    def calculate_entropy_for_variable(self, variable):
-        proportion_to_class_type_for_training_set = self.get_proportion_to_class_type_for_training_set_dictionary()
+    def calculate_entropy_for_variable(self, variable, training_set):
+        class_type_frequency = self.get_class_type_frequency_dictionary(training_set)
         # todo: finish calc entropy for variable and test it
 
-    def calculate_entropy_for_training_set(self):
-        proportion_to_class_type_for_training_set = self.get_proportion_to_class_type_for_training_set_dictionary()
-        num_values = self.training_data.get_number_training_examples()
+    def calculate_entropy_for_training_set(self, training_set):
+        class_type_frequency = self.get_class_type_frequency_dictionary(training_set)
+        num_values = self.training_data.get_number_training_examples(training_set)
 
         sum = 0.0
         Pi = 0.0
         Hi = 0.0
         ratio = 0.0
 
-        for key, value in proportion_to_class_type_for_training_set.iteritems():
+        for key, value in class_type_frequency.iteritems():
 
             Pi = float(value)/float(num_values)
 
@@ -50,9 +51,8 @@ class Problem:
     def get_categories(self):
         return self.training_data.get_categories()
 
-    def get_tokenized_data(self):
-        return self.training_data.get_tokenized_data()
+    def get_training_set(self):
+        return self.training_data.get_training_set()
 
-    def get_proportion_to_class_type_for_training_set_dictionary(self):
-        return self.training_data.get_proportion_to_class_type_for_training_set_dictionary()
-
+    def get_class_type_frequency_dictionary(self, training_set):
+        return self.training_data.get_class_type_frequency_dictionary(training_set)
