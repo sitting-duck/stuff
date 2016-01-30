@@ -181,15 +181,18 @@ class Training_Data:
         return temp_column
 
     def get_column_for_category(self, category, training_set):
-        pass
+        index = self.get_index_of_column_for_category(category, training_set)
+        return self.get_column(index, training_set)
+        #todo: test this func
 
     def get_index_of_column_for_category(self, category, training_set):
 
         # throw exception if category is not in this training set
-        assert self.has_category(category) == True, 'error: category %s doesn"t exist for training set' % category
+        assert self.has_category(category, training_set) == True, 'error: category %s doesn"t exist for training set' % category
 
-        return self.get_category_names(training_set).index(category)
-
+        # + 1 is added here because the first column is reserved for training example id, thus
+        # incrementing the column of every category
+        return self.get_category_names(training_set).index(category) + 1
 
     def get_class_column_for_training_set(self, training_set):
         return copy.deepcopy(self.get_column(self.get_index_of_class_column(training_set), training_set))

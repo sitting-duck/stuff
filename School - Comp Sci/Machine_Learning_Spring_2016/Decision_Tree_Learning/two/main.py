@@ -38,7 +38,7 @@ def run_training_set_tests(problem):
     test_get_class_type_frequency_dictionary(problem)
     test_get_number_training_examples(problem)
     test_has_category(problem)
-    # test_get_index_of_column_for_category(problem)
+    test_get_index_of_column_for_category(problem)
 
 def run_curiosity_tests():
     run_test_copy_triple_nested_dictionaries()
@@ -210,34 +210,26 @@ def test_get_index_of_column_for_category(problem):
     # what the index should be
     # (note: the first category will have index 1, not 0. The first column is for example id)
     index = 1
-
     # what the function actually returned
     actual_index = problem.training_set.get_index_of_column_for_category('Outlook', problem.get_training_set())
-
     assert index == actual_index
 
     # what the index should be
     index = 2
-
     # what the function actually returned
     actual_index = problem.training_set.get_index_of_column_for_category('Temp', problem.get_training_set())
-
     assert index == actual_index
 
     # what the index should be
     index = 3
-
     # what the function actually returned
     actual_index = problem.training_set.get_index_of_column_for_category('Humidity', problem.get_training_set())
-
     assert index == actual_index
 
     # what the index should be
     index = 4
-
     # what the function actually returned
     actual_index = problem.training_set.get_index_of_column_for_category('Wind', problem.get_training_set())
-
     assert index == actual_index
 
     #todo: neg testing. test for category that doesnt exist.
