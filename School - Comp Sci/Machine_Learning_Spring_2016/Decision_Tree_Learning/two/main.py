@@ -39,6 +39,7 @@ def run_training_set_tests(problem):
     test_get_number_training_examples(problem)
     test_has_category(problem)
     test_get_index_of_column_for_category(problem)
+    test_get_column_for_category(problem)
 
 def run_curiosity_tests():
     run_test_copy_triple_nested_dictionaries()
@@ -234,6 +235,17 @@ def test_get_index_of_column_for_category(problem):
 
     #todo: neg testing. test for category that doesnt exist.
     #todo: learn how to test for raised exceptions with pytest if you have time
+
+def test_get_column_for_category(problem):
+
+    # what column should be returned
+    test_column = ['Outlook', 's', 's', 'o', 'r', 'r', 'r', 'o', 's', 's', 'r', 's', 'o', 'o', 'r']
+
+    # what is actually returned
+    actual_column = problem.training_set.get_column_for_category('Outlook', problem.get_training_set())
+
+    # throw exception if they are not the same
+    assert test_column == actual_column, 'get_column_for_category() is broken'
 
 # CURIOSITY TESTS
 def run_test_copy_triple_nested_dictionaries():
