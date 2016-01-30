@@ -34,10 +34,14 @@ class Training_Data:
                 tokenized_data_buffer.append(tokens)
             return tokenized_data_buffer
 
-    def get_categories(self, training_data):
-        return self.create_categories_from_training_data(training_data)
+    def get_category(self, category, training_data):
+        categories = self.get_categories()
+        return categories[category]
 
-    def create_categories_from_training_data(self, training_set):
+    def get_categories(self, training_data):
+        return self.create_categories_from_training_set(training_data)
+
+    def create_categories_from_training_set(self, training_set):
 
         categories = {}
         # last column before the class column
@@ -93,6 +97,7 @@ class Training_Data:
                 num_of_specified_type += 1
         return num_of_specified_type
 
+    # simply returns the count of training examples clasified as each class type
     def get_class_type_frequency_dictionary(self, training_set):
         class_types = self.get_set_of_unique_class_types(training_set)
 
@@ -102,15 +107,28 @@ class Training_Data:
             proportion_to_class_type_for_training_set[type] = num_of_type
         return proportion_to_class_type_for_training_set
 
+    # returns a dictionary that contains all the attributes for the given category and
+    # the count that each attribute has been classified as each class type
+    def get_class_type_frequency_dictionary_for_category(self, category, training_set):
+
+        # if the category doesn't exist in the current training set throw an error
+        assert self.has_category(category, training_set) == False, 'error: training set does not have category %s' % category
+
+        # get the list of unique attributes for the given category
+        self.g
+
     # this function is going to return a tuple with the attribute name as the first item and a dictionary
     # containing the count of attributes classified as each class type for the given attribute.
     # this will later be used to compute the conditional entropy of a category
-    def get_proportion_to_class_type_for_attribute_tuple(self, attribute, training_set):
-
-        # get the set of unique class types
-        class_types = self.get_set_of_unique_class_types()
+    def get_proportion_to_class_type_for_attribute_tuple(self, category, attribute, training_set):
 
         #get the column
+        category_column = self.ge
+
+        #get all the training examples where the column contains the given attribute
+
+        # get class type frequency dictionary on the training set we just made that only concerns our given attribute
+
         # todo: finish
 
     # note: this is referring to the actual column data, not just the attribute data.
@@ -130,6 +148,9 @@ class Training_Data:
                 known_attribute_names.append(item)
 
         return known_attribute_names
+
+    def has_category(self, category, training_set):
+        return category in self.get_category_names(training_set)
 
     def get_category_names(self, training_set):
         temp_row = copy.deepcopy(self.get_row(0, training_set))
@@ -158,6 +179,17 @@ class Training_Data:
         for row in training_set:
             temp_column.append(row[index])
         return temp_column
+
+    def get_column_for_category(self, category, training_set):
+        pass
+
+    def get_index_of_column_for_category(self, category, training_set):
+
+        #todo: throw exception if category doesn't exist
+        categories = self.get_category_names(training_set)
+        index = categories.index(category)
+        return index
+
 
     def get_class_column_for_training_set(self, training_set):
         return copy.deepcopy(self.get_column(self.get_index_of_class_column(training_set), training_set))

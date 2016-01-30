@@ -7,7 +7,7 @@ from Decision_Tree import Decision_Tree
 class Problem:
 
     # all the training examples and functions for accessing them are contained in this object
-    training_data = Training_Data()
+    training_set = Training_Data()
 
     # the decision tree and all the functions for manipulating it are contained in this object
     decision_tree = Decision_Tree()
@@ -22,13 +22,14 @@ class Problem:
             pass
         # todo: finish this
 
-    def calculate_entropy_for_variable(self, variable, training_set):
+    def calculate_entropy_for_category(self, category, training_set):
+        # wrong
         class_type_frequency = self.get_class_type_frequency_dictionary(training_set)
         # todo: finish calc entropy for variable and test it
 
     def calculate_entropy_for_training_set(self, training_set):
         class_type_frequency = self.get_class_type_frequency_dictionary(training_set)
-        num_values = self.training_data.get_number_training_examples(training_set)
+        num_values = self.training_set.get_number_training_examples(training_set)
 
         sum = 0.0
         Pi = 0.0
@@ -49,10 +50,13 @@ class Problem:
         return round(sum, 3)
 
     def get_categories(self):
-        return self.training_data.get_categories()
+        return self.training_set.get_categories()
 
     def get_training_set(self):
-        return self.training_data.get_training_set()
+        return self.training_set.get_training_set()
 
     def get_class_type_frequency_dictionary(self, training_set):
-        return self.training_data.get_class_type_frequency_dictionary(training_set)
+        return self.training_set.get_class_type_frequency_dictionary(training_set)
+
+    def get_class_type_frequency_dictionary_for_category(self, category, training_set):
+        return self.training_set.get_class_type_frequency_dictionary(category, training_set)
