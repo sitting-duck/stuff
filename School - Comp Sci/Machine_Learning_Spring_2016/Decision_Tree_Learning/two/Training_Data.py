@@ -115,7 +115,6 @@ class Training_Data:
             dictionary[category] = self.get_class_type_frequency_dictionary_for_category(category, training_set)
 
         return dictionary
-    #todo: test
 
     # returns a dictionary that contains all the attributes for the given category and
     # the count that each attribute has been classified as each class type
