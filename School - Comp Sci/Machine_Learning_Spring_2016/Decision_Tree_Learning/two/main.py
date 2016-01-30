@@ -240,7 +240,8 @@ def test_get_index_of_column_for_category(problem):
 
     assert index == actual_index
 
-    #todo: neg testing. test for category that doesnt exist
+    #todo: neg testing. test for category that doesnt exist.
+    #todo: learn how to test for raised exceptions with pytest if you have time
 
 # CURIOSITY TESTS
 def run_test_copy_triple_nested_dictionaries():

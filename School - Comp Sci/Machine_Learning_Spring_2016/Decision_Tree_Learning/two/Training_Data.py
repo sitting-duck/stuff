@@ -185,10 +185,10 @@ class Training_Data:
 
     def get_index_of_column_for_category(self, category, training_set):
 
-        #todo: throw exception if category doesn't exist
-        categories = self.get_category_names(training_set)
-        index = categories.index(category)
-        return index
+        # throw exception if category is not in this training set
+        assert self.has_category(category) == True, 'error: category %s doesn"t exist for training set' % category
+
+        return self.get_category_names(training_set).index(category)
 
 
     def get_class_column_for_training_set(self, training_set):
