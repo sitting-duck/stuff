@@ -84,7 +84,7 @@ def run_training_set_tests(problem):
     test_get_column_for_category(problem)
 
     # returns a reduced training set where the only examples remaining are those with a given attriute for the given category
-    get_training_set_for_single_attribute(problem)
+    test_get_training_set_for_single_attribute(problem)
 
     # takes a category, attribute, and training set
     # returns a tuple with the attribute name as the first item and a dictionary containing the counts for each class type
@@ -323,7 +323,7 @@ def test_get_column_for_category(problem):
     # throw exception if they are not the same
     assert test_column == actual_column, 'get_column_for_category() is broken'
 
-def get_training_set_for_single_attribute(problem):
+def test_get_training_set_for_single_attribute(problem):
 
     # the training set that should be returned
     test_training_set = \
@@ -402,19 +402,30 @@ def test_calculate_entropy_for_category(problem):
     humidity_actual_entropy = problem.calculate_entropy_for_category('Humidity', training_set)
     wind_actual_entropy = problem.calculate_entropy_for_category('Wind', training_set)
 
-    #print "actual outlook: " + str(outlook_actual_entropy)
-    #print "actual temp: " + str(temp_actual_entropy)
-    #print "actual humidity: " + str(humidity_actual_entropy)
-    #print "actual wind: " + str(wind_actual_entropy)
+    print "actual outlook: " + str(outlook_actual_entropy)
+    print "actual temp: " + str(temp_actual_entropy)
+    print "actual humidity: " + str(humidity_actual_entropy)
+    print "actual wind: " + str(wind_actual_entropy)
 
     assert outlook_expected_entropy > outlook_actual_entropy - 0.2 or\
-    outlook_expected_entropy < outlook_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
+           outlook_expected_entropy < outlook_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
     assert temp_expected_entropy > temp_actual_entropy - 0.2 or\
            temp_expected_entropy < temp_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
     assert humidity_expected_entropy > humidity_actual_entropy - 0.2 or\
            humidity_expected_entropy < humidity_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
     assert wind_expected_entropy > wind_actual_entropy - 0.2 or\
            wind_expected_entropy < wind_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
+
+    #assert outlook_expected_entropy > outlook_actual_entropy - 0.2 or\
+    #outlook_expected_entropy < outlook_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
+    #assert temp_expected_entropy > temp_actual_entropy - 0.2 or\
+    #       temp_expected_entropy < temp_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
+    #assert humidity_expected_entropy > humidity_actual_entropy - 0.2 or\
+    #       humidity_expected_entropy < humidity_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
+    #assert wind_expected_entropy > wind_actual_entropy - 0.2 or\
+    #       wind_expected_entropy < wind_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
+
+    #todo: fix this
 
 # CURIOSITY TESTS
 def test_copy_double_nested_dictionaries():

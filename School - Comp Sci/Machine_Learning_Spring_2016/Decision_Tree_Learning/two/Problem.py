@@ -22,6 +22,41 @@ class Problem:
             pass
         # todo: finish this
 
+    def calculate_information_gain_for_category(self, category, training_set):
+
+        parent_entropy = self.calculate_entropy_for_training_set(training_set)
+
+
+
+    def fail_calculate_entropy_for_category(self, category, training_set):
+
+        #category_frequency_dictionary = self.get_class_type_frequency_dictionary_for_category(category, training_set)
+
+        sum = 0
+        Hi = 0
+        Pi = 0
+
+        # for each attribute
+        for attribute in self.training_set.get_unique_attributes_for_category(category, training_set):
+            reduced_training_set = self.training_set.get_training_set_for_single_attribute(category, attribute, training_set)
+            num_current_attr = len(reduced_training_set)
+            num_training_examples = len(training_set)
+            attr_proportion = float(num_current_attr / num_training_examples)
+
+            # for each class type
+            for type in self.training_set.get_set_of_unique_class_types(self.get_training_set()):
+                num_of_type = self.training_set.get_number_of_training_examples_of_class_type(type, reduced_training_set)
+                Pi = float(float(num_of_type) / float(num_current_attr))
+                print "Pi: " + str(Pi)
+                if Pi == 0:
+                    term = 0
+                else:
+                    term = Pi * math.log(Pi, 2)
+                Hi -= term
+
+            sum += float(attr_proportion * Hi)
+        return round(sum, 3)
+
     def calculate_entropy_for_category(self, category, training_set):
 
         category_frequency_dictionary = self.get_class_type_frequency_dictionary_for_category(category, training_set)
