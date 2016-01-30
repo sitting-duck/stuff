@@ -40,6 +40,7 @@ def run_training_set_tests(problem):
     test_has_category(problem)
     test_get_index_of_column_for_category(problem)
     test_get_column_for_category(problem)
+    get_training_set_for_single_attribute(problem)
 
 def run_curiosity_tests():
     run_test_copy_triple_nested_dictionaries()
@@ -246,6 +247,26 @@ def test_get_column_for_category(problem):
 
     # throw exception if they are not the same
     assert test_column == actual_column, 'get_column_for_category() is broken'
+
+def get_training_set_for_single_attribute(problem):
+
+    # the training set that should be returned
+    test_training_set = \
+    [
+        ['1', 's', 'h', 'h', 'w', 'n'],
+        ['2', 's', 'h', 'h', 's', 'n'],
+        ['8', 's', 'm', 'h', 'w', 'n'],
+        ['9', 's', 'c', 'n', 'w', 'y'],
+        ['11', 's', 'm', 'n', 's', 'y']
+    ]
+
+    # the actual set returned by the function
+    actual_training_set = problem.training_set.get_training_set_for_single_attribute('Outlook', 's', problem.get_training_set())
+
+    for i in range(0, len(actual_training_set)):
+        print str(actual_training_set[i])
+
+    assert test_training_set == actual_training_set, 'get_training_set_for_single_attribute_is_broken()'
 
 # CURIOSITY TESTS
 def run_test_copy_triple_nested_dictionaries():

@@ -44,8 +44,8 @@ class Training_Data:
     def create_categories_from_training_set(self, training_set):
 
         categories = {}
+
         # last column before the class column
-        #todo: this indexing doesn't make sense
         last_category_column = self.get_index_of_class_column(training_set)
 
         for i in range(1, last_category_column):
@@ -122,14 +122,24 @@ class Training_Data:
     # this will later be used to compute the conditional entropy of a category
     def get_proportion_to_class_type_for_attribute_tuple(self, category, attribute, training_set):
 
-        #get the column
-        category_column = self.ge
-
         #get all the training examples where the column contains the given attribute
+        pass
 
         # get class type frequency dictionary on the training set we just made that only concerns our given attribute
 
         # todo: finish
+
+    def get_training_set_for_single_attribute(self, category, attribute, training_set):
+        reduced_training_set = []
+        category_column = self.get_column_for_category(category, training_set)
+
+        i = 0
+        for item in category_column:
+            if item == attribute:
+                reduced_training_set.append(training_set[i])
+            i += 1
+
+        return reduced_training_set
 
     # note: this is referring to the actual column data, not just the attribute data.
     # the data is still pretty raw when this function is called
