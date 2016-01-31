@@ -4,6 +4,7 @@ from decimal import *
 import math
 from Training_Data import Training_Data
 from Decision_Tree import Decision_Tree
+from Node import Node
 
 class Problem:
 
@@ -16,25 +17,29 @@ class Problem:
     def __init__(self):
         pass
 
-    def create_decision_tree(self):
+    def create_decision_tree(self, training_set):
 
         if(self.decision_tree.has_root() == False):
-            root_category = self.get_best_category_for_root()
+            root_category = self.get_best_category_for_root(training_set)
+            node = Node(root_category, None, training_set)
+            self.decision_tree.set_root(node)
         else:
             pass
+        self.decision_tree.print_me()
+        print "endtree"
 
     #calculate the information gain for all the categories and store which one
     #has the highest information gain
-    def get_best_category_for_root(self):
+    def get_best_category_for_root(self, training_set):
         current_best_information_gain = 0
         current_best_category  = None
-        categories = self.training_set.get_category_names()
+        categories = self.training_set.get_category_names(training_set)
         for category in categories:
             current_information_gain = self.calculate_information_gain_for_category_for_undefined_root(category, self.get_training_set())
             if current_information_gain > current_best_information_gain:
                 current_best_information_gain = current_information_gain
                 current_best_category = category
-        return self.prec(current_best_category, 3)
+        return current_best_category
 
     # information gain is a metric to measure the amount of information gained if we split the tree at this category
     def calculate_information_gain_for_category(self, category, parent_entropy, training_set):
