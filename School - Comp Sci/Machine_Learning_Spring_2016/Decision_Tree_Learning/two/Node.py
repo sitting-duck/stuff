@@ -11,15 +11,19 @@ class Node:
 
     is_leaf = False
 
-    def __init__(self, category, parent, training_set):
+    #add is leaf default param
 
-        assert category != '', 'error: Node name cannot be an empty string'
+    def __init__(self, category, parent, training_set, is_leaf = False):
+
+        assert category != '', 'error: Node category cannot be an empty string'
         self.category = category
 
         assert parent != '', 'error: Node parent name cannot be an empty string'
         self.parent = parent
 
         self.training_set = training_set
+
+        self.is_leaf = is_leaf
 
     def set_as_root(self):
         assert self.parent == '' or self.parent == 'none', 'error: cannot set node: ' + self.category + 'as root. Node already has a parent. Root cannot have a parent node.'

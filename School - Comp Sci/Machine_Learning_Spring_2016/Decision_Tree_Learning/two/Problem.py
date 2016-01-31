@@ -19,23 +19,32 @@ class Problem:
     def __init__(self):
         pass
 
-    def create_decision_tree(self, training_set):
+    def create_decision_tree(self, training_set, parent_node = None):
 
-        assert len(training_set) != 0, 'error: empty training set'
+        if len(training_set) == 0:
+            return self.decision_tree
 
         if self.training_set.is_homogeneous(training_set):
-            return Node()
+            new_node = Node(training_set[0], None, training_set)
+            self.decision_tree.add_node(new_node)
+            return self.decision_tree
 
-        category = self.get_best_category_for_root(training_set)
-        new_node = Node(category, None, training_set)
+        category_for_current_node = self.get_best_category_for_root(training_set)
+
+        current_node = Node(category_for_current_node, parent_node, training_set)
 
         if self.decision_tree.has_root() == False:
-            self.decision_tree.set_root(new_node)
+            self.decision_tree.set_root(current_node)
 
-        partitions = self.get_training_set_partitions_by_category(category, training_set)
-        attributes = self.training_set.get_unique_attributes_for_category(category, training_set)
+        self.decision_tree.add_node(current_node)
+
+        # remove the current node's category from the training data
+        self.training_set.remove_category(category_for_current_node, training_set)
+
+        partitions = self.get_training_set_partitions_by_category(category_for_current_node, training_set)
+        attributes = self.training_set.get_unique_attributes_for_category(category_for_current_node, training_set)
         for attribute in attributes:
-            self.create_decision_tree(partitions[attribute])
+            self.create_decision_tree(partitions[attribute], current_node)
 
         self.decision_tree.print_me()
         return copy.deepcopy(self.decision_tree)

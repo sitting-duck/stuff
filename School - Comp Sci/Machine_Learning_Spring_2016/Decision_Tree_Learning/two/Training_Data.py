@@ -255,3 +255,11 @@ class Training_Data:
                 return False
             else:
                 return True
+
+    def remove_category(self, category, training_set):
+        index = self.get_index_of_column_for_category(category, training_set)
+
+        temp_set = copy.deepcopy(training_set)
+        for row in temp_set:
+            del row[index]
+        return copy.deepcopy(temp_set)
