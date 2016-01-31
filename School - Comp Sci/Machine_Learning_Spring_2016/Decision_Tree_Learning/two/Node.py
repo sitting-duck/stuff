@@ -5,7 +5,7 @@ class Node:
 
     name = ''
 
-    parent = ''
+    parent = None
 
     training_set = Training_Data()
 

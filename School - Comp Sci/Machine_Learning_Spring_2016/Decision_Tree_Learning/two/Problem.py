@@ -17,15 +17,33 @@ class Problem:
 
     def create_decision_tree(self):
 
-        if(self.decision_tree.get_num_nodes() == 0):
-            # create the root node
-            pass
-        # todo: finish this
+        if(self.decision_tree.has_root() == False):
+            root_category = self.get_best_category_for_root()
+            
+    #calculate the information gain for all the categories and store which one
+    #has the highest information gain
+    def get_best_category_for_root(self):
+        current_best_information_gain = 0
+        current_best_category  = None
+        categories = self.training_set.get_category_names()
+        for category in categories:
+            current_information_gain = self.calculate_information_gain_for_category_for_undefined_root(category, self.get_training_set())
+            if current_information_gain > current_best_information_gain:
+                current_best_information_gain = current_information_gain
+                current_best_category = category
+        return current_best_category
 
     # information gain is a metric to measure the amount of information gained if we split the tree at this category
-    def calculate_information_gain_for_category(self, category, training_set):
+    def calculate_information_gain_for_category(self, category, parent_entropy, training_set):
+        training_set_for_category_entropy = self.calculate_entropy_for_category(category, training_set)
+        information_gain = float(parent_entropy) - float(training_set_for_category_entropy)
+        return information_gain
 
-        parent_entropy = self.calculate_entropy_for_training_set(training_set)
+    # information gain is a metric to measure the amount of information gained if we split the tree at this category
+    def calculate_information_gain_for_category_for_undefined_root(self, category, training_set):
+        training_set_entropy = self.calculate_entropy_for_training_set(training_set)
+        information_gain = self.calculate_information_gain_for_category(category, training_set_entropy, training_set)
+        return information_gain
 
     def calculate_entropy_for_training_set(self, training_set):
 
