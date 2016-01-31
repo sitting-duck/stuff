@@ -138,13 +138,14 @@ def test_calculate_entropy_for_attribute(problem):
 
     training_set = problem.get_training_set()
 
-    expected = .985
-    actual = problem.calculate_entropy_for_attribute('Humidity', 'h', training_set)
-    assert expected == actual, 'calculate_entropy_for_attribute() is broken. expected: %s got: %s' % (expected, actual)
+    categories = ['Humidity', 'Humidity', 'Wind', 'Wind']
+    attributes = ['h', 'n', 'w', 's']
+    expecteds = [.985, .591, .811, 1]
+    error = 0
 
-    expected = .591
-    actual = problem.calculate_entropy_for_attribute('Humidity', 'n', training_set)
-    assert expected == actual, 'calculate_entropy_for_attribute() is broken. expected: %s got: %s' % (expected, actual)
+    for i in range(0, len(categories)):
+        actual = problem.calculate_entropy_for_attribute(categories[i], attributes[i], training_set)
+        assert within_acceptable_error(expecteds[i], actual, error), 'calculate_entropy_for_attribute() is broken. expected: %s got: %s' % (expecteds[i], actual)
 
 def test_calculate_entropy_for_category(problem):
 
@@ -164,6 +165,16 @@ def test_calculate_entropy_for_category(problem):
     #print "actual temp: " + str(temp_actual_entropy)
     #print "actual humidity: " + str(humidity_actual_entropy)
     #print "actual wind: " + str(wind_actual_entropy)
+
+    #categories = problem.training_set.get_category_names()
+    #expecteds = [.694, .911, .789, .892]
+    #error = 0.2
+
+    #for i in range(0, len(categories)):
+    #    actual = problem.calculate_entropy_for_category(categories[i], training_set)
+    #    assert
+
+
 
     assert outlook_expected_entropy > outlook_actual_entropy - 0.2 or\
            outlook_expected_entropy < outlook_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken. expected: %s got: %s' % \
@@ -477,7 +488,7 @@ def test_copy_double_nested_dictionaries():
     assert copy_test_categories != test_categories, 'there was a problem making a deep copy of the double nested dictionary'
 
 def within_acceptable_error(expected, actual, error):
-    return abs(expected - actual) < error
+    return abs(expected - actual) <= error
 
 def abs(value):
     if value < 0:

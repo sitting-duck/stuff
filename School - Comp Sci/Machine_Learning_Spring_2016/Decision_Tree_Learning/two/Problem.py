@@ -40,6 +40,7 @@ class Problem:
     def calculate_information_gain_for_category(self, category, parent_entropy, training_set):
         training_set_for_category_entropy = self.calculate_entropy_for_category(category, training_set)
         information_gain = self.prec(parent_entropy) - self.prec(training_set_for_category_entropy)
+        #print 'ig for ' + category + ': ' + str(parent_entropy) + ' - ' + str(training_set_for_category_entropy)
         return self.prec(information_gain)
 
     # information gain is a metric to measure the amount of information gained if we split the tree at this category
