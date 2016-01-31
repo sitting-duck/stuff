@@ -19,6 +19,8 @@ def run_tests(problem):
     run_curiosity_tests()
 
 def run_problem_tests(problem):
+    test_calculate_information_gain_for_category(problem)
+    test_calculate_information_gain_for_category_for_undefined_root(problem)
     test_calculate_entropy_for_training_set(problem)
     test_calculate_entropy_for_attribute(problem)
     test_calculate_entropy_for_category(problem)
@@ -104,6 +106,21 @@ def run_curiosity_tests():
     test_copy_double_nested_dictionaries()
 
 # PROBLEM TESTS
+def test_calculate_information_gain_for_category(problem):
+    pass
+
+def test_calculate_information_gain_for_category_for_undefined_root(problem):
+
+    #I am still a little suspicious of this function. I feel like my margin of error is a little large.
+    training_set = problem.get_training_set()
+    categories = problem.training_set.get_category_names(training_set)
+    expecteds = [0.246, 0.029, 0.151, 0.048]
+    error = 0.2
+
+    for i in range(0, len(categories)):
+        actual = problem.calculate_information_gain_for_category_for_undefined_root(categories[i], training_set)
+        assert within_acceptable_error(expecteds[i], actual, error), 'test_calculate_information_gain_for_category_for_undefined_root() is broken. expected %s got %s' % (expecteds[i], actual)
+
 def test_calculate_entropy_for_training_set(problem):
 
     # value that the training set entropy is supposed to be
@@ -114,7 +131,7 @@ def test_calculate_entropy_for_training_set(problem):
 
     # throw an error if they are not the same
     assert expected_training_set_entropy == actual_training_set_entropy, 'calculate_entropy_for_training_set() is broken.\
-     expected %s got %s' %  (expected_training_set_entropy, actual_training_set_entropy)
+     expected %s got %s' % (expected_training_set_entropy, actual_training_set_entropy)
 
 def test_calculate_entropy_for_attribute(problem):
 
@@ -148,24 +165,23 @@ def test_calculate_entropy_for_category(problem):
     #print "actual wind: " + str(wind_actual_entropy)
 
     assert outlook_expected_entropy > outlook_actual_entropy - 0.2 or\
-           outlook_expected_entropy < outlook_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
+           outlook_expected_entropy < outlook_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken. expected: %s got: %s' % \
+                                                                    (outlook_expected_entropy, outlook_actual_entropy)
     assert temp_expected_entropy > temp_actual_entropy - 0.2 or\
-           temp_expected_entropy < temp_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
+           temp_expected_entropy < temp_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken. expected: %s got: %s' % \
+                                                              (temp_expected_entropy, temp_actual_entropy)
     assert humidity_expected_entropy > humidity_actual_entropy - 0.2 or\
-           humidity_expected_entropy < humidity_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
+           humidity_expected_entropy < humidity_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken. expected: %s got: %s' % \
+                                                                      (humidity_expected_entropy, humidity_actual_entropy)
     assert wind_expected_entropy > wind_actual_entropy - 0.2 or\
-           wind_expected_entropy < wind_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
+           wind_expected_entropy < wind_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken. expected: %s got: %s' % \
+                                                              (wind_expected_entropy, wind_actual_entropy)
 
-    #assert outlook_expected_entropy > outlook_actual_entropy - 0.2 or\
-    #outlook_expected_entropy < outlook_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
-    #assert temp_expected_entropy > temp_actual_entropy - 0.2 or\
-    #       temp_expected_entropy < temp_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
-    #assert humidity_expected_entropy > humidity_actual_entropy - 0.2 or\
-    #       humidity_expected_entropy < humidity_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
-    #assert wind_expected_entropy > wind_actual_entropy - 0.2 or\
-    #       wind_expected_entropy < wind_actual_entropy + 0.2, 'calculate_entropy_for_category() is broken'
-
-    #todo: fix this
+    # use these instead if you want to make sure that your values match exactly
+    #assert outlook_expected_entropy > outlook_actual_entropy, 'calculate_entropy_for_category() is broken'
+    #assert temp_expected_entropy > temp_actual_entropy, 'calculate_entropy_for_category() is broken'
+    #assert humidity_expected_entropy > humidity_actual_entropy, 'calculate_entropy_for_category() is broken'
+    #assert wind_expected_entropy > wind_actual_entropy, 'calculate_entropy_for_category() is broken'
 
 # TRAINING DATA TESTS
 def test_get_tokenized_data(problem):
@@ -458,6 +474,15 @@ def test_copy_double_nested_dictionaries():
 
     # these two separate dictionaries should not be the same, if they are it means they share the same memory space and we have a problem because we have not truly made a deep copy
     assert copy_test_categories != test_categories, 'there was a problem making a deep copy of the double nested dictionary'
+
+def within_acceptable_error(expected, actual, error):
+    return abs(expected - actual) < error
+
+def abs(value):
+    if value < 0:
+        return -value
+    else:
+        return value
 
 if __name__ == '__main__':
     main()

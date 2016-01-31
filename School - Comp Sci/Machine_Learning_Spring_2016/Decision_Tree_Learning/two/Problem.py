@@ -19,7 +19,9 @@ class Problem:
 
         if(self.decision_tree.has_root() == False):
             root_category = self.get_best_category_for_root()
-            
+        else:
+            pass
+
     #calculate the information gain for all the categories and store which one
     #has the highest information gain
     def get_best_category_for_root(self):
@@ -31,19 +33,19 @@ class Problem:
             if current_information_gain > current_best_information_gain:
                 current_best_information_gain = current_information_gain
                 current_best_category = category
-        return current_best_category
+        return round(current_best_category, 3)
 
     # information gain is a metric to measure the amount of information gained if we split the tree at this category
     def calculate_information_gain_for_category(self, category, parent_entropy, training_set):
         training_set_for_category_entropy = self.calculate_entropy_for_category(category, training_set)
         information_gain = float(parent_entropy) - float(training_set_for_category_entropy)
-        return information_gain
+        return round(information_gain, 3)
 
     # information gain is a metric to measure the amount of information gained if we split the tree at this category
     def calculate_information_gain_for_category_for_undefined_root(self, category, training_set):
         training_set_entropy = self.calculate_entropy_for_training_set(training_set)
         information_gain = self.calculate_information_gain_for_category(category, training_set_entropy, training_set)
-        return information_gain
+        return round(information_gain, 3)
 
     def calculate_entropy_for_training_set(self, training_set):
 
@@ -54,7 +56,7 @@ class Problem:
         for i in range(0, num_class_types):
             num_current_type = self.training_set.get_number_of_training_examples_of_class_type(class_types[i], training_set)
             Pi = float(num_current_type / num_training_examples)
-            sum -= float(Pi)*(float(round(math.log(Pi, 2), 3)))
+            sum -= float(Pi)*(float(math.log(Pi, 2)))
         return round(sum, 3)
 
     def calculate_entropy_for_category(self, category, training_set):
