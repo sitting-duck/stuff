@@ -1,5 +1,7 @@
 
 from __future__ import division
+
+import copy
 from decimal import *
 import math
 from Training_Data import Training_Data
@@ -19,14 +21,48 @@ class Problem:
 
     def create_decision_tree(self, training_set):
 
-        if(self.decision_tree.has_root() == False):
-            root_category = self.get_best_category_for_root(training_set)
-            node = Node(root_category, None, training_set)
-            self.decision_tree.set_root(node)
-        else:
-            pass
+        assert len(training_set) != 0, 'error: empty training set'
+
+        if self.training_set.is_homogeneous(training_set):
+            return Node()
+
+        category = self.get_best_category_for_root(training_set)
+        new_node = Node(category, None, training_set)
+
+        if self.decision_tree.has_root() == False:
+            self.decision_tree.set_root(new_node)
+
+        partitions = self.get_training_set_partitions_by_category(category, training_set)
+        attributes = self.training_set.get_unique_attributes_for_category(category, training_set)
+        for attribute in attributes:
+            self.create_decision_tree(partitions[attribute])
+
         self.decision_tree.print_me()
-        print "endtree"
+        return copy.deepcopy(self.decision_tree)
+
+    def get_training_set_partitions_by_category(self, category, training_set):
+
+        attributes = self.training_set.get_unique_attributes_for_category(category, training_set)
+        partitions = {}
+
+        for example in training_set:
+            for attribute in attributes:
+                partitions[attribute] = self.training_set.get_training_set_for_single_attribute(category, attribute, training_set)
+        print str(partitions)
+        return partitions
+
+    # possibly useless
+    def get_training_set_partitions_by_class_type(self, training_set):
+        #partition the training examples by class type
+        training_set_partitions = {}
+        current_training_subset = []
+        child_nodes = []
+        for type in self.training_set.get_set_of_unique_class_types():
+            for example in training_set:
+                if example[-1] == type:
+                    current_training_subset.append(example)
+            training_set_partitions[type] = current_training_subset
+        return training_set_partitions
 
     #calculate the information gain for all the categories and store which one
     #has the highest information gain
@@ -41,11 +77,21 @@ class Problem:
                 current_best_category = category
         return current_best_category
 
+    def get_best_category_for_node(self, parent_entropy, training_set):
+        current_best_information_gain = 0
+        current_best_category  = None
+        categories = self.training_set.get_category_names(training_set)
+        for category in categories:
+            current_information_gain = self.calculate_information_gain_for_category(category, parent_entropy, training_set)
+            if current_information_gain > current_best_information_gain:
+                current_best_information_gain = current_information_gain
+                current_best_category = category
+        return current_best_category
+
     # information gain is a metric to measure the amount of information gained if we split the tree at this category
     def calculate_information_gain_for_category(self, category, parent_entropy, training_set):
         training_set_for_category_entropy = self.calculate_entropy_for_category(category, training_set)
         information_gain = self.prec(parent_entropy) - self.prec(training_set_for_category_entropy)
-        #print 'ig for ' + category + ': ' + str(parent_entropy) + ' - ' + str(training_set_for_category_entropy)
         return self.prec(information_gain)
 
     # information gain is a metric to measure the amount of information gained if we split the tree at this category

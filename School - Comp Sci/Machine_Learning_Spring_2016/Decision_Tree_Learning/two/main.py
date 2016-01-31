@@ -26,6 +26,7 @@ def run_problem_tests(problem):
     test_calculate_entropy_for_category(problem)
     test_prec(problem)
     test_create_decision_tree(problem)
+    test_get_training_set_partitions_by_category(problem)
 
 def run_training_set_tests(problem):
 
@@ -506,6 +507,9 @@ def test_prec(problem):
 def test_create_decision_tree(problem):
     training_set = problem.get_training_set()
     problem.create_decision_tree(training_set)
+
+def test_get_training_set_partitions_by_category(problem):
+    pass
 
 if __name__ == '__main__':
     main()

@@ -9,6 +9,8 @@ class Node:
 
     training_set = Training_Data()
 
+    is_leaf = False
+
     def __init__(self, category, parent, training_set):
 
         assert category != '', 'error: Node name cannot be an empty string'
@@ -26,6 +28,9 @@ class Node:
 
     def is_root(self):
         return self.parent == None
+
+    def is_leaf(self):
+        return self.is_leaf()
 
     def print_me(self):
         print 'cat: ' + self.category + ' par: ' + str(self.parent)
