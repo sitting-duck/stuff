@@ -1,5 +1,6 @@
 
 from __future__ import division
+from decimal import *
 import math
 from Training_Data import Training_Data
 from Decision_Tree import Decision_Tree
@@ -13,7 +14,7 @@ class Problem:
     decision_tree = Decision_Tree()
 
     def __init__(self):
-        pass
+        print str(getcontext())
 
     def create_decision_tree(self):
 
@@ -106,3 +107,6 @@ class Problem:
 
     def get_class_type_frequency_dictionary_for_category(self, category, training_set):
         return self.training_set.get_class_type_frequency_dictionary_for_category(category, training_set)
+
+    def prec(self, number, precision = 3):
+        return round(Decimal(number), precision)

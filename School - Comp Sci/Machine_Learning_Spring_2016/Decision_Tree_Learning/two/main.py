@@ -24,6 +24,7 @@ def run_problem_tests(problem):
     test_calculate_entropy_for_training_set(problem)
     test_calculate_entropy_for_attribute(problem)
     test_calculate_entropy_for_category(problem)
+    test_prec(problem)
 
 def run_training_set_tests(problem):
 
@@ -483,6 +484,12 @@ def abs(value):
         return -value
     else:
         return value
+
+def test_prec(problem):
+
+    expected = 1.235 # it would be 1.234 but it's going to round up if Context.rounding = ROUND_HALF_EVEN
+    actual = problem.prec(1.23456789)
+    assert expected == actual, 'prec() is broken. expected: %s got: %s' % (expected, actual)
 
 if __name__ == '__main__':
     main()
