@@ -250,12 +250,18 @@ class Training_Data:
 
     def is_homogeneous(self, training_set):
 
-        first_type = training_set[0]
-        for example in training_set:
-            if first_type != example:
-                return False
-            else:
-                return True
+        class_types = self.get_set_of_unique_class_types(training_set)
+        print "num class types: " + str(len(class_types))
+        if len(class_types) > 1:
+            return False
+        else:
+            return True
+
+        #for example in training_set:
+        #    if first_type != example:
+        #        return False
+        #    else:
+        #        return True
 
     def get_training_set_with_category_removed(self, category, training_set):
         index = self.get_index_of_column_for_category(category, training_set)

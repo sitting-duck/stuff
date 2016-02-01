@@ -24,10 +24,15 @@ class Problem:
         if len(training_set) == 0:
             return self.decision_tree
 
-        if self.training_set.is_homogeneous(training_set):
-            #new_node = Node(training_set[0], None, training_set)
-            #self.decision_tree.add_node(new_node)
+        was_it = self.training_set.is_homogeneous(training_set)
+        print "homo? " + str(was_it)
+        self.print_training_set(training_set)
+        if was_it:
+            type = self.training_set.get_set_of_unique_class_types(training_set)
+            new_node = Node(str(type[0]), parent_node, training_set)
+            self.decision_tree.add_node(new_node)
             return self.decision_tree
+
 
         category_for_current_node = self.get_best_category_for_root(training_set)
         print "selected " + str(category_for_current_node) + " for current node. "\
@@ -72,6 +77,7 @@ class Problem:
         for example in training_set:
             for attribute in attributes:
                 temp_partition = self.training_set.get_training_set_for_single_attribute(category, attribute, training_set)
+
                 partitions[attribute] = self.training_set.get_training_set_with_category_removed(category, temp_partition)
 
         for partition in partitions:
