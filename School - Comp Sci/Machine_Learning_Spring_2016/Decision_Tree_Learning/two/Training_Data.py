@@ -250,9 +250,6 @@ class Training_Data:
 
     def is_homogeneous(self, training_set):
 
-        if len(self.get_category_names(training_set)) > 1:
-            return False
-
         first_type = training_set[0]
         for example in training_set:
             if first_type != example:
