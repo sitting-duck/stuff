@@ -1,3 +1,4 @@
+import copy
 
 from Node import Node
 
@@ -15,10 +16,9 @@ class Decision_Tree:
 
     def set_root(self, node):
         self.root = node
-        self.nodes.append(self.root)
 
     def add_node(self, new_node):
-        self.nodes.append(new_node)
+        self.nodes.append(copy.deepcopy(new_node))
 
     def get_num_nodes(self):
         return len(self.nodes)
@@ -39,3 +39,4 @@ class Decision_Tree:
     def print_me(self):
         for node in self.nodes:
             node.print_me()
+        print ''

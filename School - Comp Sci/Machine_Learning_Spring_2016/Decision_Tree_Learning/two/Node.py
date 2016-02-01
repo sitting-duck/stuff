@@ -25,11 +25,6 @@ class Node:
 
         self.is_leaf = is_leaf
 
-    def set_as_root(self):
-        assert self.parent == '' or self.parent == 'none', 'error: cannot set node: ' + self.category + 'as root. Node already has a parent. Root cannot have a parent node.'
-        parent = None
-        return True
-
     def is_root(self):
         return self.parent == None
 
@@ -37,4 +32,10 @@ class Node:
         return self.is_leaf()
 
     def print_me(self):
-        print 'cat: ' + self.category + ' par: ' + str(self.parent)
+        print 'cat: ' + str(self.category) + ' par: ' + self.str(self.parent)
+
+    def str(self, node):
+        if node == None:
+            return 'none'
+        else:
+            return node.category

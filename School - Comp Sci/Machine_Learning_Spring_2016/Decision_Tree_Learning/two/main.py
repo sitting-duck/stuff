@@ -1,3 +1,4 @@
+from Node import Node
 
 __author__ = 'ashley tharp'
 
@@ -26,7 +27,9 @@ def run_problem_tests(problem):
     test_calculate_entropy_for_category(problem)
     test_prec(problem)
     test_create_decision_tree(problem)
-    test_get_training_set_partitions_by_category(problem)
+    test_get_training_set_partitions_by_attribute(problem)
+    test_str_parent_node(problem)
+
 
 def run_training_set_tests(problem):
 
@@ -508,8 +511,67 @@ def test_create_decision_tree(problem):
     training_set = problem.get_training_set()
     problem.create_decision_tree(training_set)
 
-def test_get_training_set_partitions_by_category(problem):
-    pass
+def test_get_training_set_partitions_by_attribute(problem):
+
+    training_set = problem.get_training_set()
+    test_category = 'Outlook'
+
+    s_expected =\
+    [
+        ['Day', 'Outlook', 'Temp', 'Humidity', 'Wind', 'PlayTennis'],
+        ['1', 's', 'h', 'h', 'w', 'n'],
+        ['2', 's',  'h', 'h', 's', 'n'],
+        ['8', 's',  'm', 'h', 'w', 'n'],
+        ['9', 's',  'c', 'n', 'w', 'y'],
+        ['11', 's',  'm', 'h', 's', 'y']
+    ]
+
+    o_expected =\
+    [
+        ['Day', 'Outlook', 'Temp', 'Humidity', 'Wind', 'PlayTennis'],
+        ['3', 'o', 'h', 'h', 'w', 'y'],
+        ['7', 'o',  'c', 'n', 's', 'y'],
+        ['12', 'o',  'm', 'h', 's', 'y'],
+        ['13', 'o',  'h', 'n', 'w', 'y']
+    ]
+
+    r_expected =\
+    [
+        ['Day', 'Outlook', 'Temp', 'Humidity', 'Wind', 'PlayTennis'],
+        ['4', 'r', 'm', 'h', 'w', 'y'],
+        ['5', 'r',  'c', 'n', 'w', 'y'],
+        ['6', 'r',  'c', 'n', 's', 'n'],
+        ['10', 'r',  'm', 'n', 'w', 'y'],
+        ['14', 'r',  'm', 'h', 's', 'n']
+    ]
+
+    s_actual = problem.training_set.get_training_set_for_single_attribute(test_category, 's', training_set)
+    print "S ACTUAL"
+    problem.print_training_set(s_actual)
+    assert s_expected == s_actual, 'get_training_set_partitions_by_attribute() is broken. \nexpected: %s \nactual: %s\n' % \
+                                   (problem.print_training_set(s_expected), problem.print_training_set(s_actual))
+
+    o_actual = problem.training_set.get_training_set_for_single_attribute(test_category, 'o', training_set)
+    assert o_expected == o_actual, 'get_training_set_partitions_by_attribute() is broken.  \nexpected: %s \nactual: %s\n' % \
+                                   (problem.print_training_set(o_expected), problem.print_training_set(o_actual))
+
+    r_actual = problem.training_set.get_training_set_for_single_attribute(test_category, 'r', training_set)
+    assert r_expected == r_actual, 'get_training_set_partitions_by_attribute() is broken.  \nexpected: %s \nactual: %s\n' % \
+                                   (problem.print_training_set(r_expected), problem.print_training_set(r_actual))
+#todo: wut
+def test_str_parent_node(problem):
+
+    training_set = problem.get_training_set()
+
+    test_parent_node_None = None
+    none_expected = 'none'
+    none_actual = problem.str_parent_node(test_parent_node_None)
+    assert none_expected == none_actual, 'str_parent_node() is broken. expected: %s got: %s' % (none_expected, none_actual)
+
+    test_parent_node_None = Node('some category', None, training_set)
+    none_expected = 'none'
+    none_actual = problem.str_parent_node(test_parent_node_None)
+    assert none_expected == none_actual, 'str_parent_node() is broken. expected: %s got: %s' % (none_expected, none_actual)
 
 if __name__ == '__main__':
     main()

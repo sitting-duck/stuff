@@ -166,6 +166,10 @@ class Training_Data:
         return reduced_training_set
 
     def get_unique_attributes_for_category(self, category, training_set):
+
+        if category == None:
+            return []
+
         index = self.get_index_of_column_for_category(category, training_set)
         return self.get_unique_attribute_names_from_column(index, training_set)
 
@@ -256,7 +260,7 @@ class Training_Data:
             else:
                 return True
 
-    def remove_category(self, category, training_set):
+    def get_training_set_with_category_removed(self, category, training_set):
         index = self.get_index_of_column_for_category(category, training_set)
 
         temp_set = copy.deepcopy(training_set)

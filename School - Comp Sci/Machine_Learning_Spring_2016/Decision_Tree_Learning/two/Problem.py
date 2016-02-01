@@ -25,11 +25,13 @@ class Problem:
             return self.decision_tree
 
         if self.training_set.is_homogeneous(training_set):
-            new_node = Node(training_set[0], None, training_set)
-            self.decision_tree.add_node(new_node)
+            #new_node = Node(training_set[0], None, training_set)
+            #self.decision_tree.add_node(new_node)
             return self.decision_tree
 
         category_for_current_node = self.get_best_category_for_root(training_set)
+        print "selected " + str(category_for_current_node) + " for current node. "\
+        "it's parent: " + self.get_node_string(parent_node)
 
         current_node = Node(category_for_current_node, parent_node, training_set)
 
@@ -37,11 +39,13 @@ class Problem:
             self.decision_tree.set_root(current_node)
 
         self.decision_tree.add_node(current_node)
+        print "\ndas tree:"
+        self.decision_tree.print_me()
 
         # remove the current node's category from the training data
-        self.training_set.remove_category(category_for_current_node, training_set)
+        #reduced_training_set = self.training_set.get_training_set_with_category_removed(category_for_current_node, training_set)
 
-        partitions = self.get_training_set_partitions_by_category(category_for_current_node, training_set)
+        partitions = self.get_training_set_partitions_by_attribute(category_for_current_node, training_set)
         attributes = self.training_set.get_unique_attributes_for_category(category_for_current_node, training_set)
         for attribute in attributes:
             self.create_decision_tree(partitions[attribute], current_node)
@@ -49,15 +53,31 @@ class Problem:
         self.decision_tree.print_me()
         return copy.deepcopy(self.decision_tree)
 
-    def get_training_set_partitions_by_category(self, category, training_set):
+    def get_node_string(self, node):
+        if node == None:
+            return 'none'
+        else:
+            return node.category
+
+    def get_training_set_partitions_by_attribute(self, category, training_set):
+        print "in make partitions for cat: " + str(category)
+
+        if category == None:
+            return
 
         attributes = self.training_set.get_unique_attributes_for_category(category, training_set)
         partitions = {}
 
+        temp_training_set = copy.deepcopy(training_set)
         for example in training_set:
             for attribute in attributes:
-                partitions[attribute] = self.training_set.get_training_set_for_single_attribute(category, attribute, training_set)
-        print str(partitions)
+                temp_partition = self.training_set.get_training_set_for_single_attribute(category, attribute, training_set)
+                partitions[attribute] = self.training_set.get_training_set_with_category_removed(category, temp_partition)
+
+        for partition in partitions:
+            self.print_training_set(partition)
+            print '',
+
         return partitions
 
     # possibly useless
