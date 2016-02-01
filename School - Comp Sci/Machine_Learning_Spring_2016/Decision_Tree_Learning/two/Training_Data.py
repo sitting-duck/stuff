@@ -251,7 +251,6 @@ class Training_Data:
     def is_homogeneous(self, training_set):
 
         class_types = self.get_set_of_unique_class_types(training_set)
-        print "num class types: " + str(len(class_types))
         if len(class_types) > 1:
             return False
         else:

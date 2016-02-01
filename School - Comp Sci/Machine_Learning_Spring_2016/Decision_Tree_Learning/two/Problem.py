@@ -37,6 +37,7 @@ class Problem:
         category_for_current_node = self.get_best_category_for_root(training_set)
         print "selected " + str(category_for_current_node) + " for current node. "\
         "it's parent: " + self.get_node_string(parent_node)
+        assert category_for_current_node != None, 'the fuck dude?'
 
         current_node = Node(category_for_current_node, parent_node, training_set)
 
@@ -127,13 +128,16 @@ class Problem:
     def calculate_information_gain_for_category(self, category, parent_entropy, training_set):
         training_set_for_category_entropy = self.calculate_entropy_for_category(category, training_set)
         information_gain = self.prec(parent_entropy) - self.prec(training_set_for_category_entropy)
-        return self.prec(information_gain)
+        print 'cat: ' + category + ' ig: ' + str(self.prec(parent_entropy)) + ' - ' + str(self.prec(training_set_for_category_entropy))
+
+        return self.prec(self.abs(information_gain))
 
     # information gain is a metric to measure the amount of information gained if we split the tree at this category
     def calculate_information_gain_for_category_for_undefined_root(self, category, training_set):
         training_set_entropy = self.calculate_entropy_for_training_set(training_set)
         information_gain = self.calculate_information_gain_for_category(category, training_set_entropy, training_set)
-        return self.prec(information_gain)
+
+        return self.prec(self.abs(information_gain))
 
     def calculate_entropy_for_training_set(self, training_set):
 
@@ -145,7 +149,7 @@ class Problem:
             num_current_type = self.training_set.get_number_of_training_examples_of_class_type(class_types[i], training_set)
             Pi = self.prec(num_current_type / num_training_examples)
             sum -= self.prec(Pi)*(self.prec(math.log(Pi, 2)))
-        return self.prec(sum, 3)
+        return self.prec(self.abs(sum), 3)
 
     def calculate_entropy_for_category(self, category, training_set):
 
@@ -157,7 +161,7 @@ class Problem:
             Pi = self.prec(num_current_attribute / num_training_examples)
             Hi = self.calculate_entropy_for_attribute(category, attribute, training_set)
             sum += self.prec( Pi * Hi)
-        return sum
+        return self.prec(self.abs(sum))
 
     def calculate_entropy_for_attribute(self, category, attribute, training_set):
         sum = 0
@@ -177,7 +181,9 @@ class Problem:
                 sum -= self.prec(Pi) * self.prec(math.log(Pi, 2))
             sum = self.prec(sum, 3)
 
-        return self.prec(sum, 3)
+        if sum < 0:
+            return 0
+        return self.prec(self.abs(sum), 3)
 
     def get_categories(self):
         return self.training_set.get_categories()
@@ -197,3 +203,9 @@ class Problem:
 
     def prec(self, number, precision = 3):
         return round(Decimal(number), precision)
+
+    def abs(self, value):
+        if value < 0:
+            return -value
+        else:
+            return value
