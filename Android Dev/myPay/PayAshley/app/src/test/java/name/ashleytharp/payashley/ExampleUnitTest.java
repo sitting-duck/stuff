@@ -1,4 +1,4 @@
-package name.ashleytharp.mypay;
+package name.ashleytharp.payashley;
 
 import org.junit.Test;
 

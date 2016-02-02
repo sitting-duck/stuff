@@ -1,4 +1,4 @@
-package name.ashleytharp.mypay;
+package name.ashleytharp.payashley;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

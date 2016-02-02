@@ -1,4 +1,4 @@
-package name.ashleytharp.mypay;
+package name.ashleytharp.payashley;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
