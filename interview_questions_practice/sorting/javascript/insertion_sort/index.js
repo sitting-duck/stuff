@@ -23,7 +23,7 @@
     var original_set = [];
 
 //populate the original set with 10 random numbers between 1 and 10
-    for(var i = 0, highest_random_number = 10; i < highest_random_number; i++){
+    for(var i = 0, highest_random_number = 9; i < highest_random_number; i++){
         original_set.push(Math.round(Math.random() * highest_random_number))
     }
 
@@ -50,7 +50,7 @@
         
          */
         var current_index;
-        for(var frontier_index = 0; frontier_index < input_set.length(); frontier_index++){
+        for(var frontier_index = 0; frontier_index < input_set.length; frontier_index++){
 
             console.log(temp_set);
 
@@ -59,22 +59,32 @@
             // until we are at the beginning of the set, swap the offending item down until it is where it belongs
             while(current_index > 0 && temp_set[current_index - 1] > temp_set[current_index]){
                 console.log("\tswap(" + temp_set[current_index - 1].toString() + ", " + temp_set[current_index].toString() + ")");
+
+                temp_set = swap(temp_set, current_index - 1, current_index);
+                current_index -= 1
             }
 
         }
 
-        return [];
+        return temp_set;
 
     }
 
     function swap(input_set, first_index, second_index){
-        //todo:derp
+        var temp_set = deepcopy(input_set);
+        first_item = temp_set[first_index];
+        second_item = temp_set[second_index];
+
+        temp_set[first_index] = second_item;
+        temp_set[second_index] = first_item;
+
+        return temp_set;
     }
 
     function deepcopy(input_set){
         var temp_set = [];
 
-        for(var i = 0; i < input_set.length(); i++){
+        for(var i = 0; i < input_set.length; i++){
 
             temp_set.push(input_set[i]);
 
