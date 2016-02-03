@@ -15,13 +15,8 @@ import com.corduro.paymobilesdk.CorduroPayMobile;
 import com.corduro.paymobilesdk.ICorduroPayMobileCallback;
 import com.corduro.paymobilesdk.utils.RequestStatus;
 
-
-//this is a handle to Corduro PayMobile API that is stored in the .aar file you imported into your project
 import static com.corduro.corduropaymobilesdkdemoapp.CorduroPayMobileSDK.corduroPayMobileController;
 
-//any Activity that calls any PayMobile function MUST implement the ICorduroPayMobileCallback interface.
-//this essentially means that your Activity will be forced to implement a function called onRequestComplete() 
-//where you can do any handling you desire with the results from your call to the Corduro server.
 public class CorduroLoginActivity extends Activity implements ICorduroPayMobileCallback {
 
 	//textboxes
@@ -31,12 +26,9 @@ public class CorduroLoginActivity extends Activity implements ICorduroPayMobileC
 	//progress spinner
 	private ProgressBar spinner = null;
 
-	//entry point for this Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		//sets up all the GUI elements
 		setContentView(R.layout.activity_corduro_login);
 
 		spinner = getSpinnerView();
@@ -47,8 +39,6 @@ public class CorduroLoginActivity extends Activity implements ICorduroPayMobileC
 	 */
 	public void onClickLoginButton(View view){
 
-		//this is a CorduroPayMobile API call where you pass the necessary data to the Corduro server
-		//and request to login to the Corduro network.  This is necessary for security purposes to open a session.
 		corduroPayMobileController.login(
 				getApplicationName(),							   //your application name
 				getApplicationVersion(),							//your app version
