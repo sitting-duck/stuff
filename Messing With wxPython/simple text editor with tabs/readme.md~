@@ -2,6 +2,6 @@ This is a simple text editor written in wx python that features tabs and comes w
 
 Hovering over the menu items will yeild a description at the bottom of the text editor
 
-![screencap](https://github.com/sitting-duck/stuff/tree/master/Messing%20With%20wxPython/simple%20text%20editor%20with%20tabs/screencap.png)
+![screencap](https://github.com/sitting-duck/stuff/tree/master/Messing%20With%20wxPython/simple%20text%20editor%20with%20tabs/screencap.jpg)
 
 
