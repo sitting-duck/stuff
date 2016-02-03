@@ -2,7 +2,7 @@
 Corduro Demos
 
 	Example REGEX Testing:
-		[EXAMPLE](https://github.com/sitting-duck/stuff/blob/master/Java%20Dev/REGEX%20Practice/src/REGEXPracticeTests.java)
+		https://github.com/sitting-duck/stuff/blob/master/Java%20Dev/REGEX%20Practice/src/REGEXPracticeTests.java
 
 	Disclaimor: 
 		Any comments made about code quality are not disparaging of any development done by the developers at Corduro. I am referring to problems caused by
@@ -38,7 +38,7 @@ Corduro Demos
 	
 
 	Example Demo App Tutorial:
-		[EXAMPLE](https://github.com/sitting-duck/stuff/blob/master/Android%20Dev/Corduro%20Demo%20App/app/src/main/java/com/corduro/corduropaymobilesdkdemoapp/login/CorduroLoginActivity.java)
+		https://github.com/sitting-duck/stuff/blob/master/Android%20Dev/Corduro%20Demo%20App/app/src/main/java/com/corduro/corduropaymobilesdkdemoapp/login/CorduroLoginActivity.java
 
 	Description: 
 		I made a modified code example of what my demo app was like to show the basic idea of the demo app that I wrote.  In this way I can respect the NDA but
@@ -49,9 +49,9 @@ Corduro Demos
 Parasol Demo:
 
 	Abstract:
-		[ABSTRACT](https://parasol.tamu.edu/people/atharp/project.php)
+		https://parasol.tamu.edu/people/atharp/project.php
 	Paper:
-		[PAPER](https://parasol.tamu.edu/people/atharp/rp.pdf)
+		https://parasol.tamu.edu/people/atharp/rp.pdf
 
 	Results: Decreased computation time with no noticable decrease in quality of results.
 
