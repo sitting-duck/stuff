@@ -1,0 +1,40 @@
+
+Corduro Demos
+
+	Example REGEX Testing:
+		https://github.com/sitting-duck/stuff/blob/master/Java%20Dev/REGEX%20Practice/src/REGEXPracticeTests.java
+
+	Disclaimor: 
+		Any comments made about code quality are not disparaging of any development done by the developers at Corduro. I am referring to problems caused by
+		outsourcing development to a third party company.
+
+	Description:
+		I wrote these tests to inform the developer that the client side GUI had broken because of changes on the backend.  
+		After a request a the server would respond with some JSON which is pretty much just text.  The client app would have to convert this JSON into 
+		usable objects.  While we did use GSON to serialize and deserialize JSON objects/text, a bunch of attributes were still jammed into a long string 
+		called "Description". The bad thing about this is that an extra step is needed every time to get attributes inside this description.  Another bad 
+		thing about this was that every time in the app a credit card number was needed some variation of a text parsing function for "getCreditCardNumber" was 		rewritten (if it was even encapsulated in a fuction) The other bad thing about this is that GSON won't thrown an exception if needed about these 			attributes inside the description because as far as it's concerned, it's just text.
+
+		There was a class called WalletItem.  Conceptually, there are two types of wallet items, bank accounts and credit cards.
+		So one would think that the logical thing to do would be to create classes BankAccount and CreditCard that extend WalletItem.
+		Well, for whatever reason, that didn't happen, so instead of doing that an attribute called description was added
+		to WalletItem which contained information such as WalletItem type and and everything specific to that type. The implications of this were, 
+		bad, because that meant I had to write different functions for each different WalletItem type.  
+
+		I was faced with the decision of refactoring the entire app after finishing the SDK, or, just wrapping the thing in tests to make sure it didn't break 
+		in the mean time until I had time to fix it later.
+
+		Since I didn't have the authority to change anything on the backend, nor did I have the authority to force an update, I wrote some 
+		REGEX into some modular little funcions for fetching these attributes with exceptions that would be thrown in case these attributes were not found.
+		Since there was always the possibility that someone in the future may change the way these attributes are stored in the object, or change the way
+		the description is made on the backend I made these tests that would loudly inform the developer that something needs to be fixed pronto.
+
+	
+	Example Demo App Tutorial:
+		https://github.com/sitting-duck/stuff/blob/master/Android%20Dev/Corduro%20Demo%20App/app/src/main/java/com/corduro/corduropaymobilesdkdemoapp/login/CorduroLoginActivity.java
+
+	Description: 
+		I made a modified code example of what my demo app was like to show the basic idea of the demo app that I wrote.  In this way I can respect the NDA but
+		also basically show that I wrote an app that other developers can look at to see how to use the Corduro SDK. 
+
+		This page just shows how one would use the CurdoroSDK object to login to the Corduro network.
