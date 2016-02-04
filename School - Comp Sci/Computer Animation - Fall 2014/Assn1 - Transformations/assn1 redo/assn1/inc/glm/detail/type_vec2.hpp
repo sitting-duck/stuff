@@ -309,7 +309,7 @@ namespace detail
 }//namespace glm
 
 #ifndef GLM_EXTERNAL_TEMPLATE
-#include "type_vec2.inl"
+//#include "type_vec2.inl"
 #endif//GLM_EXTERNAL_TEMPLATE
 
 #endif//glm_core_type_gentype2
