@@ -150,7 +150,7 @@ class Training_Data:
         return (attribute, class_type_frequency)
 
     def get_number_of_training_examples_for_attribute(self, category, attribute, training_set):
-        return len(self.get_training_set_for_single_attribute(category, attribute, training_set))
+        return len(self.get_training_set_for_single_attribute(category, attribute, training_set)) - 1
 
     def get_training_set_for_single_attribute(self, category, attribute, training_set):
         reduced_training_set = []

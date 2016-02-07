@@ -174,11 +174,17 @@ class Problem:
 
         sum = 0
         attributes = self.training_set.get_unique_attributes_for_category(category, training_set)
+
         for attribute in attributes:
             num_current_attribute = self.training_set.get_number_of_training_examples_for_attribute(category, attribute, training_set)
             num_training_examples = self.training_set.get_number_training_examples(training_set)
+
             Pi = self.prec(num_current_attribute / num_training_examples)
             Hi = self.calculate_entropy_for_attribute(category, attribute, training_set)
+
+            if(Debug.level >= 4):
+                 Debug.log('(', self.prec(Pi), ')(', self.prec(Hi), ')', '+')
+
             sum += self.prec( Pi * Hi)
         return self.prec(self.abs(sum))
 

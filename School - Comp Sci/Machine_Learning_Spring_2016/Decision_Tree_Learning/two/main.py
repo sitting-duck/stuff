@@ -121,7 +121,7 @@ def test_calculate_information_gain_for_category_for_undefined_root(problem):
     training_set = problem.get_training_set()
     categories = problem.training_set.get_category_names(training_set)
     expecteds = [0.246, 0.029, 0.151, 0.048]
-    error = 0.2
+    error = 0.005
 
     for i in range(0, len(categories)):
         actual = problem.calculate_information_gain_for_category_for_undefined_root(categories[i], training_set)
@@ -146,7 +146,7 @@ def test_calculate_entropy_for_attribute(problem):
     categories = ['Humidity', 'Humidity', 'Wind', 'Wind']
     attributes = ['h', 'n', 'w', 's']
     expecteds = [.985, .591, .811, 1]
-    error = 0
+    error = 0.005
 
     for i in range(0, len(categories)):
         actual = problem.calculate_entropy_for_attribute(categories[i], attributes[i], training_set)
@@ -173,7 +173,7 @@ def test_calculate_entropy_for_category(problem):
 
     #categories = problem.training_set.get_category_names()
     #expecteds = [.694, .911, .789, .892]
-    #error = 0.2
+    #error = 0.005
 
     #for i in range(0, len(categories)):
     #    actual = problem.calculate_entropy_for_category(categories[i], training_set)
