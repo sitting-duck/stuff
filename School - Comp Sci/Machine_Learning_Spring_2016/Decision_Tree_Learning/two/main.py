@@ -4,6 +4,7 @@ __author__ = 'ashley tharp'
 
 import copy
 from Problem import Problem
+from Decision_Tree import Decision_Tree
 
 def main():
 
@@ -17,6 +18,7 @@ def main():
 def run_tests(problem):
     run_training_set_tests(problem)
     run_problem_tests(problem)
+    run_decision_tree_tests(problem)
     run_curiosity_tests()
 
 def run_problem_tests(problem):
@@ -30,6 +32,8 @@ def run_problem_tests(problem):
     test_get_training_set_partitions_by_attribute(problem)
     test_get_node_string(problem)
 
+def run_decision_tree_tests(problem):
+    test_get_child_nodes_of(problem)
 
 def run_training_set_tests(problem):
 
@@ -583,6 +587,43 @@ def test_get_node_string(problem):
     some_category_expected = 'some category'
     some_category_actual = problem.get_node_string(test_parent_node_some_category)
     assert some_category_expected == some_category_actual, 'get_node_string() is broken. expected: %s got: %s' % (some_category_expected, some_category_actual)
+    
+# DECISION TREE TESTS
+
+def test_get_child_nodes_of(problem):
+
+    # test tree
+    test_tree = Decision_Tree()
+
+    #make nodes for test tree
+    root = Node('root', 0, None, [])
+    test_tree.add_node(root)
+
+    # level 1
+    expected_child_nodes = []
+    child1 = Node('child1', 0, root, [])
+    child2 = Node('child2', 0, root, [])
+    child3 = Node('child3', 0, root, [])
+    expected_child_nodes.append(child1)
+    expected_child_nodes.append(child2)
+    expected_child_nodes.append(child3)
+    test_tree.add_node(child1)
+    test_tree.add_node(child2)
+    test_tree.add_node(child3)
+
+    test_tree.print_me()
+    #problem.decision_tree.print_me()
+
+    # so now when we test this function on the root node we should get child 1, 2, and 3 back
+    actual_child_nodes_of_root = test_tree.get_child_nodes_of(root)
+
+    print(str(actual_child_nodes_of_root))
+
+    # this set is not necessarily guaranteed to be ordered, so we check to make sure that every child node is accounted for
+    # by using contains()
+    for expected in expected_child_nodes:
+        assert actual_child_nodes_of_root.__contains__(expected) == True, 'get_child_nodes_of() is broken. expected: %s but it was not returned' % str(expected.category)
+
 
 if __name__ == '__main__':
     main()

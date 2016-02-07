@@ -3,16 +3,6 @@ from Training_Data import Training_Data
 
 class Node:
 
-    category = ''
-
-    parent = None
-
-    training_set = Training_Data()
-
-    conditional_entropy = 0.00
-
-    is_leaf = False
-
     #add is leaf default param
 
     def __init__(self, category, conditional_entropy, parent, training_set, is_leaf = False):

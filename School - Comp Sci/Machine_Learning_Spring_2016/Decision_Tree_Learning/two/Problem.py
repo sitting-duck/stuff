@@ -50,6 +50,8 @@ class Problem:
             Debug.log('das tree:')
             self.decision_tree.print_me()
 
+        #if Debug.level == 0:
+        #    self.decision_tree.print_level_order()
 
         # remove the current node's category from the training data
         #reduced_training_set = self.training_set.get_training_set_with_category_removed(category_for_current_node, training_set)

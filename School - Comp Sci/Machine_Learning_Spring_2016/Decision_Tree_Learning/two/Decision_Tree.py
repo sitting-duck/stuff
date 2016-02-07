@@ -4,12 +4,9 @@ from Node import Node
 
 class Decision_Tree:
 
-    root = None
-
-    nodes = []
-
     def __init__(self):
-        pass
+         self.root = None
+         self.nodes = []
 
     def has_root(self):
         return self.root != None
@@ -40,3 +37,37 @@ class Decision_Tree:
         for node in self.nodes:
             node.print_me()
         print ''
+
+    def print_level_order(self):
+
+        current_level = []
+        current_level.append(self.root)
+
+        print self.root.category
+
+        while len(current_level) > 0:
+            current_node = current_level[0]
+            del current_level[0]
+
+            # for every node in this tree
+            for i in range(0, len(self.nodes)):
+                #if it's parent is the current node add it to the current level
+                if self.nodes[i].parent == None:
+                    continue
+                if self.nodes[i].parent.category == current_node.category:
+                    current_level.append(self.nodes[i])
+
+            # now that we've got the level, print the level
+            for item in current_level:
+                print " " + item.category + " ",
+            print ""
+
+    def get_child_nodes_of(self, current_node):
+        child_nodes = []
+
+        for i in range(0, len(self.nodes)):
+            if self.nodes[i].parent == current_node.category:
+                child_nodes.append(self.nodes[i])
+
+        return child_nodes
+
