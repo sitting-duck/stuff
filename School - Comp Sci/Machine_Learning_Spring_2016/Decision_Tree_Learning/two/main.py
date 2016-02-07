@@ -579,7 +579,7 @@ def test_get_node_string(problem):
     none_actual = problem.get_node_string(test_parent_node_None)
     assert none_expected == none_actual, 'get_node_string() is broken. expected: %s got: %s' % (none_expected, none_actual)
 
-    test_parent_node_some_category = Node('some category', None, training_set)
+    test_parent_node_some_category = Node('some category', 0.00, None, training_set)
     some_category_expected = 'some category'
     some_category_actual = problem.get_node_string(test_parent_node_some_category)
     assert some_category_expected == some_category_actual, 'get_node_string() is broken. expected: %s got: %s' % (some_category_expected, some_category_actual)

@@ -31,14 +31,15 @@ class Problem:
         if( self.append_leaf_node_to_tree_and_exit_if_homogenous(parent_node, training_set) ):
             return
 
-        category_for_current_node = self.get_best_category_for_root(training_set)
+        category_for_current_node = self.get_best_category_for_node(training_set, parent_node)
+        conditional_entropy_for_current_node = self.calculate_entropy_for_category(category_for_current_node, training_set)
 
         if(Debug.level >= 1):
             Debug.log('selected', category_for_current_node, 'for current node.', "it's parent:", self.get_node_string(parent_node))
 
         assert category_for_current_node != None, 'the fuck dude? None is not a category!'
 
-        current_node = Node(category_for_current_node, parent_node, training_set)
+        current_node = Node(category_for_current_node, conditional_entropy_for_current_node, parent_node, training_set)
 
         if self.decision_tree.has_root() == False:
             self.decision_tree.set_root(current_node)
@@ -70,7 +71,7 @@ class Problem:
 
         if was_homogenous:
             type = self.training_set.get_set_of_unique_class_types(training_set)
-            new_node = Node(str(type[0]), parent_node, training_set)
+            new_node = Node(str(type[0]), parent_node.conditional_entropy, parent_node, training_set)
             self.decision_tree.add_node(new_node)
             return True
         else:
@@ -130,12 +131,18 @@ class Problem:
                 current_best_category = category
         return current_best_category
 
-    def get_best_category_for_node(self, parent_entropy, training_set):
+    def get_best_category_for_node(self, training_set, parent_node = None):
         current_best_information_gain = 0
         current_best_category  = None
+
+        #if the root hasn't been defined we calculate best category for root
+        if(parent_node == None):
+            return self.get_best_category_for_root(training_set)
+
         categories = self.training_set.get_category_names(training_set)
         for category in categories:
-            current_information_gain = self.calculate_information_gain_for_category(category, parent_entropy, training_set)
+
+            current_information_gain = self.calculate_information_gain_for_category(category, parent_node.conditional_entropy, training_set)
             if current_information_gain > current_best_information_gain:
                 current_best_information_gain = current_information_gain
                 current_best_category = category
