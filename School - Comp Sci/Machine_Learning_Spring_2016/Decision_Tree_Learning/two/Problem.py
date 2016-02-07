@@ -7,6 +7,7 @@ import math
 from Training_Data import Training_Data
 from Decision_Tree import Decision_Tree
 from Node import Node
+from Debug import Debug
 
 class Problem:
 
@@ -25,8 +26,11 @@ class Problem:
             return self.decision_tree
 
         was_it = self.training_set.is_homogeneous(training_set)
-        print "homo? " + str(was_it)
-        self.print_training_set(training_set)
+
+        if(Debug.level >= 3):
+            Debug.log('homo?', was_it)
+            self.print_training_set(training_set)
+
         if was_it:
             type = self.training_set.get_set_of_unique_class_types(training_set)
             new_node = Node(str(type[0]), parent_node, training_set)
@@ -35,9 +39,11 @@ class Problem:
 
 
         category_for_current_node = self.get_best_category_for_root(training_set)
-        print "selected " + str(category_for_current_node) + " for current node. "\
-        "it's parent: " + self.get_node_string(parent_node)
-        assert category_for_current_node != None, 'the fuck dude?'
+
+        if(Debug.level >= 1):
+            Debug.log('selected', category_for_current_node, 'for current node.', "it's parent:", self.get_node_string(parent_node))
+
+        assert category_for_current_node != None, 'the fuck dude? None is not a category!'
 
         current_node = Node(category_for_current_node, parent_node, training_set)
 
@@ -45,8 +51,11 @@ class Problem:
             self.decision_tree.set_root(current_node)
 
         self.decision_tree.add_node(current_node)
-        print "\ndas tree:"
-        self.decision_tree.print_me()
+
+        if Debug.level >= 3:
+            Debug.log('das tree:')
+            self.decision_tree.print_me()
+
 
         # remove the current node's category from the training data
         #reduced_training_set = self.training_set.get_training_set_with_category_removed(category_for_current_node, training_set)
@@ -56,7 +65,6 @@ class Problem:
         for attribute in attributes:
             self.create_decision_tree(partitions[attribute], current_node)
 
-        self.decision_tree.print_me()
         return copy.deepcopy(self.decision_tree)
 
     def get_node_string(self, node):
@@ -66,7 +74,6 @@ class Problem:
             return node.category
 
     def get_training_set_partitions_by_attribute(self, category, training_set):
-        print "in make partitions for cat: " + str(category)
 
         if category == None:
             return
@@ -128,7 +135,9 @@ class Problem:
     def calculate_information_gain_for_category(self, category, parent_entropy, training_set):
         training_set_for_category_entropy = self.calculate_entropy_for_category(category, training_set)
         information_gain = self.prec(parent_entropy) - self.prec(training_set_for_category_entropy)
-        print 'cat: ' + category + ' ig: ' + str(self.prec(parent_entropy)) + ' - ' + str(self.prec(training_set_for_category_entropy))
+
+        if(Debug.level >= 1):
+            Debug.log('cat:', category, 'ig:', self.prec(parent_entropy), '-', self.prec(training_set_for_category_entropy), '=', self.abs(information_gain))
 
         return self.prec(self.abs(information_gain))
 
