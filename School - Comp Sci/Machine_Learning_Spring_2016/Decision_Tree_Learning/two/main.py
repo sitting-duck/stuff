@@ -617,13 +617,20 @@ def test_get_child_nodes_of(problem):
     # so now when we test this function on the root node we should get child 1, 2, and 3 back
     actual_child_nodes_of_root = test_tree.get_child_nodes_of(root)
 
-    print(str(actual_child_nodes_of_root))
+    # print("actual: " + str(actual_child_nodes_of_root))
+    for item in actual_child_nodes_of_root:
+        print item.category + " ",
 
-    # this set is not necessarily guaranteed to be ordered, so we check to make sure that every child node is accounted for
-    # by using contains()
+    # check that each expected child is actually returned by the function
+    # this will throw an exception if we do not break out of the loop when we found the proper child
     for expected in expected_child_nodes:
-        assert actual_child_nodes_of_root.__contains__(expected) == True, 'get_child_nodes_of() is broken. expected: %s but it was not returned' % str(expected.category)
-
+        for actual in actual_child_nodes_of_root:
+            if actual.category == expected.category:
+                # we found the expected child node
+                break
+        else:
+            # we did not find the expected child node
+            assert actual_child_nodes_of_root.__contains__(expected) == True, 'get_child_nodes_of() is broken. expected: %s but it was not returned' % str(expected.category)
 
 if __name__ == '__main__':
     main()

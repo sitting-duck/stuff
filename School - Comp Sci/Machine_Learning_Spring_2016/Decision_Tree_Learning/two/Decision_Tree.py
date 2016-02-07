@@ -15,6 +15,8 @@ class Decision_Tree:
         self.root = node
 
     def add_node(self, new_node):
+        if len(self.nodes) == 0:
+            self.set_root(new_node)
         self.nodes.append(copy.deepcopy(new_node))
 
     def get_num_nodes(self):
@@ -66,7 +68,11 @@ class Decision_Tree:
         child_nodes = []
 
         for i in range(0, len(self.nodes)):
-            if self.nodes[i].parent == current_node.category:
+
+            if self.nodes[i].parent == None:
+                continue
+
+            if self.nodes[i].parent.category == current_node.category:
                 child_nodes.append(self.nodes[i])
 
         return child_nodes
