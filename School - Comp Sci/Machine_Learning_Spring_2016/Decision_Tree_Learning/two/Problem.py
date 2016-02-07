@@ -22,21 +22,14 @@ class Problem:
 
     def create_decision_tree(self, training_set, parent_node = None):
 
+        print "\n\n"
+
         if len(training_set) == 0:
             return self.decision_tree
 
-        was_it = self.training_set.is_homogeneous(training_set)
-
-        if(Debug.level >= 3):
-            Debug.log('homo?', was_it)
-            self.print_training_set(training_set)
-
-        if was_it:
-            type = self.training_set.get_set_of_unique_class_types(training_set)
-            new_node = Node(str(type[0]), parent_node, training_set)
-            self.decision_tree.add_node(new_node)
-            return self.decision_tree
-
+        # if we have reached a leaf node, exit this recursive thread
+        if( self.append_leaf_node_to_tree_and_exit_if_homogenous(parent_node, training_set) ):
+            return
 
         category_for_current_node = self.get_best_category_for_root(training_set)
 
@@ -67,6 +60,22 @@ class Problem:
 
         return copy.deepcopy(self.decision_tree)
 
+    #returns true if we've reached a leaf node and it's time to bail out of this recursive thread
+    def append_leaf_node_to_tree_and_exit_if_homogenous(self, parent_node, training_set):
+        was_homogenous = self.training_set.is_homogeneous(training_set)
+
+        if(Debug.level >= 3):
+            Debug.log('homo?', was_homogenous)
+            self.print_training_set(training_set)
+
+        if was_homogenous:
+            type = self.training_set.get_set_of_unique_class_types(training_set)
+            new_node = Node(str(type[0]), parent_node, training_set)
+            self.decision_tree.add_node(new_node)
+            return True
+        else:
+            return False
+
     def get_node_string(self, node):
         if node == None:
             return 'none'
@@ -88,9 +97,10 @@ class Problem:
 
                 partitions[attribute] = self.training_set.get_training_set_with_category_removed(category, temp_partition)
 
-        for partition in partitions:
-            self.print_training_set(partition)
-            print '',
+
+        if Debug.level >= 4:
+            for partition in partitions:
+                Debug.log(partition[0], partition[1])
 
         return partitions
 

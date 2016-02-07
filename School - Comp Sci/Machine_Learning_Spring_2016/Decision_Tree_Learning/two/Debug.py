@@ -11,6 +11,8 @@ class Debug(object):
 
     # level 3 prints out all of the above and whether each iteration of the partitioning of the training set is homogenous
 
+    #level 4 prints out all the separated partitions
+
     @staticmethod
     def log(*arguments):
         for argument in arguments:
