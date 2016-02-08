@@ -110,21 +110,6 @@ class Problem:
             training_set_partitions[type] = current_training_subset
         return training_set_partitions
 
-    #calculate the information gain for all the categories and store which one
-    #has the highest information gain
-    #def get_best_category_for_root(self, training_set):
-    #    current_best_information_gain = 0
-    #    current_best_category  = None
-    #    categories = Training_Data.get_category_names(training_set)
-
-    #    for category in categories:
-    #        current_information_gain = Info_Math.calculate_information_gain_for_category_for_undefined_root(category, self.get_training_set())
-    #        if current_information_gain > current_best_information_gain:
-    #            current_best_information_gain = current_information_gain
-    #            current_best_category = category
-
-    #    return current_best_category
-
     def get_best_category_for_node(self, training_set, parent_node = None):
         current_best_information_gain = 0
         current_best_category  = None
@@ -141,4 +126,5 @@ class Problem:
         return current_best_category
 
     def get_training_set(self):
+        return self.training_set.get_training_set()
         return self.training_set.get_training_set()

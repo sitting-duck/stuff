@@ -28,15 +28,6 @@ class Info_Math:
 
         return Info_Math.prec(Info_Math.abs(information_gain))
 
-    # information gain is a metric to measure the amount of information gained if we split the tree at this category
-    # I think this function many be useless actually
-    #@staticmethod
-    #def calculate_information_gain_for_category_for_undefined_root(category, training_set):
-    #    training_set_entropy = Info_Math.calculate_entropy_for_training_set(training_set)
-    #    information_gain = Info_Math.calculate_information_gain_for_category(category, training_set_entropy, training_set)
-
-    #    return Info_Math.prec(Info_Math.abs(information_gain))
-
     @staticmethod
     def calculate_entropy_for_category(category, training_set):
 
@@ -47,40 +38,46 @@ class Info_Math:
             num_current_attribute = float(Training_Data.get_number_of_training_examples_for_attribute(category, attribute, training_set))
             num_training_examples = float(Training_Data.get_number_training_examples(training_set))
 
-            Pi = Info_Math.prec(num_current_attribute / num_training_examples)
-            Hi = Info_Math.calculate_entropy_for_attribute(category, attribute, training_set)
-
             if(Debug.level == 4):
                  Debug.log('(', Info_Math.prec(Pi), ')(', Info_Math.prec(Hi), ')', '+')
 
-            if(Debug.level >= 6):
-                 Debug.log('(', num_current_attribute, '/', num_training_examples, ')log(', num_current_attribute, '/', num_training_examples, ')', '+')
+            if(Debug.level == 6):
+                 Debug.log('(', num_current_attribute, '/', num_training_examples, ')', '*')
+
+            Pi = Info_Math.prec(num_current_attribute / num_training_examples)
+            Hi = Info_Math.calculate_entropy_for_attribute(category, attribute, training_set)
 
             sum += Info_Math.prec( Pi * Hi)
         return Info_Math.prec(Info_Math.abs(sum))
 
     @staticmethod
     def calculate_entropy_for_attribute(category, attribute, training_set):
-        sum = 0
+        term = 0
+
+        reduced_training_set = Training_Data.get_training_set_for_single_attribute(category, attribute, training_set)
+        class_type_frequency = Training_Data.get_class_type_frequency_dictionary(reduced_training_set, training_set)
 
         # get all the training examples where this attribute is present for the given category
-        reduced_training_set = Training_Data.get_training_set_for_single_attribute(category, attribute, training_set)
-        class_type_frequency = Training_Data.get_class_type_frequency_dictionary(reduced_training_set)
-        num_training_examples_for_current_attribute = Training_Data.get_number_training_examples(reduced_training_set)
         for current_type, num_current_type in class_type_frequency.iteritems():
+            reduced_training_set = Training_Data.get_training_set_for_single_attribute(category, attribute, training_set)
 
-            Pi = Info_Math.prec(num_current_type)/Info_Math.prec(num_training_examples_for_current_attribute)
+            num_training_examples_for_current_attribute = Training_Data.get_number_training_examples(reduced_training_set)
+
+            if(Debug.level >= 6):
+                 Debug.log('\t\t\t\t\t\t((-', num_current_type, '/', num_training_examples_for_current_attribute, ')log(', num_current_type, '/', num_training_examples_for_current_attribute, ')', '+')
+
+            Pi = Info_Math.prec(float(num_current_type))/Info_Math.prec(float(num_training_examples_for_current_attribute))
 
             # for the edge case of log(0) (convenient loophole for computing entropy)
             if Pi == 0.0:
-                sum = 0.0
+                term = 0.0
             else:
-                sum -= Info_Math.prec(Pi) * Info_Math.prec(math.log(Pi, 2))
-            sum = Info_Math.prec(sum, 3)
+                term = Info_Math.prec(Pi) * Info_Math.prec(math.log(Pi, 2))
+                term = Info_Math.prec(term, 3)
 
-        if sum < 0:
-            return 0
-        return Info_Math.prec(Info_Math.abs(sum), 3)
+        #if term < 0:
+        #    return 0
+        return Info_Math.prec(Info_Math.abs(term), 3)
 
     @staticmethod
     def calculate_entropy_for_training_set(training_set):

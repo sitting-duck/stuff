@@ -12,7 +12,7 @@ class Training_Data:
     #this holds the set of all categories and their attributes and the counts for each
     # attribute of each class type for the initial training set gathered from file
     # you can think of this dictionary as the initial snapshot of the categories for the training data
-    # as we travel down the tree, categoris will be removed from the training set local to a particular node
+    # as we travel down the tree, categories will be removed from the training set local to a particular node
     # so it is useful to have the initial entire category set stored here
     categories = {}
 
@@ -111,13 +111,21 @@ class Training_Data:
 
     # simply returns the count of training examples classified as each class type
     @staticmethod
-    def get_class_type_frequency_dictionary(training_set):
-        class_types = Training_Data.get_set_of_unique_class_types(training_set)
+    def get_class_type_frequency_dictionary(reduced_training_set, training_set = []):
 
         proportion_to_class_type_for_training_set = {}
-        for type in class_types:
-            num_of_type = Training_Data.get_number_of_training_examples_of_class_type(type, training_set)
-            proportion_to_class_type_for_training_set[type] = num_of_type
+
+        if training_set != []:
+            class_types = Training_Data.get_set_of_unique_class_types(training_set)
+            for type in class_types:
+                num_of_type = Training_Data.get_number_of_training_examples_of_class_type(type, reduced_training_set)
+                proportion_to_class_type_for_training_set[type] = num_of_type
+        else:
+            class_types = Training_Data.get_set_of_unique_class_types(training_set)
+            for type in class_types:
+                num_of_type = Training_Data.get_number_of_training_examples_of_class_type(type, training_set)
+                proportion_to_class_type_for_training_set[type] = num_of_type
+
         return proportion_to_class_type_for_training_set
 
     @staticmethod
