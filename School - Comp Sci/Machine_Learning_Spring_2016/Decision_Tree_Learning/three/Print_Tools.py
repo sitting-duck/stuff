@@ -102,3 +102,7 @@ class Print_Tools:
 
         return current_highest_num_children
 
+    @staticmethod
+    def print_training_set(training_set):
+        for row in training_set:
+            print str(row)

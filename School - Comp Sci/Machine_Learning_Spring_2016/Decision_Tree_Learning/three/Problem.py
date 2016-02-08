@@ -219,10 +219,6 @@ class Problem:
     def get_training_set(self):
         return self.training_set.get_training_set()
 
-    def print_training_set(self, training_set):
-        for row in training_set:
-            print str(row)
-
     def get_class_type_frequency_dictionary(self, training_set):
         return self.training_set.get_class_type_frequency_dictionary(training_set)
 
