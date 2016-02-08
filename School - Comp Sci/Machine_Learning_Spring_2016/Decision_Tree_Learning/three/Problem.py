@@ -5,6 +5,7 @@ import copy
 from decimal import *
 import math
 
+from Info_Math import Info_Math
 from Print_Tools import Print_Tools
 from Training_Data import Training_Data
 from Decision_Tree import Decision_Tree
@@ -37,7 +38,7 @@ class Problem:
         conditional_entropy_for_current_node = self.calculate_entropy_for_category(category_for_current_node, training_set)
 
         if(Debug.level >= 1):
-            Debug.log('selected', category_for_current_node, 'for current node.', "it's parent:", self.get_node_string(parent_node))
+            Debug.log('selected', category_for_current_node, 'for current node.', "it's parent:", Decision_Tree.get_node_string(parent_node))
 
         assert category_for_current_node != None, 'the fuck dude? None is not a category!'
 
@@ -77,12 +78,6 @@ class Problem:
             return True
         else:
             return False
-
-    def get_node_string(self, node):
-        if node == None:
-            return 'none'
-        else:
-            return node.category
 
     def get_training_set_partitions_by_attribute(self, category, training_set):
 
@@ -152,19 +147,19 @@ class Problem:
     # information gain is a metric to measure the amount of information gained if we split the tree at this category
     def calculate_information_gain_for_category(self, category, parent_entropy, training_set):
         training_set_for_category_entropy = self.calculate_entropy_for_category(category, training_set)
-        information_gain = self.prec(parent_entropy) - self.prec(training_set_for_category_entropy)
+        information_gain = Info_Math.prec(parent_entropy) - Info_Math.prec(training_set_for_category_entropy)
 
         if(Debug.level >= 1):
-            Debug.log('cat:', category, 'ig:', self.prec(parent_entropy), '-', self.prec(training_set_for_category_entropy), '=', self.abs(information_gain))
+            Debug.log('cat:', category, 'ig:', Info_Math.prec(parent_entropy), '-', Info_Math.prec(training_set_for_category_entropy), '=', Info_Math.abs(information_gain))
 
-        return self.prec(self.abs(information_gain))
+        return Info_Math.prec(Info_Math.abs(information_gain))
 
     # information gain is a metric to measure the amount of information gained if we split the tree at this category
     def calculate_information_gain_for_category_for_undefined_root(self, category, training_set):
         training_set_entropy = self.calculate_entropy_for_training_set(training_set)
         information_gain = self.calculate_information_gain_for_category(category, training_set_entropy, training_set)
 
-        return self.prec(self.abs(information_gain))
+        return Info_Math.prec(Info_Math.abs(information_gain))
 
     def calculate_entropy_for_training_set(self, training_set):
 
@@ -174,9 +169,9 @@ class Problem:
         num_class_types = len(class_types)
         for i in range(0, num_class_types):
             num_current_type = self.training_set.get_number_of_training_examples_of_class_type(class_types[i], training_set)
-            Pi = self.prec(num_current_type / num_training_examples)
-            sum -= self.prec(Pi)*(self.prec(math.log(Pi, 2)))
-        return self.prec(self.abs(sum), 3)
+            Pi = Info_Math.prec(num_current_type / num_training_examples)
+            sum -= Info_Math.prec(Pi)*(Info_Math.prec(math.log(Pi, 2)))
+        return Info_Math.prec(Info_Math.abs(sum), 3)
 
     def calculate_entropy_for_category(self, category, training_set):
 
@@ -187,14 +182,14 @@ class Problem:
             num_current_attribute = self.training_set.get_number_of_training_examples_for_attribute(category, attribute, training_set)
             num_training_examples = self.training_set.get_number_training_examples(training_set)
 
-            Pi = self.prec(num_current_attribute / num_training_examples)
+            Pi = Info_Math.prec(num_current_attribute / num_training_examples)
             Hi = self.calculate_entropy_for_attribute(category, attribute, training_set)
 
             if(Debug.level >= 4):
-                 Debug.log('(', self.prec(Pi), ')(', self.prec(Hi), ')', '+')
+                 Debug.log('(', Info_Math.prec(Pi), ')(', Info_Math.prec(Hi), ')', '+')
 
-            sum += self.prec( Pi * Hi)
-        return self.prec(self.abs(sum))
+            sum += Info_Math.prec( Pi * Hi)
+        return Info_Math.prec(Info_Math.abs(sum))
 
     def calculate_entropy_for_attribute(self, category, attribute, training_set):
         sum = 0
@@ -205,18 +200,18 @@ class Problem:
         num_training_examples_for_current_attribute = self.training_set.get_number_training_examples(reduced_training_set)
         for current_type, num_current_type in class_type_frequency.iteritems():
 
-            Pi = self.prec(num_current_type)/self.prec(num_training_examples_for_current_attribute)
+            Pi = Info_Math.prec(num_current_type)/Info_Math.prec(num_training_examples_for_current_attribute)
 
             # for the edge case of log(0) (convenient loophole for computing entropy)
             if Pi == 0.0:
                 sum = 0.0
             else:
-                sum -= self.prec(Pi) * self.prec(math.log(Pi, 2))
-            sum = self.prec(sum, 3)
+                sum -= Info_Math.prec(Pi) * Info_Math.prec(math.log(Pi, 2))
+            sum = Info_Math.prec(sum, 3)
 
         if sum < 0:
             return 0
-        return self.prec(self.abs(sum), 3)
+        return Info_Math.prec(Info_Math.abs(sum), 3)
 
     def get_categories(self):
         return self.training_set.get_categories()
@@ -233,12 +228,3 @@ class Problem:
 
     def get_class_type_frequency_dictionary_for_category(self, category, training_set):
         return self.training_set.get_class_type_frequency_dictionary_for_category(category, training_set)
-
-    def prec(self, number, precision = 3):
-        return round(Decimal(number), precision)
-
-    def abs(self, value):
-        if value < 0:
-            return -value
-        else:
-            return value

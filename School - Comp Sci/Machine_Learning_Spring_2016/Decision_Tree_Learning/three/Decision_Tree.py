@@ -98,3 +98,10 @@ class Decision_Tree:
                 current_deepest_level = current_node_level_depth
 
         return current_deepest_level
+
+    @staticmethod
+    def get_node_string(node):
+        if node == None:
+            return 'none'
+        else:
+            return node.category
