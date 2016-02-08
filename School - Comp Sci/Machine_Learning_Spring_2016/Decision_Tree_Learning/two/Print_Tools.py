@@ -33,7 +33,11 @@ class Print_Tools:
         tab_string = Print_Tools.get_tab_string(node_depth)
 
         for child in children:
-            print tab_string + current_node.category + " = " + child.parent_branch_attr + " :"
+            if child.is_leaf == True:
+                print tab_string + current_node.category + " = " + child.parent_branch_attr + " : " + child.category
+            else:
+                print tab_string + current_node.category + " = " + child.parent_branch_attr + " :"
+
             Print_Tools.print_in_order(decision_tree, training_set, child, node_depth + 1)
 
     @staticmethod
