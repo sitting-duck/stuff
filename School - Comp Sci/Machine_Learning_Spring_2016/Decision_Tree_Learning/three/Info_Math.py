@@ -70,9 +70,9 @@ class Info_Math:
 
             # for the edge case of log(0) (convenient loophole for computing entropy)
             if Pi == 0.0:
-                term = 0.0
+                term -= 0.0
             else:
-                term = Info_Math.prec(Pi) * Info_Math.prec(math.log(Pi, 2))
+                term -= Info_Math.prec(Pi) * Info_Math.prec(math.log(Pi, 2))
                 term = Info_Math.prec(term, 3)
 
         #if term < 0:
