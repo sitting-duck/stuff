@@ -30,6 +30,10 @@ class Training_Data:
             tokenized_data_buffer = []
             data_from_file = fileinput.input()
             for line in data_from_file:
+
+                if line == "\n": #skip blank lines
+                    continue
+
                 tokens = line.split()
                 tokenized_data_buffer.append(tokens)
             return tokenized_data_buffer
