@@ -263,7 +263,7 @@ class Training_Data:
 
         # + 1 is added here because the first column is reserved for training example id, thus
         # incrementing the column of every category
-        return Training_Data.get_category_names(training_set).index(category) + 1
+        return Training_Data.get_category_names(training_set).index(category)
 
     @staticmethod
     def get_class_column_for_training_set(training_set):

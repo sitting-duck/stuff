@@ -64,9 +64,9 @@ class Problem:
     def append_leaf_node_to_tree_and_exit_if_homogenous(self, parent_node, training_set, parent_branch_attr):
         was_homogenous = self.training_set.is_homogeneous(training_set)
 
-        if(Debug.level >= 5):
+        if(Debug.level == 5):
             Debug.log('homo?', was_homogenous)
-            self.print_training_set(training_set)
+            Print_Tools.print_training_set(training_set)
 
         if was_homogenous:
             type = self.training_set.get_set_of_unique_class_types(training_set)
@@ -112,47 +112,33 @@ class Problem:
 
     #calculate the information gain for all the categories and store which one
     #has the highest information gain
-    def get_best_category_for_root(self, training_set):
-        current_best_information_gain = 0
-        current_best_category  = None
-        categories = Training_Data.get_category_names(training_set)
+    #def get_best_category_for_root(self, training_set):
+    #    current_best_information_gain = 0
+    #    current_best_category  = None
+    #    categories = Training_Data.get_category_names(training_set)
 
-        for category in categories:
-            current_information_gain = Info_Math.calculate_information_gain_for_category_for_undefined_root(category, self.get_training_set())
-            if current_information_gain > current_best_information_gain:
-                current_best_information_gain = current_information_gain
-                current_best_category = category
+    #    for category in categories:
+    #        current_information_gain = Info_Math.calculate_information_gain_for_category_for_undefined_root(category, self.get_training_set())
+    #        if current_information_gain > current_best_information_gain:
+    #            current_best_information_gain = current_information_gain
+    #            current_best_category = category
 
-        return current_best_category
+    #    return current_best_category
 
     def get_best_category_for_node(self, training_set, parent_node = None):
         current_best_information_gain = 0
         current_best_category  = None
 
-        #if the root hasn't been defined we calculate best category for root
-        if(parent_node == None):
-            return self.get_best_category_for_root(training_set)
-
         categories = self.training_set.get_category_names(training_set)
 
         for category in categories:
 
-            current_information_gain = self.calculate_information_gain_for_category(category, parent_node.conditional_entropy, training_set)
+            current_information_gain = Info_Math.calculate_information_gain_for_category(category, parent_node, training_set)
             if current_information_gain > current_best_information_gain:
                 current_best_information_gain = current_information_gain
                 current_best_category = category
 
         return current_best_category
-
-    # information gain is a metric to measure the amount of information gained if we split the tree at this category
-    def calculate_information_gain_for_category(self, category, parent_entropy, training_set):
-        training_set_for_category_entropy = Info_Math.calculate_entropy_for_category(category, training_set)
-        information_gain = Info_Math.prec(parent_entropy) - Info_Math.prec(training_set_for_category_entropy)
-
-        if(Debug.level >= 1):
-            Debug.log('cat:', category, 'ig:', Info_Math.prec(parent_entropy), '-', Info_Math.prec(training_set_for_category_entropy), '=', Info_Math.abs(information_gain))
-
-        return Info_Math.prec(Info_Math.abs(information_gain))
 
     def get_training_set(self):
         return self.training_set.get_training_set()

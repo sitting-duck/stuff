@@ -13,11 +13,29 @@ class Info_Math:
 
 # information gain is a metric to measure the amount of information gained if we split the tree at this category
     @staticmethod
-    def calculate_information_gain_for_category_for_undefined_root(category, training_set):
-        training_set_entropy = Info_Math.calculate_entropy_for_training_set(training_set)
-        information_gain = Info_Math.calculate_information_gain_for_category(category, training_set_entropy, training_set)
+    def calculate_information_gain_for_category(category, parent_node, training_set):
+        training_set_for_category_entropy = Info_Math.calculate_entropy_for_category(category, training_set)
+
+        if parent_node == None:
+            parent_entropy = Info_Math.calculate_entropy_for_training_set(training_set)
+        else:
+            parent_entropy = parent_node.conditional_entropy
+
+        information_gain = Info_Math.prec(parent_entropy) - Info_Math.prec(training_set_for_category_entropy)
+
+        if(Debug.level >= 1):
+            Debug.log('cat:', category, 'ig:', Info_Math.prec(parent_entropy), '-', Info_Math.prec(training_set_for_category_entropy), '=', Info_Math.abs(information_gain))
 
         return Info_Math.prec(Info_Math.abs(information_gain))
+
+    # information gain is a metric to measure the amount of information gained if we split the tree at this category
+    # I think this function many be useless actually
+    #@staticmethod
+    #def calculate_information_gain_for_category_for_undefined_root(category, training_set):
+    #    training_set_entropy = Info_Math.calculate_entropy_for_training_set(training_set)
+    #    information_gain = Info_Math.calculate_information_gain_for_category(category, training_set_entropy, training_set)
+
+    #    return Info_Math.prec(Info_Math.abs(information_gain))
 
     @staticmethod
     def calculate_entropy_for_category(category, training_set):
@@ -26,14 +44,17 @@ class Info_Math:
         attributes = Training_Data.get_unique_attributes_for_category(category, training_set)
 
         for attribute in attributes:
-            num_current_attribute = Training_Data.get_number_of_training_examples_for_attribute(category, attribute, training_set)
-            num_training_examples = Training_Data.get_number_training_examples(training_set)
+            num_current_attribute = float(Training_Data.get_number_of_training_examples_for_attribute(category, attribute, training_set))
+            num_training_examples = float(Training_Data.get_number_training_examples(training_set))
 
             Pi = Info_Math.prec(num_current_attribute / num_training_examples)
             Hi = Info_Math.calculate_entropy_for_attribute(category, attribute, training_set)
 
-            if(Debug.level >= 4):
+            if(Debug.level == 4):
                  Debug.log('(', Info_Math.prec(Pi), ')(', Info_Math.prec(Hi), ')', '+')
+
+            if(Debug.level >= 6):
+                 Debug.log('(', num_current_attribute, '/', num_training_examples, ')log(', num_current_attribute, '/', num_training_examples, ')', '+')
 
             sum += Info_Math.prec( Pi * Hi)
         return Info_Math.prec(Info_Math.abs(sum))
@@ -65,11 +86,12 @@ class Info_Math:
     def calculate_entropy_for_training_set(training_set):
 
         sum = 0
-        num_training_examples = Training_Data.get_number_training_examples(training_set)
+        num_training_examples = float(Training_Data.get_number_training_examples(training_set))
         class_types = Training_Data.get_set_of_unique_class_types(training_set)
         num_class_types = len(class_types)
         for i in range(0, num_class_types):
-            num_current_type = Training_Data.get_number_of_training_examples_of_class_type(class_types[i], training_set)
+            num_current_type = float(Training_Data.get_number_of_training_examples_of_class_type(class_types[i], training_set))
+
             Pi = Info_Math.prec(num_current_type / num_training_examples)
             sum -= Info_Math.prec(Pi)*(Info_Math.prec(math.log(Pi, 2)))
         return Info_Math.prec(Info_Math.abs(sum), 3)
