@@ -4,6 +4,8 @@ from __future__ import division
 import copy
 from decimal import *
 import math
+
+from Print_Tools import Print_Tools
 from Training_Data import Training_Data
 from Decision_Tree import Decision_Tree
 from Node import Node
@@ -47,7 +49,7 @@ class Problem:
             self.decision_tree.print_me()
 
         if Debug.level == 0:
-            self.decision_tree.print_level_order()
+            Print_Tools.print_level_order(self.decision_tree, self.training_set)
 
         partitions = self.get_training_set_partitions_by_attribute(category_for_current_node, training_set)
         attributes = self.training_set.get_unique_attributes_for_category(category_for_current_node, training_set)
@@ -66,7 +68,7 @@ class Problem:
 
         if was_homogenous:
             type = self.training_set.get_set_of_unique_class_types(training_set)
-            new_node = Node(str(type[0]), parent_node.conditional_entropy, parent_node, training_set)
+            new_node = Node(str(type[0]), parent_node.conditional_entropy, parent_node, training_set, True)
             self.decision_tree.add_node(new_node)
             return True
         else:

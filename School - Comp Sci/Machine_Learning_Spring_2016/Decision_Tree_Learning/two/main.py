@@ -5,6 +5,7 @@ __author__ = 'ashley tharp'
 import copy
 from Problem import Problem
 from Decision_Tree import Decision_Tree
+from Print_Tools import  Print_Tools
 
 def main():
 
@@ -16,7 +17,7 @@ def main():
     run_tests(problem)
 
     print "final tree: "
-    problem.decision_tree.print_level_order()
+    Print_Tools.print_level_order(problem.decision_tree, problem.training_set)
 
 def run_tests(problem):
     run_training_set_tests(problem)

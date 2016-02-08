@@ -5,6 +5,36 @@ class Print_Tools:
 
     def __init_(self):
         pass
+    
+    @staticmethod
+    def print_level_order(decision_tree, training_set):
+
+        deepest_level = decision_tree.get_deepest_level()
+
+        for i in range(0, deepest_level + 1):
+            current_level = decision_tree.get_nodes_at_level(i)
+
+            for node in current_level:
+
+                #if training_set.has_category(node.category, training_set.training_set):
+                if node.is_leaf == False:
+                    attributes = training_set.get_unique_attributes_for_category(node.category, decision_tree.root.training_set)
+
+                    for attr in attributes:
+
+                        tab_string = Print_Tools.get_tab_string(decision_tree.get_level_depth_for_node(node))
+                        print tab_string + node.category + " = " + attr + " :"
+
+
+    @staticmethod
+    def get_tab_string(level_num):
+
+        tab_string = ""
+
+        for i in range(0, level_num):
+            tab_string += '\t'
+
+        return tab_string
 
     @staticmethod
     def get_line_length(decision_tree, training_set):

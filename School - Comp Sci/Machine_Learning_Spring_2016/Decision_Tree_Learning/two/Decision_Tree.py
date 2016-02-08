@@ -1,6 +1,7 @@
 import copy
 
 from Node import Node
+from Training_Data import Training_Data
 
 class Decision_Tree:
 
@@ -40,7 +41,7 @@ class Decision_Tree:
             node.print_me()
         print ''
 
-    def print_level_order(self):
+    def print_level_order_deprecated(self):
 
         deepest_level = self.get_deepest_level()
 
