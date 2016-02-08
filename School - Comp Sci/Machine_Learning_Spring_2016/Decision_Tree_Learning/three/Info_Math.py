@@ -14,7 +14,7 @@ class Info_Math:
 # information gain is a metric to measure the amount of information gained if we split the tree at this category
     @staticmethod
     def calculate_information_gain_for_category(category, parent_node, training_set):
-        training_set_for_category_entropy = Info_Math.calculate_entropy_for_category(category, training_set)
+        training_set_for_category_entropy = Info_Math.calculate_conditional_entropy_for_category(category, training_set)
 
         if parent_node == None:
             parent_entropy = Info_Math.calculate_entropy_for_training_set(training_set)
@@ -29,7 +29,7 @@ class Info_Math:
         return Info_Math.prec(Info_Math.abs(information_gain))
 
     @staticmethod
-    def calculate_entropy_for_category(category, training_set):
+    def calculate_conditional_entropy_for_category(category, training_set):
 
         sum = 0
         attributes = Training_Data.get_unique_attributes_for_category(category, training_set)
@@ -45,13 +45,13 @@ class Info_Math:
                  Debug.log('(', num_current_attribute, '/', num_training_examples, ')', '*')
 
             Pi = Info_Math.prec(num_current_attribute / num_training_examples)
-            Hi = Info_Math.calculate_entropy_for_attribute(category, attribute, training_set)
+            Hi = Info_Math.calculate_conditional_entropy_for_attribute(category, attribute, training_set)
 
             sum += Info_Math.prec( Pi * Hi)
         return Info_Math.prec(Info_Math.abs(sum))
 
     @staticmethod
-    def calculate_entropy_for_attribute(category, attribute, training_set):
+    def calculate_conditional_entropy_for_attribute(category, attribute, training_set):
         term = 0
 
         reduced_training_set = Training_Data.get_training_set_for_single_attribute(category, attribute, training_set)
@@ -75,8 +75,6 @@ class Info_Math:
                 term -= Info_Math.prec(Pi) * Info_Math.prec(math.log(Pi, 2))
                 term = Info_Math.prec(term, 3)
 
-        #if term < 0:
-        #    return 0
         return Info_Math.prec(Info_Math.abs(term), 3)
 
     @staticmethod

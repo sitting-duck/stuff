@@ -158,7 +158,7 @@ class Tests:
         error = 0.005
 
         for i in range(0, len(categories)):
-            actual = problem.calculate_entropy_for_attribute(categories[i], attributes[i], training_set)
+            actual = problem.calculate_conditional_entropy_for_attribute(categories[i], attributes[i], training_set)
             assert Tests.within_acceptable_error(expecteds[i], actual, error), 'calculate_entropy_for_attribute() is broken. expected: %s got: %s' % (expecteds[i], actual)
 
     @staticmethod
@@ -171,10 +171,10 @@ class Tests:
 
         training_set = problem.get_training_set()
 
-        outlook_actual_entropy = problem.calculate_entropy_for_category('Outlook', training_set)
-        temp_actual_entropy = problem.calculate_entropy_for_category('Temp', training_set)
-        humidity_actual_entropy = problem.calculate_entropy_for_category('Humidity', training_set)
-        wind_actual_entropy = problem.calculate_entropy_for_category('Wind', training_set)
+        outlook_actual_entropy = problem.calculate_conditional_entropy_for_category('Outlook', training_set)
+        temp_actual_entropy = problem.calculate_conditional_entropy_for_category('Temp', training_set)
+        humidity_actual_entropy = problem.calculate_conditional_entropy_for_category('Humidity', training_set)
+        wind_actual_entropy = problem.calculate_conditional_entropy_for_category('Wind', training_set)
 
         #print "actual outlook: " + str(outlook_actual_entropy)
         #print "actual temp: " + str(temp_actual_entropy)

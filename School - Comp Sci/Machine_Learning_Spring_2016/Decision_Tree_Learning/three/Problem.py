@@ -35,7 +35,7 @@ class Problem:
             return
 
         category_for_current_node = self.get_best_category_for_node(training_set, parent_node)
-        conditional_entropy_for_current_node = Info_Math.calculate_entropy_for_category(category_for_current_node, training_set)
+        conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_category(category_for_current_node, training_set)
 
         if(Debug.level >= 1):
             Debug.log('selected', category_for_current_node, 'for current node.', "it's parent:", Decision_Tree.get_node_string(parent_node))
@@ -122,6 +122,10 @@ class Problem:
             if current_information_gain > current_best_information_gain:
                 current_best_information_gain = current_information_gain
                 current_best_category = category
+
+        #eg.  if all categories had entropy of zero
+        if current_best_category == None:
+            current_best_category = self.get_most_frequent_
 
         return current_best_category
 
