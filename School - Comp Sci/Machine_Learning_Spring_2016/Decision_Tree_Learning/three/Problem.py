@@ -45,8 +45,8 @@ class Problem:
             Debug.log('das tree:')
             self.decision_tree.print_me()
 
-        #if Debug.level == 0:
-        #    Print_Tools.print_in_order(self.decision_tree, self.training_set, self.decision_tree.root)
+        if Debug.level == 0:
+            Print_Tools.print_in_order(self.decision_tree, self.training_set, self.decision_tree.root)
 
         partitions = self.get_training_set_partitions_by_attribute(category_for_current_node, training_set)
         attributes = self.training_set.get_unique_attributes_for_category(category_for_current_node, training_set)
@@ -63,13 +63,16 @@ class Problem:
     def append_leaf_node_to_tree_and_exit_if_homogenous(self, parent_node, training_set, parent_branch_attr):
         was_homogenous = self.training_set.is_homogeneous(training_set)
 
-        if(Debug.level >= 3):
+        if(Debug.level >= 5):
             Debug.log('homo?', was_homogenous)
             self.print_training_set(training_set)
 
         if was_homogenous:
             type = self.training_set.get_set_of_unique_class_types(training_set)
-            new_node = Node(str(type[0]), parent_node.conditional_entropy, parent_node, training_set, True, parent_branch_attr)
+            if parent_node == None:
+                new_node = Node(str(type[0]), None, parent_node, training_set, True, parent_branch_attr)
+            else:
+                new_node = Node(str(type[0]), parent_node.conditional_entropy, parent_node, training_set, True, parent_branch_attr)
             self.decision_tree.add_node(new_node)
             return True
         else:
@@ -97,10 +100,6 @@ class Problem:
                 partitions[attribute] = self.training_set.get_training_set_with_category_removed(category, temp_partition)
 
 
-        if Debug.level >= 4:
-            for partition in partitions:
-                Debug.log(partition[0], partition[1])
-
         return partitions
 
     # possibly useless
@@ -122,11 +121,13 @@ class Problem:
         current_best_information_gain = 0
         current_best_category  = None
         categories = self.training_set.get_category_names(training_set)
+
         for category in categories:
             current_information_gain = self.calculate_information_gain_for_category_for_undefined_root(category, self.get_training_set())
             if current_information_gain > current_best_information_gain:
                 current_best_information_gain = current_information_gain
                 current_best_category = category
+
         return current_best_category
 
     def get_best_category_for_node(self, training_set, parent_node = None):
@@ -138,12 +139,14 @@ class Problem:
             return self.get_best_category_for_root(training_set)
 
         categories = self.training_set.get_category_names(training_set)
+
         for category in categories:
 
             current_information_gain = self.calculate_information_gain_for_category(category, parent_node.conditional_entropy, training_set)
             if current_information_gain > current_best_information_gain:
                 current_best_information_gain = current_information_gain
                 current_best_category = category
+
         return current_best_category
 
     # information gain is a metric to measure the amount of information gained if we split the tree at this category

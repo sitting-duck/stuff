@@ -9,7 +9,11 @@ def main():
     # this is important because the training set will change in size as it is passed through the tree
 
     problem = Problem()
-    Tests.run_tests(problem)
+    #Tests.run_tests(problem)
+
+    training_set = problem.get_training_set()
+
+    problem.create_decision_tree(training_set)
 
     print "final tree: "
     Print_Tools.print_in_order(problem.decision_tree, problem.training_set, problem.decision_tree.root)

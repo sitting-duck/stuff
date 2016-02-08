@@ -196,8 +196,9 @@ class Training_Data:
 
     def get_category_names(self, training_set):
         temp_row = copy.deepcopy(self.get_row(0, training_set))
-        del temp_row[0]
+        #del temp_row[0]
         del temp_row[-1]
+
         return temp_row
 
     def get_class_values_for_training_set(self, training_set):
