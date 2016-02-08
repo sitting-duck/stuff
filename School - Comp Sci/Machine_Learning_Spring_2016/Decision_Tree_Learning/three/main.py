@@ -1,7 +1,7 @@
 
 from Print_Tools import  Print_Tools
 from Problem import Problem
-from Tests import Tests
+from Tests_PlayTennis import Tests_PlayTennis
 
 def main():
 

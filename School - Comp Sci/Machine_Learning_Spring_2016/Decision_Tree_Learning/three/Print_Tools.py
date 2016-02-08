@@ -5,6 +5,38 @@ class Print_Tools:
 
     def __init_(self):
         pass
+
+    @staticmethod
+    def print_in_order(decision_tree, training_set, current_node, node_depth = 0):
+
+        children = decision_tree.get_child_nodes_of(current_node)
+
+        tab_string = Print_Tools.get_tab_string(node_depth)
+
+        for child in children:
+            if child.is_leaf == True:
+                print tab_string + current_node.category + " = " + child.parent_branch_attr + " : " + child.category
+            else:
+                print tab_string + current_node.category + " = " + child.parent_branch_attr + " :"
+
+            Print_Tools.print_in_order(decision_tree, training_set, child, node_depth + 1)
+
+    @staticmethod
+    def get_print_tree(decision_tree, training_set, current_node, node_depth = 0, print_tree_current = ""):
+
+        print_tree = print_tree_current
+
+        children = decision_tree.get_child_nodes_of(current_node)
+
+        tab_string = Print_Tools.get_tab_string(node_depth)
+
+        for child in children:
+            if child.is_leaf == True:
+                print_tree += tab_string + current_node.category + " = " + child.parent_branch_attr + " : " + child.category + '\n'
+            else:
+                print_tree += tab_string + current_node.category + " = " + child.parent_branch_attr + " :" + '\n'
+
+            Print_Tools.get_print_tree(decision_tree, training_set, child, node_depth + 1, print_tree)
     
     @staticmethod
     def print_level_order_deprecated_2(decision_tree, training_set):
@@ -24,21 +56,6 @@ class Print_Tools:
 
                         tab_string = Print_Tools.get_tab_string(decision_tree.get_level_depth_for_node(node))
                         print tab_string + node.category + " = " + attr + " :"
-
-    @staticmethod
-    def print_in_order(decision_tree, training_set, current_node, node_depth = 0):
-
-        children = decision_tree.get_child_nodes_of(current_node)
-
-        tab_string = Print_Tools.get_tab_string(node_depth)
-
-        for child in children:
-            if child.is_leaf == True:
-                print tab_string + current_node.category + " = " + child.parent_branch_attr + " : " + child.category
-            else:
-                print tab_string + current_node.category + " = " + child.parent_branch_attr + " :"
-
-            Print_Tools.print_in_order(decision_tree, training_set, child, node_depth + 1)
 
     @staticmethod
     def get_tab_string(level_num):
