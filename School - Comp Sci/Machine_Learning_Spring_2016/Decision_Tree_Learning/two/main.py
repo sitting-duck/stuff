@@ -34,6 +34,7 @@ def run_problem_tests(problem):
 
 def run_decision_tree_tests(problem):
     test_get_child_nodes_of(problem)
+    test_get_level_depth_for_node(problem)
 
 def run_training_set_tests(problem):
 
@@ -592,34 +593,21 @@ def test_get_node_string(problem):
 
 def test_get_child_nodes_of(problem):
 
-    # test tree
-    test_tree = Decision_Tree()
+    test_tree = create_simple_test_tree()
 
-    #make nodes for test tree
-    root = Node('root', 0, None, [])
-    test_tree.add_node(root)
 
-    # level 1
-    expected_child_nodes = []
-    child1 = Node('child1', 0, root, [])
-    child2 = Node('child2', 0, root, [])
-    child3 = Node('child3', 0, root, [])
-    expected_child_nodes.append(child1)
-    expected_child_nodes.append(child2)
-    expected_child_nodes.append(child3)
-    test_tree.add_node(child1)
-    test_tree.add_node(child2)
-    test_tree.add_node(child3)
 
-    test_tree.print_me()
+    #test_tree.print_me()
     #problem.decision_tree.print_me()
 
     # so now when we test this function on the root node we should get child 1, 2, and 3 back
-    actual_child_nodes_of_root = test_tree.get_child_nodes_of(root)
+    actual_child_nodes_of_root = test_tree.get_child_nodes_of(test_tree.root)
 
     # print("actual: " + str(actual_child_nodes_of_root))
-    for item in actual_child_nodes_of_root:
-        print item.category + " ",
+    #for item in actual_child_nodes_of_root:
+    #    print item.category + " ",
+
+    expected_child_nodes = create_expected_child_nodes_for_root_for_simple_test_tree()
 
     # check that each expected child is actually returned by the function
     # this will throw an exception if we do not break out of the loop when we found the proper child
@@ -630,7 +618,94 @@ def test_get_child_nodes_of(problem):
                 break
         else:
             # we did not find the expected child node
-            assert actual_child_nodes_of_root.__contains__(expected) == True, 'get_child_nodes_of() is broken. expected: %s but it was not returned' % str(expected.category)
+            assert 'get_child_nodes_of() is broken. expected: %s but it was not returned' % str(expected.category)
+
+def test_get_level_depth_for_node(problem):
+
+    #simple test for testing the depth of the root
+    test_tree = create_simple_test_tree()
+
+    expected_root_level = 0
+    root_node = test_tree.get_node_with_category('root')
+    actual_root_level = test_tree.get_level_depth_for_node(root_node)
+    assert(expected_root_level == actual_root_level), 'get_level depth_for_node() is broken. expected %s got %s' % (expected_root_level, actual_root_level)
+
+    # here we're going to test level depth retrieval for lower levels
+    two_level_test_tree = create_two_level_test_tree()
+
+    expected_child1_level = 1
+    child1 = two_level_test_tree.get_node_with_category('child1')
+    actual_child1_level = two_level_test_tree.get_level_depth_for_node(child1)
+    assert expected_child1_level == actual_child1_level, 'get_level depth_for_node() is broken. expected %s got %s' % (expected_child1_level, actual_child1_level)
+
+    # test for child4 on level 2
+    expected_child4_level = 2
+    child4 = two_level_test_tree.get_node_with_category('child4')
+    actual_child4_level = two_level_test_tree.get_level_depth_for_node(child4)
+    assert expected_child4_level == actual_child4_level, 'get_level depth_for_node() is broken. expected %s got %s' % (expected_child4_level, actual_child4_level)
+
+def create_simple_test_tree():
+
+    # test tree
+    test_tree = Decision_Tree()
+
+    #make nodes for test tree
+    root = Node('root', 0, None, [])
+    test_tree.add_node(root)
+
+    # level 1
+
+    child1 = Node('child1', 0, root, [])
+    child2 = Node('child2', 0, root, [])
+    child3 = Node('child3', 0, root, [])
+
+    test_tree.add_node(child1)
+    test_tree.add_node(child2)
+    test_tree.add_node(child3)
+
+    return test_tree
+
+def create_expected_child_nodes_for_root_for_simple_test_tree():
+    expected_child_nodes = []
+    root = Node('root', 0, None, [])
+    child1 = Node('child1', 0, root, [])
+    child2 = Node('child2', 0, root, [])
+    child3 = Node('child3', 0, root, [])
+    expected_child_nodes.append(child1)
+    expected_child_nodes.append(child2)
+    expected_child_nodes.append(child3)
+    return expected_child_nodes
+
+def create_two_level_test_tree():
+
+    # test tree
+    two_level_test_tree = Decision_Tree()
+
+    #make nodes for test tree
+    root = Node('root', 0, None, [])
+    two_level_test_tree.add_node(root)
+
+    # level 1
+
+    child1 = Node('child1', 0, two_level_test_tree.root, [])
+    child2 = Node('child2', 0, two_level_test_tree.root, [])
+    child3 = Node('child3', 0, two_level_test_tree.root, [])
+
+    two_level_test_tree.add_node(child1)
+    two_level_test_tree.add_node(child2)
+    two_level_test_tree.add_node(child3)
+
+    # level 2
+    child3 = two_level_test_tree.get_node_with_category(child3.category)
+    child4 = Node('child4', 0, child3, [])
+    child5 = Node('child5', 0, child3, [])
+    child6 = Node('child6', 0, child3, [])
+
+    two_level_test_tree.add_node(child4)
+    two_level_test_tree.add_node(child5)
+    two_level_test_tree.add_node(child6)
+
+    return two_level_test_tree
 
 if __name__ == '__main__':
     main()
