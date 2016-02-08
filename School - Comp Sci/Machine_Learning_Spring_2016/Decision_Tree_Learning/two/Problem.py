@@ -22,7 +22,7 @@ class Problem:
     def __init__(self):
         pass
 
-    def create_decision_tree(self, training_set, parent_node = None):
+    def create_decision_tree(self, training_set, parent_branch_attr = None, parent_node = None):
 
         print "\n\n"
 
@@ -30,7 +30,7 @@ class Problem:
             return self.decision_tree
 
         # if we have reached a leaf node, exit this recursive thread
-        if( self.append_leaf_node_to_tree_and_exit_if_homogenous(parent_node, training_set) ):
+        if( self.append_leaf_node_to_tree_and_exit_if_homogenous(parent_node, training_set, parent_branch_attr) ):
             return
 
         category_for_current_node = self.get_best_category_for_node(training_set, parent_node)
@@ -41,25 +41,26 @@ class Problem:
 
         assert category_for_current_node != None, 'the fuck dude? None is not a category!'
 
-        current_node = Node(category_for_current_node, conditional_entropy_for_current_node, parent_node, training_set)
-        self.decision_tree.add_node(current_node)
-
         if Debug.level >= 3:
             Debug.log('das tree:')
             self.decision_tree.print_me()
 
-        if Debug.level == 0:
-            Print_Tools.print_level_order(self.decision_tree, self.training_set)
+        #if Debug.level == 0:
+        #    Print_Tools.print_in_order(self.decision_tree, self.training_set, self.decision_tree.root)
 
         partitions = self.get_training_set_partitions_by_attribute(category_for_current_node, training_set)
         attributes = self.training_set.get_unique_attributes_for_category(category_for_current_node, training_set)
+
+        current_node = Node(category_for_current_node, conditional_entropy_for_current_node, parent_node, training_set, False, parent_branch_attr)
+        self.decision_tree.add_node(current_node)
+
         for attribute in attributes:
-            self.create_decision_tree(partitions[attribute], current_node)
+            self.create_decision_tree(partitions[attribute], attribute, current_node)
 
         return copy.deepcopy(self.decision_tree)
 
     #returns true if we've reached a leaf node and it's time to bail out of this recursive thread
-    def append_leaf_node_to_tree_and_exit_if_homogenous(self, parent_node, training_set):
+    def append_leaf_node_to_tree_and_exit_if_homogenous(self, parent_node, training_set, parent_branch_attr):
         was_homogenous = self.training_set.is_homogeneous(training_set)
 
         if(Debug.level >= 3):
@@ -68,7 +69,7 @@ class Problem:
 
         if was_homogenous:
             type = self.training_set.get_set_of_unique_class_types(training_set)
-            new_node = Node(str(type[0]), parent_node.conditional_entropy, parent_node, training_set, True)
+            new_node = Node(str(type[0]), parent_node.conditional_entropy, parent_node, training_set, True, parent_branch_attr)
             self.decision_tree.add_node(new_node)
             return True
         else:

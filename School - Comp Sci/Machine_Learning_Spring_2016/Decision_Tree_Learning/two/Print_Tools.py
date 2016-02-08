@@ -7,7 +7,7 @@ class Print_Tools:
         pass
     
     @staticmethod
-    def print_level_order(decision_tree, training_set):
+    def print_level_order_deprecated_2(decision_tree, training_set):
 
         deepest_level = decision_tree.get_deepest_level()
 
@@ -25,6 +25,16 @@ class Print_Tools:
                         tab_string = Print_Tools.get_tab_string(decision_tree.get_level_depth_for_node(node))
                         print tab_string + node.category + " = " + attr + " :"
 
+    @staticmethod
+    def print_in_order(decision_tree, training_set, current_node, node_depth = 0):
+
+        children = decision_tree.get_child_nodes_of(current_node)
+
+        tab_string = Print_Tools.get_tab_string(node_depth)
+
+        for child in children:
+            print tab_string + current_node.category + " = " + child.parent_branch_attr + " :"
+            Print_Tools.print_in_order(decision_tree, training_set, child, node_depth + 1)
 
     @staticmethod
     def get_tab_string(level_num):

@@ -17,7 +17,7 @@ def main():
     run_tests(problem)
 
     print "final tree: "
-    Print_Tools.print_level_order(problem.decision_tree, problem.training_set)
+    Print_Tools.print_in_order(problem.decision_tree, problem.training_set, problem.decision_tree.root)
 
 def run_tests(problem):
     run_training_set_tests(problem)
@@ -589,7 +589,7 @@ def test_get_node_string(problem):
     none_actual = problem.get_node_string(test_parent_node_None)
     assert none_expected == none_actual, 'get_node_string() is broken. expected: %s got: %s' % (none_expected, none_actual)
 
-    test_parent_node_some_category = Node('some category', 0.00, None, training_set)
+    test_parent_node_some_category = Node('some category', 0.00, None, training_set, False, None)
     some_category_expected = 'some category'
     some_category_actual = problem.get_node_string(test_parent_node_some_category)
     assert some_category_expected == some_category_actual, 'get_node_string() is broken. expected: %s got: %s' % (some_category_expected, some_category_actual)
@@ -662,14 +662,14 @@ def create_simple_test_tree():
     test_tree = Decision_Tree()
 
     #make nodes for test tree
-    root = Node('root', 0, None, [])
+    root = Node('root', 0, None, [], False, None)
     test_tree.add_node(root)
 
     # level 1
 
-    child1 = Node('child1', 0, root, [])
-    child2 = Node('child2', 0, root, [])
-    child3 = Node('child3', 0, root, [])
+    child1 = Node('child1', 0, root, [], False, None)
+    child2 = Node('child2', 0, root, [], False, None)
+    child3 = Node('child3', 0, root, [], False, None)
 
     test_tree.add_node(child1)
     test_tree.add_node(child2)
@@ -679,10 +679,10 @@ def create_simple_test_tree():
 
 def create_expected_child_nodes_for_root_for_simple_test_tree():
     expected_child_nodes = []
-    root = Node('root', 0, None, [])
-    child1 = Node('child1', 0, root, [])
-    child2 = Node('child2', 0, root, [])
-    child3 = Node('child3', 0, root, [])
+    root = Node('root', 0, None, [], False, None)
+    child1 = Node('child1', 0, root, [], False, None)
+    child2 = Node('child2', 0, root, [], False, None)
+    child3 = Node('child3', 0, root, [], False, None)
     expected_child_nodes.append(child1)
     expected_child_nodes.append(child2)
     expected_child_nodes.append(child3)
@@ -694,14 +694,14 @@ def create_two_level_test_tree():
     two_level_test_tree = Decision_Tree()
 
     #make nodes for test tree
-    root = Node('root', 0, None, [])
+    root = Node('root', 0, None, [], False, None)
     two_level_test_tree.add_node(root)
 
     # level 1
 
-    child1 = Node('child1', 0, two_level_test_tree.root, [])
-    child2 = Node('child2', 0, two_level_test_tree.root, [])
-    child3 = Node('child3', 0, two_level_test_tree.root, [])
+    child1 = Node('child1', 0, two_level_test_tree.root, [], False, None)
+    child2 = Node('child2', 0, two_level_test_tree.root, [], False, None)
+    child3 = Node('child3', 0, two_level_test_tree.root, [], False, None)
 
     two_level_test_tree.add_node(child1)
     two_level_test_tree.add_node(child2)
@@ -709,9 +709,9 @@ def create_two_level_test_tree():
 
     # level 2
     child3 = two_level_test_tree.get_node_with_category(child3.category)
-    child4 = Node('child4', 0, child3, [])
-    child5 = Node('child5', 0, child3, [])
-    child6 = Node('child6', 0, child3, [])
+    child4 = Node('child4', 0, child3, [], False, None)
+    child5 = Node('child5', 0, child3, [], False, None)
+    child6 = Node('child6', 0, child3, [], False, None)
 
     two_level_test_tree.add_node(child4)
     two_level_test_tree.add_node(child5)
