@@ -34,6 +34,9 @@ class Problem:
         if( self.append_leaf_node_to_tree_and_exit_if_homogenous(parent_node, training_set, parent_branch_attr) ):
             return
 
+        if len(Training_Data.get_category_names(training_set)) == 0:
+            return
+
         category_for_current_node = self.get_best_category_for_node(training_set, parent_node)
         conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_category(category_for_current_node, training_set)
 
@@ -119,16 +122,24 @@ class Problem:
         for category in categories:
 
             current_information_gain = Info_Math.calculate_information_gain_for_category(category, parent_node, training_set)
+
+            #if they have the same information gain, take the one that is alphabetically lower
+            if current_information_gain == current_best_information_gain:
+                categories_in_alphabetical_order = sorted((category, current_best_category))
+                current_best_category = categories_in_alphabetical_order[0]
+
+            #if current is better then take current
             if current_information_gain > current_best_information_gain:
                 current_best_information_gain = current_information_gain
                 current_best_category = category
 
         #eg.  if all categories had entropy of zero
-        if current_best_category == None:
-            current_best_category = self.get_most_frequent_
+        #and we have not exhasusted all categories yet
+        if current_best_category == None and len(categories) > 0:
+            categories_in_alphabetical_order = sorted(categories)
+            current_best_category = categories_in_alphabetical_order[0]
 
         return current_best_category
 
     def get_training_set(self):
-        return self.training_set.get_training_set()
         return self.training_set.get_training_set()
