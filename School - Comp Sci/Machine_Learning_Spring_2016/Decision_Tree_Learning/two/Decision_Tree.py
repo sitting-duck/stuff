@@ -87,4 +87,21 @@ class Decision_Tree:
             print node.category + " ",
         print ""
 
+    def get_nodes_at_level(self, level_number):
+        level_nodes = []
 
+        for node in self.nodes:
+            if self.get_level_depth_for_node(node) == level_number:
+                level_nodes.append(node)
+
+        return level_nodes
+
+    def get_deepest_level(self):
+
+        current_deepest_level = 0
+        for node in self.nodes:
+            current_node_level_depth = self.get_level_depth_for_node(node)
+            if current_node_level_depth > current_deepest_level:
+                current_deepest_level = current_node_level_depth
+
+        return current_deepest_level

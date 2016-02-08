@@ -35,6 +35,7 @@ def run_problem_tests(problem):
 def run_decision_tree_tests(problem):
     test_get_child_nodes_of(problem)
     test_get_level_depth_for_node(problem)
+    test_get_deepest_level(problem)
 
 def run_training_set_tests(problem):
 
@@ -642,8 +643,15 @@ def test_get_level_depth_for_node(problem):
     expected_child4_level = 2
     child4 = two_level_test_tree.get_node_with_category('child4')
     actual_child4_level = two_level_test_tree.get_level_depth_for_node(child4)
-    assert expected_child4_level == actual_child4_level, 'get_level depth_for_node() is broken. expected %s got %s' % (expected_child4_level, actual_child4_level)
+    assert expected_child4_level == actual_child4_level, 'get_level_depth_for_node() is broken. expected %s got %s' % (expected_child4_level, actual_child4_level)
 
+def test_get_deepest_level(problem):
+
+    expected = 2
+    two_level_test_tree = create_two_level_test_tree()
+    actual = two_level_test_tree.get_deepest_level()
+    assert expected == actual, 'get_deepest_level() is broken. expected %s got %s' % (expected, actual)
+    
 def create_simple_test_tree():
 
     # test tree
