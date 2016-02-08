@@ -651,7 +651,7 @@ def test_get_deepest_level(problem):
     two_level_test_tree = create_two_level_test_tree()
     actual = two_level_test_tree.get_deepest_level()
     assert expected == actual, 'get_deepest_level() is broken. expected %s got %s' % (expected, actual)
-    
+
 def create_simple_test_tree():
 
     # test tree

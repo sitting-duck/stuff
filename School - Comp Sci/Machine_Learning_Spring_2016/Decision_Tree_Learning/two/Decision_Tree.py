@@ -42,19 +42,11 @@ class Decision_Tree:
 
     def print_level_order(self):
 
-        queue = []
-        queue.append(self.root)
+        deepest_level = self.get_deepest_level()
 
-        print self.root.category
-
-        while len(queue) > 0:
-            current_node = queue[0]
-            del queue[0]
-
-            next_level = self.get_child_nodes_of(current_node)
-            queue.append(next_level)
-            print "\n"
-            self.print_level(next_level)
+        for i in range(0, deepest_level):
+            current_level = self.get_nodes_at_level(i)
+            self.print_level(current_level)
 
     def get_next_level(self, current_node):
         pass
