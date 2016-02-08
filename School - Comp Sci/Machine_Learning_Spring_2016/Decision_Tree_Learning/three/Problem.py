@@ -32,10 +32,10 @@ class Problem:
 
         # if we have reached a leaf node, exit this recursive thread
         if( self.append_leaf_node_to_tree_and_exit_if_homogenous(parent_node, training_set, parent_branch_attr) ):
-            return
+            return self.decision_tree
 
         if len(Training_Data.get_category_names(training_set)) == 0:
-            return
+            return self.decision_tree
 
         category_for_current_node = self.get_best_category_for_node(training_set, parent_node)
         conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_category(category_for_current_node, training_set)
@@ -43,25 +43,19 @@ class Problem:
         if(Debug.level >= 1):
             Debug.log('selected', category_for_current_node, 'for current node.', "it's parent:", Decision_Tree.get_node_string(parent_node))
 
-        assert category_for_current_node != None, 'the fuck dude? None is not a category!'
-
-        if Debug.level >= 3:
-            Debug.log('das tree:')
-            self.decision_tree.print_me()
-
-        if Debug.level == 0:
-            Print_Tools.print_in_order(self.decision_tree, self.training_set, self.decision_tree.root)
+        #assert category_for_current_node != None, 'the fuck dude? None is not a category!'
+        if category_for_current_node == None:
+            return self.decision_tree
 
         partitions = self.get_training_set_partitions_by_attribute(category_for_current_node, training_set)
         attributes = self.training_set.get_unique_attributes_for_category(category_for_current_node, training_set)
 
-        current_node = Node(category_for_current_node, conditional_entropy_for_current_node, parent_node, training_set, False, parent_branch_attr)
-        self.decision_tree.add_node(current_node)
+        current_node = self.add_node_to_tree(category_for_current_node, conditional_entropy_for_current_node, parent_node, training_set, False, parent_branch_attr)
 
         for attribute in attributes:
             self.create_decision_tree(partitions[attribute], attribute, current_node)
 
-        return copy.deepcopy(self.decision_tree)
+        return self.decision_tree
 
     #returns true if we've reached a leaf node and it's time to bail out of this recursive thread
     def append_leaf_node_to_tree_and_exit_if_homogenous(self, parent_node, training_set, parent_branch_attr):
@@ -125,8 +119,7 @@ class Problem:
 
             #if they have the same information gain, take the one that is alphabetically lower
             if current_information_gain == current_best_information_gain:
-                categories_in_alphabetical_order = sorted((category, current_best_category))
-                current_best_category = categories_in_alphabetical_order[0]
+                current_best_category = Training_Data.get_lowest_alpha_category((category, current_best_category))
 
             #if current is better then take current
             if current_information_gain > current_best_information_gain:
@@ -136,10 +129,18 @@ class Problem:
         #eg.  if all categories had entropy of zero
         #and we have not exhasusted all categories yet
         if current_best_category == None and len(categories) > 0:
-            categories_in_alphabetical_order = sorted(categories)
-            current_best_category = categories_in_alphabetical_order[0]
+            current_best_category = Training_Data.get_lowest_alpha_category(categories)
 
         return current_best_category
 
     def get_training_set(self):
         return self.training_set.get_training_set()
+
+    def add_node_to_tree(self, category, conditional_entropy, parent_node, training_set, is_leaf, parent_branch_attr):
+        current_node = Node(category, conditional_entropy, parent_node, training_set, is_leaf, parent_branch_attr)
+        self.decision_tree.add_node(current_node)
+
+        if Debug.level >= 3:
+            Print_Tools.print_in_order(self.decision_tree, self.training_set, self.decision_tree.root)
+
+        return current_node

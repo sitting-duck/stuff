@@ -306,3 +306,8 @@ class Training_Data:
         for row in temp_set:
             del row[index]
         return copy.deepcopy(temp_set)
+
+    @staticmethod
+    def get_lowest_alpha_category(categories):
+        categories_in_alphabetical_order = sorted(categories)
+        return categories_in_alphabetical_order[0]
