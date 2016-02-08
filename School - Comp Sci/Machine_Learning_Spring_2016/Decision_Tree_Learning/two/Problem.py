@@ -40,10 +40,6 @@ class Problem:
         assert category_for_current_node != None, 'the fuck dude? None is not a category!'
 
         current_node = Node(category_for_current_node, conditional_entropy_for_current_node, parent_node, training_set)
-
-        if self.decision_tree.has_root() == False:
-            self.decision_tree.set_root(current_node)
-
         self.decision_tree.add_node(current_node)
 
         if Debug.level >= 3:
@@ -52,9 +48,6 @@ class Problem:
 
         if Debug.level == 0:
             self.decision_tree.print_level_order()
-
-        # remove the current node's category from the training data
-        #reduced_training_set = self.training_set.get_training_set_with_category_removed(category_for_current_node, training_set)
 
         partitions = self.get_training_set_partitions_by_attribute(category_for_current_node, training_set)
         attributes = self.training_set.get_unique_attributes_for_category(category_for_current_node, training_set)

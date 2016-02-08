@@ -15,6 +15,9 @@ def main():
 
     run_tests(problem)
 
+    print "final tree: "
+    problem.decision_tree.print_level_order()
+
 def run_tests(problem):
     run_training_set_tests(problem)
     run_problem_tests(problem)

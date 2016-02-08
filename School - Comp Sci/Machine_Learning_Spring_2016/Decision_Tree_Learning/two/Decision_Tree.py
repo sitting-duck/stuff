@@ -16,7 +16,7 @@ class Decision_Tree:
 
     def add_node(self, new_node):
         if len(self.nodes) == 0:
-            self.set_root(new_node)
+            self.set_root(copy.deepcopy(new_node))
         self.nodes.append(copy.deepcopy(new_node))
 
     def get_num_nodes(self):
@@ -44,7 +44,7 @@ class Decision_Tree:
 
         deepest_level = self.get_deepest_level()
 
-        for i in range(0, deepest_level):
+        for i in range(0, deepest_level + 1):
             current_level = self.get_nodes_at_level(i)
             self.print_level(current_level)
 
