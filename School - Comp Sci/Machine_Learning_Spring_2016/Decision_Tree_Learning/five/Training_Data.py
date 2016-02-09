@@ -198,7 +198,7 @@ class Training_Data:
             return []
 
         index = Training_Data.get_index_of_column_for_category(category, training_set)
-        return Training_Data.get_unique_attribute_names_from_column(index, training_set)
+        return sorted(Training_Data.get_unique_attribute_names_from_column(index, training_set))
 
     # note: this is referring to the actual column data, not just the attribute data.
     # the data is still pretty raw when this function is called
