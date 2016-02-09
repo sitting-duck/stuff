@@ -1,3 +1,5 @@
+import copy
+
 from Tests import Tests
 from Training_Data import Training_Data
 
@@ -12,7 +14,7 @@ class Print_Tools:
     @staticmethod
     def print_in_order(decision_tree, training_set, current_node = None, node_depth = 0):
 
-        if current_node == None:
+        if current_node is None:
             current_node = decision_tree.root
 
         children = decision_tree.get_child_nodes_of(current_node)
@@ -21,8 +23,8 @@ class Print_Tools:
         tab_string = Print_Tools.get_tab_string(node_depth)
 
         for child in children:
-            if child.is_leaf == True:
-                print tab_string + '|' +  current_node.category + " = " + child.parent_branch_attr + " : " + child.category
+            if child.is_leaf is True:
+                print tab_string + '|' + current_node.category + " = " + child.parent_branch_attr + " : " + child.category
             else:
                 print tab_string + '|' + current_node.category + " = " + child.parent_branch_attr + " :"
                 Print_Tools.print_in_order(decision_tree, training_set, child, node_depth + 1)
@@ -41,11 +43,32 @@ class Print_Tools:
         for child in children:
             if child.is_leaf == True:
                 the_string = tab_string + '|' +  current_node.category + " = " + child.parent_branch_attr + " : " + child.category + "\n"
-                assert self.tests.expected_tree[node_depth] == the_string
+                assert Tests.expected_tree[node_depth] == the_string
             else:
                 print tab_string + '|' + current_node.category + " = " + child.parent_branch_attr + " :"
                 Print_Tools.print_in_order(decision_tree, training_set, child, node_depth + 1)
 
+    def get_print_tree(self, decision_tree, training_set, current_node=None, node_depth=0, print_tree_current=[]):
+
+        self.print_tree = copy.deepcopy(print_tree_current)
+
+        if current_node is None:
+            current_node = decision_tree.root
+            # print_tree.append('|' +current_node.category + " = " + "0" + " : " + '\n')
+
+        children = decision_tree.get_child_nodes_of(current_node)
+        children = Print_Tools.sort_by_parent_attr_type(children)
+
+        tab_string = Print_Tools.get_tab_string(node_depth)
+
+        for child in children:
+            if child.is_leaf is True:
+                self.print_tree.append(tab_string + '|' + current_node.category + " = " + child.parent_branch_attr + " : " + child.category + '\n')
+            else:
+                self.print_tree.append(tab_string + '|' + current_node.category + " = " + child.parent_branch_attr + " :" + '\n')
+                # self.get_print_tree(decision_tree, training_set, child, node_depth + 1, print_tree)
+                self.get_print_tree(decision_tree, training_set, child, node_depth + 1, copy.deepcopy(self.print_tree))
+        return self.print_tree
 
     #@staticmethod
     def static_var(varname, value):
@@ -56,13 +79,13 @@ class Print_Tools:
        return decorate
 
     @static_var("print_tree", [])
-    def get_print_tree(self, decision_tree, training_set, current_node = None, node_depth = 0, print_tree_current = []):
+    def get_print_tree_static(self, decision_tree, training_set, current_node = None, node_depth = 0, print_tree_current = []):
 
-        #self.get_print_tree.print_tree = print_tree_current
+        self.get_print_tree.print_tree = print_tree_current
 
-        if current_node == None:
+        if current_node is None:
             current_node = decision_tree.root
-            #print_tree.append('|' +current_node.category + " = " + "0" + " : " + '\n')
+            # print_tree.append('|' +current_node.category + " = " + "0" + " : " + '\n')
 
         children = decision_tree.get_child_nodes_of(current_node)
         children = Print_Tools.sort_by_parent_attr_type(children)
@@ -70,17 +93,17 @@ class Print_Tools:
         tab_string = Print_Tools.get_tab_string(node_depth)
 
         for child in children:
-            if child.is_leaf == True:
+            if child.is_leaf is True:
                 self.get_print_tree.print_tree.append(tab_string + '|' +  current_node.category + " = " + child.parent_branch_attr + " : " + child.category + '\n')
             else:
                 self.get_print_tree.print_tree.append(tab_string + '|' +  current_node.category + " = " + child.parent_branch_attr + " :" + '\n')
-                #self.get_print_tree(decision_tree, training_set, child, node_depth + 1, self.get_print_tree.print_tree)
-                self.get_print_tree(decision_tree, training_set, child, node_depth + 1)
+                # self.get_print_tree(decision_tree, training_set, child, node_depth + 1, self.get_print_tree.print_tree)
+                self.get_print_tree(decision_tree, training_set, child, node_depth + 1, self.get_print_tree.print_tree.print_tree)
         return self.get_print_tree.print_tree
 
-        #else:
-            #print "curr: " + str(print_tree)
-            #return print_tree
+        # else:
+            # print "curr: " + str(print_tree)
+            # return print_tree
 
     def get_print_tree_derp(self, decision_tree, training_set, current_node = None, node_depth = 0, print_tree_current = []):
 
