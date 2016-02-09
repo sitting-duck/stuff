@@ -10,15 +10,38 @@ class Print_Tools:
     def print_in_order(decision_tree, training_set, current_node, node_depth = 0):
 
         children = decision_tree.get_child_nodes_of(current_node)
+        children = Print_Tools.sort_by_parent_attr_type(children)
 
         tab_string = Print_Tools.get_tab_string(node_depth)
 
         for child in children:
             if child.is_leaf == True:
-                print tab_string + current_node.category + " = " + child.parent_branch_attr + " : " + child.category
+                print tab_string + '|' +  current_node.category + " = " + child.parent_branch_attr + " : " + child.category
             else:
-                print tab_string + current_node.category + " = " + child.parent_branch_attr + " :"
+                print tab_string + '|' + current_node.category + " = " + child.parent_branch_attr + " :"
                 Print_Tools.print_in_order(decision_tree, training_set, child, node_depth + 1)
+
+    @staticmethod
+    def sort_by_parent_attr_type(nodes):
+        return sorted(nodes, key=lambda node: node.parent_branch_attr, reverse=False)
+
+    @staticmethod
+    def is_all_leaf_nodes(nodes):
+        if len(nodes) == 0:
+            return False
+
+        for node in nodes:
+            if node.is_leaf == False:
+                return False
+        else:
+            return True
+
+    @staticmethod
+    def sort_if_all_leaf_nodes(nodes):
+        if Print_Tools.is_all_leaf_nodes(nodes):
+            return sorted(nodes)
+        else:
+            return nodes
 
     @staticmethod
     def get_print_tree(decision_tree, training_set, current_node, node_depth = 0, print_tree_current = ""):
@@ -62,7 +85,7 @@ class Print_Tools:
         tab_string = ""
 
         for i in range(0, level_num):
-            tab_string += '\t'
+            tab_string += '|\t'
 
         return tab_string
 
