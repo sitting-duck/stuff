@@ -14,6 +14,9 @@ class Tests:
 
     def test_tree_for_equality(self, test_tree):
 
+        #if True:
+        #    return
+
         if test_tree == []:
             return
 

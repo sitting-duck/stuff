@@ -25,6 +25,7 @@ class Problem:
     print_tools = Print_Tools()
 
     def __init__(self):
+
         self.tests = Tests()
         self.tests.get_test_data_from_file(self)
 
@@ -42,8 +43,9 @@ class Problem:
         if len(Training_Data.get_category_names(training_set)) == 0:
             return self.decision_tree
 
-        category_for_current_node = self.get_best_category_for_node(training_set, parent_node)
-        conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_category(category_for_current_node, training_set)
+        category_for_current_node = self.get_best_category_for_node(training_set, parent_branch_attr, parent_node)
+        #conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_category(category_for_current_node, training_set)
+        conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_attribute(category_for_current_node, parent_branch_attr, training_set)
 
         if(Debug.level >= 1):
             Debug.log('selected', category_for_current_node, 'for current node.', "it's parent:", Decision_Tree.get_node_string(parent_node))
@@ -159,7 +161,7 @@ class Problem:
             training_set_partitions[type] = current_training_subset
         return training_set_partitions
 
-    def get_best_category_for_node(self, training_set, parent_node = None):
+    def get_best_category_for_node(self, training_set, parent_branch_attr, parent_node = None):
         current_best_information_gain = 0
         current_best_category  = None
 
@@ -167,7 +169,7 @@ class Problem:
 
         for category in categories:
 
-            current_information_gain = Info_Math.calculate_information_gain_for_category(category, parent_node, training_set)
+            current_information_gain = Info_Math.calculate_information_gain_for_category(category, parent_branch_attr, parent_node, training_set)
 
             #if they have the same information gain, take the one that is alphabetically lower
             if current_information_gain == current_best_information_gain:

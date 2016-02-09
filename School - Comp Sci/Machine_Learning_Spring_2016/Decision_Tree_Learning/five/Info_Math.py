@@ -13,20 +13,23 @@ class Info_Math:
 
 # information gain is a metric to measure the amount of information gained if we split the tree at this category
     @staticmethod
-    def calculate_information_gain_for_category(category, parent_node, training_set):
+    def calculate_information_gain_for_category(category, parent_branch_attr, parent_node, training_set):
         training_set_for_category_entropy = Info_Math.calculate_conditional_entropy_for_category(category, training_set)
+
+        #parent_entropy = Info_Math.calculate_entropy_for_training_set(training_set)
 
         if parent_node == None:
             parent_entropy = Info_Math.calculate_entropy_for_training_set(training_set)
         else:
             parent_entropy = parent_node.conditional_entropy
+            #parent_entropy = Info_Math.calculate_conditional_entropy_for_attribute(parent_node.category, parent_branch_attr, parent_node.training_set)
 
         information_gain = Info_Math.prec(parent_entropy) - Info_Math.prec(training_set_for_category_entropy)
 
         if(Debug.level >= 1):
             Debug.log('cat:', category, 'ig:', Info_Math.prec(parent_entropy), '-', Info_Math.prec(training_set_for_category_entropy), '=', information_gain)
 
-        assert information_gain >= 0, 'error: got negative info gain: %s for %s' % (str(information_gain), category)
+        #assert information_gain >= 0, 'error: got negative info gain: %s for %s' % (str(information_gain), category)
 
         return Info_Math.prec(information_gain)
 
@@ -56,12 +59,15 @@ class Info_Math:
     def calculate_conditional_entropy_for_attribute(category, attribute, training_set):
         term = 0
 
-        reduced_training_set = Training_Data.get_training_set_for_single_attribute(category, attribute, training_set)
+
+        reduced_training_set = Info_Math.get_reduced_training_set(category, attribute, training_set)
+
         class_type_frequency = Training_Data.get_class_type_frequency_dictionary(reduced_training_set, training_set)
 
         # get all the training examples where this attribute is present for the given category
         for current_type, num_current_type in class_type_frequency.iteritems():
-            reduced_training_set = Training_Data.get_training_set_for_single_attribute(category, attribute, training_set)
+
+            reduced_training_set = Info_Math.get_reduced_training_set(category, attribute, training_set)
 
             num_training_examples_for_current_attribute = Training_Data.get_number_training_examples(reduced_training_set)
 
@@ -80,6 +86,14 @@ class Info_Math:
         return Info_Math.prec(Info_Math.abs(term), 3)
 
     @staticmethod
+    def get_reduced_training_set(category, attribute, training_set):
+        if attribute is None:
+            reduced_training_set = training_set
+        else:
+            reduced_training_set = Training_Data.get_training_set_for_single_attribute(category, attribute, training_set)
+        return reduced_training_set
+
+    @staticmethod
     def calculate_entropy_for_training_set(training_set):
 
         sum = 0
@@ -95,6 +109,11 @@ class Info_Math:
 
     @staticmethod
     def prec(number, precision = 3):
+
+        #round up to zero if below by acceptable error
+        if(Info_Math.abs(number) < 0.005 and number < 0):
+            number = 0
+
         return round(Decimal(number), precision)
 
     @staticmethod
