@@ -24,9 +24,11 @@ class Info_Math:
         information_gain = Info_Math.prec(parent_entropy) - Info_Math.prec(training_set_for_category_entropy)
 
         if(Debug.level >= 1):
-            Debug.log('cat:', category, 'ig:', Info_Math.prec(parent_entropy), '-', Info_Math.prec(training_set_for_category_entropy), '=', Info_Math.abs(information_gain))
+            Debug.log('cat:', category, 'ig:', Info_Math.prec(parent_entropy), '-', Info_Math.prec(training_set_for_category_entropy), '=', information_gain)
 
-        return Info_Math.prec(Info_Math.abs(information_gain))
+
+
+        return Info_Math.prec(information_gain)
 
     @staticmethod
     def calculate_conditional_entropy_for_category(category, training_set):
