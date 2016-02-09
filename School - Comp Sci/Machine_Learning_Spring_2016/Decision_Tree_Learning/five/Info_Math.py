@@ -26,7 +26,7 @@ class Info_Math:
         if(Debug.level >= 1):
             Debug.log('cat:', category, 'ig:', Info_Math.prec(parent_entropy), '-', Info_Math.prec(training_set_for_category_entropy), '=', information_gain)
 
-
+        assert information_gain >= 0, 'error: got negative info gain: %s for %s' % (str(information_gain), category)
 
         return Info_Math.prec(information_gain)
 
