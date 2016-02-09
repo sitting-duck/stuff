@@ -64,12 +64,26 @@ class Problem:
         categories = Training_Data.get_category_names(training_set)
         num_categories = len(categories)
 
+        if num_categories == 1:
+            current_category = categories[0]
+            pass
+
+        #if num_categories == 1:
+        #if parent_node != None:
+        #    num_attributes = len(Training_Data.get_unique_attributes_for_category(parent_node.category, training_set))
+        #else:
+        #    num_attributes = 999
+
         if(Debug.level == 5):
             Debug.log('was_homogenous?', was_homogenous)
             Print_Tools.print_training_set(training_set)
 
+        #if was_homogenous and (num_categories == 1) and num_attributes == 1:
         #if was_homogenous and (num_categories == 1):
-        if num_categories == 1:
+        #if num_categories == 1:
+        #if num_categories == 1 and num_attributes == 1:
+        #if num_attributes == 1:
+        if was_homogenous == True:
             self.add_leaf_to_tree(parent_node, training_set, parent_branch_attr)
             return True
         else:
@@ -78,19 +92,20 @@ class Problem:
     def add_leaf_to_tree(self, parent_node, training_set, parent_branch_attr):
 
         #todo: detect most common class type in the case that this leaf is not homogenous
-        #type = Training_Data.get_set_of_unique_class_types(training_set)
+        type = Training_Data.get_set_of_unique_class_types(training_set)
 
         #if parent_node == None:
         #    self.add_node_to_tree(str(type[0]), None, parent_node, training_set, True, parent_branch_attr)
         #else:
         #    self.add_node_to_tree(str(type[0]), parent_node.conditional_entropy, parent_node, training_set, True, parent_branch_attr)
 
-        type = self.get_most_common_class_type(training_set)
+        #type = self.get_most_common_class_type(training_set)
 
         if parent_node == None:
-            self.add_node_to_tree(str(type), None, parent_node, training_set, True, parent_branch_attr)
+            self.add_node_to_tree(str(type[0]), None, parent_node, training_set, True, parent_branch_attr)
+
         else:
-            self.add_node_to_tree(str(type), parent_node.conditional_entropy, parent_node, training_set, True, parent_branch_attr)
+            self.add_node_to_tree(str(type[0]), parent_node.conditional_entropy, parent_node, training_set, True, parent_branch_attr)
 
     @staticmethod
     def get_most_common_class_type(training_set):
