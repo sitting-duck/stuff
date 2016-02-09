@@ -1,13 +1,19 @@
-
+from Tests import Tests
 from Training_Data import Training_Data
 
 class Print_Tools:
+
+    print_tree = []
+
 
     def __init_(self):
         pass
 
     @staticmethod
-    def print_in_order(decision_tree, training_set, current_node, node_depth = 0):
+    def print_in_order(decision_tree, training_set, current_node = None, node_depth = 0):
+
+        if current_node == None:
+            current_node = decision_tree.root
 
         children = decision_tree.get_child_nodes_of(current_node)
         children = Print_Tools.sort_by_parent_attr_type(children)
@@ -22,43 +28,92 @@ class Print_Tools:
                 Print_Tools.print_in_order(decision_tree, training_set, child, node_depth + 1)
 
     @staticmethod
-    def sort_by_parent_attr_type(nodes):
-        return sorted(nodes, key=lambda node: node.parent_branch_attr, reverse=False)
+    def check_in_order(decision_tree, training_set, current_node = None, node_depth = 0):
 
-    @staticmethod
-    def is_all_leaf_nodes(nodes):
-        if len(nodes) == 0:
-            return False
-
-        for node in nodes:
-            if node.is_leaf == False:
-                return False
-        else:
-            return True
-
-    @staticmethod
-    def sort_if_all_leaf_nodes(nodes):
-        if Print_Tools.is_all_leaf_nodes(nodes):
-            return sorted(nodes)
-        else:
-            return nodes
-
-    @staticmethod
-    def get_print_tree(decision_tree, training_set, current_node, node_depth = 0, print_tree_current = ""):
-
-        print_tree = print_tree_current
+        if current_node == None:
+            current_node = decision_tree.root
 
         children = decision_tree.get_child_nodes_of(current_node)
+        children = Print_Tools.sort_by_parent_attr_type(children)
 
         tab_string = Print_Tools.get_tab_string(node_depth)
 
         for child in children:
             if child.is_leaf == True:
-                print_tree += tab_string + current_node.category + " = " + child.parent_branch_attr + " : " + child.category + '\n'
-                return print_tree
+                the_string = tab_string + '|' +  current_node.category + " = " + child.parent_branch_attr + " : " + child.category + "\n"
+                assert self.tests.expected_tree[node_depth] == the_string
             else:
-                print_tree += tab_string + current_node.category + " = " + child.parent_branch_attr + " :" + '\n'
-                Print_Tools.get_print_tree(decision_tree, training_set, child, node_depth + 1, print_tree)
+                print tab_string + '|' + current_node.category + " = " + child.parent_branch_attr + " :"
+                Print_Tools.print_in_order(decision_tree, training_set, child, node_depth + 1)
+
+
+    #@staticmethod
+    def static_var(varname, value):
+       def decorate(func):
+         setattr(func, varname, value)
+         return func
+
+       return decorate
+
+    @static_var("print_tree", [])
+    def get_print_tree(self, decision_tree, training_set, current_node = None, node_depth = 0, print_tree_current = []):
+
+        #self.get_print_tree.print_tree = print_tree_current
+
+        if current_node == None:
+            current_node = decision_tree.root
+            #print_tree.append('|' +current_node.category + " = " + "0" + " : " + '\n')
+
+        children = decision_tree.get_child_nodes_of(current_node)
+        children = Print_Tools.sort_by_parent_attr_type(children)
+
+        tab_string = Print_Tools.get_tab_string(node_depth)
+
+        for child in children:
+            if child.is_leaf == True:
+                self.get_print_tree.print_tree.append(tab_string + '|' +  current_node.category + " = " + child.parent_branch_attr + " : " + child.category + '\n')
+            else:
+                self.get_print_tree.print_tree.append(tab_string + '|' +  current_node.category + " = " + child.parent_branch_attr + " :" + '\n')
+                #self.get_print_tree(decision_tree, training_set, child, node_depth + 1, self.get_print_tree.print_tree)
+                self.get_print_tree(decision_tree, training_set, child, node_depth + 1)
+        return self.get_print_tree.print_tree
+
+        #else:
+            #print "curr: " + str(print_tree)
+            #return print_tree
+
+    def get_print_tree_derp(self, decision_tree, training_set, current_node = None, node_depth = 0, print_tree_current = []):
+
+        self.print_tree = print_tree_current
+
+        if current_node == None:
+            current_node = decision_tree.root
+
+        children = decision_tree.get_child_nodes_of(current_node)
+        children = Print_Tools.sort_by_parent_attr_type(children)
+
+        tab_string = Print_Tools.get_tab_string(node_depth)
+
+        if len(children) == 0:
+            #if current_node.parent == None:
+            return self.print_tree
+        #    else:
+        #        return self.print_tree
+
+        self.print_tree = []
+        tab_string = Print_Tools.get_tab_string(node_depth)
+
+        for child in children:
+            if child.is_leaf == True:
+                self.print_tree.append(tab_string + '|' +  current_node.category + " = " + child.parent_branch_attr + " : " + child.category + '\n')
+                return self.print_tree
+            else:
+                self.print_tree.append(tab_string + '|' +  current_node.category + " = " + child.parent_branch_attr + " :" + '\n')
+                self.get_print_tree(decision_tree, training_set, child, node_depth + 1, self.print_tree)
+
+            #return self.print_tree.range(len(self.print_tree) - node_depth - 1, len(self.print_tree)  - 1)
+            #return self.print_tree[len(self.print_tree) - node_depth - 1 : len(self.print_tree) ]
+            return self.print_tree
 
     @staticmethod
     def print_level_order_deprecated_2(decision_tree, training_set):
@@ -145,3 +200,25 @@ class Print_Tools:
     def print_training_set(training_set):
         for row in training_set:
             print str(row)
+
+    @staticmethod
+    def sort_by_parent_attr_type(nodes):
+        return sorted(nodes, key=lambda node: node.parent_branch_attr, reverse=False)
+
+    @staticmethod
+    def is_all_leaf_nodes(nodes):
+        if len(nodes) == 0:
+            return False
+
+        for node in nodes:
+            if node.is_leaf == False:
+                return False
+        else:
+            return True
+
+    @staticmethod
+    def sort_if_all_leaf_nodes(nodes):
+        if Print_Tools.is_all_leaf_nodes(nodes):
+            return sorted(nodes)
+        else:
+            return nodes

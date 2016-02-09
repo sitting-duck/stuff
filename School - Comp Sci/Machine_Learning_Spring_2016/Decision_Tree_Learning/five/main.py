@@ -1,6 +1,7 @@
 
 from Print_Tools import  Print_Tools
 from Problem import Problem
+from Tests import Tests
 from Tests_PlayTennis import Tests_PlayTennis
 
 def main():
@@ -9,7 +10,6 @@ def main():
     # this is important because the training set will change in size as it is passed through the tree
 
     problem = Problem()
-    #Tests.run_tests(problem)
 
     training_set = problem.get_training_set()
 

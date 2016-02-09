@@ -8,6 +8,7 @@ import math
 
 from Info_Math import Info_Math
 from Print_Tools import Print_Tools
+from Tests import Tests
 from Training_Data import Training_Data
 from Decision_Tree import Decision_Tree
 from Node import Node
@@ -21,8 +22,11 @@ class Problem:
     # the decision tree and all the functions for manipulating it are contained in this object
     decision_tree = Decision_Tree()
 
+    print_tools = Print_Tools()
+
     def __init__(self):
-        pass
+        self.tests = Tests()
+        self.tests.get_test_data_from_file(self)
 
     def create_decision_tree(self, training_set, parent_branch_attr = None, parent_node = None):
 
@@ -189,6 +193,12 @@ class Problem:
         self.decision_tree.add_node(current_node)
 
         if Debug.level >= 3:
-            Print_Tools.print_in_order(self.decision_tree, self.training_set, self.decision_tree.root)
+            Print_Tools.print_in_order(self.decision_tree, self.training_set)
+
+        #Print_Tools.check_in_order(self.decision_tree, self.training_set)
+
+        print_tree = self.print_tools.get_print_tree(self.decision_tree, self.training_set)
+        #print "curr: " + str(print_tree)
+        self.tests.test_tree_for_equality(print_tree)
 
         return current_node
