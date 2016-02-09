@@ -1,5 +1,6 @@
 
 from __future__ import division
+from itertools import groupby as g
 
 import copy
 from decimal import *
@@ -31,7 +32,7 @@ class Problem:
             return self.decision_tree
 
         # if we have reached a leaf node, exit this recursive thread
-        if(self.append_leaf_node_to_tree_and_exit_if_homogeneous_and_single_category(parent_node, training_set, parent_branch_attr)):
+        if(self.append_leaf_node_to_tree_and_exit_if_single_category(parent_node, training_set, parent_branch_attr)):
             return self.decision_tree
 
         if len(Training_Data.get_category_names(training_set)) == 0:
@@ -43,7 +44,6 @@ class Problem:
         if(Debug.level >= 1):
             Debug.log('selected', category_for_current_node, 'for current node.', "it's parent:", Decision_Tree.get_node_string(parent_node))
 
-        #assert category_for_current_node != None, 'the fuck dude? None is not a category!'
         if category_for_current_node == None:
             return self.decision_tree
 
@@ -58,7 +58,7 @@ class Problem:
         return self.decision_tree
 
     #returns true if we've reached a leaf node and it's time to bail out of this recursive thread
-    def append_leaf_node_to_tree_and_exit_if_homogeneous_and_single_category(self, parent_node, training_set, parent_branch_attr):
+    def append_leaf_node_to_tree_and_exit_if_single_category(self, parent_node, training_set, parent_branch_attr):
         was_homogenous = self.training_set.is_homogeneous(training_set)
 
         categories = Training_Data.get_category_names(training_set)
@@ -68,7 +68,8 @@ class Problem:
             Debug.log('was_homogenous?', was_homogenous)
             Print_Tools.print_training_set(training_set)
 
-        if was_homogenous and (num_categories == 1):
+        #if was_homogenous and (num_categories == 1):
+        if num_categories == 1:
             self.add_leaf_to_tree(parent_node, training_set, parent_branch_attr)
             return True
         else:
@@ -77,12 +78,38 @@ class Problem:
     def add_leaf_to_tree(self, parent_node, training_set, parent_branch_attr):
 
         #todo: detect most common class type in the case that this leaf is not homogenous
-        type = self.training_set.get_set_of_unique_class_types(training_set)
+        #type = Training_Data.get_set_of_unique_class_types(training_set)
+
+        #if parent_node == None:
+        #    self.add_node_to_tree(str(type[0]), None, parent_node, training_set, True, parent_branch_attr)
+        #else:
+        #    self.add_node_to_tree(str(type[0]), parent_node.conditional_entropy, parent_node, training_set, True, parent_branch_attr)
+
+        type = self.get_most_common_class_type(training_set)
 
         if parent_node == None:
-            self.add_node_to_tree(str(type[0]), None, parent_node, training_set, True, parent_branch_attr)
+            self.add_node_to_tree(str(type), None, parent_node, training_set, True, parent_branch_attr)
         else:
-            self.add_node_to_tree(str(type[0]), parent_node.conditional_entropy, parent_node, training_set, True, parent_branch_attr)
+            self.add_node_to_tree(str(type), parent_node.conditional_entropy, parent_node, training_set, True, parent_branch_attr)
+
+    @staticmethod
+    def get_most_common_class_type(training_set):
+        #if len(training_set[0]) > 1:
+        #    type_dic = Training_Data.get_class_type_frequency_dictionary(training_set)
+
+        #    most_common_types = max(len(type_instances) for type_instances in type_dic.itervalues())
+
+        #    alpha_ordered_most_common_types = sorted(most_common_types)
+
+        #    return alpha_ordered_most_common_types[0]
+
+        for line in training_set:
+            del line[0]
+
+        #else:
+        return (max(g(sorted(training_set)), key=lambda(x, v):(len(list(v)),-training_set.index(x)))[0])[0]
+
+
 
     def get_training_set_partitions_by_attribute(self, category, training_set):
 
@@ -95,6 +122,7 @@ class Problem:
         for attribute in attributes:
             temp_partition = self.training_set.get_training_set_for_single_attribute(category, attribute, training_set)
 
+            #partitions[attribute] = temp_partition
             partitions[attribute] = self.training_set.get_training_set_with_category_removed(category, temp_partition)
 
         return partitions
