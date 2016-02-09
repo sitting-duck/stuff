@@ -20,7 +20,6 @@ class Print_Tools:
                 print tab_string + current_node.category + " = " + child.parent_branch_attr + " :"
                 Print_Tools.print_in_order(decision_tree, training_set, child, node_depth + 1)
 
-
     @staticmethod
     def get_print_tree(decision_tree, training_set, current_node, node_depth = 0, print_tree_current = ""):
 

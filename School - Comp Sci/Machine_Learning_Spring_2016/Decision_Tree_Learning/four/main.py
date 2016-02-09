@@ -15,7 +15,7 @@ def main():
 
     problem.create_decision_tree(training_set)
 
-    print "final tree: "
+    print "\n\nfinal tree: \n\n"
     Print_Tools.print_in_order(problem.decision_tree, problem.training_set, problem.decision_tree.root)
 
 if __name__ == '__main__':

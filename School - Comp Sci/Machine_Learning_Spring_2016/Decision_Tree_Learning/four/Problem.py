@@ -62,19 +62,24 @@ class Problem:
         was_homogenous = self.training_set.is_homogeneous(training_set)
 
         if(Debug.level == 5):
-            Debug.log('homo?', was_homogenous)
+            Debug.log('was_homogenous?', was_homogenous)
             Print_Tools.print_training_set(training_set)
 
         if was_homogenous:
-            type = self.training_set.get_set_of_unique_class_types(training_set)
-            if parent_node == None:
-                new_node = Node(str(type[0]), None, parent_node, training_set, True, parent_branch_attr)
-            else:
-                new_node = Node(str(type[0]), parent_node.conditional_entropy, parent_node, training_set, True, parent_branch_attr)
-            self.decision_tree.add_node(new_node)
+            self.add_leaf_to_tree(parent_node, training_set, parent_branch_attr)
             return True
         else:
             return False
+
+    def add_leaf_to_tree(self, parent_node, training_set, parent_branch_attr):
+
+        #todo: detect most common class type in the case that this leaf is not homogenous
+        type = self.training_set.get_set_of_unique_class_types(training_set)
+
+        if parent_node == None:
+            self.add_node_to_tree(str(type[0]), None, parent_node, training_set, True, parent_branch_attr)
+        else:
+            self.add_node_to_tree(str(type[0]), parent_node.conditional_entropy, parent_node, training_set, True, parent_branch_attr)
 
     def get_training_set_partitions_by_attribute(self, category, training_set):
 
@@ -84,13 +89,10 @@ class Problem:
         attributes = self.training_set.get_unique_attributes_for_category(category, training_set)
         partitions = {}
 
-        temp_training_set = copy.deepcopy(training_set)
-        for example in training_set:
-            for attribute in attributes:
-                temp_partition = self.training_set.get_training_set_for_single_attribute(category, attribute, training_set)
+        for attribute in attributes:
+            temp_partition = self.training_set.get_training_set_for_single_attribute(category, attribute, training_set)
 
-                partitions[attribute] = self.training_set.get_training_set_with_category_removed(category, temp_partition)
-
+            partitions[attribute] = self.training_set.get_training_set_with_category_removed(category, temp_partition)
 
         return partitions
 
