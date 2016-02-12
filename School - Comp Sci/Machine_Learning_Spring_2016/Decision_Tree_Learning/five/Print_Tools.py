@@ -14,6 +14,8 @@ class Print_Tools:
     @staticmethod
     def print_in_order(decision_tree, training_set, current_node = None, node_depth = 0):
 
+        # since this function is recursive, this check for None indicates that we just called this function the first time
+        # this makes sense because we always start printing from root
         if current_node is None:
             current_node = decision_tree.root
 

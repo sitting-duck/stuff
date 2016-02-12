@@ -53,8 +53,11 @@ class Problem:
         if category_for_current_node == None:
             return self.decision_tree
 
+        # the current category column will be removed
         partitions = self.get_training_set_partitions_by_attribute(category_for_current_node, training_set)
-        attributes = self.training_set.get_unique_attributes_for_category(category_for_current_node, training_set)
+
+        # these are sorted by alpha
+        attributes = sorted(self.training_set.get_unique_attributes_for_category(category_for_current_node, training_set))
 
         current_node = self.add_node_to_tree(category_for_current_node, conditional_entropy_for_current_node, parent_node, training_set, False, parent_branch_attr)
 
@@ -70,10 +73,6 @@ class Problem:
         categories = Training_Data.get_category_names(training_set)
         num_categories = len(categories)
 
-        if num_categories == 1:
-            current_category = categories[0]
-            pass
-
         #if num_categories == 1:
         #if parent_node != None:
         #    num_attributes = len(Training_Data.get_unique_attributes_for_category(parent_node.category, training_set))
@@ -86,7 +85,7 @@ class Problem:
 
         #if was_homogenous and (num_categories == 1) and num_attributes == 1:
         #if was_homogenous and (num_categories == 1):
-        if num_categories == 1:
+        if num_categories == 0:
         #if num_categories == 1 and num_attributes == 1:
         #if num_attributes == 1:
         #if was_homogenous == True:
@@ -107,11 +106,17 @@ class Problem:
 
         type = self.get_most_common_class_type(training_set)
 
-        if parent_node == None:
-            self.add_node_to_tree(str(type), None, parent_node, training_set, True, parent_branch_attr)
+        parent_conditional_entropy = Problem.get_parent_conditional_entropy(parent_node)
 
+        # add the parent
+        self.add_node_to_tree(str(type), parent_conditional_entropy, parent_node, training_set, True, parent_branch_attr)
+
+    @staticmethod
+    def get_parent_conditional_entropy(parent_node):
+        if parent_node == None:
+            return None
         else:
-            self.add_node_to_tree(str(type), parent_node.conditional_entropy, parent_node, training_set, True, parent_branch_attr)
+            return parent_node.conditional_entropy
 
     @staticmethod
     def get_most_common_class_type(training_set):
