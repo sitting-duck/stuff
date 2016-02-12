@@ -1,6 +1,6 @@
 
 from __future__ import division
-from itertools import groupby as g
+from itertools import groupby as groupby_handle
 
 import copy
 from decimal import *
@@ -85,7 +85,7 @@ class Problem:
 
         #if was_homogenous and (num_categories == 1) and num_attributes == 1:
         #if was_homogenous and (num_categories == 1):
-        if num_categories == 0:
+        if num_categories == 0 or was_homogenous:
         #if num_categories == 1 and num_attributes == 1:
         #if num_attributes == 1:
         #if was_homogenous == True:
@@ -95,14 +95,6 @@ class Problem:
             return False
 
     def add_leaf_to_tree(self, parent_node, training_set, parent_branch_attr):
-
-        #todo: detect most common class type in the case that this leaf is not homogenous
-        #type = Training_Data.get_set_of_unique_class_types(training_set)
-
-        #if parent_node == None:
-        #    self.add_node_to_tree(str(type[0]), None, parent_node, training_set, True, parent_branch_attr)
-        #else:
-        #    self.add_node_to_tree(str(type[0]), parent_node.conditional_entropy, parent_node, training_set, True, parent_branch_attr)
 
         type = self.get_most_common_class_type(training_set)
 
@@ -132,10 +124,43 @@ class Problem:
         #for line in training_set:
         #    del line[0]
 
+        # get rid of the class category tag
+        #temp = copy.deepcopy(training_set)
+        #del temp[0]
+
         #else:
-        return (max(g(sorted(training_set)), key=lambda(x, v):(len(list(v)),-training_set.index(x)))[0])[0]
+        #most_common = (max(groupby_handle(training_set), key=lambda (x, items_of_current_class_type):(len(list(items_of_current_class_type)), -training_set.index(x)))[0])[0]
+        #return most_common
 
+        #type_dic = Training_Data.get_class_type_frequency_dictionary(training_set)
 
+        type_dic = {}
+        class_types = Training_Data.get_set_of_unique_class_types(training_set)
+        for type in class_types:
+            num_of_type = Training_Data.get_number_of_training_examples_of_class_type(type, training_set)
+            type_dic[type] = num_of_type
+
+        for key, value in type_dic.iteritems():
+            print "key: " + key + " value: " + str(value)
+
+        greatest_current_key = ''
+        greatest_num_items = 0
+
+        #determine what the greatest number of items is
+        for key, value in type_dic.iteritems():
+            if value > greatest_num_items:
+                greatest_num_items = value
+
+        #find all keys with that many items
+        # in the case of a tie we will take the lowest alpha key
+        keys = []
+        for key, value in type_dic.iteritems():
+            if value == greatest_num_items:
+                keys.append(key)
+
+        most_common = sorted(keys)[0]
+
+        return most_common
 
     def get_training_set_partitions_by_attribute(self, category, training_set):
 

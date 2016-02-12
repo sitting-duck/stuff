@@ -115,11 +115,14 @@ class Training_Data:
 
         proportion_to_class_type_for_training_set = {}
 
+        #if we have two args
         if training_set != []:
             class_types = Training_Data.get_set_of_unique_class_types(training_set)
             for type in class_types:
                 num_of_type = Training_Data.get_number_of_training_examples_of_class_type(type, reduced_training_set)
                 proportion_to_class_type_for_training_set[type] = num_of_type
+
+        #if we have one arg
         else:
             class_types = Training_Data.get_set_of_unique_class_types(training_set)
             for type in class_types:
