@@ -233,6 +233,10 @@ class Training_Data:
         return category in Training_Data.get_category_names(training_set)
 
     @staticmethod
+    def get_num_categories(training_set):
+        return len(Training_Data.get_category_names())
+
+    @staticmethod
     def get_category_names(training_set):
         temp_row = copy.deepcopy(Training_Data.get_row(0, training_set))
         #del temp_row[0]
@@ -299,7 +303,41 @@ class Training_Data:
         return len(training_set) - 1
 
     @staticmethod
-    def is_homogeneous(training_set):
+    def is_leaf(training_set):
+        if Training_Data.is_pure(training_set):
+            return True
+        else:
+            if Training_Data.get_num_categories(training_set) == 0 and Training_Data.is_split_equally_between_class_types(training_set)
+
+    @staticmethod
+    def is_split_equally_between_class_types(training_set):
+
+        #If you don't have exotic data in your dicts equality should be transitive,
+        #i. e. from
+        #a == b and a == c
+        #follows
+        #b == c
+        #so that you don't have to test the latter explicitly.
+        #This reduces the number of tests significantly.
+
+        freq_dict = Training_Data.get_class_type_frequency_dictionary(training_set)
+
+        values = freq_dict.itervalues() #get all the values
+
+        first = next(values) #pick an arbitrary value to compare against all the others
+
+        #if this arbitrary value matches all the others...
+        if all(first == item for item in values):
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def is_pure(training_set):
+        return Training_Data.is_single_class_type(training_set)
+
+    @staticmethod
+    def is_single_class_type(training_set):
 
         class_types = Training_Data.get_set_of_unique_class_types(training_set)
         if len(class_types) > 1:

@@ -36,6 +36,8 @@ class Info_Math:
         #information_gain = Info_Math.prec(parent_entropy) - Info_Math.prec(training_set_for_category_entropy)
         information_gain = float(parent_entropy) - float(training_set_for_category_entropy)
 
+        information_gain = Info_Math.abs(information_gain)
+
         if(Debug.level >= 1):
             Debug.log('cat:', category, 'ig:', Info_Math.prec(parent_entropy), '-', Info_Math.prec(training_set_for_category_entropy), '=', information_gain)
 

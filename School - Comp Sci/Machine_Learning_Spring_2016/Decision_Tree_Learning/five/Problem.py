@@ -66,21 +66,21 @@ class Problem:
 
     #returns true if we've reached a leaf node and it's time to bail out of this recursive thread
     def append_leaf_node_to_tree_and_exit_if_single_category(self, parent_node, training_set, parent_branch_attr):
-        was_homogenous = self.training_data.is_homogeneous(training_set)
 
         categories = Training_Data.get_category_names(training_set)
         num_categories = len(categories)
 
-        if(Debug.level == 5):
-            Debug.log('was_homogenous?', was_homogenous)
-            Print_Tools.print_training_set(training_set)
+        #if(Debug.level == 5):
+        #    Debug.log('was_pure?', was_pure)
+        #    Print_Tools.print_training_set(training_set)
 
-        #if was_homogenous and (num_categories == 1) and num_attributes == 1:
-        #if was_homogenous and (num_categories == 1):
-        if num_categories == 0 or was_homogenous:
+        was_pure = self.training_data.is_single_class_type(training_set)
+        #if was_pure and (num_categories == 1) and num_attributes == 1:
+        #if was_pure and (num_categories == 1):
+        if num_categories == 0 or was_pure:
         #if num_categories == 1 and num_attributes == 1:
         #if num_attributes == 1:
-        #if was_homogenous == True:
+        #if was_pure == True:
             self.add_leaf_to_tree(parent_node, training_set, parent_branch_attr)
             return True
         else:
