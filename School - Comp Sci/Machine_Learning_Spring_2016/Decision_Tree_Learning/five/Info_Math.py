@@ -39,9 +39,15 @@ class Info_Math:
         if(Debug.level >= 1):
             Debug.log('cat:', category, 'ig:', Info_Math.prec(parent_entropy), '-', Info_Math.prec(training_set_for_category_entropy), '=', information_gain)
 
-        #assert information_gain >= 0, 'error: got negative info gain: %s for %s' % (str(information_gain), category)
+        assert information_gain > -0.003, 'error: got negative info gain: %s for %s' % (str(information_gain), category)
+        #assert Info_Math.abs(0 - information_gain) > 0.02, 'error: got negative info gain: %s for %s' % (str(information_gain), category)
+        #assert Info_Math.within_acceptable_error(information_gain, 0, 0.02), 'error: got negative info gain: %s for %s' % (str(information_gain), category)
 
         return Info_Math.prec(information_gain)
+
+    @staticmethod
+    def within_acceptable_error(expected, actual, error):
+        return Info_Math.abs(expected - actual) <= error
 
     @staticmethod
     def calculate_conditional_entropy_for_category(category, training_set):
