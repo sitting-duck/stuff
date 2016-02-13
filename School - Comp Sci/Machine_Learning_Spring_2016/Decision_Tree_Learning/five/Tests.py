@@ -33,7 +33,10 @@ class Tests:
     @staticmethod
     def run_tests(problem):
         Tests.test_email_entropy_root(problem)
+
         Tests.test_email_gain_root_nigeria(problem)
+        Tests.test_email_gain_root_viagra(problem)
+        Tests.test_email_gain_root_learning(problem)
 
     @staticmethod
     def test_email_entropy_root(problem):
@@ -53,3 +56,25 @@ class Tests:
         expected_gain = 0.278
 
         assert gain_root_nigeria == expected_gain, 'error on test_email_gain_root_nigeria() expected %s got %s' % (gain_root_nigeria, expected_gain)
+
+    @staticmethod
+    def test_email_gain_root_viagra(problem):
+
+        training_set = problem.training_data.get_training_set('./testing/email.dat')
+
+        gain_root_viagra = Info_Math.calculate_information_gain_for_category('viagra', None, None, training_set)
+        expected_gain = 0.035
+
+        assert gain_root_viagra == expected_gain, 'error on test_email_gain_root_viagra() expected %s got %s' % (gain_root_viagra, expected_gain)
+
+    @staticmethod
+    def test_email_gain_root_learning(problem):
+
+        training_set = problem.training_data.get_training_set('./testing/email.dat')
+
+        gain_root_learning = Info_Math.calculate_information_gain_for_category('learning', None, None, training_set)
+        expected_gain = 0.236
+
+        assert gain_root_learning == expected_gain, 'error on test_email_gain_root_learning() expected %s got %s' % (gain_root_learning, expected_gain)
+
+    
