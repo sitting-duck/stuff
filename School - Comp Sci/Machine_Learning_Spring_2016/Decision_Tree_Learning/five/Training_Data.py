@@ -19,18 +19,23 @@ class Training_Data:
     def __init__(self):
         self.training_set =self. get_training_set()
 
-    def get_training_set(self):
+    def get_training_set(self, file_path = None):
+
+        #if filename not specified during call, fetch file name from the command line
+        if file_path == None:
+            file_path = fileinput.input()
 
         # if data has already been collected from file return it
         if self.training_set != []:
             return self.training_set
+
         # else collect and tokenize the data from the file and store it in
         # a 2D list
         else:
             tokenized_data_buffer = []
-            data_from_file = fileinput.input()
-            for line in data_from_file:
+            file = open(file_path)
 
+            for line in file:
                 if line == "\n": #skip blank lines
                     continue
 
@@ -314,3 +319,34 @@ class Training_Data:
     def get_lowest_alpha_category(categories):
         categories_in_alphabetical_order = sorted(categories)
         return categories_in_alphabetical_order[0]
+
+    @staticmethod
+    def get_most_common_class_type(training_set):
+
+        type_dic = {}
+        class_types = Training_Data.get_set_of_unique_class_types(training_set)
+        for type in class_types:
+            num_of_type = Training_Data.get_number_of_training_examples_of_class_type(type, training_set)
+            type_dic[type] = num_of_type
+
+        for key, value in type_dic.iteritems():
+            print "key: " + key + " value: " + str(value)
+
+        greatest_current_key = ''
+        greatest_num_items = 0
+
+        #determine what the greatest number of items is
+        for key, value in type_dic.iteritems():
+            if value > greatest_num_items:
+                greatest_num_items = value
+
+        #find all keys with that many items
+        # in the case of a tie we will take the lowest alpha key
+        keys = []
+        for key, value in type_dic.iteritems():
+            if value == greatest_num_items:
+                keys.append(key)
+
+        most_common = sorted(keys)[0]
+
+        return most_common

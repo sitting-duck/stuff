@@ -24,12 +24,13 @@ class Info_Math:
             parent_entropy = parent_node.conditional_entropy
             #parent_entropy = Info_Math.calculate_conditional_entropy_for_attribute(parent_node.category, parent_branch_attr, parent_node.training_set)
 
-        information_gain = Info_Math.prec(parent_entropy) - Info_Math.prec(training_set_for_category_entropy)
+        #information_gain = Info_Math.prec(parent_entropy) - Info_Math.prec(training_set_for_category_entropy)
+        information_gain = float(parent_entropy) - float(training_set_for_category_entropy)
 
         if(Debug.level >= 1):
             Debug.log('cat:', category, 'ig:', Info_Math.prec(parent_entropy), '-', Info_Math.prec(training_set_for_category_entropy), '=', information_gain)
 
-        #assert information_gain >= 0, 'error: got negative info gain: %s for %s' % (str(information_gain), category)
+        assert information_gain >= 0, 'error: got negative info gain: %s for %s' % (str(information_gain), category)
 
         return Info_Math.prec(information_gain)
 
@@ -58,7 +59,6 @@ class Info_Math:
     @staticmethod
     def calculate_conditional_entropy_for_attribute(category, attribute, training_set):
         term = 0
-
 
         reduced_training_set = Info_Math.get_reduced_training_set(category, attribute, training_set)
 
@@ -103,9 +103,12 @@ class Info_Math:
         for i in range(0, num_class_types):
             num_current_type = float(Training_Data.get_number_of_training_examples_of_class_type(class_types[i], training_set))
 
-            Pi = Info_Math.prec(num_current_type / num_training_examples)
-            sum -= Info_Math.prec(Pi)*(Info_Math.prec(math.log(Pi, 2)))
-        return Info_Math.prec(Info_Math.abs(sum), 3)
+            #Pi = Info_Math.prec(num_current_type / num_training_examples)
+            Pi = float(num_current_type / num_training_examples)
+            #sum -= Info_Math.prec(Pi)*(Info_Math.prec(math.log(Pi, 2)))
+            sum -= (Pi)*float(math.log(Pi, 2))
+        #return Info_Math.prec(Info_Math.abs(sum), 3)
+        return float(Info_Math.abs(sum))
 
     @staticmethod
     def prec(number, precision = 3):

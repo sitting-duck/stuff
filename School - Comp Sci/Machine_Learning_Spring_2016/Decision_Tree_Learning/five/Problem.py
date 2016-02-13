@@ -1,10 +1,5 @@
 
 from __future__ import division
-from itertools import groupby as groupby_handle
-
-import copy
-from decimal import *
-import math
 
 from Info_Math import Info_Math
 from Print_Tools import Print_Tools
@@ -27,37 +22,27 @@ class Problem:
     def __init__(self):
 
         self.tests = Tests()
-        self.tests.get_test_data_from_file(self)
+        self.tests.run_tests(self)
+        self.tests.get_final_tree_test_data_from_file(self)
 
     def create_decision_tree(self, training_set, parent_branch_attr = None, parent_node = None):
 
         print "\n\n"
 
-        if len(training_set) == 0:
-            return self.decision_tree
-
         # if we have reached a leaf node, exit this recursive thread
         if(self.append_leaf_node_to_tree_and_exit_if_single_category(parent_node, training_set, parent_branch_attr)):
             return self.decision_tree
 
-        if len(Training_Data.get_category_names(training_set)) == 0:
-            return self.decision_tree
-
         category_for_current_node = self.get_best_category_for_node(training_set, parent_branch_attr, parent_node)
-        #conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_category(category_for_current_node, training_set)
         conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_attribute(category_for_current_node, parent_branch_attr, training_set)
 
         if(Debug.level >= 1):
             Debug.log('selected', category_for_current_node, 'for current node.', "it's parent:", Decision_Tree.get_node_string(parent_node))
 
-        if category_for_current_node == None:
-            return self.decision_tree
-
-        # the current category column will be removed
+        # the current category column will be removed in the training sets passed down to the child nodes
         partitions = self.get_training_set_partitions_by_attribute(category_for_current_node, training_set)
 
-        # these are sorted by alpha
-        attributes = sorted(self.training_set.get_unique_attributes_for_category(category_for_current_node, training_set))
+        attributes = self.training_set.get_unique_attributes_for_category(category_for_current_node, training_set)
 
         current_node = self.add_node_to_tree(category_for_current_node, conditional_entropy_for_current_node, parent_node, training_set, False, parent_branch_attr)
 
@@ -72,12 +57,6 @@ class Problem:
 
         categories = Training_Data.get_category_names(training_set)
         num_categories = len(categories)
-
-        #if num_categories == 1:
-        #if parent_node != None:
-        #    num_attributes = len(Training_Data.get_unique_attributes_for_category(parent_node.category, training_set))
-        #else:
-        #    num_attributes = 999
 
         if(Debug.level == 5):
             Debug.log('was_homogenous?', was_homogenous)
@@ -96,7 +75,7 @@ class Problem:
 
     def add_leaf_to_tree(self, parent_node, training_set, parent_branch_attr):
 
-        type = self.get_most_common_class_type(training_set)
+        type = Training_Data.get_most_common_class_type(training_set)
 
         parent_conditional_entropy = Problem.get_parent_conditional_entropy(parent_node)
 
@@ -110,57 +89,7 @@ class Problem:
         else:
             return parent_node.conditional_entropy
 
-    @staticmethod
-    def get_most_common_class_type(training_set):
-        #if len(training_set[0]) > 1:
-        #    type_dic = Training_Data.get_class_type_frequency_dictionary(training_set)
 
-        #    most_common_types = max(len(type_instances) for type_instances in type_dic.itervalues())
-
-        #    alpha_ordered_most_common_types = sorted(most_common_types)
-
-        #    return alpha_ordered_most_common_types[0]
-
-        #for line in training_set:
-        #    del line[0]
-
-        # get rid of the class category tag
-        #temp = copy.deepcopy(training_set)
-        #del temp[0]
-
-        #else:
-        #most_common = (max(groupby_handle(training_set), key=lambda (x, items_of_current_class_type):(len(list(items_of_current_class_type)), -training_set.index(x)))[0])[0]
-        #return most_common
-
-        #type_dic = Training_Data.get_class_type_frequency_dictionary(training_set)
-
-        type_dic = {}
-        class_types = Training_Data.get_set_of_unique_class_types(training_set)
-        for type in class_types:
-            num_of_type = Training_Data.get_number_of_training_examples_of_class_type(type, training_set)
-            type_dic[type] = num_of_type
-
-        for key, value in type_dic.iteritems():
-            print "key: " + key + " value: " + str(value)
-
-        greatest_current_key = ''
-        greatest_num_items = 0
-
-        #determine what the greatest number of items is
-        for key, value in type_dic.iteritems():
-            if value > greatest_num_items:
-                greatest_num_items = value
-
-        #find all keys with that many items
-        # in the case of a tie we will take the lowest alpha key
-        keys = []
-        for key, value in type_dic.iteritems():
-            if value == greatest_num_items:
-                keys.append(key)
-
-        most_common = sorted(keys)[0]
-
-        return most_common
 
     def get_training_set_partitions_by_attribute(self, category, training_set):
 
