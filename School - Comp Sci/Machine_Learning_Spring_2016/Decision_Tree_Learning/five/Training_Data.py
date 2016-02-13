@@ -1,5 +1,6 @@
 import fileinput
 import copy
+import sys
 
 class Training_Data:
 
@@ -17,31 +18,31 @@ class Training_Data:
     categories = {}
 
     def __init__(self):
-        self.training_set =self. get_training_set()
+        pass
 
     def get_training_set(self, file_path = None):
 
         #if filename not specified during call, fetch file name from the command line
         if file_path == None:
-            file_path = fileinput.input()
-
-        # if data has already been collected from file return it
-        if self.training_set != []:
-            return self.training_set
+            file_path = sys.argv[1]
+        else:
+            pass
 
         # else collect and tokenize the data from the file and store it in
         # a 2D list
-        else:
-            tokenized_data_buffer = []
-            file = open(file_path)
+        tokenized_data_buffer = []
+        file = open(file_path)
 
-            for line in file:
-                if line == "\n": #skip blank lines
-                    continue
+        for line in file:
+            if line == "\n": #skip blank lines
+                continue
 
-                tokens = line.split()
-                tokenized_data_buffer.append(tokens)
-            return tokenized_data_buffer
+            tokens = line.split()
+            tokenized_data_buffer.append(tokens)
+
+        file.close()
+
+        return tokenized_data_buffer
 
     @staticmethod
     def get_category(category, training_data):

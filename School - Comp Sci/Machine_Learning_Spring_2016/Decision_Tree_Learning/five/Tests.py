@@ -16,8 +16,8 @@ class Tests:
 
     def test_tree_for_equality(self, test_tree):
 
-        #if True:
-        #    return
+        if True:
+            return
 
         if test_tree == []:
             return
@@ -31,12 +31,8 @@ class Tests:
 
     def test_calculate_entropy_for_training_set(self, problem):
 
-        file = open('testing/set_entropy_should_be_one.dat')
-
-        training_set = file.readlines()
+        training_set = problem.training_data.get_training_set('./testing/set_entropy_should_be_one.dat')
 
         entropy = Info_Math.calculate_entropy_for_training_set(training_set)
 
-        assert entropy == 1, "error"
-
-        file.close()
+        assert entropy == 1, "error on calculate entropy for training_set()"
