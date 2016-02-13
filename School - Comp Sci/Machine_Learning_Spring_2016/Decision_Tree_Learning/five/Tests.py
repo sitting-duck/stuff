@@ -1,6 +1,7 @@
 
 import sys
 from Info_Math import Info_Math
+from Training_Data import Training_Data
 
 
 class Tests:
@@ -37,6 +38,8 @@ class Tests:
         Tests.test_email_gain_root_nigeria(problem)
         Tests.test_email_gain_root_viagra(problem)
         Tests.test_email_gain_root_learning(problem)
+
+        Tests.test_email_gain_root_nigeria_equal_zero(problem)
 
     @staticmethod
     def test_email_entropy_root(problem):
@@ -77,4 +80,19 @@ class Tests:
 
         assert gain_root_learning == expected_gain, 'error on test_email_gain_root_learning() expected %s got %s' % (gain_root_learning, expected_gain)
 
-    
+    @staticmethod
+    def test_email_gain_root_nigeria_equal_zero(problem):
+        #todo: throw in type checks into calc functions to make sure we are passing strings and not ints
+
+        training_set = problem.training_data.get_training_set('./testing/email.dat')
+
+        reduced_training_set_nigeria_zero = Training_Data.get_reduced_training_set('nigeria', '0', training_set)
+
+        gain_root_nigeria_equal_zero = Info_Math.calculate_conditional_entropy_for_attribute('nigeria', '0', training_set)
+
+        expected_gain_root_nigeria_equal_zero = 0.722
+
+        assert gain_root_nigeria_equal_zero == expected_gain_root_nigeria_equal_zero, 'error on test_email_gain_root_nigeria_equal_zero() expected %s got %s' % (expected_gain_root_nigeria_equal_zero, gain_root_nigeria_equal_zero)
+
+        print '',
+

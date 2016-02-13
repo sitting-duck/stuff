@@ -19,10 +19,11 @@ class Info_Math:
         #parent_entropy = Info_Math.calculate_entropy_for_training_set(training_set)
 
         if parent_node == None:
-            parent_entropy = Info_Math.calculate_entropy_for_training_set(training_set)
+            #parent_entropy = Info_Math.calculate_entropy_for_training_set(training_set)
+            parent_entropy = Info_Math.calculate_conditional_entropy_for_attribute(category, parent_branch_attr, training_set)
         else:
-            parent_entropy = parent_node.conditional_entropy
-            #parent_entropy = Info_Math.calculate_conditional_entropy_for_attribute(parent_node.category, parent_branch_attr, parent_node.training_set)
+            #parent_entropy = parent_node.conditional_entropy
+            parent_entropy = Info_Math.calculate_conditional_entropy_for_attribute(parent_node.category, parent_branch_attr, parent_node.training_set)
 
         #information_gain = Info_Math.prec(parent_entropy) - Info_Math.prec(training_set_for_category_entropy)
         information_gain = float(parent_entropy) - float(training_set_for_category_entropy)

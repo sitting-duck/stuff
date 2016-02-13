@@ -36,7 +36,17 @@ class Problem:
             return self.decision_tree
 
         category_for_current_node = self.get_best_category_for_node(training_set, parent_branch_attr, parent_node)
-        conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_attribute(category_for_current_node, parent_branch_attr, training_set)
+
+        #currently refactoring
+        #conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_attribute(category_for_current_node, parent_branch_attr, training_set)
+
+        if parent_node == None:
+            conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_attribute(category_for_current_node, parent_branch_attr, training_set)
+        else:
+            conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_attribute(parent_node.category, parent_branch_attr, parent_node.training_set)
+
+        if category_for_current_node == 'nigeria' and parent_branch_attr == '0':
+            assert conditional_entropy_for_current_node == 0.722, 'fail!!!!'
 
         if(Debug.level >= 1):
             Debug.log('selected', category_for_current_node, 'for current node.', "it's parent:", Decision_Tree.get_node_string(parent_node))
