@@ -41,6 +41,9 @@ class Tests:
 
         Tests.test_email_gain_root_nigeria_equal_zero(problem)
 
+        Tests.test_create_decision_tree_until_email_gain_root_nigeria_equal_zero(problem)
+
+
     @staticmethod
     def test_email_entropy_root(problem):
 
@@ -58,7 +61,7 @@ class Tests:
         gain_root_nigeria = Info_Math.calculate_information_gain_for_category('nigeria', None, None, training_set)
         expected_gain = 0.278
 
-        assert gain_root_nigeria == expected_gain, 'error on test_email_gain_root_nigeria() expected %s got %s' % (gain_root_nigeria, expected_gain)
+        assert gain_root_nigeria == expected_gain, 'error on test_email_gain_root_nigeria() expected %s got %s' % (expected_gain, gain_root_nigeria)
 
     @staticmethod
     def test_email_gain_root_viagra(problem):
@@ -96,3 +99,7 @@ class Tests:
 
         print '',
 
+
+    @staticmethod
+    def test_create_decision_tree_until_email_gain_root_nigeria_equal_zero(problem):
+        pass

@@ -11,19 +11,27 @@ class Info_Math:
     def __init__(self):
         pass
 
-# information gain is a metric to measure the amount of information gained if we split the tree at this category
+    @staticmethod
+    def calculate_information_gain_for_category_new(parent_entropy, category, training_set):
+        pass
+
+    @staticmethod
+    def calculate_entropy_for_category_new(category, parent_branch_attr, training_set):
+        pass
+
+    # information gain is a metric to measure the amount of information gained if we split the tree at this category
     @staticmethod
     def calculate_information_gain_for_category(category, parent_branch_attr, parent_node, training_set):
-        training_set_for_category_entropy = Info_Math.calculate_conditional_entropy_for_category(category, training_set)
-
-        #parent_entropy = Info_Math.calculate_entropy_for_training_set(training_set)
 
         if parent_node == None:
-            #parent_entropy = Info_Math.calculate_entropy_for_training_set(training_set)
-            parent_entropy = Info_Math.calculate_conditional_entropy_for_attribute(category, parent_branch_attr, training_set)
+            parent_entropy = Info_Math.calculate_entropy_for_training_set(training_set)
+            #parent_entropy = Info_Math.calculate_conditional_entropy_for_attribute(category, parent_branch_attr, training_set)
         else:
             #parent_entropy = parent_node.conditional_entropy
             parent_entropy = Info_Math.calculate_conditional_entropy_for_attribute(parent_node.category, parent_branch_attr, parent_node.training_set)
+
+        training_set_for_category_entropy = Info_Math.calculate_conditional_entropy_for_category(category, training_set)
+        #training_set_for_category_entropy = Info_Math.calculate_conditional_entropy_for_attribute(category, parent_branch_attr, training_set)
 
         #information_gain = Info_Math.prec(parent_entropy) - Info_Math.prec(training_set_for_category_entropy)
         information_gain = float(parent_entropy) - float(training_set_for_category_entropy)
@@ -31,7 +39,7 @@ class Info_Math:
         if(Debug.level >= 1):
             Debug.log('cat:', category, 'ig:', Info_Math.prec(parent_entropy), '-', Info_Math.prec(training_set_for_category_entropy), '=', information_gain)
 
-        assert information_gain >= 0, 'error: got negative info gain: %s for %s' % (str(information_gain), category)
+        #assert information_gain >= 0, 'error: got negative info gain: %s for %s' % (str(information_gain), category)
 
         return Info_Math.prec(information_gain)
 

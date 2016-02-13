@@ -43,7 +43,8 @@ class Problem:
         if parent_node == None:
             conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_attribute(category_for_current_node, parent_branch_attr, training_set)
         else:
-            conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_attribute(parent_node.category, parent_branch_attr, parent_node.training_set)
+            #conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_attribute(parent_node.category, parent_branch_attr, parent_node.training_set)
+            conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_category(category_for_current_node, training_set)
 
         if category_for_current_node == 'nigeria' and parent_branch_attr == '0':
             assert conditional_entropy_for_current_node == 0.722, 'fail!!!!'
