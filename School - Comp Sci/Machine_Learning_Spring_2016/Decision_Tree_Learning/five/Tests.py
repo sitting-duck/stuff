@@ -28,6 +28,7 @@ class Tests:
             return
 
         for i in range(0, len(test_tree)):
+            print '',
             #we call split so that we don't run into problems with tabs versus spaces
             assert self.expected_tree[i].split() == test_tree[i].split(), 'failure: expected: %s got: %s for line %i \ntest_tree: %s' % (self.expected_tree[i], test_tree[i], i, str(test_tree))
 
