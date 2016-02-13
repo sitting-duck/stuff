@@ -60,14 +60,14 @@ class Info_Math:
     def calculate_conditional_entropy_for_attribute(category, attribute, training_set):
         term = 0
 
-        reduced_training_set = Info_Math.get_reduced_training_set(category, attribute, training_set)
+        reduced_training_set = Training_Data.get_reduced_training_set(category, attribute, training_set)
 
         class_type_frequency = Training_Data.get_class_type_frequency_dictionary(reduced_training_set, training_set)
 
         # get all the training examples where this attribute is present for the given category
         for current_type, num_current_type in class_type_frequency.iteritems():
 
-            reduced_training_set = Info_Math.get_reduced_training_set(category, attribute, training_set)
+            reduced_training_set = Training_Data.get_reduced_training_set(category, attribute, training_set)
 
             num_training_examples_for_current_attribute = Training_Data.get_number_training_examples(reduced_training_set)
 
@@ -84,14 +84,6 @@ class Info_Math:
                 term = Info_Math.prec(term, 3)
 
         return Info_Math.prec(Info_Math.abs(term), 3)
-
-    @staticmethod
-    def get_reduced_training_set(category, attribute, training_set):
-        if attribute is None:
-            reduced_training_set = training_set
-        else:
-            reduced_training_set = Training_Data.get_training_set_for_single_attribute(category, attribute, training_set)
-        return reduced_training_set
 
     @staticmethod
     def calculate_entropy_for_training_set(training_set):

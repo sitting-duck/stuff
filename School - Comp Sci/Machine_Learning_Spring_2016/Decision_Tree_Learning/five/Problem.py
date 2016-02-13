@@ -27,8 +27,6 @@ class Problem:
 
         self.tests.run_tests(self)
 
-        self.tests.get_final_tree_test_data_from_file(self)
-
     def create_decision_tree(self, training_set, parent_branch_attr = None, parent_node = None):
 
         print "\n\n"

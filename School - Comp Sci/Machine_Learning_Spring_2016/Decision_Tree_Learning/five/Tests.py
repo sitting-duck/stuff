@@ -1,3 +1,5 @@
+
+import sys
 from Info_Math import Info_Math
 
 
@@ -6,13 +8,15 @@ class Tests:
     expected_tree = []
 
     def __init__(self):
-        pass
 
-    def get_final_tree_test_data_from_file(self, problem):
+        self.expected_tree = self.get_final_tree_test_data_from_file(sys.argv[2])
 
-        file = open('expected_tree_my_format.txt', 'r')
+    @staticmethod
+    def get_final_tree_test_data_from_file(file_path_to_expected_tree):
 
-        self.expected_tree = list(file)
+        file = open(file_path_to_expected_tree, 'r')
+
+        return list(file)
 
     def test_tree_for_equality(self, test_tree):
 
@@ -26,13 +30,26 @@ class Tests:
             print '',
             assert self.expected_tree[i] == test_tree[i], 'failure: expected: %s got: %s for line %i \ntest_tree: %s' % (self.expected_tree[i], test_tree[i], i, str(test_tree))
 
-    def run_tests(self, problem):
-        self.test_calculate_entropy_for_training_set(problem)
+    @staticmethod
+    def run_tests(problem):
+        Tests.test_email_entropy_root(problem)
+        Tests.test_email_gain_root_nigeria(problem)
 
-    def test_calculate_entropy_for_training_set(self, problem):
+    @staticmethod
+    def test_email_entropy_root(problem):
 
         training_set = problem.training_data.get_training_set('./testing/set_entropy_should_be_one.dat')
 
         entropy = Info_Math.calculate_entropy_for_training_set(training_set)
 
         assert entropy == 1, "error on calculate entropy for training_set()"
+
+    @staticmethod
+    def test_email_gain_root_nigeria(problem):
+
+        training_set = problem.training_data.get_training_set('./testing/email.dat')
+
+        gain_root_nigeria = Info_Math.calculate_information_gain_for_category('nigeria', None, None, training_set)
+        expected_gain = 0.278
+
+        assert gain_root_nigeria == expected_gain, 'error on test_email_gain_root_nigeria() expected %s got %s' % (gain_root_nigeria, expected_gain)

@@ -330,9 +330,6 @@ class Training_Data:
             num_of_type = Training_Data.get_number_of_training_examples_of_class_type(type, training_set)
             type_dic[type] = num_of_type
 
-        for key, value in type_dic.iteritems():
-            print "key: " + key + " value: " + str(value)
-
         greatest_current_key = ''
         greatest_num_items = 0
 
@@ -351,3 +348,11 @@ class Training_Data:
         most_common = sorted(keys)[0]
 
         return most_common
+
+    @staticmethod
+    def get_reduced_training_set(category, attribute, training_set):
+        if attribute is None:
+            reduced_training_set = training_set
+        else:
+            reduced_training_set = Training_Data.get_training_set_for_single_attribute(category, attribute, training_set)
+        return reduced_training_set
