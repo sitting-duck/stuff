@@ -164,8 +164,8 @@ class Problem:
             current_information_gain = Info_Math.calculate_information_gain_for_category(category, parent_branch_attr, parent_node, training_set)
 
             #if they have the same information gain, take the one that is alphabetically lower
-            if current_information_gain == current_best_information_gain:
-                current_best_category = Training_Data.get_lowest_alpha_category((category, current_best_category))
+            #if current_information_gain == current_best_information_gain:
+            #    current_best_category = Training_Data.get_lowest_alpha_category((category, current_best_category))
 
             #if current is better then take current
             if current_information_gain > current_best_information_gain:
