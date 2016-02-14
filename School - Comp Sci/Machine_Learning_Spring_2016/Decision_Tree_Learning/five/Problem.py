@@ -46,9 +46,6 @@ class Problem:
             #conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_attribute(parent_node.category, parent_branch_attr, parent_node.training_set)
             conditional_entropy_for_current_node = Info_Math.calculate_conditional_entropy_for_category(category_for_current_node, training_set)
 
-        if category_for_current_node == 'nigeria' and parent_branch_attr == '0':
-            assert conditional_entropy_for_current_node == 0.722, 'fail!!!!'
-
         if(Debug.level >= 1):
             Debug.log('selected', category_for_current_node, 'for current node.', "it's parent:", Decision_Tree.get_node_string(parent_node))
 
@@ -65,7 +62,7 @@ class Problem:
         return self.decision_tree
 
     #returns true if we've reached a leaf node and it's time to bail out of this recursive thread
-    def append_leaf_node_to_tree_and_exit_if_single_category(self, parent_node, training_set, parent_branch_attr):
+    def append_leaf_node_to_tree_and_exit_if_single_category_old(self, parent_node, training_set, parent_branch_attr):
 
         categories = Training_Data.get_category_names(training_set)
         num_categories = len(categories)
@@ -86,14 +83,37 @@ class Problem:
         else:
             return False
 
+        #returns true if we've reached a leaf node and it's time to bail out of this recursive thread
+    def append_leaf_node_to_tree_and_exit_if_single_category(self, parent_node, training_set, parent_branch_attr):
+
+        if Training_Data.is_leaf(training_set):
+
+            self.add_leaf_to_tree(parent_node, training_set, parent_branch_attr)
+            return True
+        else:
+            return False
+
     def add_leaf_to_tree(self, parent_node, training_set, parent_branch_attr):
 
-        type = Training_Data.get_most_common_class_type(training_set)
+        type = self.get_type_for_leaf(training_set)
 
         parent_conditional_entropy = Problem.get_parent_conditional_entropy(parent_node)
 
         # add the parent
         self.add_node_to_tree(str(type), parent_conditional_entropy, parent_node, training_set, True, parent_branch_attr)
+
+    def get_type_for_leaf(self, training_set):
+        #select the most common type in the global training set
+        # when the training set has zero training examples
+        if Training_Data.get_number_training_examples(training_set) == 0:
+            return Training_Data.get_most_common_class_type(self.training_set)
+        else:
+            # select the most common type in the local training set
+            # when  the training set is not pure but there are no categories left and there is more than zero examples
+            if Training_Data.is_pure(training_set) == False and Training_Data.get_num_categories(training_set) == 0:
+                return Training_Data.get_most_common_class_type(training_set)
+            else:
+                return Training_Data.get_most_common_class_type(training_set)
 
     @staticmethod
     def get_parent_conditional_entropy(parent_node):

@@ -130,9 +130,9 @@ class Training_Data:
 
         #if we have one arg
         else:
-            class_types = Training_Data.get_set_of_unique_class_types(training_set)
+            class_types = Training_Data.get_set_of_unique_class_types(reduced_training_set)
             for type in class_types:
-                num_of_type = Training_Data.get_number_of_training_examples_of_class_type(type, training_set)
+                num_of_type = Training_Data.get_number_of_training_examples_of_class_type(type, reduced_training_set)
                 proportion_to_class_type_for_training_set[type] = num_of_type
 
         return proportion_to_class_type_for_training_set
@@ -217,7 +217,8 @@ class Training_Data:
         column = copy.deepcopy(Training_Data.get_column(index, training_set))
 
         #delete the category name from this data column
-        del column[0]
+        if len(column) > 0:
+            del column[0]
 
         # add all names not seen before to the list of attr names
         # note: attribute names cannot be the same as a category name
@@ -234,7 +235,7 @@ class Training_Data:
 
     @staticmethod
     def get_num_categories(training_set):
-        return len(Training_Data.get_category_names())
+        return len(Training_Data.get_category_names(training_set))
 
     @staticmethod
     def get_category_names(training_set):
@@ -296,7 +297,10 @@ class Training_Data:
 
     @staticmethod
     def get_index_of_class_column(training_set):
-        return len(training_set[0]) - 1
+        if len(training_set) == 0:
+            return 0
+        else:
+            return len(training_set[0]) - 1
 
     @staticmethod
     def get_number_training_examples(training_set):
@@ -304,13 +308,23 @@ class Training_Data:
 
     @staticmethod
     def is_leaf(training_set):
-        if Training_Data.is_pure(training_set):
+        if Training_Data.is_single_class_type(training_set):
             return True
         else:
-            if Training_Data.get_num_categories(training_set) == 0 and Training_Data.is_split_equally_between_class_types(training_set)
+            if Training_Data.get_num_categories(training_set) == 0 \
+                    and Training_Data.is_split_equally_between_class_types(training_set):
+                return True
+            else:
+                if Training_Data.get_num_categories(training_set) == 0:
+                    return True
+                else:
+                    return False
 
     @staticmethod
     def is_split_equally_between_class_types(training_set):
+
+        if len(training_set) == 0:
+            return True
 
         #If you don't have exotic data in your dicts equality should be transitive,
         #i. e. from
@@ -321,6 +335,9 @@ class Training_Data:
         #This reduces the number of tests significantly.
 
         freq_dict = Training_Data.get_class_type_frequency_dictionary(training_set)
+
+        if len(freq_dict) == 0:
+            return True
 
         values = freq_dict.itervalues() #get all the values
 

@@ -46,7 +46,7 @@ class Info_Math:
         #assert Info_Math.abs(0 - information_gain) > 0.02, 'error: got negative info gain: %s for %s' % (str(information_gain), category)
         #assert Info_Math.within_acceptable_error(information_gain, 0, 0.02), 'error: got negative info gain: %s for %s' % (str(information_gain), category)
 
-        return Info_Math.prec(information_gain)
+        return float(information_gain)
 
     @staticmethod
     def within_acceptable_error(expected, actual, error):
@@ -68,11 +68,11 @@ class Info_Math:
             if(Debug.level == 6):
                  Debug.log('(', num_current_attribute, '/', num_training_examples, ')', '*')
 
-            Pi = Info_Math.prec(num_current_attribute / num_training_examples)
+            Pi = float(num_current_attribute / num_training_examples)
             Hi = Info_Math.calculate_conditional_entropy_for_attribute(category, attribute, training_set)
 
-            sum += Info_Math.prec( Pi * Hi)
-        return Info_Math.prec(Info_Math.abs(sum))
+            sum += float( Pi * Hi)
+        return float(Info_Math.abs(sum))
 
     @staticmethod
     def calculate_conditional_entropy_for_attribute(category, attribute, training_set):
@@ -92,16 +92,17 @@ class Info_Math:
             if(Debug.level >= 6):
                  Debug.log('\t\t\t\t\t\t((-', num_current_type, '/', num_training_examples_for_current_attribute, ')log(', num_current_type, '/', num_training_examples_for_current_attribute, ')', '+')
 
-            Pi = Info_Math.prec(float(num_current_type))/Info_Math.prec(float(num_training_examples_for_current_attribute))
+            Pi = float(num_current_type)/float(num_training_examples_for_current_attribute)
 
             # for the edge case of log(0) (convenient loophole for computing entropy)
             if Pi == 0.0:
                 term -= 0.0
             else:
-                term -= Info_Math.prec(Pi) * Info_Math.prec(math.log(Pi, 2))
-                term = Info_Math.prec(term, 3)
+                term -= float(Pi) * float(math.log(Pi, 2))
+                #term = Info_Math.prec(term, 3)
 
-        return Info_Math.prec(Info_Math.abs(term), 3)
+        #return Info_Math.prec(Info_Math.abs(term), 3)
+        return Info_Math.abs(term)
 
     @staticmethod
     def calculate_entropy_for_training_set(training_set):

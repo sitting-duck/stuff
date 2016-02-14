@@ -21,8 +21,8 @@ class Tests:
 
     def test_tree_for_equality(self, test_tree):
 
-        if True:
-            return
+        #if True:
+        #    return
 
         if test_tree == []:
             return
@@ -37,6 +37,7 @@ class Tests:
 
         Tests.test_single_class_type(problem)
         Tests.test_is_pure(problem)
+        Tests.test_is_split_equally_between_class_types(problem)
         Tests.test_is_leaf(problem)
 
         Tests.test_email_entropy_root(problem)
@@ -52,22 +53,33 @@ class Tests:
     @staticmethod
     def test_is_leaf(problem):
 
-        #note: a node does not have to be pure to be a leaf,
-        #it can be impure if there are zero categories left and there is more than one class type
-        #or it can also be impure if there are multiple categories left
-
         #a node is a leaf if
         # a. the training set is pure
 
-        # select the most common type in the local training set
-        # when  the training set is not pure but there are no categories left and there is more than zero examples
+        #note: a node does not have to be pure to be a leaf,
+        #it can be a leaf AND impure if there are zero categories left and there is more than one class type
+        training_set = problem.training_data.get_training_set('./testing/purity/training_examples_equally_split_between_two_classes.dat')
+        expected_result = True
+        result = Training_Data.is_leaf(training_set)
+        assert expected_result == result, 'error on test_is_leaf() expected %s got %s' % (expected_result, result)
 
-        #select the most common type in the global training set
-        # when the training set has zero training examples
+        training_set = problem.training_data.get_training_set('./testing/purity/no_training_examples_no_categories.dat')
+        expected_result = True
+        result = Training_Data.is_leaf(training_set)
+        assert expected_result == result, 'error on test_is_leaf() expected %s got %s' % (expected_result, result)
 
+    @staticmethod
+    def test_is_split_equally_between_class_types(problem):
 
+        training_set = problem.training_data.get_training_set('./testing/purity/training_examples_equally_split_between_two_classes.dat')
+        expected_result = True
+        result = Training_Data.is_split_equally_between_class_types(training_set)
+        assert expected_result == result, 'error on training_examples_equally_split_between_two_classes expected %s got %s' % (expected_result, result)
 
-        pass
+        training_set = problem.training_data.get_training_set('./testing/purity/training_examples_not_equally_split_between_two_classes.dat')
+        expected_result = False
+        result = Training_Data.is_split_equally_between_class_types(training_set)
+        assert expected_result == result, 'error on training_examples_not_equally_split_between_two_classes expected %s got %s' % (expected_result, result)
 
     @staticmethod
     def test_is_pure(problem):
@@ -82,9 +94,9 @@ class Tests:
         result = Training_Data.is_pure(training_set)
         assert expected_result == result, 'error on test_is_pure() expected %s got %s' % (expected_result, result)
 
-        training_set = problem.training_data.get_training_set('./testing/purity/should_be_pure_training_examples_equally_split_between_two_classes.dat')
-        result = Training_Data.is_pure(training_set)
-        assert expected_result == result, 'error on test_is_pure() expected %s got %s' % (expected_result, result)
+        #training_set = problem.training_data.get_training_set('./testing/purity/should_be_pure_training_examples_equally_split_between_two_classes.dat')
+        #result = Training_Data.is_pure(training_set)
+        #assert expected_result == result, 'error on test_is_pure() expected %s got %s' % (expected_result, result)
 
     @staticmethod
     def test_single_class_type(problem):
@@ -116,7 +128,7 @@ class Tests:
         gain_root_nigeria = Info_Math.calculate_information_gain_for_category('nigeria', None, None, training_set)
         expected_gain = 0.278
 
-        assert gain_root_nigeria == expected_gain, 'error on test_email_gain_root_nigeria() expected %s got %s' % (expected_gain, gain_root_nigeria)
+        assert Info_Math.prec(gain_root_nigeria) == expected_gain, 'error on test_email_gain_root_nigeria() expected %s got %s' % (expected_gain, gain_root_nigeria)
 
     @staticmethod
     def test_email_gain_root_viagra(problem):
@@ -126,7 +138,7 @@ class Tests:
         gain_root_viagra = Info_Math.calculate_information_gain_for_category('viagra', None, None, training_set)
         expected_gain = 0.035
 
-        assert gain_root_viagra == expected_gain, 'error on test_email_gain_root_viagra() expected %s got %s' % (gain_root_viagra, expected_gain)
+        assert Info_Math.prec(gain_root_viagra) == expected_gain, 'error on test_email_gain_root_viagra() expected %s got %s' % (gain_root_viagra, expected_gain)
 
     @staticmethod
     def test_email_gain_root_learning(problem):
@@ -136,7 +148,7 @@ class Tests:
         gain_root_learning = Info_Math.calculate_information_gain_for_category('learning', None, None, training_set)
         expected_gain = 0.236
 
-        assert gain_root_learning == expected_gain, 'error on test_email_gain_root_learning() expected %s got %s' % (gain_root_learning, expected_gain)
+        assert Info_Math.prec(gain_root_learning) == expected_gain, 'error on test_email_gain_root_learning() expected %s got %s' % (gain_root_learning, expected_gain)
 
     @staticmethod
     def test_email_gain_root_nigeria_equal_zero(problem):
@@ -150,9 +162,7 @@ class Tests:
 
         expected_gain_root_nigeria_equal_zero = 0.722
 
-        assert gain_root_nigeria_equal_zero == expected_gain_root_nigeria_equal_zero, 'error on test_email_gain_root_nigeria_equal_zero() expected %s got %s' % (expected_gain_root_nigeria_equal_zero, gain_root_nigeria_equal_zero)
-
-        print '',
+        assert Info_Math.prec(gain_root_nigeria_equal_zero) == expected_gain_root_nigeria_equal_zero, 'error on test_email_gain_root_nigeria_equal_zero() expected %s got %s' % (expected_gain_root_nigeria_equal_zero, gain_root_nigeria_equal_zero)
 
 
     @staticmethod
