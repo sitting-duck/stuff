@@ -72,7 +72,8 @@ class Info_Math:
             Hi = Info_Math.calculate_conditional_entropy_for_attribute(category, attribute, training_set)
 
             sum += float( Pi * Hi)
-        return float(Info_Math.abs(sum))
+        #return float(Info_Math.abs(sum))
+        return float(sum)
 
     @staticmethod
     def calculate_conditional_entropy_for_attribute(category, attribute, training_set):
@@ -102,7 +103,8 @@ class Info_Math:
                 #term = Info_Math.prec(term, 3)
 
         #return Info_Math.prec(Info_Math.abs(term), 3)
-        return Info_Math.abs(term)
+        #return Info_Math.abs(term)
+        return term
 
     @staticmethod
     def calculate_entropy_for_training_set(training_set):
@@ -119,7 +121,8 @@ class Info_Math:
             #sum -= Info_Math.prec(Pi)*(Info_Math.prec(math.log(Pi, 2)))
             sum -= (Pi)*float(math.log(Pi, 2))
         #return Info_Math.prec(Info_Math.abs(sum), 3)
-        return float(Info_Math.abs(sum))
+        #return float(Info_Math.abs(sum))
+        return float(sum)
 
     @staticmethod
     def prec(number, precision = 3):
