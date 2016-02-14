@@ -311,15 +311,36 @@ class Training_Data:
         if Training_Data.is_single_class_type(training_set):
             return True
         else:
-            if Training_Data.get_num_categories(training_set) == 0 \
-                    and Training_Data.is_split_equally_between_class_types(training_set):
+            if Training_Data.get_num_categories(training_set) == 0 and Training_Data.is_split_equally_between_class_types(training_set):
                 return True
             else:
-                False
-                #if Training_Data.get_num_categories(training_set) == 0:
-                #    return True
+
+                temp_training = copy.deepcopy(training_set)
+
+                #get rid of the category row
+                del temp_training[0]
+
+                #get rid of the class column
+                for i in range(0, len(temp_training)):
+                    del temp_training[i][-1]
+
+                #if all the rows in temp_training it means that the classes are divided equally among the attributes
+                comparison_row = temp_training[0]
+
+                if all(comparison_row == row for row in temp_training):
+                    return True
+                else:
+                    return False
+
+               
+                #        if Training_Data.get_num_categories(training_set) == 0:
+                #            return True
+                #        else:
                 #else:
-                #    return False
+                #    if Training_Data.is_split_equally_between_class_types(training_set):
+                #        return True
+                #    else:
+                #            return False
 
     @staticmethod
     def is_split_equally_between_class_types(training_set):
