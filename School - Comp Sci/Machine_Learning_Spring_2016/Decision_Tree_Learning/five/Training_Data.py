@@ -104,7 +104,7 @@ class Training_Data:
     @staticmethod
     def get_set_of_unique_class_types(training_set):
         last_column_index = Training_Data.get_index_of_class_column(training_set)
-        return Training_Data.get_unique_attribute_names_from_column(last_column_index, training_set)
+        return sorted(Training_Data.get_unique_attribute_names_from_column(last_column_index, training_set))
 
     @staticmethod
     def get_number_of_training_examples_of_class_type(type, training_set):
@@ -315,10 +315,11 @@ class Training_Data:
                     and Training_Data.is_split_equally_between_class_types(training_set):
                 return True
             else:
-                if Training_Data.get_num_categories(training_set) == 0:
-                    return True
-                else:
-                    return False
+                False
+                #if Training_Data.get_num_categories(training_set) == 0:
+                #    return True
+                #else:
+                #    return False
 
     @staticmethod
     def is_split_equally_between_class_types(training_set):
