@@ -332,16 +332,6 @@ class Training_Data:
                 else:
                     return False
 
-               
-                #        if Training_Data.get_num_categories(training_set) == 0:
-                #            return True
-                #        else:
-                #else:
-                #    if Training_Data.is_split_equally_between_class_types(training_set):
-                #        return True
-                #    else:
-                #            return False
-
     @staticmethod
     def is_split_equally_between_class_types(training_set):
 
