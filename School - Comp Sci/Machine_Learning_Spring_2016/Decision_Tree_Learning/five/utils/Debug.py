@@ -11,7 +11,7 @@ class Debug(object):
 
     # level 4 prints out the entire calculations done for calculating entropy and information gain
 
-    # level 5 prints out all of the above and whether each iteration of the partitioning of the training set is homogenous
+    # level 5 prints out all of the above and whether each iteration of the partitioning of the training set is homogeneous
 
     # level 6 prints out the actual fractions in the entropy calculations
 

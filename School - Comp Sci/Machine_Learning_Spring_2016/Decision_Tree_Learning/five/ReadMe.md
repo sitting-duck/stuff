@@ -6,6 +6,5 @@ Entropy is calculated for a set
 
 Information gain is calculated for a category
 
-Is there a way to reduce coupling so that we don't have to type problem
-.training set all the tiem?
+
 

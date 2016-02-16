@@ -1,16 +1,12 @@
-import copy
 
-from Node import Node
-from Parse_Tools import Training_Data
-
-class Decision_Tree:
+class DecisionTree:
 
     def __init__(self):
-         self.root = None
-         self.nodes = []
+        self.root = None
+        self.nodes = []
 
     def has_root(self):
-        return self.root != None
+        return self.root is not None
 
     def set_root(self, node):
         self.root = node
@@ -18,7 +14,6 @@ class Decision_Tree:
     def add_node(self, new_node):
         if len(self.nodes) == 0:
             self.set_root(new_node)
-        #self.nodes.append(copy.deepcopy(new_node))
         self.nodes.append(new_node)
 
     def get_num_nodes(self):
@@ -58,7 +53,7 @@ class Decision_Tree:
 
         for i in range(0, len(self.nodes)):
 
-            if self.nodes[i].parent == None:
+            if self.nodes[i].parent is None:
                 continue
 
             if self.nodes[i].parent is current_node:
@@ -66,17 +61,19 @@ class Decision_Tree:
 
         return child_nodes
 
-    def get_level_depth_for_node(self, current_node):
+    @staticmethod
+    def get_level_depth_for_node(current_node):
 
         level_depth = 0
 
-        while current_node.parent != None:
+        while current_node.parent is not None:
             current_node = current_node.parent
             level_depth += 1
 
         return level_depth
 
-    def print_level(self, level):
+    @staticmethod
+    def print_level(level):
         for node in level:
             print node.category + " ",
         print ""
@@ -102,7 +99,7 @@ class Decision_Tree:
 
     @staticmethod
     def get_node_string(node):
-        if node == None:
+        if node is None:
             return 'none'
         else:
             return node.category

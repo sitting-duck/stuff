@@ -1,9 +1,4 @@
-
-from Parse_Tools import Training_Data
-
 class Node:
-
-    #add is leaf default param
 
     def __init__(self, category, conditional_entropy, parent, training_set, is_leaf, parent_branch_attr):
 
@@ -22,7 +17,7 @@ class Node:
         self.parent_branch_attr = parent_branch_attr
 
     def is_root(self):
-        return self.parent == None
+        return self.parent is None
 
     def is_leaf(self):
         return self.is_leaf()
@@ -30,8 +25,9 @@ class Node:
     def print_me(self):
         print 'cat: ' + str(self.category) + ' par: ' + self.str(self.parent)
 
-    def str(self, node):
-        if node == None:
+    @staticmethod
+    def str(node):
+        if node is None:
             return 'none'
         else:
             return node.category
