@@ -8,7 +8,7 @@ from tree.Node import Node
 from utils.Debug import Debug
 
 
-class Problem:
+class Training:
     # all the training examples and functions for accessing them are contained in this object
     training_data = ParseTools()
 
@@ -35,24 +35,19 @@ class Problem:
 
         category_for_current_node = self.get_best_category_for_node(training_set, parent_branch_attr, parent_node)
 
-        if parent_node is None:
-            conditional_entropy_for_current_node = InfoMath.calculate_conditional_entropy_for_attribute(
-                category_for_current_node, parent_branch_attr, training_set)
-        else:
-            conditional_entropy_for_current_node = InfoMath.calculate_conditional_entropy_for_category(
-                category_for_current_node, training_set)
+        conditional_entropy_for_current_node = InfoMath.calculate_conditional_entropy_for_current_node(parent_node, category_for_current_node, parent_branch_attr, training_set)
 
         if Debug.level >= 1:
             Debug.log('selected', category_for_current_node, 'for current node.', "it's parent:",
                       DecisionTree.get_node_string(parent_node))
 
         # the current category column will be removed in the training sets passed down to the child nodes
-        partitions = self.get_training_set_partitions_by_attribute(category_for_current_node, training_set)
+        partitions = ParseTools.get_training_set_partitions_by_attribute(category_for_current_node, training_set)
 
-        attributes = self.training_data.get_unique_attributes_for_category(category_for_current_node, training_set)
+        attributes = ParseTools.get_unique_attributes_for_category(category_for_current_node, training_set)
 
-        current_node = self.add_node_to_tree(category_for_current_node, conditional_entropy_for_current_node,
-                                             parent_node, training_set, False, parent_branch_attr)
+        current_node = self.add_node_to_tree_and_test_current_tree(category_for_current_node, conditional_entropy_for_current_node,
+                                                                   parent_node, training_set, False, parent_branch_attr)
 
         for attribute in attributes:
             self.create_decision_tree(partitions[attribute], attribute, current_node)
@@ -74,11 +69,11 @@ class Problem:
 
         current_leaf_type = self.get_type_for_leaf(training_set)
 
-        parent_conditional_entropy = Problem.get_parent_conditional_entropy(parent_node)
+        parent_conditional_entropy = Node.get_parent_conditional_entropy(parent_node)
 
         # add the parent
-        self.add_node_to_tree(str(current_leaf_type), parent_conditional_entropy, parent_node, training_set, True,
-                              parent_branch_attr)
+        self.add_node_to_tree_and_test_current_tree(str(current_leaf_type), parent_conditional_entropy, parent_node, training_set, True,
+                                                    parent_branch_attr)
 
     def get_type_for_leaf(self, training_set):
 
@@ -96,28 +91,6 @@ class Problem:
 
             else:
                 return ParseTools.get_most_common_class_type(training_set)
-
-    @staticmethod
-    def get_parent_conditional_entropy(parent_node):
-        if parent_node is None:
-            return None
-        else:
-            return parent_node.conditional_entropy
-
-    def get_training_set_partitions_by_attribute(self, category, training_set):
-
-        if category is None:
-            return
-
-        attributes = self.training_data.get_unique_attributes_for_category(category, training_set)
-        partitions = {}
-
-        for attribute in attributes:
-            temp_partition = self.training_data.get_training_set_for_single_attribute(category, attribute, training_set)
-
-            partitions[attribute] = self.training_data.get_training_set_with_category_removed(category, temp_partition)
-
-        return partitions
 
     # partition the training examples by class type
     def get_training_set_partitions_by_class_type(self, training_set):
@@ -155,8 +128,9 @@ class Problem:
 
         return current_best_category
 
-    def add_node_to_tree(self, category, conditional_entropy, parent_node, training_set, is_leaf, parent_branch_attr):
+    def add_node_to_tree_and_test_current_tree(self, category, conditional_entropy, parent_node, training_set, is_leaf, parent_branch_attr):
         current_node = Node(category, conditional_entropy, parent_node, training_set, is_leaf, parent_branch_attr)
+
         self.decision_tree.add_node(current_node)
 
         if Debug.level >= 3:

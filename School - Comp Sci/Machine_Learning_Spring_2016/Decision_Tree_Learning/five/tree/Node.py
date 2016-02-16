@@ -31,3 +31,10 @@ class Node:
             return 'none'
         else:
             return node.category
+
+    @staticmethod
+    def get_parent_conditional_entropy(parent_node):
+        if parent_node is None:
+            return None
+        else:
+            return parent_node.conditional_entropy

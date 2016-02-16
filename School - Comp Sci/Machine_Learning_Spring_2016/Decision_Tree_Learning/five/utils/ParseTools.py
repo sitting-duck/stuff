@@ -430,3 +430,19 @@ class ParseTools:
             return True
         else:
             return False
+
+    @staticmethod
+    def get_training_set_partitions_by_attribute(category, training_set):
+
+        if category is None:
+            return
+
+        attributes = ParseTools.get_unique_attributes_for_category(category, training_set)
+        partitions = {}
+
+        for attribute in attributes:
+            temp_partition = ParseTools.get_training_set_for_single_attribute(category, attribute, training_set)
+
+            partitions[attribute] = ParseTools.get_training_set_with_category_removed(category, temp_partition)
+
+        return partitions

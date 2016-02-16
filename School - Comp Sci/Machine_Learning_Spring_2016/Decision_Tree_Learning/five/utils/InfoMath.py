@@ -52,6 +52,13 @@ class InfoMath:
         return InfoMath.abs(expected - actual) <= error
 
     @staticmethod
+    def calculate_conditional_entropy_for_current_node(parent_node, category_for_current_node, parent_branch_attr, training_set):
+        if parent_node is None:
+            return InfoMath.calculate_conditional_entropy_for_attribute(category_for_current_node, parent_branch_attr, training_set)
+        else:
+            return InfoMath.calculate_conditional_entropy_for_category(category_for_current_node, training_set)
+
+    @staticmethod
     def calculate_conditional_entropy_for_category(category, training_set):
 
         current_entropy_sum = 0

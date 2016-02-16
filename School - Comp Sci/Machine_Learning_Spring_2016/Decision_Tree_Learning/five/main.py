@@ -1,11 +1,11 @@
 from utils.ParseTools import ParseTools
 from utils.PrintTools import PrintTools
-from Problem import Problem
+from Training import Training
 
 
 def main():
 
-    problem = Problem()
+    problem = Training()
 
     training_set = ParseTools.get_training_set()
 

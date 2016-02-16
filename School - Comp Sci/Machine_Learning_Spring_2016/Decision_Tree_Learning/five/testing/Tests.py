@@ -38,6 +38,8 @@ class Tests:
 
         Tests.test_email_gain_root_nigeria_equal_zero(problem)
 
+        Tests.test_get_node_with()#boop
+
     @staticmethod
     def test_is_leaf(problem):
         # a node is a leaf if
