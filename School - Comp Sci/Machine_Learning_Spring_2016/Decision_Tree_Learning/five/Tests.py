@@ -1,7 +1,7 @@
 
 import sys
 from Info_Math import Info_Math
-from Training_Data import Training_Data
+from Parse_Tools import Training_Data
 
 
 class Tests:
@@ -28,7 +28,6 @@ class Tests:
             return
 
         for i in range(0, len(test_tree)):
-            print '',
             #we call split so that we don't run into problems with tabs versus spaces
             assert self.expected_tree[i].split() == test_tree[i].split(), 'failure: expected: %s got: %s for line %i \ntest_tree: %s' % (self.expected_tree[i], test_tree[i], i, str(test_tree))
 
@@ -123,7 +122,7 @@ class Tests:
     @staticmethod
     def test_email_gain_root_nigeria(problem):
 
-        training_set = problem.training_data.get_training_set('./testing/email.dat')
+        training_set = problem.training_data.get_training_set('./training/email/email.dat')
 
         gain_root_nigeria = Info_Math.calculate_information_gain_for_category('nigeria', None, None, training_set)
         expected_gain = 0.278
@@ -133,7 +132,7 @@ class Tests:
     @staticmethod
     def test_email_gain_root_viagra(problem):
 
-        training_set = problem.training_data.get_training_set('./testing/email.dat')
+        training_set = problem.training_data.get_training_set('./training/email/email.dat')
 
         gain_root_viagra = Info_Math.calculate_information_gain_for_category('viagra', None, None, training_set)
         expected_gain = 0.035
@@ -143,7 +142,7 @@ class Tests:
     @staticmethod
     def test_email_gain_root_learning(problem):
 
-        training_set = problem.training_data.get_training_set('./testing/email.dat')
+        training_set = problem.training_data.get_training_set('./training/email/email.dat')
 
         gain_root_learning = Info_Math.calculate_information_gain_for_category('learning', None, None, training_set)
         expected_gain = 0.236
@@ -154,7 +153,7 @@ class Tests:
     def test_email_gain_root_nigeria_equal_zero(problem):
         #todo: throw in type checks into calc functions to make sure we are passing strings and not ints
 
-        training_set = problem.training_data.get_training_set('./testing/email.dat')
+        training_set = problem.training_data.get_training_set('./training/email/email.dat')
 
         reduced_training_set_nigeria_zero = Training_Data.get_reduced_training_set('nigeria', '0', training_set)
 

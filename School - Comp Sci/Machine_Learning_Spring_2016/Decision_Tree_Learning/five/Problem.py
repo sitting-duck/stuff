@@ -4,7 +4,7 @@ from __future__ import division
 from Info_Math import Info_Math
 from Print_Tools import Print_Tools
 from Tests import Tests
-from Training_Data import Training_Data
+from Parse_Tools import Training_Data
 from Decision_Tree import Decision_Tree
 from Node import Node
 from Debug import Debug

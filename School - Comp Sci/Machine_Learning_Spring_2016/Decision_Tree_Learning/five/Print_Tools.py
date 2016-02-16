@@ -1,7 +1,7 @@
 import copy
 
 from Tests import Tests
-from Training_Data import Training_Data
+from Parse_Tools import Training_Data
 
 class Print_Tools:
 
