@@ -1,7 +1,7 @@
 from __future__ import division
 from utils.InfoMath import InfoMath
 from utils.PrintTools import PrintTools
-from testing.Tests import Tests
+from testing.unit_testing.UnitTests import UnitTests
 from utils.ParseTools import ParseTools
 from tree.DecisionTree import DecisionTree
 from tree.Node import Node
@@ -9,6 +9,9 @@ from utils.Debug import Debug
 
 
 class Training:
+    """
+        This class will train and build the decision tree with a set of training examples
+    """
     # all the training examples and functions for accessing them are contained in this object
     training_data = ParseTools()
 
@@ -19,7 +22,7 @@ class Training:
 
     def __init__(self):
 
-        self.tests = Tests()
+        self.tests = UnitTests()
 
         self.training_set = ParseTools.get_training_set()
 

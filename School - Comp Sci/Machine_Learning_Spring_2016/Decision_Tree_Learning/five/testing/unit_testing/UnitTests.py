@@ -3,7 +3,7 @@ from utils.InfoMath import InfoMath
 from utils.ParseTools import ParseTools
 
 
-class Tests:
+class UnitTests:
     expected_tree = []
 
     def __init__(self):
@@ -25,20 +25,18 @@ class Tests:
 
     @staticmethod
     def run_tests(problem):
-        Tests.test_single_class_type(problem)
-        Tests.test_is_pure(problem)
-        Tests.test_is_split_equally_between_class_types(problem)
-        Tests.test_is_leaf(problem)
+        UnitTests.test_single_class_type(problem)
+        UnitTests.test_is_pure(problem)
+        UnitTests.test_is_split_equally_between_class_types(problem)
+        UnitTests.test_is_leaf(problem)
 
-        Tests.test_email_entropy_root(problem)
+        UnitTests.test_email_entropy_root(problem)
 
-        Tests.test_email_gain_root_nigeria(problem)
-        Tests.test_email_gain_root_viagra(problem)
-        Tests.test_email_gain_root_learning(problem)
+        UnitTests.test_email_gain_root_nigeria(problem)
+        UnitTests.test_email_gain_root_viagra(problem)
+        UnitTests.test_email_gain_root_learning(problem)
 
-        Tests.test_email_gain_root_nigeria_equal_zero(problem)
-
-        Tests.test_get_node_with()#boop
+        UnitTests.test_email_gain_root_nigeria_equal_zero(problem)
 
     @staticmethod
     def test_is_leaf(problem):
@@ -48,12 +46,12 @@ class Tests:
         # note: a node does not have to be pure to be a leaf,
         # it can be a leaf AND impure if there are zero categories left and there is more than one class type
         training_set = problem.training_data.get_training_set(
-            './testing/purity/training_examples_equally_split_between_two_classes.dat')
+            './testing/unit_testing/purity/training_examples_equally_split_between_two_classes.dat')
         expected_result = True
         result = ParseTools.is_leaf(training_set)
         assert expected_result == result, 'error on test_is_leaf() expected %s got %s' % (expected_result, result)
 
-        training_set = problem.training_data.get_training_set('./testing/purity/no_training_examples_no_categories.dat')
+        training_set = problem.training_data.get_training_set('./testing/unit_testing/purity/no_training_examples_no_categories.dat')
         expected_result = True
         result = ParseTools.is_leaf(training_set)
         assert expected_result == result, 'error on test_is_leaf() expected %s got %s' % (expected_result, result)
@@ -61,14 +59,14 @@ class Tests:
     @staticmethod
     def test_is_split_equally_between_class_types(problem):
         training_set = problem.training_data.get_training_set(
-            './testing/purity/training_examples_equally_split_between_two_classes.dat')
+            './testing/unit_testing/purity/training_examples_equally_split_between_two_classes.dat')
         expected_result = True
         result = ParseTools.is_split_equally_between_class_types(training_set)
         assert expected_result == result, 'error on training_examples_equally_split_between_two_classes expected %s got %s' % (
             expected_result, result)
 
         training_set = problem.training_data.get_training_set(
-            './testing/purity/training_examples_not_equally_split_between_two_classes.dat')
+            './testing/unit_testing/purity/training_examples_not_equally_split_between_two_classes.dat')
         expected_result = False
         result = ParseTools.is_split_equally_between_class_types(training_set)
         assert expected_result == result, 'error on training_examples_not_equally_split_between_two_classes expected %s got %s' % (
@@ -79,24 +77,24 @@ class Tests:
         expected_result = True
 
         training_set = problem.training_data.get_training_set(
-            './testing/purity/should_be_pure_no_training_examples_one_category.dat')
+            './testing/unit_testing/purity/should_be_pure_no_training_examples_one_category.dat')
         result = ParseTools.is_pure(training_set)
         assert expected_result == result, 'error on test_is_pure() expected %s got %s' % (expected_result, result)
 
         training_set = problem.training_data.get_training_set(
-            './testing/purity/should_be_pure_no_training_examples_two_categories.dat')
+            './testing/unit_testing/purity/should_be_pure_no_training_examples_two_categories.dat')
         result = ParseTools.is_pure(training_set)
         assert expected_result == result, 'error on test_is_pure() expected %s got %s' % (expected_result, result)
 
     @staticmethod
     def test_single_class_type(problem):
-        training_set = problem.training_data.get_training_set('./testing/purity/single_class_type.dat')
+        training_set = problem.training_data.get_training_set('./testing/unit_testing/purity/single_class_type.dat')
         result = ParseTools.is_single_class_type(training_set)
         expected_result = True
         assert result == expected_result, 'error on test_single_class_type() expected %s got %s' % \
                                           (expected_result, result)
 
-        training_set = problem.training_data.get_training_set('./testing/purity/non_single_class_type.dat')
+        training_set = problem.training_data.get_training_set('./testing/unit_testing/purity/non_single_class_type.dat')
         result = ParseTools.is_single_class_type(training_set)
         expected_result = False
         assert result == expected_result, 'error on test_single_class_type() expected %s got %s' % \
@@ -104,7 +102,7 @@ class Tests:
 
     @staticmethod
     def test_email_entropy_root(problem):
-        training_set = problem.training_data.get_training_set('./testing/email/set_entropy_should_be_one.dat')
+        training_set = problem.training_data.get_training_set('./testing/unit_testing/email/set_entropy_should_be_one.dat')
 
         entropy = InfoMath.calculate_entropy_for_training_set(training_set)
 

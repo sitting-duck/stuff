@@ -3,115 +3,115 @@ from tree.Node import Node
 from tree.DecisionTree import DecisionTree
 
 
-class TestsPlayTennis:
+class UnitTestsPlayTennis:
     def __init__(self):
         pass
 
     @staticmethod
     def run_tests(problem):
-        TestsPlayTennis.run_training_set_tests(problem)
-        TestsPlayTennis.run_problem_tests(problem)
-        TestsPlayTennis.run_decision_tree_tests(problem)
-        TestsPlayTennis.run_curiosity_tests()
+        UnitTestsPlayTennis.run_training_set_tests(problem)
+        UnitTestsPlayTennis.run_problem_tests(problem)
+        UnitTestsPlayTennis.run_decision_tree_tests(problem)
+        UnitTestsPlayTennis.run_curiosity_tests()
 
     @staticmethod
     def run_problem_tests(problem):
-        TestsPlayTennis.test_calculate_information_gain_for_category(problem)
-        TestsPlayTennis.test_calculate_information_gain_for_category_for_undefined_root(problem)
-        TestsPlayTennis.test_calculate_entropy_for_training_set(problem)
-        TestsPlayTennis.test_calculate_entropy_for_attribute(problem)
-        TestsPlayTennis.test_calculate_entropy_for_category(problem)
-        TestsPlayTennis.test_precision(problem)
-        TestsPlayTennis.test_create_decision_tree(problem)
-        TestsPlayTennis.test_get_node_string(problem)
+        UnitTestsPlayTennis.test_calculate_information_gain_for_category(problem)
+        UnitTestsPlayTennis.test_calculate_information_gain_for_category_for_undefined_root(problem)
+        UnitTestsPlayTennis.test_calculate_entropy_for_training_set(problem)
+        UnitTestsPlayTennis.test_calculate_entropy_for_attribute(problem)
+        UnitTestsPlayTennis.test_calculate_entropy_for_category(problem)
+        UnitTestsPlayTennis.test_precision(problem)
+        UnitTestsPlayTennis.test_create_decision_tree(problem)
+        UnitTestsPlayTennis.test_get_node_string(problem)
 
     @staticmethod
     def run_decision_tree_tests(problem):
-        TestsPlayTennis.test_get_child_nodes_of()
-        TestsPlayTennis.test_get_level_depth_for_node()
-        TestsPlayTennis.test_get_deepest_level()
-        TestsPlayTennis.test_got_correct_decision_tree(problem)
+        UnitTestsPlayTennis.test_get_child_nodes_of()
+        UnitTestsPlayTennis.test_get_level_depth_for_node()
+        UnitTestsPlayTennis.test_get_deepest_level()
+        UnitTestsPlayTennis.test_got_correct_decision_tree(problem)
 
     @staticmethod
     def run_training_set_tests(problem):
 
         # takes the text data from the input file and returns a 2D list of the training data
-        TestsPlayTennis.test_get_tokenized_data(problem)
+        UnitTestsPlayTennis.test_get_tokenized_data(problem)
 
         # returns the row including the training data id and class of the training set
-        TestsPlayTennis.test_get_row(problem)
+        UnitTestsPlayTennis.test_get_row(problem)
 
         # returns the column including the category name of the training set
-        TestsPlayTennis.test_get_column(problem)
+        UnitTestsPlayTennis.test_get_column(problem)
 
         # returns a list of the category names in the order they are listed in the training set
-        TestsPlayTennis.test_get_category_names(problem)
+        UnitTestsPlayTennis.test_get_category_names(problem)
 
         # returns the set of attribute types for a category
-        TestsPlayTennis.test_get_unique_attributes_for_category(problem)
+        UnitTestsPlayTennis.test_get_unique_attributes_for_category(problem)
 
         # returns the set of attribute types from category column in the training data
-        TestsPlayTennis.test_get_unique_attribute_names_from_column(problem)
+        UnitTestsPlayTennis.test_get_unique_attribute_names_from_column(problem)
 
         # returns the index of the last column of the training set
-        TestsPlayTennis.test_get_index_of_class_column(problem)
+        UnitTestsPlayTennis.test_get_index_of_class_column(problem)
 
         # returns the set of class types for a category
-        TestsPlayTennis.test_get_set_of_unique_class_types(problem)
+        UnitTestsPlayTennis.test_get_set_of_unique_class_types(problem)
 
         # takes an index and returns the category name for that column
-        TestsPlayTennis.test_get_category_name_from_column(problem)
+        UnitTestsPlayTennis.test_get_category_name_from_column(problem)
 
         # takes an index and returns a dictionary with the count for all the attributes for a category set to zero
-        TestsPlayTennis.test_create_attribute_dictionary_from_column(problem)
+        UnitTestsPlayTennis.test_create_attribute_dictionary_from_column(problem)
 
         # takes an index and returns a tuple with the name of the category and a dictionary of all its attributes with
         # their counts set to zero
-        TestsPlayTennis.test_create_category_tuple_from_column(problem)
+        UnitTestsPlayTennis.test_create_category_tuple_from_column(problem)
 
         # returns a dictionary of all the categories with attribute counts all set to zero#
-        TestsPlayTennis.test_create_categories_from_training_set(problem)
+        UnitTestsPlayTennis.test_create_categories_from_training_set(problem)
 
         # return the set of class types for the training set
-        TestsPlayTennis.test_get_class_values_for_training_set(problem)
+        UnitTestsPlayTennis.test_get_class_values_for_training_set(problem)
 
         # returns the number of training examples that have been classified a certain way
         # useful for calculating entropy
-        TestsPlayTennis.test_get_number_of_training_examples_of_class_type(problem)
+        UnitTestsPlayTennis.test_get_number_of_training_examples_of_class_type(problem)
 
         # returns a dictionary with the counts for each class type
-        TestsPlayTennis.test_get_class_type_frequency_dictionary(problem)
+        UnitTestsPlayTennis.test_get_class_type_frequency_dictionary(problem)
 
         # returns the number of training examples in the given training set
-        TestsPlayTennis.test_get_number_training_examples(problem)
+        UnitTestsPlayTennis.test_get_number_training_examples(problem)
 
         # returns a bool indicating whether a training set has some category
         # useful for input validation
-        TestsPlayTennis.test_has_category(problem)
+        UnitTestsPlayTennis.test_has_category(problem)
 
         # returns the index of the column for given category in the training set
-        TestsPlayTennis.test_get_index_of_column_for_category(problem)
+        UnitTestsPlayTennis.test_get_index_of_column_for_category(problem)
 
         # returns the actual column in the training set for given category
-        TestsPlayTennis.test_get_column_for_category(problem)
+        UnitTestsPlayTennis.test_get_column_for_category(problem)
 
         # returns a reduced training set where the only examples remaining are those with a given attribute for the given category
-        TestsPlayTennis.test_get_training_set_for_single_attribute(problem)
+        UnitTestsPlayTennis.test_get_training_set_for_single_attribute(problem)
 
         # takes a category, attribute, and training set
         # returns a tuple with the attribute name as the first item and a dictionary containing the counts for each class type
         # as the second item
-        TestsPlayTennis.test_get_class_type_frequency_for_attribute_tuple(problem)
+        UnitTestsPlayTennis.test_get_class_type_frequency_for_attribute_tuple(problem)
 
         # returns a dictionary containing all the counts of all class types for all attributes of the given category
-        TestsPlayTennis.test_get_class_type_frequency_dictionary_for_category(problem)
+        UnitTestsPlayTennis.test_get_class_type_frequency_dictionary_for_category(problem)
 
         # returns a dictionary containing the counts for all variables in the given training set
-        TestsPlayTennis.test_get_class_type_frequency_dictionary_for_all_categories(problem)
+        UnitTestsPlayTennis.test_get_class_type_frequency_dictionary_for_all_categories(problem)
 
     @staticmethod
     def run_curiosity_tests():
-        TestsPlayTennis.test_copy_double_nested_dictionaries()
+        UnitTestsPlayTennis.test_copy_double_nested_dictionaries()
 
     # PROBLEM TESTS
     @staticmethod
@@ -129,8 +129,8 @@ class TestsPlayTennis:
 
         for i in range(0, len(categories)):
             actual = problem.calculate_information_gain_for_category_for_undefined_root(categories[i], training_set)
-            assert TestsPlayTennis.within_acceptable_error(expecteds[i], actual,
-                                                           error), 'test_calculate_information_gain_for_category_for_undefined_root() is broken. expected %s got %s' % (
+            assert UnitTestsPlayTennis.within_acceptable_error(expecteds[i], actual,
+                                                               error), 'test_calculate_information_gain_for_category_for_undefined_root() is broken. expected %s got %s' % (
                 expecteds[i], actual)
 
     @staticmethod
@@ -158,8 +158,8 @@ class TestsPlayTennis:
 
         for i in range(0, len(categories)):
             actual = problem.calculate_conditional_entropy_for_attribute(categories[i], attributes[i], training_set)
-            assert TestsPlayTennis.within_acceptable_error(expecteds[i], actual,
-                                                           error), 'calculate_entropy_for_attribute() is broken. expected: %s got: %s' % (
+            assert UnitTestsPlayTennis.within_acceptable_error(expecteds[i], actual,
+                                                               error), 'calculate_entropy_for_attribute() is broken. expected: %s got: %s' % (
                 expecteds[i], actual)
 
     @staticmethod
@@ -578,7 +578,7 @@ class TestsPlayTennis:
     @staticmethod
     def test_get_child_nodes_of():
 
-        test_tree = TestsPlayTennis.create_simple_test_tree()
+        test_tree = UnitTestsPlayTennis.create_simple_test_tree()
 
         # test_tree.print_me()
         # problem.decision_tree.print_me()
@@ -590,7 +590,7 @@ class TestsPlayTennis:
         # for item in actual_child_nodes_of_root:
         #    print item.category + " ",
 
-        expected_child_nodes = TestsPlayTennis.create_expected_child_nodes_for_root_for_simple_test_tree()
+        expected_child_nodes = UnitTestsPlayTennis.create_expected_child_nodes_for_root_for_simple_test_tree()
 
         # check that each expected child is actually returned by the function
         # this will throw an exception if we do not break out of the loop when we found the proper child
@@ -607,7 +607,7 @@ class TestsPlayTennis:
     def test_get_level_depth_for_node():
 
         # simple test for testing the depth of the root
-        test_tree = TestsPlayTennis.create_simple_test_tree()
+        test_tree = UnitTestsPlayTennis.create_simple_test_tree()
 
         expected_root_level = 0
         root_node = test_tree.get_node_with_category('root')
@@ -617,7 +617,7 @@ class TestsPlayTennis:
             expected_root_level, actual_root_level)
 
         # here we're going to test level depth retrieval for lower levels
-        two_level_test_tree = TestsPlayTennis.create_two_level_test_tree()
+        two_level_test_tree = UnitTestsPlayTennis.create_two_level_test_tree()
 
         expected_child1_level = 1
         child1 = two_level_test_tree.get_node_with_category('child1')
@@ -636,7 +636,7 @@ class TestsPlayTennis:
     def test_get_deepest_level():
 
         expected = 2
-        two_level_test_tree = TestsPlayTennis.create_two_level_test_tree()
+        two_level_test_tree = UnitTestsPlayTennis.create_two_level_test_tree()
         actual = two_level_test_tree.get_deepest_level()
         assert expected == actual, 'get_deepest_level() is broken. expected %s got %s' % (expected, actual)
 
