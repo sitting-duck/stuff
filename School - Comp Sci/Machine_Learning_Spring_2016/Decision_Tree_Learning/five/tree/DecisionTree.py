@@ -35,7 +35,7 @@ class DecisionTree:
     def get_node_with(self, parent_node, parent_branch_attr):
 
         for node in self.nodes:
-            if node is parent_node and parent_branch_attr == node.parent_branch_attr:
+            if node.parent is parent_node and parent_branch_attr == node.parent_branch_attr:
                 return node
 
     def print_me(self):

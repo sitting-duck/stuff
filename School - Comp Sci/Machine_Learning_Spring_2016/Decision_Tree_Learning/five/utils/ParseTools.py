@@ -20,29 +20,52 @@ class ParseTools:
         pass
 
     @staticmethod
-    def get_training_set(file_path=None):
+    def get_training_set(file_path=None, num_examples=None):
 
         # if filename not specified during call, fetch file name from the command line
         if file_path is None:
             file_path = sys.argv[1]
-        else:
-            pass
 
-        # else collect and tokenize the data from the file and store it in
-        # a 2D list
+        return ParseTools.get_tokenized_data(file_path, num_examples)
+
+    @staticmethod
+    def get_testing_set(file_path=None, num_examples=None):
+
+        # if filename not specified during call, fetch file name from the command line
+        if file_path is None:
+            file_path = sys.argv[2]
+
+        return ParseTools.get_tokenized_data(file_path, num_examples)
+
+    @staticmethod
+    def get_tokenized_data(file_path, num_examples=None):
+
         tokenized_data_buffer = []
-        training_set_file = open(file_path)
+        example_set_file = open(file_path)
 
-        for line in training_set_file:
+        if num_examples is None:
+            for line in example_set_file:
 
-            # skip blank line
-            if line == "\n":
-                continue
+                # skip blank line
+                if line == "\n":
+                    continue
 
-            tokens = line.split()
-            tokenized_data_buffer.append(tokens)
+                tokens = line.split()
+                tokenized_data_buffer.append(tokens)
+        else:
+            for i in range(0, num_examples):
 
-        training_set_file.close()
+
+                line = example_set_file.readline()
+
+                # skip blank line
+                if line == "\n" or line == "" or line is None:
+                    continue
+
+                tokens = line.split()
+                tokenized_data_buffer.append(tokens)
+
+        example_set_file.close()
 
         return tokenized_data_buffer
 

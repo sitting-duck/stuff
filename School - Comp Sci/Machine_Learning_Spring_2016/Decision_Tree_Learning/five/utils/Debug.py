@@ -1,7 +1,7 @@
 
 class Debug(object):
 
-    level = 6
+    level = 0
 
     # level 0 prints out no debug statements
 

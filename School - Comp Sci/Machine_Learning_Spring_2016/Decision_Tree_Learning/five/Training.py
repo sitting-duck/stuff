@@ -30,8 +30,6 @@ class Training:
 
     def create_decision_tree(self, training_set, parent_branch_attr=None, parent_node=None):
 
-        print "\n\n"
-
         # if we have reached a leaf node, exit this recursive thread
         if self.append_leaf_node_to_tree_and_exit_if_single_category(parent_node, training_set, parent_branch_attr):
             return self.decision_tree
