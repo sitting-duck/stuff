@@ -1,6 +1,7 @@
 #ifndef CUSTOMWIDGET_H
 #define CUSTOMWIDGET_H
 
+#include <QApplication>
 #include <QListWidgetItem>
 #include <QPushButton>
 #include <QWidget>
@@ -15,7 +16,7 @@ class CustomWidget : public QWidget
 
 public:
 
-    explicit CustomWidget(QWidget *parent = 0);
+    explicit CustomWidget(QWidget *parent = 0, QApplication *qApp = 0);
 
 private slots:
     void itemClicked(QListWidgetItem *item);
@@ -24,6 +25,12 @@ private slots:
 signals:
 
 private:
+
+    //parent widget
+    QWidget* parent;
+
+    //hosting application
+    QApplication* qApp;
 
     //a vertical layout that will hold all our widgets
     QVBoxLayout* layout;
@@ -44,7 +51,6 @@ private:
     void addCitiesToListWidget();
 
     void connectWidgetsToEventListeners();
-
 
 };
 

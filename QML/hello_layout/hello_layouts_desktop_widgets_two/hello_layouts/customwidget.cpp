@@ -7,8 +7,12 @@
 #include <QPainter>
 #include <QVBoxLayout>
 
-CustomWidget::CustomWidget(QWidget *parent) : QWidget(parent)
+CustomWidget::CustomWidget(QWidget *parent, QApplication *qApp) : QWidget(parent)
 {
+    this->parent = parent;
+
+    this->qApp = qApp;
+
 
     initLayout();
 
@@ -63,7 +67,7 @@ void CustomWidget::connectWidgetsToEventListeners()
     connect(this->m_edit, SIGNAL(editingFinished()), this, SLOT(updateItem()));
 
     //FUBAR
-    connect(this->m_button, SIGNAL(clicked()), , SLOT(quit()));
+    connect(this->m_button, SIGNAL(clicked()), this, SLOT(quit()));
 
 }
 
@@ -93,4 +97,5 @@ void CustomWidget::updateItem()
         item ->setText(this->m_edit->text());
 
     }
+
 }
