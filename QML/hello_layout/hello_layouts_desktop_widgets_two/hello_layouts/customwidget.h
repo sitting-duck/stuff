@@ -16,7 +16,8 @@ class CustomWidget : public QWidget
 
 public:
 
-    explicit CustomWidget(QWidget *parent = 0, QApplication *qApp = 0);
+    //syntax error: static_cast when trying to pass in pointer to hosting application
+    explicit CustomWidget(QWidget *parent = 0);
 
 private slots:
     void itemClicked(QListWidgetItem *item);
@@ -25,12 +26,6 @@ private slots:
 signals:
 
 private:
-
-    //parent widget
-    QWidget* parent;
-
-    //hosting application
-    QApplication* qApp;
 
     //a vertical layout that will hold all our widgets
     QVBoxLayout* layout;

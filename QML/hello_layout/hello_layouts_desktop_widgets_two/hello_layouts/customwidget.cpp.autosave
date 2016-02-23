@@ -61,7 +61,7 @@ void CustomWidget::connectWidgetsToEventListeners()
     connect(this->m_list_widget, SIGNAL(QListWidgetItem::itemClicked(QListWidgetItem*)), this, SLOT(CustomWidget::itemClicked(QListWidgetItem*)));
     connect(this->m_edit, SIGNAL(editingFinished()), this, SLOT(updateItem()));
 
-    //FUBAR
+    //qApp is a global pointer to the hosting application
     connect(this->m_button, SIGNAL(clicked()), qApp, SLOT(quit()));
 
 }
