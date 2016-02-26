@@ -58,18 +58,16 @@ void CustomWidget::addCitiesToListWidget()
 void CustomWidget::connectWidgetsToEventListeners()
 {
 
-    connect(this->m_list_widget, SIGNAL(QListWidgetItem::itemClicked(QListWidgetItem*)), this, SLOT(CustomWidget::itemClicked(QListWidgetItem*)));
+    connect(this->m_list_widget, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(itemClicked(QListWidgetItem*)));
     connect(this->m_edit, SIGNAL(editingFinished()), this, SLOT(updateItem()));
 
-    //FUBAR
+    //qApp is a global pointer to the hosting application
     connect(this->m_button, SIGNAL(clicked()), qApp, SLOT(quit()));
 
 }
 
 void CustomWidget::itemClicked(QListWidgetItem *item)
 {
-
-    std::cout << "in my item clicked" << std::endl;
 
     //throw exception if item does not exist
     Q_ASSERT(item);
@@ -82,8 +80,6 @@ void CustomWidget::itemClicked(QListWidgetItem *item)
 
 void CustomWidget::updateItem()
 {
-
-    std::cout << "boop" << std::endl;
 
     QListWidgetItem* item = this ->m_list_widget->currentItem();
 

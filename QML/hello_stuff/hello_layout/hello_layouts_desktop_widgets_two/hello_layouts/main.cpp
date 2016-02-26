@@ -5,8 +5,7 @@
 
 /*
  *
- * This program will update the location of a yellow rectangle to a new location every time the user
- * clicks.
+ * This program has a list of cities of which, when selected, their name can be edited in the box below.
  *
  */
 int main(int argc, char *argv[])
