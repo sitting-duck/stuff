@@ -13,23 +13,18 @@ import "./style"
 
 ColumnLayout {
 
+    id: root
     spacing: 2
+    property string title: ""
 
     TitleText {
 
-        id: title
-        text: "Title"
-        //anchors.horizontalCenter: content.horizontalCenter
-        //anchors.bottom: content.top
+        text: root.title
         Layout.alignment: Qt.AlignHCenter
+
     }
 
     Rectangle {
-
-        id: content
-
-        //otional heading
-        //property TitleText title
 
         radius: 3
         color: "#494b4b"
