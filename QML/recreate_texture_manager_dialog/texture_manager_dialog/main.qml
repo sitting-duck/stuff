@@ -8,6 +8,8 @@ ApplicationWindow {
     height: 480
     title: qsTr("Example Project for Modular Texture Manager Dialog")
 
+    
+    //Menu Bar Options
     menuBar: MenuBar {
         Menu {
             title: qsTr("File")
@@ -51,9 +53,10 @@ ApplicationWindow {
         anchors.bottomMargin: 10
         text: "Open Texture Manager"
         onClicked: {myTextureManager.open()}//todo: write dlgTextureManager.qml
-        tooltip: qStr("Open texture manager")
+        tooltip: qsTr("Open texture manager")
     }
 
+    //allows the user to organize, import, and delete textures
     TextureManager {
         id: myTextureManager
     }

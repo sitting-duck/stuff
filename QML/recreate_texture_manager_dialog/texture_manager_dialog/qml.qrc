@@ -1,7 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>qml/TToolButton.qml</file>
         <file>qml/TextureManager.qml</file>
+        <file>qml/TextureGallery.qml</file>
+        <file>qml/style/TitleText.qml</file>
+        <file>qml/style/TToolButton.qml</file>
+        <file>qml/TextureManagerElement.qml</file>
     </qresource>
 </RCC>

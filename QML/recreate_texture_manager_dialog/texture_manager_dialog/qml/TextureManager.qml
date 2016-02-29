@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Dialogs 1.2
-
+import QtQuick.Layouts 1.2
+import "./style"
 
 /*!
 
@@ -8,7 +9,6 @@ import QtQuick.Dialogs 1.2
   \brief the TextureManager can be used to import new textures, delete existing textures as well as
   manage texture categories.
 
-  \ingroup Dialog
 
   \reentrant
 
@@ -41,11 +41,70 @@ Dialog {
     height: 460
     title: "Texture Manager"
 
-    Rectangle {
+    //Background rectangle:
+    //contains the categories column and the textures column
+    contentItem: Rectangle {
 
-        width: parent.width
-        height: parent.height
+        id: root
+        anchors.fill: parent
         color: "#3F4141"
+
+        RowLayout {
+
+            anchors.fill: parent
+            spacing: 2
+
+            /*
+            ColumnLayout {
+
+                Text {
+                    text: "text"
+                }
+
+                Rectangle {
+
+                    color: "red"
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    border.color: "#000000"
+                    border.width: 1
+                }
+
+            }
+
+
+
+            Rectangle {
+
+                color: "red"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                border.color: "#000000"
+                border.width: 1
+            }
+            */
+
+
+
+            //Categories List
+            TextureManagerElement {
+
+                id: categoryList
+                anchors.top: parent.top
+                anchors.left: parent.left
+                //title.text: "Categories"
+
+            }
+
+            //Texture Gallery
+            TextureManagerElement {
+
+                id: textureGallery
+            }
+
+
+
+        }
     }
 
 

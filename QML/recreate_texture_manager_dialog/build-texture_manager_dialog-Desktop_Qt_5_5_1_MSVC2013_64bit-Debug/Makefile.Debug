@@ -157,8 +157,11 @@ compiler_rcc_clean:
 	-$(DEL_FILE) debug\qrc_qml.cpp
 debug\qrc_qml.cpp: ..\texture_manager_dialog\qml.qrc \
 		..\texture_manager_dialog\main.qml \
+		..\texture_manager_dialog\qml\TextureGallery.qml \
 		..\texture_manager_dialog\qml\TextureManager.qml \
-		..\texture_manager_dialog\qml\TToolButton.qml
+		..\texture_manager_dialog\qml\TextureManagerElement.qml \
+		..\texture_manager_dialog\qml\style\TitleText.qml \
+		..\texture_manager_dialog\qml\style\TToolButton.qml
 	D:\Qt\5.5\msvc2013_64\bin\rcc.exe -name qml ..\texture_manager_dialog\qml.qrc -o debug\qrc_qml.cpp
 
 compiler_moc_header_make_all:
