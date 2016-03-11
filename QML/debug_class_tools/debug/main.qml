@@ -78,13 +78,57 @@ ApplicationWindow {
 
         //qmlPrintAll(myListModel, "heading");
 
-        prettyPrintQMLObject(myRectangle, "heading");
+        //prettyPrintQMLObject(myRectangle, "heading");
 
         //printQmlObjectProperties(myTest, ["height", "width", "visible", "anchors.centerIn"], "derp");
 
         //var thing = {one: "one", two: {twotwo: "twotwo", threethree: "threethree"}};
 
         //console.log(JSON.stringify(thing, null, "     "));
+
+        printAllVarsInFunction(functionWithSomeVarsInIt, "printing some function");
+
+        //functionWithSomeVarsInIt.
+
+    }
+
+    function functionWithSomeVarsInIt(){
+
+        var never = "gonna";
+        var give = "you";
+        var you = "up";
+        var never = "gonna";
+        var let = "you";
+        var you = "down";
+
+        return "boop";
+
+    }
+
+    function printAllVarsInFunction(functionObject, optionalHeading){
+
+        //is optionalHeading not set, will be set to zero
+        optionalHeading = optionalHeading || "";
+
+        var outputString = "";
+
+        if(optionalHeading !== ""){
+
+            outputString += optionalHeading + ":\n"
+
+        }
+
+        for(currentVar in Object.entries(functionObject)){
+
+            //console.log("currentVar", currentVar);
+             //outputString += currentVar.toString() + "(" + typeof(currentVar) + "): " + functionObject[currentVar];
+
+            var map = new Map(Object.entries(functionObject));
+            outputString += map.toString();
+
+        }
+
+        console.log(outputString);
 
     }
 
