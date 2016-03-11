@@ -14,5 +14,4 @@ Text {
     anchors.leftMargin: 10
     anchors.rightMargin: 10
 
-
 }

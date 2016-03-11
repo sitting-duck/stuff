@@ -1,10 +1,13 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>qml/TextureManager.qml</file>
-        <file>qml/TextureGallery.qml</file>
         <file>qml/style/TitleText.qml</file>
         <file>qml/style/TToolButton.qml</file>
-        <file>qml/TextureManagerElement.qml</file>
+        <file>qml/gui_elements/texture_gallery/TextureGallery.qml</file>
+        <file>qml/gui_elements/TextureManagerColumn.qml</file>
+        <file>qml/TextureManager.qml</file>
+        <file>qml/gui_elements/category_manager/CategoryManager.qml</file>
+        <file>qml/style/TextureManagerColumnComponent.qml</file>
+        <file>qml/style/TextureManagerScrollView.qml</file>
     </qresource>
 </RCC>

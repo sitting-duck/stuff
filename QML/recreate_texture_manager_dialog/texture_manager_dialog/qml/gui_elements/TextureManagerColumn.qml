@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.2
-import "./style"
+import "./../style"
 
 /*!
 
@@ -10,12 +10,12 @@ import "./style"
 
   */
 
-
 ColumnLayout {
 
     id: root
     spacing: 2
     property string title: ""
+    default property alias content: defaultContent.children;
 
     TitleText {
 
@@ -24,25 +24,24 @@ ColumnLayout {
 
     }
 
-    Rectangle {
+    Item {
 
-        radius: 3
-        color: "#494b4b"
-        border.color: "#000000"
-        border.width: 1
-
-        //always all the possible space given to it
+        id: defaultContent
+        //always fill all the possible space given to it
         Layout.fillHeight: true
         Layout.fillWidth: true
 
-        //leave a 10 pixel space around all elements
-        anchors.topMargin: 10
-        anchors.bottomMargin: 10
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
+        TextureManagerColumnComponent {
+
+            id: defaultComponent
+
+        }
 
     }
+
 }
+
+
 
 
 
