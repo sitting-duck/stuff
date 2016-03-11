@@ -1,5 +1,14 @@
 import QtQuick 2.0
+import QtQuick.Layouts 1.2
+import "./../"
 
-Item {
+TextureManagerColumn {
 
+    title: "Textures"
+
+    /*content: Rectangle {
+
+        color: "red"
+
+    }*/
 }

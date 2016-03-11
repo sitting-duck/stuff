@@ -1,0 +1,11 @@
+<RCC>
+
+    <!-- root folder -->
+    <qresource prefix="/">
+        <file>main.qml</file>
+    </qresource>
+
+
+
+
+</RCC>
