@@ -88,7 +88,8 @@ ApplicationWindow {
 
         printAllVarsInFunction(functionWithSomeVarsInIt, "printing some function");
 
-        //functionWithSomeVarsInIt.
+        console.log("derr");
+        functionWithSomeVarsInIt.toString();
 
     }
 
@@ -97,7 +98,6 @@ ApplicationWindow {
         var never = "gonna";
         var give = "you";
         var you = "up";
-        var never = "gonna";
         var let = "you";
         var you = "down";
 
@@ -118,13 +118,15 @@ ApplicationWindow {
 
         }
 
-        for(currentVar in Object.entries(functionObject)){
 
-            //console.log("currentVar", currentVar);
-             //outputString += currentVar.toString() + "(" + typeof(currentVar) + "): " + functionObject[currentVar];
+        console.log(functionObject);
+        for(currentVar in functionObject){
 
-            var map = new Map(Object.entries(functionObject));
-            outputString += map.toString();
+            console.log("currentVar", currentVar);
+             outputString += currentVar.toString() + "(" + typeof(currentVar) + "): " + functionObject[currentVar];
+
+            //var map = new Map(Object.entries(functionObject));
+            //outputString += map.toString();
 
         }
 
