@@ -88,8 +88,6 @@ ApplicationWindow {
 
         printAllVarsInFunction(functionWithSomeVarsInIt, "printing some function");
 
-        console.log("derr");
-        functionWithSomeVarsInIt.toString();
 
     }
 
