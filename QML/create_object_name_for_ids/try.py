@@ -33,16 +33,29 @@ def tagAllObjects(args, objectStack=[], lines=[]):
         if '{' in line:
             numOpenBracket += 1
             hasIdTag = objectHasIdTag(lines, lineIndex)
-            print "has Id tag: " + str(hasIdTag)
+            # print "has Id tag: " + str(hasIdTag)
             if hasIdTag == True:
+                # insert matching object name under id
                 addObjectToStack(lines, lineIndex, objectStack)
-                #insert matching object name under id
+                whitespace = getLeadingWhiteSpaceOnIdLine(lines, lineIndex)
+                idTag = objectStack[-1]['id']
+                idTagLine = whitespace + 'id: ' + idTag + '\n'
+                objectNameLine = whitespace + 'objectName: "' + idTag + '"\n'
+                newLine = idTagLine + objectNameLine
+                lines[getLineOfIdTag(lines, lineIndex)] = newLine
+                print newLine
 
-                pass
             else:
                 #create custom id tag and matching object name
                 customTag = getCustomTag(lines, lineIndex, objectStack)
-                print customTag
+                whitespace = getLeadingWhiteSpace(line) + '            '
+                customIdTagLine = whitespace + 'id: ' + customTag + '\n'
+                customObjectNameLine = whitespace + 'objectName: "' + customTag + '"\n'
+                newLine = customIdTagLine + customObjectNameLine
+                lines[lineIndex] = lines[lineIndex] + newLine
+                print newLine
+
+    writeToFile(args, inputFile, lines)
 
 def addObjectToStack(lines, lineIndex, objectStack):
     currentType = getCurrentObjectType(lines, lineIndex)
@@ -84,9 +97,17 @@ def objectHasIdTag(lines, lineIndex):
             break
     return hasIdTag
 
+def getLineOfIdTag(lines, lineIndex):
+    while True:
+        line = lines[lineIndex]
+        if 'id:' in line:
+            return lineIndex
+        lineIndex += 1
 
-
-
+def getLeadingWhiteSpaceOnIdLine(lines, lineIndex):
+    idLineIndex = getLineOfIdTag(lines, lineIndex)
+    whitespace = getLeadingWhiteSpaceOnLine(lines, idLineIndex)
+    return whitespace
 
 def getLeadingWhiteSpaceOnLine(lines, lineIndex):
 
@@ -95,10 +116,14 @@ def getLeadingWhiteSpaceOnLine(lines, lineIndex):
     for i in range(0, len(line)):
         if line[i] == ' ':
             numSpace += 1
+        if line[i] == '\t':
+            numSpace += 4
         else:
             break # break at the first non space
 
-    return line[0 : numSpace]
+    whitespace = ' ' * numSpace
+
+    return whitespace
 
 def getWhiteSpaceBasedOnNumNestedObjects(numNested):
     whitespace = ""

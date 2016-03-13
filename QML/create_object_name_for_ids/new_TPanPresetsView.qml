@@ -36,8 +36,9 @@ import "../TBase/TmConfigure.js" as TC
 
 Rectangle {
 
-    id: top
-    objectName: "top"
+ id: top
+ objectName: "top"
+
 
 
     //  ============ interface ================
@@ -60,11 +61,14 @@ Rectangle {
 
     TToolBar {
 
-        id: toolBar
-        objectName: "toolBar"
+ id: toolBar
+ objectName: "toolBar"
+
         width: parent.width
 
         RowLayout {
+                    id: RowLayout0
+                    objectName: "RowLayout0"
 
             width: parent.width
 
@@ -72,8 +76,9 @@ Rectangle {
 
             ComboBox {
 
-                id: cbCategory
-                objectName: "cbCategory"
+ id: cbCategory
+ objectName: "cbCategory"
+
                 Layout.fillWidth: true
 
                 //model: presetController.getCategories(true);
@@ -81,12 +86,16 @@ Rectangle {
 
 
                 onCurrentIndexChanged: {
+                            id: onCurrentIndexChanged0
+                            objectName: "onCurrentIndexChanged0"
 
                     //if (presetView) presetView.updatePreset()
 
                 }
 
                 style: PmComboBoxStyle {}
+                             id: style0
+                             objectName: "style0"
 
 
 
@@ -96,15 +105,20 @@ Rectangle {
 
             TToolButtonIcon {
 
-                id: btPack
-                objectName: "btPack"
+ id: btPack
+ objectName: "btPack"
+
                 action: Action {
+                             id: action0
+                             objectName: "action0"
 
                     text: qsTr("Pack")
 
                     iconSource: "qrc:/TControls/icons/center-white.png"
 
                     onTriggered: {
+                                id: onTriggered0
+                                objectName: "onTriggered0"
 
                         presetPackList.popup()
 
@@ -117,8 +131,12 @@ Rectangle {
                 //JSON object
 
                 property var packQuery: ({text:'All'})
+                              id: property0
+                              objectName: "property0"
 
                 onPackQueryChanged: {
+                            id: onPackQueryChanged0
+                            objectName: "onPackQueryChanged0"
 
                     // presetView.updatePreset()
 
@@ -128,27 +146,34 @@ Rectangle {
 
                 Menu {
 
-                    id: presetPackList
-                    objectName: "presetPackList"
+ id: presetPackList
+ objectName: "presetPackList"
+
                     style: TMenuStyle {iconSize:Qt.size(48,48)}
+                                 id: style1
+                                 objectName: "style1"
 
 
 
                     ExclusiveGroup {
 
-                        id: egPack
-                        objectName: "egPack"
+ id: egPack
+ objectName: "egPack"
+
                     }
 
 
 
                     Instantiator {
 
-                        id: presetPackInst
-                        objectName: "presetPackInst"
+ id: presetPackInst
+ objectName: "presetPackInst"
+
                         //model: presetController.getPresetPacks(true)
 
                         MenuItem {
+                                    id: MenuItem0
+                                    objectName: "MenuItem0"
 
                             //TODO: find out why this is happenings
 
@@ -161,6 +186,8 @@ Rectangle {
                             checked: false
 
                             onTriggered: {
+                                        id: onTriggered1
+                                        objectName: "onTriggered1"
 
                                 btPack.packQuery = presetPackInst.model[model.index];
 
@@ -169,6 +196,8 @@ Rectangle {
                         }
 
                         onObjectAdded: {
+                                    id: onObjectAdded0
+                                    objectName: "onObjectAdded0"
 
 //                            console.log('jjjjjjjjjjjjjjjjj',object, object.text);
 
@@ -185,6 +214,8 @@ Rectangle {
 
 
             Item {
+                        id: Item0
+                        objectName: "Item0"
 
                 Layout.preferredWidth: 10
 
@@ -193,16 +224,22 @@ Rectangle {
 
 
             TToolButtonIcon {
+                        id: TToolButtonIcon1
+                        objectName: "TToolButtonIcon1"
 
                 Layout.alignment: Qt.AlignRight
 
                 action: Action {
+                             id: action1
+                             objectName: "action1"
 
                     text: qsTr("==")
 
                     iconSource: "qrc:/TControls/icons/center-white.png"
 
                     onTriggered:  {
+                                 id: onTriggered2
+                                 objectName: "onTriggered2"
 
                         presetEdit.popup()
 
@@ -212,9 +249,12 @@ Rectangle {
 
                 Menu {
 
-                    id: presetEdit
-                    objectName: "presetEdit"
+ id: presetEdit
+ objectName: "presetEdit"
+
                     MenuItem {
+                                id: MenuItem1
+                                objectName: "MenuItem1"
 
                         action: actions.actDeletePreset
 
@@ -223,6 +263,8 @@ Rectangle {
                     }
 
                     MenuItem {
+                                id: MenuItem2
+                                objectName: "MenuItem2"
 
                         action: actions.actEditPreset
 
@@ -235,6 +277,8 @@ Rectangle {
             }
 
             TToolButtonIcon {
+                        id: TToolButtonIcon2
+                        objectName: "TToolButtonIcon2"
 
                 Layout.alignment: Qt.AlignRight
 
@@ -258,8 +302,9 @@ Rectangle {
 
     TDatabase { 
 
-        id: db
-        objectName: "db"
+ id: db
+ objectName: "db"
+
     }
 
 
@@ -269,6 +314,8 @@ Rectangle {
     //derp
 
     Rectangle {
+                id: Rectangle1
+                objectName: "Rectangle1"
 
             anchors.top: toolBar.bottom
 
@@ -286,8 +333,9 @@ Rectangle {
 
             {
 
-                        id: presetView
-                        objectName: "presetView"
+ id: presetView
+ objectName: "presetView"
+
                         anchors.fill: parent
 
 
@@ -297,6 +345,8 @@ Rectangle {
 
 
                         delegate: Rectangle {
+                                     id: delegate0
+                                     objectName: "delegate0"
 
 
 
@@ -320,8 +370,9 @@ Rectangle {
 
 
 
-        id: testRectangle
-        objectName: "testRectangle"
+ id: testRectangle
+ objectName: "testRectangle"
+
         height: 100
 
         width: 100
@@ -336,8 +387,9 @@ Rectangle {
 
     Item {
 
-        id: p
-        objectName: "p"
+ id: p
+ objectName: "p"
+
     }
 
 

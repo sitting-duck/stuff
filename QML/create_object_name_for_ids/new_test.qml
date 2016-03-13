@@ -1,14 +1,25 @@
 Rectangle {
 
+    id: derp
+    objectName: "derp"
+
 	//code
 
 	Rectangle {
-		id: derp
+
+        id: herp
+        objectName: "herp"
+
 		//code	
 
-id: Rectangle1
-objectName: "Rectangle1"
+		Rectangle{
+            id: Rectangle2
+            objectName: "Rectangle2"
 
-id: Rectangle1
-objectName: "Rectangle1"
- objectName: "Rectangle1"
+			//code
+
+		}
+
+	}
+
+}
