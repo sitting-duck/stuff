@@ -70,7 +70,7 @@ def getLeadingWhiteSpace(line):
 
 def parseCommandLineArgs():
      # inititalize the argument parser so we can get the arguments from the command line
-    parser = argparse.ArgumentParser(description = 'boop')
+    parser = argparse.ArgumentParser(description = 'Adds objectName: tags to qml objects in qml files automagically')
 
     # grab the argument for the file output flag. The file output flag can be either
     # -make-new-copy or -in-place.
@@ -78,7 +78,7 @@ def parseCommandLineArgs():
     # object with a defined id.
     # the -in-place flag will out edit the file in place.
     # the file output flag is required and the program will not run if it is not specified.
-    parser.add_argument('fileOutputFlag', help="-in-place or -make-new-copy")
+    parser.add_argument('fileOutputFlag', help="in-place or make-new-copy")
 
     # grab the file name for the qml file we are adding object names for
     parser.add_argument('fileUrl', help="the file you want to process")
