@@ -30,7 +30,7 @@ def tagAllObjects(args, objectStack=[], lines=[]):
 
     for lineIndex in range(0, len(lines)):
         line = lines[lineIndex]
-        if '{' in line:
+        if '{' in line and ':' not in line:
             numOpenBracket += 1
             hasIdTag = objectHasIdTag(lines, lineIndex)
             # print "has Id tag: " + str(hasIdTag)
@@ -66,7 +66,7 @@ def addObjectToStack(lines, lineIndex, objectStack):
 def getCustomTag(lines, lineIndex, objectStack):
     currentType = getCurrentObjectType(lines, lineIndex)
     howMany = sum(1 for currentObject in objectStack if currentObject['type'] == currentType)
-    currentCustomTag = currentType + str(howMany)
+    currentCustomTag = '_' + currentType + str(howMany)
     currentObject = { 'type' : currentType, 'id' : currentCustomTag }
     objectStack.append(currentObject)
     return currentCustomTag
