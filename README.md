@@ -4,7 +4,7 @@
 	[PlayingWithBroadcastReceivers](https://github.com/sitting-duck/stuff/tree/master/Android%20Dev/PlayingWithBroadcastReceivers): well commented, I guess useful for understanding the use of Broadcast receivers, which you will need to know to use Google Cloud Messaging services
 	
 [Messing With wxPython](https://github.com/sitting-duck/stuff/tree/master/Messing%20With%20wxPython): wxPython is a neat little toolkit for making quick and dirty natives GUIs in Python. 
-	[simpletexteditor](https://github.com/sitting-duck/stuff/blob/master/Messing%20With%20wxPython/simpletexteditor.py): little text editor. todo: add drag and drop feature
+	[simpletexteditor](https://github.com/sitting-duck/stuff/blob/master/Messing%20With%20wxPython/simpletexteditor.py): little text edboopitor. todo: add drag and drop feature
 	
 [Projects for StackOverflow Questions](https://github.com/sitting-duck/stuff/tree/master/Projects%20for%20StackOverflow%20Questions/C%2B%2B/check_a_value_like_define_VERSION_3.1.4_at_compile_time): if I make a project to develop some code to answer a stackOverflow question, I archive it here for future reference.
 	[check_a_value_like_define_VERSION_3.1.4_at_compile_time](https://github.com/sitting-duck/stuff/tree/master/Projects%20for%20StackOverflow%20Questions/C%2B%2B/check_a_value_like_define_VERSION_3.1.4_at_compile_time): a workaround required because of a limitation of the preprocessor commands in C++
