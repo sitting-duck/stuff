@@ -41,7 +41,37 @@ ApplicationWindow {
 
         property string idString: "myRectangle"
 
+        height: parent.height
+        width: parent.width
         anchors.centerIn: parent
+        color: "gray"
+
+        Rectangle {
+
+            height: parent.height - 10
+            width: parent.width - 10
+            anchors.centerIn: parent
+            color: "blue"
+
+            Rectangle {
+
+                height: parent.height - 10
+                width: parent.width - 10
+                anchors.centerIn: parent
+                color: "green"
+
+                Rectangle {
+
+                    height: parent.height - 10
+                    width: parent.width - 10
+                    anchors.centerIn: parent
+                    color: "purple"
+
+                }
+
+            }
+
+        }
 
         Text {
             id: myTest
@@ -200,6 +230,19 @@ ApplicationWindow {
     * examples you would commonly use: 'object', 'string', 'number', 'boolean', 'function'
     */
    function prettyPrintQMLObjectPropertiesOfType(qmlObject, typeToPrint, optionalHeading){
+
+       var outputString = getPrettyOutputStringForQMLObjectPropertiesOfType(qmlObject, typeToPrint, optionalHeading);
+       console.log(outputString);
+
+   }
+
+   /*
+    * note: typeToPrint must be entered as an array of strings.
+    * Acceptable typeToPrint arguments are any string that would be returned by the javascript typof() function.
+    * examples you would commonly use: 'object', 'string', 'number', 'boolean', 'function'
+    * param: qmlObject
+    */
+   function prettyPrintQMLObjectPropertiesOfTypeParentsUntilObject(qmlObjectToStartAt, qmlObjectToStopAt, typeToPrint, optionalHeading){
 
        var outputString = getPrettyOutputStringForQMLObjectPropertiesOfType(qmlObject, typeToPrint, optionalHeading);
        console.log(outputString);
