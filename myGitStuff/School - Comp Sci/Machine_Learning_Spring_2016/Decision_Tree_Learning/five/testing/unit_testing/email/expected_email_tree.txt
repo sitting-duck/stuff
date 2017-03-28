@@ -1,8 +1,0 @@
-nigeria = 0 :
-|	viagra = 0 : 0
-|	viagra = 1 :
-|	|	learning = 0 : 1
-|	|	learning = 1 : 0
-nigeria = 1 :
-|	learning = 0 : 1
-|	learning = 1 : 0

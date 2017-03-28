@@ -1,1 +1,0 @@
-I did not write this N Tree Library, I am just keeping it here for future reference because I like the way it is written and I know how to use it.
