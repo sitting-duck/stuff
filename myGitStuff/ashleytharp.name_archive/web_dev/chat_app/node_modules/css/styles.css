@@ -1,0 +1,19 @@
+
+body {
+
+	color: white;
+	background-color: #282828;
+
+}
+
+.button{
+	
+	/*font-family: Courier New", Courier, monospace;*/
+	color: black;
+	background-color: white;
+	padding: 2px 6px 2px 6px;
+	right: 1px solid #333333;
+	border-bottom: 1px solid #333333;
+	border-left: 1px solid #CCCCCC;
+	
+}

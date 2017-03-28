@@ -1,0 +1,8 @@
+6
+ctf.agent.ChenSimpleAgent
+ctf.agent.Tharpoon4
+ctf.agent.Tharpoon5
+ctf.agent.Tharpoon
+ctf.agent.RandomAgent
+ctf.agent.BomberAgent
+

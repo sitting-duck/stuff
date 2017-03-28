@@ -1,0 +1,34 @@
+*.obj
+*.log
+*.exe
+*.tlog
+*.pdb
+*.idb
+*.ncb
+*.sdf
+*.filters
+*.suo
+*.user
+*.ilk
+*.zip
+*.rc
+*.manifest
+*.lastbuildstate
+*.ipch
+*.res
+*.unsuccessfulbuild
+*.classpath
+*.project
+*.prefs
+*.class
+*.in
+*.bak
+*.dsp
+*.dsw
+*.htm
+*.idea
+*.xml
+*.iml
+/School - Comp Sci/Python
+/Messing With wxPython/simpletexteditor.py
+/Messing With wxPython/simpleTextEditorWithTabs.py
