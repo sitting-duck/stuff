@@ -57,6 +57,7 @@
 #include <QPrinter>
 #endif
 
+
 QT_BEGIN_NAMESPACE
 class QAction;
 class QLabel;
