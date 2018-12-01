@@ -9,16 +9,17 @@ This little snipped is super useful for finding a needle in a haystack:
 
 For removing all the bloat from a Qt deploy environment
 
-##
-## DESTROY ALL DEBUG FILE BLOAT DRAGGED IN BY MACDEPLOYQT (debug binaries are not useful to the user)
-##
-cd "$QTIFW"
-find . -name "*_debug*" -print0 | xargs -0 rm -rf
+### DESTROY ALL DEBUG FILE BLOAT DRAGGED IN BY MACDEPLOYQT (debug binaries are not useful to the user)
+```
+find . -name "*_debug*" -print0 | xargs -0 rm -rf 
 #find . -name "*_debug*" -type f -print0 | xargs -0 rm -rf
 find . -name "*.dSYM" -print0 | xargs -0 rm -rf
 find . -name "*.*.dSYM" -print0 | xargs -0 rm -rf
 find . -name "*.prl" -print0 | xargs -0 rm -rf
+```
 
-# DESTROY ALL HEADERS. (No reason to deploy headers, only binaries are loaded)
+### DESTROY ALL HEADERS. (No reason to deploy headers, only binaries are loaded)
+```
 find . -type d -name "Headers" -print0 | xargs -0 rm -rf
 find . -type f -name "Headers" -print0 | xargs -0 rm -rf
+```
