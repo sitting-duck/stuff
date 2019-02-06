@@ -1,3 +1,5 @@
+For testing qnetwork using tutorial https://doc.qt.io/qt-5/qtnetworkauth-redditclient-example.html
+
 Using Qt 5.12
 
 Note: I had to download the QtNetworkAuthorization module using the maintenence tool. 
