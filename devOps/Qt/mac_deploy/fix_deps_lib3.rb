@@ -1,13 +1,16 @@
 #!/usr/bin/env ruby
 
-# fix_deps.rb
-
-# Topaz Labs
 # @author: Ashley Tharp
 # @date: 01/02/2016
 
 # Short Summary: 
 # 	Sets the install names of the dynamic library dependencies of an executable
+
+# When Do I use this Script? 
+# 	When I have been handed a dir full of dylibs that are all pointing all over the place. I will use a script like this to just glob all the dylibs, 
+# 	and search and replace strings. I have to know what is wrong in the install paths and what I want to replace it with in this script. A more general 
+# 	script would use regex and just grab whatever is there, and replace it with @rpath/dependency_name. This script however would be really useful in 
+# 	special situations where I need to set specific dylibs to point to specific places. 
 
 # Some Background:
 # 	This script exists because of the way dylibs work and the fact that we have external dylibs linking at runtime to our app.
@@ -34,8 +37,6 @@
 # 	The dylibs install name is a path to the dylib itself.
 # 	You can set it with the -id tag using the install_name_tool
 
-
-
 # 	This can get rather complicated because dependencies can have dependencies, which can have depencies of dependencies,
 # 	so, a wise thing to do might be to put all your dependencies in the same folder so that you can set all the rpaths to
 # 	point to the same directory and you don't have to worry about being clever.
@@ -43,7 +44,9 @@
 # 	So, a dylib will have an install name, as well as a list of rpaths to it's dependencies.  This script sets those
 # 	rpaths using install_name_tool -change.
 
-# 	otool -L is returns the child depencies of any dylib.
+# 	You may also sometimes have to change the id of your dylib using install_name_tool -id
+
+# 	otool -L is returns the child depencies of any dylib
 
 
 
@@ -73,7 +76,7 @@ def fix_deps path_to_lib, deps
 			to = to.gsub("@executable_path/", "@loader_path/../Frameworks/")
 			#puts "\tfixing dependency '#{from}' => '#{to}' for: #{path_to_lib}"
 			`install_name_tool -change "#{from}" "#{to}" "#{path_to_lib}"`
-			# `install_name_tool -change "#{from}" "#{to}" "../MacOS/Filter\ Studio"`
+			# `install_name_tool -change "#{from}" "#{to}" "../MacOS/Test\ Program"`
 		end
 
 		if "#{d}".include?("usr/local/lib/")
@@ -112,7 +115,7 @@ def fix_deps_for_dylib path_to_lib, deps
 			to = to.gsub("@executable_path/", "@loader_path/")
 			#puts "\tfixing dependency '#{from}' => '#{to}' for: #{path_to_lib}"
 			`install_name_tool -change "#{from}" "#{to}" "#{path_to_lib}"`
-			# `install_name_tool -change "#{from}" "#{to}" "../MacOS/Filter\ Studio"`
+			# `install_name_tool -change "#{from}" "#{to}" "../MacOS/Test\ Program"`
 		end
 
 		if "#{d}".include?("/usr/local/lib/")
