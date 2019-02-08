@@ -52,6 +52,7 @@ cp "$QTDIR"/plugins/platforms/libqcocoa.dylib  "$PLUGINS_DIR"/platforms/
 
 cp "$QTDIR"/plugins/printsupport/libcocoaprintersupport.dylib  "$PLUGINS_DIR"/printsupport/
 
+# If your application uses a database
 cp "$QTDIR"/plugins/sqldrivers/libqsqlite.dylib "$PLUGINS_DIR"/sqldrivers/
 cp "$QTDIR"/plugins/sqldrivers/libqsqlmysql.dylib "$PLUGINS_DIR"/sqldrivers/
 cp "$QTDIR"/plugins/sqldrivers/libqsqlodbc.dylib "$PLUGINS_DIR"/sqldrivers/
@@ -62,6 +63,9 @@ cp -r "$PLUGINS_DIR" "$QTIFW/contents-beta/qt/Test Program.app/Contents/"
 ##
 ## DELETE ALL THE EXTRA GARBAGE DRAGGED IN BY MACDEPLOYQT
 ##
+## You are probably hosting this application somewhere like aws for exapmle. You are paying per download, so storing 
+## unecessary files is costing you money every time someone downloads, and with no benefit to the user. Keep your app profile
+## lean and mean to save money 
 rm -rf "$QTIFW"/contents-beta/qt/Test\ Program.app/Contents/Frameworks/Qt3DCore.framework
 rm -rf "$QTIFW"/contents-beta/qt/Test\ Program.app/Contents/Frameworks/Qt3DInput.framework
 rm -rf "$QTIFW"/contents-beta/qt/Test\ Program.app/Contents/Frameworks/Qt3DLogic.framework
