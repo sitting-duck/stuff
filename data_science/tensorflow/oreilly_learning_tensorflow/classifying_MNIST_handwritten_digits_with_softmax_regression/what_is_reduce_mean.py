@@ -1,8 +1,18 @@
 import tensorflow as tf
 
+# Here is the function signature for tf.reduce_mean
+# tf.math.reduce_mean(
+#    input_tensor,
+#    axis=None,
+#    keepdims=None,
+#    name=None,
+#    reduction_indices=None,
+#    keep_dims=None
+#)
+# For me axis translates to "where do you add the additional numbers to increase the dimension." 
+
 # we pretty much cannot do or execute anything without creating a session
 sess = tf.Session()
-
 
 # let's make a tensor, and fill it with some values
 mytensor = tf.constant([[100, 110], [10, 20], [1000, 1100]])
