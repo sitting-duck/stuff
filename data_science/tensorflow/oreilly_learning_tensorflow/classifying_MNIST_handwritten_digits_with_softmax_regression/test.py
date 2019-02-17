@@ -53,3 +53,5 @@ print("accuracy: ")
 accuracy = tf.reduce_mean(tf.cast(correct_mask, tf.float32))
 print(sess.run(accuracy))
 
+
+
