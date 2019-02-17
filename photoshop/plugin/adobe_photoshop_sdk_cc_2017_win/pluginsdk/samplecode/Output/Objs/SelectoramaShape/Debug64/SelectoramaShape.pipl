@@ -1,0 +1,284 @@
+#define RSCL32(a,b,c,d)   0x ## c ## d, 0x ## a ## b
+#define LC(a,b,c,d)       #d, #c, #b, #a
+#define RSCS32(a)         a, 0
+
+STRINGTABLE	DISCARDABLE
+BEGIN
+	16000,
+	"Selectorama\n\nVersion CC 2017 Release 1 (10/11/2016)\nCopyright 1996-2016, Adobe Systems Incorporated.\nAll Rights Reserved.\n\nAn example plug-in selection module for Adobe Photoshop®."
+END
+
+16000  PiPL  DISCARDABLE
+BEGIN
+	1, /* First byte must always be 1 */
+	0L, /* kCurrentPiPL Version */
+	    8L, /* Property count */
+	"MIB8", /* '8BIM' */
+	"dnik", /* 'kind' PIKindProperty */
+	0L, /* Index */
+	    4L, /* Length */
+	"MSB8", /* '8BSM' Photoshop Selection plug-in */
+
+	"MIB8", /* '8BIM' */
+	"eman", /* 'name' PINameProperty */
+	0L, /* Index */
+	   16L, /* Length */
+	"\016Selectorama...\0", 
+
+	"MIB8", /* '8BIM' */
+	"gtac", /* 'catg' PICategoryProperty */
+	0L, /* Index */
+	   12L, /* Length */
+	"\010AdobeSDK\0\0\0", 
+
+	"MIB8", /* '8BIM' */
+	"srev", /* 'vers' PIVersionProperty */
+	0L, /* Index */
+	    4L, /* Length */
+	0X00010000L, /* (Major << 16) | Minor */
+
+	"MIB8", /* '8BIM' */
+	"tpmc", /* 'cmpt' PIComponent */
+	0L, /* Index */
+	   20L, /* Length */
+	1179648L, /* Version */
+	"Selectorama\0\0\0\0\0", /* Unique ID */
+
+	"MIB8", /* '8BIM' */
+	"mtsh", /* 'hstm' PITerminology */
+	0L, /* Index */
+	   40L, /* Length */
+	0L, /* Version */
+	"7kds", /* Class ID */
+	"Mles", /* Event ID */
+	16000, /* Terminology ID */
+	"AdobeSDK Selectorama\0\0\0\0", /* Unique string */
+	    0, /* Padding */
+
+	"MIB8", /* '8BIM' */
+	"lbne", /* 'enbl' EnableInfoProperty */
+	0L, /* Index */
+	    8L, /* Length */
+	"true\0\0\0\0", 
+
+	"MIB8", /* '8BIM' */
+	"4668", /* '8664' PIWin64X86CodeProperty */
+	0L, /* Index */
+	   12L, /* Length */
+	"PluginMain\0\0", 
+
+END
+
+16000  aete  DISCARDABLE
+BEGIN
+	1, /* First byte must always be 1 */
+	0X0001, /* majorVersion|minorVersion */
+	0, /* language */
+	0, /* script */
+	    1, /* Suite Count */
+	"\010AdobeSDK", 
+	"\026Adobe example plug-ins", 
+	"7kds", /* Suite ID */
+	1, /* Suite level */
+	1, /* Suite version */
+	    1, /* Event Count */
+	"\024AdobeSDK selectorama", 
+	"\023selectorama plug-in", 
+	"7kds", /* Event class */
+	"Mles", /* Descriptor type */
+	"llun", /* Reply type */
+	"\000", 
+	000000, /* Flags */
+	"RmI#", /* Direct param type */
+	"\000", 
+	0XB000, /* Direct params */
+	    4, /* Parameter Count */
+	"\013select area", 
+	"  rA", 
+	"Lest", 
+	"\016selection area", 
+	0X2000, /* Param flags */
+	"\006amount", 
+	"tnmA", 
+	"buod", 
+	"\015random amount", 
+	000000, /* Param flags */
+	"\021use channels from", 
+	"snhC", 
+	"Moct", 
+	"\036use composite target or merged", 
+	0X2000, /* Param flags */
+	"\006create", 
+	"Erck", 
+	"Erct", 
+	"\013create type", 
+	0X2000, /* Param flags */
+	    0, /* Class count */
+	0, /* Number of comparison ops (always 0) */
+	    3, /* Enum count */
+	"Lest", 
+	    3, /* Alias count */
+	"\007minimum", 
+	"0Les", 
+	"\016select minimum", 
+	"\007maximum", 
+	"1Les", 
+	"\016select maximum", 
+	"\006random", 
+	"2Lhs", 
+	"\015select random", 
+	"Moct", 
+	    2, /* Alias count */
+	"\006target", 
+	"Tesu", 
+	"\024use target composite", 
+	"\006merged", 
+	"Mesu", 
+	"\024use merged composite", 
+	"Erct", 
+	    3, /* Alias count */
+	"\011selection", 
+	"0Erc", 
+	"\016make selection", 
+	"\004path", 
+	"1Erc", 
+	"\011make path", 
+	"\005layer", 
+	"2Erc", 
+	"\012make layer", 
+END
+
+16482  PiPL  DISCARDABLE
+BEGIN
+	1, /* First byte must always be 1 */
+	0L, /* kCurrentPiPL Version */
+	    8L, /* Property count */
+	"MIB8", /* '8BIM' */
+	"dnik", /* 'kind' PIKindProperty */
+	0L, /* Index */
+	    4L, /* Length */
+	"MSB8", /* '8BSM' Photoshop Selection plug-in */
+
+	"MIB8", /* '8BIM' */
+	"eman", /* 'name' PINameProperty */
+	0L, /* Index */
+	   12L, /* Length */
+	"\010Shape...\0\0\0", 
+
+	"MIB8", /* '8BIM' */
+	"gtac", /* 'catg' PICategoryProperty */
+	0L, /* Index */
+	   12L, /* Length */
+	"\010AdobeSDK\0\0\0", 
+
+	"MIB8", /* '8BIM' */
+	"srev", /* 'vers' PIVersionProperty */
+	0L, /* Index */
+	    4L, /* Length */
+	0X00010000L, /* (Major << 16) | Minor */
+
+	"MIB8", /* '8BIM' */
+	"tpmc", /* 'cmpt' PIComponent */
+	0L, /* Index */
+	   12L, /* Length */
+	1179648L, /* Version */
+	"Shape\0\0\0", /* Unique ID */
+
+	"MIB8", /* '8BIM' */
+	"mtsh", /* 'hstm' PITerminology */
+	0L, /* Index */
+	   32L, /* Length */
+	0L, /* Version */
+	"7kds", /* Class ID */
+	"Ephs", /* Event ID */
+	16482, /* Terminology ID */
+	"AdobeSDK Shape\0\0", /* Unique string */
+	    0, /* Padding */
+
+	"MIB8", /* '8BIM' */
+	"lbne", /* 'enbl' EnableInfoProperty */
+	0L, /* Index */
+	    8L, /* Length */
+	"true\0\0\0\0", 
+
+	"MIB8", /* '8BIM' */
+	"4668", /* '8664' PIWin64X86CodeProperty */
+	0L, /* Index */
+	   16L, /* Length */
+	"PluginMain1\0\0\0\0\0", 
+
+END
+
+16482  aete  DISCARDABLE
+BEGIN
+	1, /* First byte must always be 1 */
+	0X0001, /* majorVersion|minorVersion */
+	0, /* language */
+	0, /* script */
+	    1, /* Suite Count */
+	"\010AdobeSDK", 
+	"\026Adobe example plug-ins", 
+	"7kds", /* Suite ID */
+	1, /* Suite level */
+	1, /* Suite version */
+	    1, /* Event Count */
+	"\016AdobeSDK Shape", 
+	"\050nearestbase example color picker plug-in", 
+	"7kds", /* Event class */
+	"Ephs", /* Descriptor type */
+	"llun", /* Reply type */
+	"\000", 
+	000000, /* Flags */
+	"RmI#", /* Direct param type */
+	"\000", 
+	0XB000, /* Direct params */
+	    2, /* Parameter Count */
+	"\005shape", 
+	" phS", 
+	"Phst", 
+	"\012shape type", 
+	0X2000, /* Param flags */
+	"\006create", 
+	"Erck", 
+	"Erct", 
+	"\013create type", 
+	0X2000, /* Param flags */
+	    0, /* Class count */
+	0, /* Number of comparison ops (always 0) */
+	    2, /* Enum count */
+	"Phst", 
+	    7, /* Alias count */
+	"\010triangle", 
+	"0Phs", 
+	"\015triangle path", 
+	"\006square", 
+	"1Phs", 
+	"\013square path", 
+	"\006circle", 
+	"2Phs", 
+	"\013circle path", 
+	"\004star", 
+	"3Phs", 
+	"\011star path", 
+	"\006treble", 
+	"4Phs", 
+	"\013treble path", 
+	"\006ribbon", 
+	"5Phs", 
+	"\013ribbon path", 
+	"\004note", 
+	"6Phs", 
+	"\011note path", 
+	"Erct", 
+	    3, /* Alias count */
+	"\011selection", 
+	"0Erc", 
+	"\016make selection", 
+	"\004path", 
+	"1Erc", 
+	"\016make mask path", 
+	"\005layer", 
+	"2Erc", 
+	"\012make layer", 
+END
+
