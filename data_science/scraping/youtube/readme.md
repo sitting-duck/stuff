@@ -14,5 +14,7 @@ sudo chmod a+rx /usr/local/bin/youtube-dl
 If you lose connectivity and then resume (like if you're switching wifi networks) it will hang in mid-download and cannot be recovered. You'll have to start over or else write a script to check for dups and then resume wherever you were. 
 On the bright side, if you resume, it will have the same amount of progress because of the .part file.
 
+extrator simply refers to a website that you want to download videos from.
+
 
 
