@@ -8,9 +8,9 @@ pre-existing code with a lot of moving parts that I wasn't super familiar with y
 I would find myself spending a lot of time trying to hunt down what worked and what didn't and become frustrated with the 
 amount of time I spent on it. 
 
-I started writing these GUI "Debug" classes, tools, functions, etc for printing out everything inside a QML object and I
-found the exercise to be quite instructive in not only 
+I started writing these GUI "Debug" classes, tools, functions, etc after work hours for printing out everything inside a QML object 
+and I found the exercise to be quite instructive in not only 
 
-a. understanding QML objects
+a. understanding QML objects in general
 b. getting a pretty quick picture of what was going on with QML element I was unfamiliar with without having to manually
 type out just a million console logs.
