@@ -12,5 +12,20 @@ It turns out this was not to be. The employee that had been at the company the l
 This meant that if it wasn't written by the image processing phd types, and it wasn't file io related, it was probably written
 in QML. 
 
-This class turned out to never really be useful to me at all. On top of that, when I submitted it to the repo ...
+This class turned out to never really be useful to me at all. 
+
+```
+Rectangle {
+  id: Rectangle1
+  objectName: "Rectangle1"
+}
+```
+
+So every QML object can be given an id, and inside of each scope, each is must be unique.
+It made a lot of sense to me at the time, that I could grab whatever GUI element I need from the GUI side by object name this way.
+I figured I could recursively run this script, and process every qml file in my repository, so that every GUI element could be
+easily accessed on the C++ side this way. 
+
+Again, never turned out that way, but you get the idea.
+
 
