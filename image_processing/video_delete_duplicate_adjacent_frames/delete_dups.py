@@ -30,6 +30,7 @@ def main():
                 pass
             #    for file in files:
             #        print "\t" + file
+            files = sorted(files)
 
             # we make a loop for looping through these files using an index
             # using i and i+1 to fetch two adjacent files is really convenient for us in this situation
@@ -40,4 +41,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
+(
