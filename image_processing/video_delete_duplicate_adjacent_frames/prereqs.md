@@ -10,3 +10,5 @@ pip install --upgrade scikit-image
 pip install --upgrade imutils
 pip install imutils
 
+I recall my frame_sequencer.py script was not very robust at all, if it failed on even a single input video it would not recover and I would lose the rest of the night until I restarted it in the morning. My next todo will be to make this script robust
+
