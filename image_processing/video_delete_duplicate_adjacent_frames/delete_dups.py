@@ -27,8 +27,16 @@ def main():
         for dir in dirs:
             print dir
             for _, _, files in os.walk(videoFolder + dir):
-                for file in files:
-                    print file
+                pass
+            #    for file in files:
+            #        print "\t" + file
+
+            # we make a loop for looping through these files using an index
+            # using i and i+1 to fetch two adjacent files is really convenient for us in this situation
+            for i in range(0, len(files)):
+                #print i
+                if (i+1) < len(files):
+                    print str(i) + " " + str(i+1)
 
 if __name__ == "__main__":
     main()
