@@ -1,16 +1,9 @@
 import os
 import cv2
+from skimage.measure import compare_ssim
 
 def get_ssim(image1, image2):
     
-    print image1
-    print image2
-  
-    print os.path.exists(os.path.dirname(os.path.realpath(__file__)))
-    print os.path.exists(os.path.dirname(os.path.realpath(__file__)) + "/sequenced_footage/")
-    print os.path.isfile(image1)
-    print os.path.isfile(image2)
-
     if not os.path.isfile(image1) or not os.path.isfile(image2):
         raise("input image does not exist")
         return
@@ -18,8 +11,6 @@ def get_ssim(image1, image2):
     # load the two input images
     imageA = cv2.imread(image1)
     imageB = cv2.imread(image2)
-    cv2.imshow("A", imageA)
-    cv2.imshow("B", imageB)
 
     # convert the images to grayscale
     grayA = cv2.cvtColor(imageA, cv2.COLOR_BGR2GRAY)
@@ -31,8 +22,23 @@ def get_ssim(image1, image2):
 
     #diff is an array of floats [0,1], we convert to 8bit uint [0-255] so we can do imageproc
     diff = (diff * 255).astype("uint8")
-    print("SSI<: {}".format(score))
+    #print("SSI<: {}".format(score))
     return score
+
+def sort_list(list):
+    index_list = sorted(range(len(list)), key=list.__getitem__)
+    #print "index_list: " + str(index_list)
+
+    sorted_list = []
+    for k in range(0, len(index_list)):
+        #print "index: " + str(k)
+        #print "index_list[index]: " + str(index_list[k])
+        #print "files[index_list[index]]:" + str(files[index_list[k]])
+        sorted_list.append(list[index_list[k]])
+    #print "mah sorted: "
+    #for j in range(0, len(files)):
+    #    print sorted_list[j]
+    return sorted_list
 
 def main():
    
@@ -44,17 +50,36 @@ def main():
             print dir
             for _, _, files in os.walk(videoFolder + dir):
                 pass
-            #    for file in files:
-            #        print "\t" + file
-            files = sorted(files)
+            files = sort_list(files)
+            
+            print "num files before: " + str(len(files))
 
+            for m in range(0, len(files)):
+                print m
+                print files[m]
             # we make a loop for looping through these files using an index
             # using i and i+1 to fetch two adjacent files is really convenient for us in this situation
             for i in range(0, len(files)):
-                #print i
+
+                if (i+1) < len(files) - 1:
+                    print i
+                    print "i: " + str(files[i])
+                    print "i+1: " + str(files[i+1])
+                    print "comparing " + str(files[i]) + " and " + str(files[i+1])
                 if (i+1) < len(files):
-                    #print str(videoFolder+files[i]) + " " + str(videoFolder+files[i+1])
-                    print get_ssim(pwd+"/"+videoFolder+"/"+dir+"/"+files[i], pwd+"/"+videoFolder+"/"+dir+"/"+files[i+1]) 
+                    file1 = pwd+"/"+videoFolder+"/"+dir+"/"+files[i]
+                    file2 = pwd+"/"+videoFolder+"/"+dir+"/"+files[i+1]
+                    ssim = round(get_ssim(file1, file2), 2) 
+                    print "ssim: " + str(ssim)
+                    if ssim >= 0.99:
+                        print "removing: " + str(file2)
+                        os.remove(file2)
+                                    
+                for _, _, files in os.walk(videoFolder + dir):
+                    pass
+                files = sort_list(files)
+
+            print "num files after: " + str(len(files)) 
 
 if __name__ == "__main__":
     main()
