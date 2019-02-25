@@ -1,10 +1,25 @@
 import os
+import cv2
 
 def get_ssim(image1, image2):
     
+    print image1
+    print image2
+  
+    print os.path.exists(os.path.dirname(os.path.realpath(__file__)))
+    print os.path.exists(os.path.dirname(os.path.realpath(__file__)) + "/sequenced_footage/")
+    print os.path.isfile(image1)
+    print os.path.isfile(image2)
+
+    if not os.path.isfile(image1) or not os.path.isfile(image2):
+        raise("input image does not exist")
+        return
+
     # load the two input images
-    imageA = cv2.imread(args["first"])
-    imageB = cv2.imread(args["second"])
+    imageA = cv2.imread(image1)
+    imageB = cv2.imread(image2)
+    cv2.imshow("A", imageA)
+    cv2.imshow("B", imageB)
 
     # convert the images to grayscale
     grayA = cv2.cvtColor(imageA, cv2.COLOR_BGR2GRAY)
@@ -22,6 +37,7 @@ def get_ssim(image1, image2):
 def main():
    
     videoFolder = "sequenced_footage/" # the folder with all the frames saved as images in it
+    pwd = os.path.dirname(os.path.realpath(__file__))
 
     for _, dirs, _ in os.walk(videoFolder):
         for dir in dirs:
@@ -37,8 +53,10 @@ def main():
             for i in range(0, len(files)):
                 #print i
                 if (i+1) < len(files):
-                    print str(i) + " " + str(i+1)
+                    #print str(videoFolder+files[i]) + " " + str(videoFolder+files[i+1])
+                    print get_ssim(pwd+"/"+videoFolder+"/"+dir+"/"+files[i], pwd+"/"+videoFolder+"/"+dir+"/"+files[i+1]) 
 
 if __name__ == "__main__":
     main()
-(
+
+
