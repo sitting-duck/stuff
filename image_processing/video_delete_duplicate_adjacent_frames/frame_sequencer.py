@@ -11,7 +11,7 @@ import subprocess
 videoFolder = "./footage/"
 files = os.walk
 
-for root, dirs, files in os.walk(videoFolder):
+for root, dirs, files in os.walk(videoFolder)g
 	for file in files:
 		print file
 		filename, fileExtension = os.path.splitext(file)

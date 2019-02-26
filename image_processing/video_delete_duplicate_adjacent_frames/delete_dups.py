@@ -27,17 +27,10 @@ def get_ssim(image1, image2):
 
 def sort_list(list):
     index_list = sorted(range(len(list)), key=list.__getitem__)
-    #print "index_list: " + str(index_list)
 
     sorted_list = []
     for k in range(0, len(index_list)):
-        #print "index: " + str(k)
-        #print "index_list[index]: " + str(index_list[k])
-        #print "files[index_list[index]]:" + str(files[index_list[k]])
         sorted_list.append(list[index_list[k]])
-    #print "mah sorted: "
-    #for j in range(0, len(files)):
-    #    print sorted_list[j]
     return sorted_list
 
 def main():
