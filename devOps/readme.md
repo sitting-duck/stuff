@@ -34,3 +34,14 @@ find . -name "*.prl" -print0 | xargs -0 rm -rf
 find . -type d -name "Headers" -print0 | xargs -0 rm -rf
 find . -type f -name "Headers" -print0 | xargs -0 rm -rf
 ```
+### To Make the Mac Jenkins Build server accessible over the network: 
+Changing the httpListenAddress for Jenkins on OSX
+
+I installed Jenkins via homebrew and wanted the web interface to be accessible over the network. By default, Jenkins is launched with the --httpListenAddress=127.0.0.1 option and is only accessible on the local machine.
+
+I found the plist file that was used to launch Jenkins in ~/Library/LaunchAgents/homebrew.mxcl.jenkins.plist and changed the argument, but each time I ran brew services restart jenkins my changes would be lost. It turns out that this file only exists at run time. The config file that is actually used is located at /usr/local/opt/jenkins/homebrew.mxcl.jenkins.plist. If you change this file then restart Jenkins then your changes should take effect.
+
+TL;DR:
+
+sudo vim /usr/local/opt/jenkins/homebrew.mxcl.jenkins.plist
+brew services restart jenkins
