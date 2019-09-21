@@ -6,10 +6,10 @@
  to add dlls and .lib files but it will probably work for other file types
  if you change these lines
 
-'''
+```
 	git lfs track *.lib
 	git lfs track *.dll
-'''
+```
 
 to *.whatever_you_want_extension
 
