@@ -2,6 +2,17 @@
  This script is for adding files to Git LFS and then pushing them to a repo.
  It assumes you have already initalized git lfs. 
 
+ I executed this file using Git Bash on Windows 10. I wrote this script 
+ to add dlls and .lib files but it will probably work for other file types
+ if you change these lines
+
+'''
+	git lfs track *.lib
+	git lfs track *.dll
+'''
+
+to *.whatever_you_want_extension
+
  Why do you need this script?
  If you need to push a loooooooot of dependencies to Git LFS. 
  If you try to push all your files at once in a single commit, any sort of 
