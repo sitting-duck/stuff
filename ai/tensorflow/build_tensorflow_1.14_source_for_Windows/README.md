@@ -1,7 +1,7 @@
 
 ### Building the Tensorflow Source code on Windows in C++ with GPU support
 
-0. Before we even start we need to make sure you are running on the correct hardware.
+0. Before we even start we need to make sure you are running on the correct hardware. See below this screencap from the Tensorflow documentation:
 ![Hardware reqs](hardware_reqs.png)
 That links to here: ``https://developer.nvidia.com/cuda-gpus``. You'll be able to find your card from there. 
 
@@ -13,6 +13,18 @@ Alternatively, you can also look under Display Adaptors in the Device Manager:
 For example I checked my device manager under display adaptors to see what graphics card I have: 
 ![Check graphics card](device_manager_check_graphics_card.png)
 
+1. You need to install the NVidia graphics driver for your card. You can type the name of your graphics card plus "Nvidia grpahics card driver to find the download page for your card."
+
+You need to make sure you are downloading the latest version, in your search you may find an older version, and if you are lucky, when you run and install, you may see an error like this if your driver is too old:
+
+![Incompatible Graphics Hardware](incompatible_graphics_hardware.png)
+But you might not be so lucky and have to find out later. 
+
+The page for NVidia Graphics card drivers is ``https://www.nvidia.com/Download/index.aspx``
+
+And you're going to find your graphics card using this thing:
+![NVidida Driver Download Form](nvidia_driver_downloads.png)
+If you don't see your graphics card in there keep looking,you are possibly looking under the wrong category. If it is an NVidia graphics card and it exists, it will be in there somewhere. If you go throiugh this form you are guaranteed to get the latest version. If you google and just find some link, there is a possibility you will download an older version, so make sure. 
 
 
 1. Before installing Bazel, make sure you can actually compile Tensorflow on your Windows machine. To compile something successfully you need the right hardware, the right compiler and so on. I find that most of the time the setup is the most specific and difficult part of software, not the actual code. So we're going to make sure your computer is ready for the task.  Read ``https://www.tensorflow.org/install/gpu#windows_setup`` to see the prereqs. You need to make sure you have a compatible graphics card.
@@ -39,18 +51,6 @@ According to the article you need:
 
 
 
-You need to install the NVidia graphics driver for your card. You can type the name of your graphics card plus "Nvidia grpahics card driver to find the download page for your card."
-
-You need to make sure you are downloading the latest version, in your search you may find an older version, and if you are lucky, when you run and install, you may see an error like this if your driver is too old:
-
-![Incompatible Graphics Hardware](incompatible_graphics_hardware.png)
-But you might not be so lucky and have to find out later. 
-
-The page for NVidia Graphics card drivers is ``https://www.nvidia.com/Download/index.aspx``
-
-And you're going to find your graphics card using this thing:
-![NVidida Driver Download Form](nvidia_driver_downloads.png)
-If you don't see your graphics card in there keep looking,you are possibly looking under the wrong category. If it is an NVidia graphics card and it exists, it will be in there somewhere. If you go throiugh this form you are guaranteed to get the latest version. If you google and just find some link, there is a possibility you will download an older version, so make sure. 
 
 
  Install Bazel. I was hesitant to start using Bazel because I saw many examples using CMake, and because it was intimidating at first. However, I will say that the Bazel documentation is very good and the command line tools and syntax from Bazel are very well made, so there is no need to be scared of trying the new framework. 
