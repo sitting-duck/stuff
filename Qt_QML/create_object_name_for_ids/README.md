@@ -12,7 +12,8 @@ It turns out this was not to be. The employee that had been at the company the l
 This meant that if it wasn't written by the image processing phd types, and it wasn't file io related, it was probably written
 in QML. 
 
-This class turned out to never really be useful to me at all. 
+This class turned out to never really be useful to me at all because it didn't go with the paradigm of most of the code base at work, and was based a on a false assumption. It was a nice little kata in Python, but I have yet to have found an actual use for it.
+ 
 
 ```
 Rectangle {
@@ -28,4 +29,6 @@ easily accessed on the C++ side this way.
 
 Again, never turned out that way, but you get the idea.
 
+You can see a super simple example input qml file in test.qml, 
+and you can see what the expected output would be with new_test.qml
 

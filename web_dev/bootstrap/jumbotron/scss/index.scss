@@ -1,0 +1,17 @@
+$super-big-font-size: 100px;
+$medium-font-size: 50px;
+
+.jumbotron.sky-jumbotron {
+	background: url("../img/animal-dawn-desktop-backgrounds-875858.jpg");
+	background-size: cover; 
+	background-repeat: no-repeat;
+	height: 100vh;
+}
+
+.jumbotron p.super-big-font {
+	font-size: 200px;
+}
+
+.jumbotron p.medium-font {
+	font-size: 50px;	
+}
