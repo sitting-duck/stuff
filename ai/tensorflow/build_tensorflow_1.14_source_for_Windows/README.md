@@ -1,7 +1,8 @@
 
 ### Building the Tensorflow Source code on Windows in C++ with GPU support
 
-0. Before we even start we need to make sure you are running on the correct hardware. See below this screencap from the Tensorflow documentation:
+### Step 0: Check your hardware
+Before we even start we need to make sure you are running on the correct hardware. See below this screencap from the Tensorflow documentation:
 ![Hardware reqs](hardware_reqs.png)
 That links to here: ``https://developer.nvidia.com/cuda-gpus``. You'll be able to find your card from there. 
 
@@ -13,7 +14,8 @@ Alternatively, you can also look under Display Adaptors in the Device Manager:
 For example I checked my device manager under display adaptors to see what graphics card I have: 
 ![Check graphics card](device_manager_check_graphics_card.png)
 
-1. You need to install the NVidia graphics driver for your card. You can type the name of your graphics card plus "Nvidia grpahics card driver to find the download page for your card."
+### Step 1: Install NVidia Graphics Card Driver
+You need to install the NVidia graphics driver for your card.
 The page for NVidia Graphics card drivers is ``https://www.nvidia.com/Download/index.aspx``
 
 And you're going to find your graphics card using this form:
@@ -24,9 +26,17 @@ If you use that form, you are guaranteed to download the latest version, if you 
 ![Incompatible Graphics Hardware](incompatible_graphics_hardware.png)
 But you might not be so lucky and have to find out later. So use that form, I have made the mistake before of just using some link I found on StackOverflow and installed a driver that was outdated. Don't make my mistake :)
 
-If you don't see your graphics card in there keep looking,you are possibly looking under the wrong category. If it is an NVidia graphics card and it exists, it will be in there somewhere. If you go throiugh this form you are guaranteed to get the latest version. 
+If you don't see your graphics card in there, keep looking, you are possibly looking under the wrong category. If it is an NVidia graphics card and it exists, it will be in there somewhere. If you go throiugh this form you are guaranteed to get the latest version. 
 
-1. Before installing Bazel, make sure you can actually compile Tensorflow on your Windows machine. To compile something successfully you need the right hardware, the right compiler and so on. I find that most of the time the setup is the most specific and difficult part of software, not the actual code. So we're going to make sure your computer is ready for the task.  Read ``https://www.tensorflow.org/install/gpu#windows_setup`` to see the prereqs. You need to make sure you have a compatible graphics card.
+You will download an exe file and run it to install your NVidia graphics card driver. The one I ended up using was: ``http://us.download.nvidia.com/Windows/436.48/436.48-notebook-win10-64bit-international-whql.exe``
+
+### Step 2: Install Cuda for Windows
+The documentation is here: ``https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/``
+Go to here: ``https://developer.nvidia.com/cuda-downloads`` and download the NVidia Cuda Toolkit. 
+
+![Download Cuda Enabled toolkit](download_cuda_enabled_toolkit.png)
+
+### Step 3: Install Bazel
 
 The first thing you're going to see on that page is this: 
 ![Into Build from Source](intro_build_from_source.png)
