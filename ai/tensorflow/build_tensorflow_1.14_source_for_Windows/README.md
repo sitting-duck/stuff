@@ -1,32 +1,18 @@
-This page: ``https://www.tensorflow.org/install/source#linux`` has a lot of useful links on it, but it is not what you need. It is about building Tensorflow from source for Python, (you want C++), and it is only tested on Linux and Mac, as shown in the screencap below.
-![Not Tested and Not Supported for Windows](not_tested_and_supported_for_Windows.png)
 
-According to the Tensorflow website as of 10/12/2019, this configuration is not tested and is not supported. However, I was able to build tensorflow on Windows using Bazel with GPU support and I will detail my endeavor in a level of detail that I hope is not too excruciating below. 
-
-### A little background. 
-We do machine learning stuff where I work. Normally we do machine learning stuff with tensorflow and the way we usually do this is we will build and train the neural net using Python.
-
-Then, we want to convert this neural net into a product consumable by users, so we need to put it into a format accessible to the average person. Most people do not have Python installed, and most people do not use Linux as their operating system, but this is teh environment that seems to work best with Tensorflow. 
-
-So what happens next is pretty much that we start converting all the Python code to C++, and we have to build an application to load the model on Windows, and another one that will build the model on the Mac. 
-
-### First failed Attempt:
-Since we have to build for both Mac and Windows, an easy thing to do in this situaiton is to use some cross platform framework like Qt so that you only have to write your code once. 
-
-We tried getting some prebuild dlls and dylibs for tensorflow 1.14 and linking them into our project. We kept getting compiler errors about missing headers and unresolved external symbols no matter what we tried, so we determined that we might need more control, and decided to build Tensorflow ourselves. If you build the code yourself, you can find the exact line of code causing the missing header error or unresolved external symbol error and get what info you need to fix it.
-
-### Building the Tensorflow Source code on Windows with GPU support
+### Building the Tensorflow Source code on Windows in C++ with GPU support
 
 0. Before we even start we need to make sure you are running on the correct hardware.
 ![Hardware reqs](hardware_reqs.png)
 That links to here: ``https://developer.nvidia.com/cuda-gpus``. 
 
-Figure out what kind of GPU you have. At this time, you need an NVidia GPU. You normally will not get these in a laptop unless it is a gaming laptop.  
+Figure out what kind of GPU you have. At this time (10/11/2019), you need an NVidia GPU. You normally will not get these in a laptop unless it is a gaming laptop.  
 ![How to Find out What GPU You Have](how_to_find_out_what_gpu_i_have.png)
 
 Alternatively, you can also look under Display Adaptors in the Device Manager: 
 For example I checked my device manager under display adaptors to see what graphics card I have: 
 ![Check graphics card](device_manager_check_graphics_card.png)
+
+
 
 1. Before installing Bazel, make sure you can actually compile Tensorflow on your Windows machine. To compile something successfully you need the right hardware, the right compiler and so on. I find that most of the time the setup is the most specific and difficult part of software, not the actual code. So we're going to make sure your computer is ready for the task.  Read ``https://www.tensorflow.org/install/gpu#windows_setup`` to see the prereqs. You need to make sure you have a compatible graphics card.
 
@@ -74,3 +60,21 @@ Note: I Just downloaded the bazel exe file from Github. I built tensorflow from 
 Fortunately, Bazel is pretty mature, if you have the wrong version of Bazel, it will warn you like this:
 ![Wrong Version of Bazel Error](wrong_version_bazel.png) 
 
+
+### Random Extra Shit
+This page: ``https://www.tensorflow.org/install/source#linux`` has a lot of useful links on it, but it is not what you need. It is about building Tensorflow from source for Python, (you want C++), and it is only tested on Linux and Mac, as shown in the screencap below.
+![Not Tested and Not Supported for Windows](not_tested_and_supported_for_Windows.png)
+
+According to the Tensorflow website as of 10/12/2019, this configuration is not tested and is not supported. However, I was able to build tensorflow on Windows using Bazel with GPU support and I will detail my endeavor in a level of detail that I hope is not too excruciating below. 
+
+### A little background. 
+We do machine learning stuff where I work. Normally we do machine learning stuff with tensorflow and the way we usually do this is we will build and train the neural net using Python.
+
+Then, we want to convert this neural net into a product consumable by users, so we need to put it into a format accessible to the average person. Most people do not have Python installed, and most people do not use Linux as their operating system, but this is teh environment that seems to work best with Tensorflow. 
+
+So what happens next is pretty much that we start converting all the Python code to C++, and we have to build an application to load the model on Windows, and another one that will build the model on the Mac. 
+
+### First failed Attempt:
+Since we have to build for both Mac and Windows, an easy thing to do in this situaiton is to use some cross platform framework like Qt so that you only have to write your code once. 
+
+We tried getting some prebuild dlls and dylibs for tensorflow 1.14 and linking them into our project. We kept getting compiler errors about missing headers and unresolved external symbols no matter what we tried, so we determined that we might need more control, and decided to build Tensorflow ourselves. If you build the code yourself, you can find the exact line of code causing the missing header error or unresolved external symbol error and get what info you need to fix it.
