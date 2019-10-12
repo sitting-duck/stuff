@@ -3,9 +3,10 @@
 
 0. Before we even start we need to make sure you are running on the correct hardware.
 ![Hardware reqs](hardware_reqs.png)
-That links to here: ``https://developer.nvidia.com/cuda-gpus``. 
+That links to here: ``https://developer.nvidia.com/cuda-gpus``. You'll be able to find your card from there. 
 
-Figure out what kind of GPU you have. At this time (10/11/2019), you need an NVidia GPU. You normally will not get these in a laptop unless it is a gaming laptop.  
+At this time (10/11/2019), you need an NVidia GPU. You normally will not get these in a laptop unless it is a gaming laptop.  
+From the documentation on ``https://www.tensorflow.org/install/gpu``
 ![How to Find out What GPU You Have](how_to_find_out_what_gpu_i_have.png)
 
 Alternatively, you can also look under Display Adaptors in the Device Manager: 
