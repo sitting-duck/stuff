@@ -1,0 +1,34 @@
+
+According to the article you need: 
+![Cuda Enabled GPU](cuda_enabled_gpu.png)
+
+
+
+
+
+ Install Bazel. I was hesitant to start using Bazel because I saw many examples using CMake, and because it was intimidating at first. However, I will say that the Bazel documentation is very good and the command line tools and syntax from Bazel are very well made, so there is no need to be scared of trying the new framework. 
+
+The step to install Bazel are very well documented, so I will not include them in this document. You can follow them here: ``https://docs.bazel.build/versions/master/install-windows.html``
+Note: I Just downloaded the bazel exe file from Github. I built tensorflow from source, but I did not need to build Bazel from source. 
+
+Fortunately, Bazel is pretty mature, if you have the wrong version of Bazel, it will warn you like this:
+![Wrong Version of Bazel Error](wrong_version_bazel.png) 
+
+
+### Random Extra Shit
+This page: ``https://www.tensorflow.org/install/source#linux`` has a lot of useful links on it, but it is not what you need. It is about building Tensorflow from source for Python, (you want C++), and it is only tested on Linux and Mac, as shown in the screencap below.
+![Not Tested and Not Supported for Windows](not_tested_and_supported_for_Windows.png)
+
+According to the Tensorflow website as of 10/12/2019, this configuration is not tested and is not supported. However, I was able to build tensorflow on Windows using Bazel with GPU support and I will detail my endeavor in a level of detail that I hope is not too excruciating below. 
+
+### A little background. 
+We do machine learning stuff where I work. Normally we do machine learning stuff with tensorflow and the way we usually do this is we will build and train the neural net using Python.
+
+Then, we want to convert this neural net into a product consumable by users, so we need to put it into a format accessible to the average person. Most people do not have Python installed, and most people do not use Linux as their operating system, but this is teh environment that seems to work best with Tensorflow. 
+
+So what happens next is pretty much that we start converting all the Python code to C++, and we have to build an application to load the model on Windows, and another one that will build the model on the Mac. 
+
+### First failed Attempt:
+Since we have to build for both Mac and Windows, an easy thing to do in this situaiton is to use some cross platform framework like Qt so that you only have to write your code once. 
+
+We tried getting some prebuild dlls and dylibs for tensorflow 1.14 and linking them into our project. We kept getting compiler errors about missing headers and unresolved external symbols no matter what we tried, so we determined that we might need more control, and decided to build Tensorflow ourselves. If you build the code yourself, you can find the exact line of code causing the missing header error or unresolved external symbol error and get what info you need to fix it.

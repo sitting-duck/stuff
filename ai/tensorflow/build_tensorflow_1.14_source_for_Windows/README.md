@@ -31,12 +31,116 @@ If you don't see your graphics card in there, keep looking, you are possibly loo
 You will download an exe file and run it to install your NVidia graphics card driver. The one I ended up using was: ``http://us.download.nvidia.com/Windows/436.48/436.48-notebook-win10-64bit-international-whql.exe``
 
 ### Step 2: Install Cuda for Windows
-The documentation is here: ``https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/``
-Go to here: ``https://developer.nvidia.com/cuda-downloads`` and download the NVidia Cuda Toolkit. 
+The documentation is here: ``https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/`` <br>
+Go to here: ``https://developer.nvidia.com/cuda-downloads`` and download the NVidia Cuda Toolkit. <br>
 
 ![Download Cuda Enabled toolkit](download_cuda_enabled_toolkit.png)
 
+### Step 3: Install Python for Windows
+Download page: ``https://www.python.org/downloads/windows/``
+Make sure you set your path variables. If you cannot call ``python --version`` from the ``cmd`` terminal you did not set your environment variables correctly yet.
+
 ### Step 3: Install Bazel
+The documentation is on this page: ``https://docs.bazel.build/versions/master/install-windows.html``
+Follow all the steps on that page and install all the prereqs.
+
+Then you will go to this page to actually install Bazel: ``https://github.com/bazelbuild/bazel/releases/tag/0.24.1`` There are more recent versions, but 0.24 is the version you need for building Tensorflow 1.14 on Windows.
+
+If you install the wrong version you will see something like this: 
+![Wrong version Bazel](wrong_version_bazel.png)
+The first time you try to build tensorflow, so make sure you have downloaded version 0.24.
+
+### Step 4: Configure Bazel to Build C++ on Windows
+Follow this documentation: ``https://docs.bazel.build/versions/master/windows.html#build-c-with-msvc``
+
+### Step 4: Install MSYS
+Go here: ``https://www.msys2.org/`` and download and install MSYS for the bin tools you will need to build Tensorflow
+
+If MSYS2 is installed to ``C:\msys64``, ie. you installed the 64 bit version, add ``C:\msys64\usr\bin`` to your ``%PATH%`` environment variable. Then, using cmd.exe, run:
+```
+pacman -S git patch unzip
+```
+
+### Step 5: Install Visual Studio Build Tools 2017
+Documentation is here: ``https://www.tensorflow.org/install/source_windows#install_visual_c_build_tools_2017``
+Note: I have done this with MSVC 2015 with no problems, so that might work for you too.
+
+### Step 6: Clone the Tensorflow source code
+Original Documentation: ``https://www.tensorflow.org/install/source_windows#download_the_tensorflow_source_code``
+
+``cd`` into your cloned directory and do ``git checkout r1.14``
+
+### Step 7: Configure the Build using configure.py
+Original Documentation: ``python ./configure.py``
+Run ``python ./configure.py`` at the root of your source tree
+
+You will probably want to say no to all the other dependencies it asks you about (unless you are specifically aware that your project needs it), but you should say yes when it asks you if you want to build with Cuda. A successful session will look something like this: 
+```
+$ python configure.py
+WARNING: --batch mode is deprecated. Please instead explicitly shut down your Bazel server using the command "bazel shutdown".
+You have bazel 0.24.1 installed.
+Please specify the location of python. [Default is C:\Users\Username\AppData\Local\Programs\Python\Python36\python.exe]:
+
+
+Found possible Python library paths:
+  C:\Users\Username\AppData\Local\Programs\Python\Python36\lib\site-packages
+Please input the desired Python library path to use.  Default is [C:\Users\Username\AppData\Local\Programs\Python\Python36\lib\site-packages]
+
+Do you wish to build TensorFlow with XLA JIT support? [y/N]:
+No XLA JIT support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with ROCm support? [y/N]:
+No ROCm support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with CUDA support? [y/N]: Y
+CUDA support will be enabled for TensorFlow.
+
+Found CUDA 10.0 in:
+	C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/lib/x64
+	C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/include
+Found cuDNN 7 in:
+	C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/lib
+	C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/include
+
+``` 
+
+### Step 7: Build the dll 
+Note: Dont do this:
+```
+bazel build //tensorflow/tools/pip_package:build_pip_package
+```
+This is on the ``https://www.tensorflow.org/install/source_windows`` but this is building Python stuff, you don't want that. You want the C++ API for tensorflow so disregard that.
+
+```
+bazel build --config=cuda tensorflow:tensorflow.dll
+```
+The build will take a long time (possibly between 20 minutes and an hour the first time)
+
+### Step 8: Build the .lib
+```
+bazel build --config=cuda tensorflow:tensorflow.lib
+```
+The build may take a long time (possibly between 20 minutes and an hour the first time)
+
+### Step 8: Link your .lib into your Windows project for testing
+You may do this in Visual Studio, or Qt for example. Add a path to your .lib file and test compilation calling a tensorflow function in your c++.
+
+### Step 9: Add Header source if necessary
+On my build I had trouble with these libs so I downloaded their source code separately and linked them into my project. <br>
+Clone these header libraries from Github or download the source from these 3 places: 
+```
+https://github.com/protocolbuffers/protobuf/releases/tag/v3.7.0 
+https://github.com/abseil/abseil-cpp 
+http://eigen.tuxfamily.org/index.php?title=Main_Page 
+``` 
+and link them into your Windows project if you are having trouble with missing header files or recursive includes of headers in the eigen library.
+
+
+### Step 9: Identify Missing Symbols:
+Each compilation error you see like this: 
+![unresolved external symbol](unresolved_external_symbol.png)
+
+Go to the source code that has the missing symbol error. In your IDE if it is Visual Studio or Qt Creator and select "Go to Symbol Definition" or something similiar. This will take you into somewhere in the actual tensorflow source code. In front of the function definition or the class definition that caused the missing symbol error put the macro ``TF_EXPORT``, at the top of that same file, before any other includes put ``#include "tensorflow/core/platform/macros.h"`` and then rebuild your .lib. Tensorneeds to be built with that symbol exported. Just calling ``bazel build --config=cuda tensorflow:tensorflow.lib`` will suffice, there is no need to do a clean rebuild.
 
 The first thing you're going to see on that page is this: 
 ![Into Build from Source](intro_build_from_source.png)
@@ -55,36 +159,3 @@ It is tempting to go in order and just click that link and go ahead and install 
 Click the first link, it's going to take you to ``https://docs.bazel.build/versions/master/install-windows.html`` on the Bazel Website. 
 
 
-According to the article you need: 
-![Cuda Enabled GPU](cuda_enabled_gpu.png)
-
-
-
-
-
- Install Bazel. I was hesitant to start using Bazel because I saw many examples using CMake, and because it was intimidating at first. However, I will say that the Bazel documentation is very good and the command line tools and syntax from Bazel are very well made, so there is no need to be scared of trying the new framework. 
-
-The step to install Bazel are very well documented, so I will not include them in this document. You can follow them here: ``https://docs.bazel.build/versions/master/install-windows.html``
-Note: I Just downloaded the bazel exe file from Github. I built tensorflow from source, but I did not need to build Bazel from source. 
-
-Fortunately, Bazel is pretty mature, if you have the wrong version of Bazel, it will warn you like this:
-![Wrong Version of Bazel Error](wrong_version_bazel.png) 
-
-
-### Random Extra Shit
-This page: ``https://www.tensorflow.org/install/source#linux`` has a lot of useful links on it, but it is not what you need. It is about building Tensorflow from source for Python, (you want C++), and it is only tested on Linux and Mac, as shown in the screencap below.
-![Not Tested and Not Supported for Windows](not_tested_and_supported_for_Windows.png)
-
-According to the Tensorflow website as of 10/12/2019, this configuration is not tested and is not supported. However, I was able to build tensorflow on Windows using Bazel with GPU support and I will detail my endeavor in a level of detail that I hope is not too excruciating below. 
-
-### A little background. 
-We do machine learning stuff where I work. Normally we do machine learning stuff with tensorflow and the way we usually do this is we will build and train the neural net using Python.
-
-Then, we want to convert this neural net into a product consumable by users, so we need to put it into a format accessible to the average person. Most people do not have Python installed, and most people do not use Linux as their operating system, but this is teh environment that seems to work best with Tensorflow. 
-
-So what happens next is pretty much that we start converting all the Python code to C++, and we have to build an application to load the model on Windows, and another one that will build the model on the Mac. 
-
-### First failed Attempt:
-Since we have to build for both Mac and Windows, an easy thing to do in this situaiton is to use some cross platform framework like Qt so that you only have to write your code once. 
-
-We tried getting some prebuild dlls and dylibs for tensorflow 1.14 and linking them into our project. We kept getting compiler errors about missing headers and unresolved external symbols no matter what we tried, so we determined that we might need more control, and decided to build Tensorflow ourselves. If you build the code yourself, you can find the exact line of code causing the missing header error or unresolved external symbol error and get what info you need to fix it.
