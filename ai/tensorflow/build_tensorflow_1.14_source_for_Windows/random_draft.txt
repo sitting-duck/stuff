@@ -32,3 +32,20 @@ So what happens next is pretty much that we start converting all the Python code
 Since we have to build for both Mac and Windows, an easy thing to do in this situaiton is to use some cross platform framework like Qt so that you only have to write your code once. 
 
 We tried getting some prebuild dlls and dylibs for tensorflow 1.14 and linking them into our project. We kept getting compiler errors about missing headers and unresolved external symbols no matter what we tried, so we determined that we might need more control, and decided to build Tensorflow ourselves. If you build the code yourself, you can find the exact line of code causing the missing header error or unresolved external symbol error and get what info you need to fix it.
+
+The first thing you're going to see on that page is this: 
+It's talking about Pip and Python a lot I suppose because most people end up building that instead of C++. This made me think I was in the wrong place at first, but you need to read through this to understand if your machine will work for the job so don't run away. 
+
+The blue part with the star links to the prebuilt binaries. This was what we tried first and is usually the easiest way to go about using third party libraries in our C++ code. The reason it did not work for us I will explain in more detail later, but basically those libraries are not built with all their symbols exposed due to limitations on the number of symbols that can be loaded by the C++ linker. That is why we had to build from source, in your case you may be here for the same reason or others. 
+
+The next thing you will see is this: 
+![Install Python TF dependencies](install_python_and_tf_deps.png)
+You can safely ignore this part because you are not here to build tensorflow in Python, you are here to build it in C++ on Windows, but don't leave, you will need other stuff in this article.
+
+The next thing you will see is this:
+![Install Bazel](install_bazel_tf.png)
+
+It is tempting to go in order and just click that link and go ahead and install Bazel, but remember what you are here to do, you need to build Tensorflow with GPU support, so, actually, keep scrolling down, 
+Click the first link, it's going to take you to ``https://docs.bazel.build/versions/master/install-windows.html`` on the Bazel Website. 
+
+

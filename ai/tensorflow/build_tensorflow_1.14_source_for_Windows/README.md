@@ -39,6 +39,9 @@ Go to here: ``https://developer.nvidia.com/cuda-downloads`` and download the NVi
 ### Step 3: Install Python for Windows
 Download page: ``https://www.python.org/downloads/windows/``
 Make sure you set your path variables. If you cannot call ``python --version`` from the ``cmd`` terminal you did not set your environment variables correctly yet.
+![Into Build from Source](intro_build_from_source.png)
+
+Once you have installed Python for Windows, also install those dependencies in the screencap above.
 
 ### Step 3: Install Bazel
 The documentation is on this page: ``https://docs.bazel.build/versions/master/install-windows.html``
@@ -141,21 +144,5 @@ Each compilation error you see like this:
 ![unresolved external symbol](unresolved_external_symbol.png)
 
 Go to the source code that has the missing symbol error. In your IDE if it is Visual Studio or Qt Creator and select "Go to Symbol Definition" or something similiar. This will take you into somewhere in the actual tensorflow source code. In front of the function definition or the class definition that caused the missing symbol error put the macro ``TF_EXPORT``, at the top of that same file, before any other includes put ``#include "tensorflow/core/platform/macros.h"`` and then rebuild your .lib. Tensorneeds to be built with that symbol exported. Just calling ``bazel build --config=cuda tensorflow:tensorflow.lib`` will suffice, there is no need to do a clean rebuild.
-
-The first thing you're going to see on that page is this: 
-![Into Build from Source](intro_build_from_source.png)
-It's talking about Pip and Python a lot I suppose because most people end up building that instead of C++. This made me think I was in the wrong place at first, but you need to read through this to understand if your machine will work for the job so don't run away. 
-
-The blue part with the star links to the prebuilt binaries. This was what we tried first and is usually the easiest way to go about using third party libraries in our C++ code. The reason it did not work for us I will explain in more detail later, but basically those libraries are not built with all their symbols exposed due to limitations on the number of symbols that can be loaded by the C++ linker. That is why we had to build from source, in your case you may be here for the same reason or others. 
-
-The next thing you will see is this: 
-![Install Python TF dependencies](install_python_and_tf_deps.png)
-You can safely ignore this part because you are not here to build tensorflow in Python, you are here to build it in C++ on Windows, but don't leave, you will need other stuff in this article.
-
-The next thing you will see is this:
-![Install Bazel](install_bazel_tf.png)
-
-It is tempting to go in order and just click that link and go ahead and install Bazel, but remember what you are here to do, you need to build Tensorflow with GPU support, so, actually, keep scrolling down, 
-Click the first link, it's going to take you to ``https://docs.bazel.build/versions/master/install-windows.html`` on the Bazel Website. 
 
 
