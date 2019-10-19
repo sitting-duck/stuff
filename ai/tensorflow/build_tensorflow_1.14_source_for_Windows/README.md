@@ -140,9 +140,46 @@ and link them into your Windows project if you are having trouble with missing h
 
 
 ### Step 9: Identify Missing Symbols:
-Each compilation error you see like this: 
+You have built your .libs and .dll files. Now you should make a small C++ project to test using these libraries. Probably one of the first things you will want to do is just some very very basic tensorflow setup code like this: 
+```
+#include "tensorflow/cc/ops/standard_ops.h"
+#include <tensorflow/core/framework/graph.pb.h>
+#include "tensorflow/core/graph/default_device.h"
+#include "tensorflow/core/graph/graph_def_builder.h"
+#include "tensorflow/core/lib/core/threadpool.h"
+#include "tensorflow/core/lib/strings/stringprintf.h"
+#include "tensorflow/core/platform/init_main.h"
+#include "tensorflow/core/platform/logging.h"
+#include "tensorflow/core/platform/types.h"
+#include "tensorflow/core/public/session.h"
+#include "tensorflow/core/protobuf/meta_graph.pb.h"
+#include "tensorflow/core/framework/graph.pb.h"
+#include "tensorflow/core/public/session.h"
+#include "tensorflow/core/framework/tensor.h"
+
+using namespace tensorflow;
+
+int main(int argc, char *argv[]) {
+	// Create a Session running TensorFlow locally in process.
+	std::unique_ptr<tensorflow::Session> session(tensorflow::NewSession({}));
+}
+```
+
+Probably you will see some complaints about unresolved external symbols like this:
+For each compilation error you see like this: 
 ![unresolved external symbol](unresolved_external_symbol.png)
 
-Go to the source code that has the missing symbol error. In your IDE if it is Visual Studio or Qt Creator and select "Go to Symbol Definition" or something similiar. This will take you into somewhere in the actual tensorflow source code. In front of the function definition or the class definition that caused the missing symbol error put the macro ``TF_EXPORT``, at the top of that same file, before any other includes put ``#include "tensorflow/core/platform/macros.h"`` and then rebuild your .lib. Tensorneeds to be built with that symbol exported. Just calling ``bazel build --config=cuda tensorflow:tensorflow.lib`` will suffice, there is no need to do a clean rebuild.
+
+Go to the source code that has the missing symbol error. In your IDE you may be able to right click the symbol reference in your actual code and select "Go to Symbol Definition" or something similiar. 
+I am using Qt Creator for my C++ project code and it looks like this: 
+![Right click and select go to symbol definition](find_symbol_in_editor.png)
+
+This will take you into somewhere in the actual tensorflow source code. In front of the function definition or the class definition that caused the missing symbol error put the macro ``TF_EXPORT``, at the top of that same file, before any other includes put ``#include "tensorflow/core/platform/macros.h"`` 
+
+![add TF_EXPORT to symbol](add_tf_export_to_symbol.png)
+![add_path_to_macros](add_path_to_macros.png)
+
+and then rebuild your .lib. Tensorneeds to be built with that symbol exported. Just calling ``bazel build --config=cuda tensorflow:tensorflow.lib`` will suffice, there is no need to do a clean rebuild.
+
 
 
