@@ -162,6 +162,8 @@ using namespace tensorflow;
 int main(int argc, char *argv[]) {
 	// Create a Session running TensorFlow locally in process.
 	std::unique_ptr<tensorflow::Session> session(tensorflow::NewSession({}));
+
+	return 0;
 }
 ```
 
