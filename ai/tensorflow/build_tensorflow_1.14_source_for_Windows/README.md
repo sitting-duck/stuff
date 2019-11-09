@@ -50,7 +50,7 @@ pip3 install keras_applications==1.0.6 --no-deps
 pip3 install keras_preprocessing==1.0.5 --no-deps
 ```
 
-### Step 3: Install Bazel
+### Step 4: Install Bazel
 The documentation is on this page: ``https://docs.bazel.build/versions/master/install-windows.html``
 Follow all the steps on that page and install all the prereqs.
 
@@ -60,10 +60,10 @@ If you install the wrong version you will see something like this:
 ![Wrong version Bazel](wrong_version_bazel.png)
 The first time you try to build tensorflow, so make sure you have downloaded version 0.24.
 
-### Step 4: Configure Bazel to Build C++ on Windows
+### Step 5: Configure Bazel to Build C++ on Windows
 Follow this documentation: ``https://docs.bazel.build/versions/master/windows.html#build-c-with-msvc``
 
-### Step 4: Install MSYS
+### Step 6: Install MSYS
 Go here: ``https://www.msys2.org/`` and download and install MSYS for the bin tools you will need to build Tensorflow
 
 If MSYS2 is installed to ``C:\msys64``, ie. you installed the 64 bit version, add ``C:\msys64\usr\bin`` to your ``%PATH%`` environment variable. Then, using cmd.exe, run:
@@ -71,16 +71,16 @@ If MSYS2 is installed to ``C:\msys64``, ie. you installed the 64 bit version, ad
 pacman -S git patch unzip
 ```
 
-### Step 5: Install Visual Studio Build Tools 2017
+### Step 7: Install Visual Studio Build Tools 2017
 Documentation is here: ``https://www.tensorflow.org/install/source_windows#install_visual_c_build_tools_2017``
 Note: I have done this with MSVC 2015 with no problems, so that might work for you too.
 
-### Step 6: Clone the Tensorflow source code
+### Step 8: Clone the Tensorflow source code
 Original Documentation: ``https://www.tensorflow.org/install/source_windows#download_the_tensorflow_source_code``
 
 ``cd`` into your cloned directory and do ``git checkout r1.14``
 
-### Step 7: Configure the Build using configure.py
+### Step 9: Configure the Build using configure.py
 Original Documentation: ``python ./configure.py``
 Run ``python ./configure.py`` at the root of your source tree
 
@@ -114,7 +114,7 @@ Found cuDNN 7 in:
 
 ``` 
 
-### Step 7: Build the dll 
+### Step 10: Build the dll 
 Note: Dont do this:
 ```
 bazel build //tensorflow/tools/pip_package:build_pip_package
@@ -126,16 +126,16 @@ bazel build --config=cuda tensorflow:tensorflow.dll
 ```
 The build will take a long time (possibly between 20 minutes and an hour the first time)
 
-### Step 8: Build the .lib
+### Step 11: Build the .lib
 ```
 bazel build --config=cuda tensorflow:tensorflow.lib
 ```
 The build may take a long time (possibly between 20 minutes and an hour the first time)
 
-### Step 8: Link your .lib into your Windows project for testing
+### Step 12: Link your .lib into your Windows project for testing
 You may do this in Visual Studio, or Qt for example. Add a path to your .lib file and test compilation calling a tensorflow function in your c++.
 
-### Step 9: Add Header source if necessary
+### Step 13: Add Header source if necessary
 On my build I had trouble with these libs so I downloaded their source code separately and linked them into my project. <br>
 Clone these header libraries from Github or download the source from these 3 places: 
 ```
@@ -146,7 +146,7 @@ http://eigen.tuxfamily.org/index.php?title=Main_Page
 and link them into your Windows project if you are having trouble with missing header files or recursive includes of headers in the eigen library.
 
 
-### Step 9: Identify Missing Symbols:
+### Step 14: Identify Missing Symbols:
 You have built your .libs and .dll files. Now you should make a small C++ project to test using these libraries. Probably one of the first things you will want to do is just some very very basic tensorflow setup code like this: 
 ```
 #include "tensorflow/cc/ops/standard_ops.h"
