@@ -39,7 +39,9 @@ Go to here: ``https://developer.nvidia.com/cuda-downloads`` and download the NVi
 ### Step 3: Install Python for Windows
 Download page: ``https://www.python.org/downloads/windows/``
 Make sure you set your path variables. If you cannot call ``python --version`` from the ``cmd`` terminal you did not set your environment variables correctly yet.
-![Intro Build from Source](intro_build_from_source_page.png)
+![pip install dependencies](pip_deps.png)
+
+Note: I am following this page from TF to get that info: https://www.tensorflow.org/install/source_windows
 
 Once you have installed Python for Windows, also install those dependencies in the screencap above.
 
