@@ -39,7 +39,7 @@ Go to here: ``https://developer.nvidia.com/cuda-downloads`` and download the NVi
 ### Step 3: Install Python for Windows
 Download page: ``https://www.python.org/downloads/windows/``
 Make sure you set your path variables. If you cannot call ``python --version`` from the ``cmd`` terminal you did not set your environment variables correctly yet.
-![Into Build from Source](intro_build_from_source.png)
+![Intro Build from Source](intro_build_from_source_page.png)
 
 Once you have installed Python for Windows, also install those dependencies in the screencap above.
 
