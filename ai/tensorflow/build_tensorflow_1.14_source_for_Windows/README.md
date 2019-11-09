@@ -39,11 +39,16 @@ Go to here: ``https://developer.nvidia.com/cuda-downloads`` and download the NVi
 ### Step 3: Install Python for Windows
 Download page: ``https://www.python.org/downloads/windows/``
 Make sure you set your path variables. If you cannot call ``python --version`` from the ``cmd`` terminal you did not set your environment variables correctly yet.
-![pip install dependencies](pip_deps.png)
 
 Note: I am following this page from TF to get that info: https://www.tensorflow.org/install/source_windows
 
-Once you have installed Python for Windows, also install those dependencies in the screencap above.
+Once you have installed Python for Windows, also install these dependencies using pip3 in the terminal using the commands below:
+
+```
+pip3 install six numpy wheel
+pip3 install keras_applications==1.0.6 --no-deps
+pip3 install keras_preprocessing==1.0.5 --no-deps
+```
 
 ### Step 3: Install Bazel
 The documentation is on this page: ``https://docs.bazel.build/versions/master/install-windows.html``
