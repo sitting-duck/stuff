@@ -178,7 +178,7 @@ Probably you will see some complaints about unresolved external symbols like thi
 For each compilation error you see like this: 
 ![unresolved external symbol](unresolved_external_symbol.png)
 
-The reason this is happening is because you can only expose 60,000 symbols in a dll by default. The tensorflow dll has more than 60000 symbols, so as the programmer building this dll you will have to manually indicate which ones you want eposed. Google has chosen some default set, but it may not work for everyone.
+The reason this is happening is because you can only expose 60,000 symbols in a dll. This is just some limitation of the dll format. The tensorflow library code has more than 60000 symbols, so as the programmer building this dll (a dll is just a binary file for accessing a library at runtime) you will have to manually indicate which symbols you want exposed if they are not already. Google has chosen some default set, but it may not work for everyone.
 
 Note: For our intents and purposes here, just think of a missing symbol error as pointing out that the compiler can't find the actual definition of some class or function anywhere. What we are going to do is to expose the missing symbol so that the compiler can find it. 
 
