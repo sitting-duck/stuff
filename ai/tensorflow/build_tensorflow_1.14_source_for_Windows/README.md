@@ -186,7 +186,7 @@ Go to the source code that has the missing symbol error. In your IDE you may be 
 I am using Qt Creator for my C++ project code and it looks like this: 
 ![Right click and select go to symbol definition](find_symbol_in_editor.png)
 
-This will take you into somewhere in the actual tensorflow source code. In front of the function definition or the class definition that caused the missing symbol error put the macro ``TF_EXPORT``, at the top of that same file, before any other includes put ``#include "tensorflow/core/platform/macros.h"`` 
+This will take you into somewhere in the actual tensorflow source code. (in this case tensorflow-master\tensorflow\core\public\session.h) In front of the function definition or the class definition that caused the missing symbol error put the macro ``TF_EXPORT``, at the top of that same file, before any other includes put ``#include "tensorflow/core/platform/macros.h"`` 
 
 ![add TF_EXPORT to symbol](add_tf_export_to_symbol.png)
 ![add_path_to_macros](add_path_to_macros.png)
