@@ -5,6 +5,6 @@ import tensorlayer as tl
 import file_tools as ft
 
 paths = ["images"]
-valid_extensions = [".tiff", ".tif", ".png", ".jpg"]
+valid_extensions = [".tiff", ".tif", ".png", ".jpg", ".jpeg"]
 filenames = ft.files(paths, valid_extensions) 
 dataset = tf.data.Dataset.from_tensor_slices((filenames))

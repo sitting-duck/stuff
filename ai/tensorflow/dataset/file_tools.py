@@ -1,8 +1,7 @@
 import os
-import logging
-logging.basicConfig(filename='fileio.txt', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# paths: an array of filepaths
+# paths: an array of filepath strings eg. "./images"
+# valid_file_extensions: an array of valid file extensions eg. ".tif", ".jpg" etc.
 def files(paths, valid_file_extensions):
     outlist = []	
     for path in paths:
@@ -11,6 +10,6 @@ def files(paths, valid_file_extensions):
                 _, ext = os.path.splitext(filename)
                 if ext in valid_file_extensions:
                     outlist.append( os.path.join(root, filename) )
-    logging.debug('outlist: ', outlist)
+    print('outlist: ', outlist)
     return outlist
             
