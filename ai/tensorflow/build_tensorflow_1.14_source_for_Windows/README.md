@@ -1,6 +1,10 @@
 
 ### Building the Tensorflow Source code on Windows in C++ with GPU support
 
+Python version: 3.6.8 <br>
+Tensorflow Version: 1.14.0 <br>
+OS: Windows 10 <br>
+
 ### Step 0: Check your hardware
 Before we even start we need to make sure you are running on the correct hardware. See below this screencap from the Tensorflow documentation:
 ![Hardware reqs](hardware_reqs.png)
