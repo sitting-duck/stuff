@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>main.qml</file>
-        <file>CategoryListViewDelegate.qml</file>
-        <file>CategoryListViewModel.qml</file>
-        <file>CategoryManager.qml</file>
-    </qresource>
-</RCC>

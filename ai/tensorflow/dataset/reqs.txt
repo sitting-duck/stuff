@@ -1,4 +1,0 @@
-pip3 install --user --upgrade tensorflow  # install in $HOME
-# on MacOS I seemed to get by without having to install tensorflow-gpu
-pip3 install tensorlayer
-

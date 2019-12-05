@@ -197,5 +197,10 @@ This will take you into somewhere in the actual tensorflow source code. (in this
 
 and then rebuild your .lib. Tensorneeds to be built with that symbol exported. Just calling ``bazel build --config=cuda tensorflow:tensorflow.lib`` will suffice, there is no need to do a clean rebuild.
 
+### On collaboration with me to get your Windows tensorflow build working or suggesting edits to this document
+You can email me at ashley.tharp@gmail.com. I try to check my email and clear my inbox every day. I will have most active time to work on collabs on weekends as this is a side project for me.
+
+I found the tensorflow code is not easy to just zip up and transport to another computer because the code has many symbolic links in it. I also do not know how to commit to Github such type of code with these links in it, so I have found an easy solution for quick collab is to use some screensharing software. 
+I can still git clone any tensorflow branch onto my machine however, but it may take me some time to recreate environment on your machine if I need to set up another version of Bazel, or build another version of Tensorflow than 1.14. 
 
 
