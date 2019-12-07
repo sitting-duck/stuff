@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- HTML Codes by Quackit.com -->
+<title>
+MotorCycles are Awesome!!!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="motorcycle">
+<meta name="description" content="I love motorcycles because they exist.">
+<style>
+body {background-color:#ffffff;background-image:url(https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Harley-Davidson_Road_King_white.jpg/1280px-Harley-Davidson_Road_King_white.jpg);background-repeat:no-repeat;background-position:top left;background-attachment:fixed;}
+h1{font-family:Arial, sans-serif;color:#000000;background-color:#ffffff;}
+p {font-family:Georgia, serif;font-size:14px;font-style:normal;font-weight:normal;color:#000000;background-color:#ffffff;}
+</style>
+ 
+<script> 
+
+ document.write("<h1 id='boldStuff'>Javascript is cool</h1>") 
+ document.write("<h1 id='boldStuff2'>Javascript is cool</h1>") 
+
+</script> 
+
+</head>
+<body>
+<h1>Did you know that you need a motorcycle?</h1>
+<p>There are many kinds of Motorcycles. It is my personal mission to drive my motorcycle into space to advance the plight of humanity and the state of the art of motorcycle technology. </p>
+
+		
+<script>
+function changeText(){ 
+ document.getElementById('boldStuff').innerHTML = 'Fred Flinstone';
+}
+
+function changeText2(){
+ var userInput = document.getElementById('userInput').value;
+ document.getElementById('boldStuff2').innerHTML = userInput;
+}
+</script>
+
+<p>Welcome to the site!</p>
+<input type='text' id='userInput' value='Enter Text Here'>
+<input type='button' onclick='changeText2()' value='Change Text'> 
+
+
+
+
+</body>
+</html>

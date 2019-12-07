@@ -1,0 +1,75 @@
+body{
+
+	color: white;
+	background-color: #282828;
+
+}
+
+.button{
+	
+	/*font-family: Courier New", Courier, monospace;*/
+	color: black;
+	background-color: white;
+	padding: 2px 6px 2px 6px;
+	right: 1px solid #333333;
+	border-bottom: 1px solid #333333;
+	border-left: 1px solid #CCCCCC;
+	
+}
+
+a.button:link {
+	
+	text-decoration: none;
+	
+}
+
+a.button:hover {
+	
+	text-decoration: underline
+
+}
+
+
+/* for divs */
+
+.center{
+
+	margin: 0 auto;
+	width: 100px;
+	height: 100px;
+
+}
+
+div.outer-div {
+
+	padding: 30px;
+
+}
+
+div.inner-div{
+
+	margin: auto;
+	width: 200px;
+	height: 200px;
+	border-radius: 3px;
+}
+
+div.center-div{
+
+	position: absolute;
+	margin: auto;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 100px;
+	height: 100px;
+
+}
+
+/*
+go_button:active {
+	position:relative;
+	top:1px;
+}
+*/
