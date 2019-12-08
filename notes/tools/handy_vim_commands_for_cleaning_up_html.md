@@ -3,4 +3,22 @@ Here specifically we place newlines (carriage returns in VIM search and replace 
 ```
 %s#</td><td>#</td>\r<td#gc
 ```
+For removing tabs in between two tags
+```
+:%s#</font>\t</td>#</font></td>#gc
+
+```
+
+Indent all table cells
+```
+:%s#<td#\t<td#gc
+
+```
+
+Put new table rows on their own lines
+```
+:%s#</tr><tr#</tr>\r<tr#gc
+
+```
+
 
