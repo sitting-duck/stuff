@@ -21,4 +21,19 @@ Put new table rows on their own lines
 
 ```
 
+remove all tabs between tags
+```
+:%s#>\t<#><#gc
+```
+
+Newline with indent. Tag with a quotation mark can be edited to refine search
+```
+:%s#R"><#R">\r<\t#gc
+
+```
+Remove spaces before closing tag
+```
+:%s#\t</td>#</td>#gc
+```
+
 
