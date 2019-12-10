@@ -195,6 +195,37 @@ This will take you into somewhere in the actual tensorflow source code. (in this
 ![add TF_EXPORT to symbol](add_tf_export_to_symbol.png)
 ![add_path_to_macros](add_path_to_macros.png)
 
+In ``\tensorflow\tensorflow\core\public\session.h`` you will add ``TF_EXPORT`` to the constructor definition of Session. 
+When you are done, it will look like this: 
+```
+...
+/// ```
+///
+/// A Session allows concurrent calls to Run(), though a Session must
+/// be created / extended by a single thread.
+///
+/// Only one thread must call Close(), and Close() must only be called
+/// after all other calls to Run() have returned.
+class Session {
+ public:
+  TF_EXPORT Session();
+  virtual ~Session();
+
+  /// \brief Create the graph to be used for the session.
+  ///
+  /// Returns an error if this session has already been created with a
+  /// graph. To re-use the session with a different graph, the caller
+  /// must Close() the session first.
+  virtual Status Create(const GraphDef& graph) = 0;
+  ...
+```
+
+
+You will probably also need to export the symbol for NewSession, so you will add ``TF_EXPORT`` to the symbol definition and it will look like this:
+```
+TF_EXPORT Status NewSession(const SessionOptions& options, Session** out_session);
+```
+
 and then rebuild your .lib. Tensorneeds to be built with that symbol exported. Just calling ``bazel build --config=cuda tensorflow:tensorflow.lib`` will suffice, there is no need to do a clean rebuild.
 
 ### On collaboration with me to get your Windows tensorflow build working or suggesting edits to this document
