@@ -226,6 +226,12 @@ You will probably also need to export the symbol for NewSession, so you will add
 TF_EXPORT Status NewSession(const SessionOptions& options, Session** out_session);
 ```
 
+May also want to add ``TF_EXPORT`` in front of this function as well:
+```
+TF_EXPORT Session* NewSession(const SessionOptions& options);
+
+```
+
 and then rebuild your .lib. Tensorneeds to be built with that symbol exported. Just calling ``bazel build --config=cuda tensorflow:tensorflow.lib`` will suffice, there is no need to do a clean rebuild.
 
 ### On collaboration with me to get your Windows tensorflow build working or suggesting edits to this document
