@@ -303,7 +303,6 @@ TF_EXPORT struct SessionOptions {
 
 #endif  // TENSORFLOW_PUBLIC_SESSION_OPTIONS_H_
 
-
 ```
 
 and then rebuild your .lib. Tensorneeds to be built with that symbol exported. Just calling ``bazel build --config=cuda tensorflow:tensorflow.lib`` will suffice, there is no need to do a clean rebuild.
