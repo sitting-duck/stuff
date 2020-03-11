@@ -65,7 +65,7 @@
     "escape-html": "1.0.2",
     "etag": "~1.7.0",
     "finalhandler": "0.4.0",
-    "fresh": "0.3.0",
+    "fresh": "0.5.2",
     "merge-descriptors": "1.0.0",
     "methods": "~1.1.1",
     "on-finished": "~2.3.0",
