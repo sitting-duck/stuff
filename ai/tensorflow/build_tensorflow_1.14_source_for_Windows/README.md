@@ -195,7 +195,122 @@ This will take you into somewhere in the actual tensorflow source code. (in this
 ![add TF_EXPORT to symbol](add_tf_export_to_symbol.png)
 ![add_path_to_macros](add_path_to_macros.png)
 
+In ``\tensorflow\tensorflow\core\public\session.h`` you will add ``TF_EXPORT`` to the constructor definition of Session. 
+When you are done, it will look like this: 
+```
+...
+/// ```
+///
+/// A Session allows concurrent calls to Run(), though a Session must
+/// be created / extended by a single thread.
+///
+/// Only one thread must call Close(), and Close() must only be called
+/// after all other calls to Run() have returned.
+class Session {
+ public:
+  TF_EXPORT Session();
+  virtual ~Session();
+
+  /// \brief Create the graph to be used for the session.
+  ///
+  /// Returns an error if this session has already been created with a
+  /// graph. To re-use the session with a different graph, the caller
+  /// must Close() the session first.
+  virtual Status Create(const GraphDef& graph) = 0;
+  ...
+```
+
+
+You will probably also need to export the symbol for NewSession, so you will add ``TF_EXPORT`` to the symbol definition and it will look like this:
+```
+TF_EXPORT Status NewSession(const SessionOptions& options, Session** out_session);
+```
+
+May also want to add ``TF_EXPORT`` in front of this function as well:
+```
+TF_EXPORT Session* NewSession(const SessionOptions& options);
+
+
+```
+In your Tensorflow code again you may also need to export two symbols in ``/tensorflow/core/public/session_options.h``
+Your final ``session_options.h`` file will look like this: 
+
+```
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+#ifndef TENSORFLOW_PUBLIC_SESSION_OPTIONS_H_
+#define TENSORFLOW_PUBLIC_SESSION_OPTIONS_H_
+
+#include <string>
+#include "tensorflow/core/platform/types.h"
+#include "tensorflow/core/protobuf/config.pb.h"
+#include "tensorflow/core/platform/macros.h"
+
+namespace tensorflow {
+
+class Env;
+
+/// Configuration information for a Session.
+TF_EXPORT struct SessionOptions {
+  /// The environment to use.
+  Env* env;
+
+  /// \brief The TensorFlow runtime to connect to.
+  ///
+  /// If 'target' is empty or unspecified, the local TensorFlow runtime
+  /// implementation will be used.  Otherwise, the TensorFlow engine
+  /// defined by 'target' will be used to perform all computations.
+  ///
+  /// "target" can be either a single entry or a comma separated list
+  /// of entries. Each entry is a resolvable address of the
+  /// following format:
+  ///   local
+  ///   ip:port
+  ///   host:port
+  ///   ... other system-specific formats to identify tasks and jobs ...
+  ///
+  /// NOTE: at the moment 'local' maps to an in-process service-based
+  /// runtime.
+  ///
+  /// Upon creation, a single session affines itself to one of the
+  /// remote processes, with possible load balancing choices when the
+  /// "target" resolves to a list of possible processes.
+  ///
+  /// If the session disconnects from the remote process during its
+  /// lifetime, session calls may fail immediately.
+  string target;
+
+  /// Configuration options.
+  ConfigProto config;
+
+  TF_EXPORT SessionOptions();
+};
+
+}  // end namespace tensorflow
+
+#endif  // TENSORFLOW_PUBLIC_SESSION_OPTIONS_H_
+
+```
+
 and then rebuild your .lib. Tensorneeds to be built with that symbol exported. Just calling ``bazel build --config=cuda tensorflow:tensorflow.lib`` will suffice, there is no need to do a clean rebuild.
 
+### On collaboration with me to get your Windows tensorflow build working or suggesting edits to this document
+You can email me at ashley.tharp@gmail.com. I try to check my email and clear my inbox every day. I will have most active time to work on collabs on weekends as this is a side project for me.
+
+I found the tensorflow code is not easy to just zip up and transport to another computer because the code has many symbolic links in it. I also do not know how to commit to Github such type of code with these links in it, so I have found an easy solution for quick collab is to use some screensharing software. 
+One person gave me once his version of bazel, python, tensorflow and so on, and this is good enough for me to try to copy your environment, but configuration is quite time consuming. I think this fact is perhaps why Docker was invented. 
 
 

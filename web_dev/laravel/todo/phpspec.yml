@@ -1,5 +1,0 @@
-suites:
-    main:
-        namespace: todo
-        psr4_prefix: todo
-        src_path: app
