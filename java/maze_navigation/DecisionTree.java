@@ -13,7 +13,7 @@ public class DecisionTree {
 	}
 
 	public DecisionTree insertNode(DecisionTreeNode _node) {
-		System.out.println("insertNode: " + _node.toString());
+		// System.out.println("insertNode: " + _node.toString());
 		DecisionTreeNode currentNode = root;
 		boolean isNull = currentNode.child() == null;
 

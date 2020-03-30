@@ -30,14 +30,61 @@ public class Labrinth
         // pick a random start point on the first row (row 0) of the array
     	random_number_generator = new Random(); 
 
-	// there are numColumns number of slots in the first row, we use that number - 1 make a suitable range
-	// so that we can pick a random array index to be our "Start" cell of the maze
+		// there are numColumns number of slots in the first row, we use that number - 1 make a suitable range
+		// so that we can pick a random array index to be our "Start" cell of the maze
     	int column_start = random_number_generator.nextInt(numColumns - 1);
 
         // and mark that node of the labrinth with an "S"	
     	data[0][column_start].set("S");
     	start = new Coordinate(0, column_start);
+    }
 
+    public Labrinth(DecisionTree tree) {
+
+    	System.out.println("\tinit");
+
+    	scan = new Scanner(System.in);
+        // fill the entire labrinth with walls (place a 1 into each cell)
+    	for(int i = 0; i < numRows; i++) {
+    		for(int j = 0; j < numColumns; j++) {
+    			data[i][j] = new Cell("1");
+    		}
+    	}
+
+    	DecisionTreeNode currentNode = tree.root();
+    	if(currentNode == null) {
+    		// pick a random start point on the first row (row 0) of the array
+	    	random_number_generator = new Random(); 
+
+			// there are numColumns number of slots in the first row, we use that number - 1 make a suitable range
+			// so that we can pick a random array index to be our "Start" cell of the maze
+	    	int column_start = random_number_generator.nextInt(numColumns - 1);
+
+	        // and mark that node of the labrinth with an "S"	
+	    	data[0][column_start].set("S");
+	    	start = new Coordinate(0, column_start);
+    	} else {
+    		set(currentNode.coordinate(), "S");	
+    	}
+
+	
+		boolean isNull = currentNode.child() == null;
+
+		int num = 0;
+		while(true) {
+			
+			currentNode = currentNode.child();
+			if(currentNode == null) {
+				return;
+			}
+			if(currentNode.child() == null) {
+				set(currentNode.coordinate(), "E");
+			} else {
+				set(currentNode.coordinate(), "0");	
+			}
+			
+			
+		}
     }
 
 	public int rows() {
@@ -72,20 +119,20 @@ public class Labrinth
 
 	public boolean validRow(int _row) {
 		boolean valid = _row > -1 && (_row < numRows);
-		System.out.println("\tvalidRow(): row: " + _row + " " + valid);
+		// System.out.println("\tvalidRow(): row: " + _row + " " + valid);
 		return valid;
 	}
 
 	public boolean validCol(int _col) {
 		boolean valid = _col > -1 && (_col < numColumns);
-		System.out.println("\tvalidCol: col: " + _col + " " + valid);
+		// System.out.println("\tvalidCol: col: " + _col + " " + valid);
 		return valid;
 	}
 
 	public boolean canGoHere(Coordinate _coordinate) {
 		boolean canGo = validRow(_coordinate.row) && validCol(_coordinate.col);
 
-		System.out.println("\tcanGoHere: " + canGo + " coord: " + _coordinate.toString());
+		// System.out.println("\tcanGoHere: " + canGo + " coord: " + _coordinate.toString());
 		return validRow(_coordinate.row) && validCol(_coordinate.col);
 	} 
 
@@ -112,7 +159,7 @@ public class Labrinth
 	}
 
 	public boolean isValid(int _decision, Coordinate _coordinate) {
-		System.out.println("\t\tisValid(): decision: " + _decision + " coordinate: " + _coordinate.toString());
+		// System.out.println("\t\tisValid(): decision: " + _decision + " coordinate: " + _coordinate.toString());
 
 		if(_decision == 0) {
 			boolean canBreakNorth = canBreakNorth(_coordinate);

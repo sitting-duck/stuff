@@ -25,6 +25,10 @@ public class Driver {
 		labrinth.print();
 		decisionTree.print();
 
+		Labrinth test = new Labrinth(decisionTree);
+		System.out.println("Test Print: ");
+		test.print();
+
 		//Testing insert node
 		// DecisionTreeNode child1 = new DecisionTreeNode(new Coordinate(0, 0));
 		// decisionTree.insertNode(child1);
@@ -62,7 +66,7 @@ public class Driver {
 		System.out.println("leaf labrinth: " + leaf.labrinth());
 
 		leaf.labrinth().print();
-		tree.print();
+		//tree.print();
 
 		scan.nextLine();
 
@@ -81,16 +85,16 @@ public class Driver {
 			if(isValid) {	
 				// System.out.println("was valid: " + thisDecisionChoice);
 				// record this decision choice
-				System.out.println("before set: ");
-				tree.print();
+				// System.out.println("before set: ");
+				// tree.print();
 
 				leaf.labrinth().set(newCoordinate, "0");
 				lastDecision.setChild(currentDecision);
 				currentDecision.setParent(lastDecision);
 				tree = tree.insertNode(currentDecision);
 
-				System.out.println("after set: ");
-				tree.print();
+				// System.out.println("after set: ");
+				// tree.print();
 				
 				if(leaf.labrinth().canEndPath(newCoordinate)) {
 					leaf.labrinth().set(newCoordinate, "E");
@@ -98,7 +102,7 @@ public class Driver {
 				} else {
 
 					atGoal = makeNextDecision(currentDecision, tree); // reduce problem
-					System.out.println("atGoal " + atGoal);
+					// System.out.println("atGoal " + atGoal);
 					if(atGoal == false) { // backtrack has occurred
 						//un - record this decision choice
 						System.out.println("BACKTRACK!!");
@@ -114,7 +118,7 @@ public class Driver {
 			}
 			choiceNumber += 1;
 		}
-		System.out.println("exit while loop");
+		// System.out.println("exit while loop");
 		return atGoal;
 	}
 
