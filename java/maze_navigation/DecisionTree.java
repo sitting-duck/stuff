@@ -15,63 +15,57 @@ public class DecisionTree {
 		scan = new Scanner(System.in);
 	}
 
-	public boolean makeNextDecision(DecisionTreeNode lastDecision) {
+	
 
+	public DecisionTree insertNode(DecisionTreeNode _node) {
+		System.out.println("insertNode: " + _node.toString());
+		DecisionTreeNode currentNode = root;
+		boolean isNull = currentNode.child() == null;
 
-
-		System.out.println("makeNextDecision(): " + lastDecision.coordinate().toString());
-
-		labrinth.print();
-		scan.nextLine();
-
-		boolean atGoal = false;
-		int choiceNumber = 0;
-		int numberOfChoices = 8;
-		while(atGoal == false && choiceNumber < numberOfChoices) {
-			int thisDecisionChoice = lastDecision.nextChoice();
-			Coordinate newCoordinate = labrinth.nextChoiceAsCoordinate(thisDecisionChoice, lastDecision.coordinate());
-			DecisionTreeNode currentDecision = new DecisionTreeNode(newCoordinate);
-
-
-			if(labrinth.isValid(thisDecisionChoice, lastDecision.coordinate())) {	
-				// System.out.println("was valid: " + thisDecisionChoice);
-				// record this decision choice
-				labrinth.set(newCoordinate, "0");
-				lastDecision.setChild(currentDecision);
-				currentDecision.setParent(lastDecision);
-				
-				if(labrinth.canEndPath(newCoordinate)) {
-					labrinth.set(newCoordinate, "E");
-					return true;
-				} else {
-					//atGoal = makeNextDecision(currentDecision); // reduce problem
-					if(atGoal == false) { // backtrack has occurred
-						//un - record this decision choice
-						lastDecision.setChild(null);
-					}
-				}
-				atGoal = makeNextDecision(currentDecision); // ??
+		int num = 0;
+		while(!isNull) {
+			isNull = currentNode.child() == null;
+			//System.out.println("isNull: " + isNull);
+			currentNode = currentNode.child();
+			num++;
+			if(num == 15) {
+				break;
 			}
-			choiceNumber += 1;
 		}
-		return atGoal;
+		if(currentNode != null) {
+			currentNode.setChild(_node);	
+		}
+
+		return this;
+
 	}
 
 	public DecisionTreeNode root() {
 		return root;
 	}
 
-	public static void main(String[] args) {
+	public void print() {
+		System.out.println("tree");
+		
+		DecisionTreeNode currentNode = root;
+		System.out.println("root: " + currentNode.toString());
+		boolean isNull = currentNode.child() == null;
 
-		// create decision tree
+		if(!isNull) {
+			currentNode = currentNode.child();
+		}
+		
 
-		Labrinth labrinth = new Labrinth();
-		DecisionTree decisionTree = new DecisionTree(new DecisionTreeNode(labrinth.start()), labrinth);
-
-		decisionTree.makeNextDecision(decisionTree.root());
-
-		labrinth.print();
-
+		int num = 0;
+		while(!isNull) {
+			isNull = currentNode.child() == null;
+		// System.out.println("isNull: " + isNull);
+			System.out.println("\t" + currentNode.toString());
+			currentNode = currentNode.child();
+			num++;
+			if(num == 15) {
+				break;
+			}
+		}
 	}
-
 }

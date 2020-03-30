@@ -80,7 +80,7 @@ public class Labrinth
 	} 
 
 	public boolean isWall(Coordinate _coordinate) {
-		System.out.println("isWall(): " + data[_coordinate.row][_coordinate.col].get() + " " + data[_coordinate.row][_coordinate.col].get() == "1");
+		//System.out.println("isWall(): " + data[_coordinate.row][_coordinate.col].get() + " " + data[_coordinate.row][_coordinate.col].get() == "1");
 		return data[_coordinate.row][_coordinate.col].get() == "1";
 		//return true;
 	}
@@ -94,8 +94,7 @@ public class Labrinth
 	}
 
 	public boolean canEndPath(Coordinate _coordinate) {
-		System.out.println("canEndPath: ");
-		System.out.println("canEndPath: " + _coordinate.toString() + " lastRow: " + (numRows - 1) );
+		//System.out.println("canEndPath: " + _coordinate.toString() + " lastRow: " + (numRows - 1) );
 		return _coordinate.row == numRows - 1;
 	}
 
@@ -105,19 +104,19 @@ public class Labrinth
 
 		if(_decision == 0) {
 			boolean canBreakNorth = canBreakNorth(_coordinate);
-			System.out.println("canBreakNorth: " + canBreakNorth);
+			//System.out.println("canBreakNorth: " + canBreakNorth);
 			return canBreakNorth;
 		} else if(_decision == 1) {
 			boolean canBreakEast = canBreakEast(_coordinate);
-			System.out.println("canBreakEast: " + canBreakEast);
+			//System.out.println("canBreakEast: " + canBreakEast);
 			return canBreakEast;
 		} else if(_decision == 2) {
 			boolean canBreakSouth = canBreakSouth(_coordinate);
-			System.out.println("canBreakSouth: " + canBreakSouth);
+			//System.out.println("canBreakSouth: " + canBreakSouth);
 			return canBreakSouth;
 		} else if(_decision == 3) {
 			boolean canBreakWest = canBreakWest(_coordinate);
-			System.out.println("canBreakWest: " + canBreakWest);
+			//System.out.println("canBreakWest: " + canBreakWest);
 			return canBreakWest;
 		} else {
 			return false;

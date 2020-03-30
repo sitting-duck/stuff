@@ -16,15 +16,12 @@ public class DecisionTreeNode {
 	public DecisionTreeNode(Coordinate _coordinate) {
 		coordinate = _coordinate;
 		random_number_generator = new Random();
-	
-
 	}
 
 	public DecisionTreeNode(Coordinate _coordinate, DecisionTreeNode _parent) {
 		coordinate = _coordinate;
 		parent = _parent;
 		random_number_generator = new Random();
-
 	}
 
 	public int decisionNumber() { // returns the level of the tree
@@ -50,8 +47,21 @@ public class DecisionTreeNode {
 		return coordinate;
 	}
 
+	public String toString() {
+		return coordinate.toString();
+	}
+
+	public DecisionTreeNode child() {
+		return child;
+	}
+
 	public void setChild(DecisionTreeNode _node) {
+		if(_node != null) {
+			_node.parent = child;	
+		}
+		
 		child = _node;
+
 	}
 
 	public void setParent(DecisionTreeNode _node) {
