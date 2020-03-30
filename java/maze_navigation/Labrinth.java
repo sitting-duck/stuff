@@ -54,7 +54,7 @@ public class Labrinth
     	DecisionTreeNode currentNode = tree.root();
     	if(currentNode == null) {
     		// pick a random start point on the first row (row 0) of the array
-	    	random_number_generator = new Random(); 
+	    	random_number_generator = new Random();
 
 			// there are numColumns number of slots in the first row, we use that number - 1 make a suitable range
 			// so that we can pick a random array index to be our "Start" cell of the maze
@@ -77,7 +77,7 @@ public class Labrinth
 			if(currentNode == null) {
 				return;
 			}
-			if(currentNode.child() == null) {
+			if(currentNode.child() == null && lastRow(currentNode.coordinate().row)) {
 				set(currentNode.coordinate(), "E");
 			} else {
 				set(currentNode.coordinate(), "0");	
@@ -115,6 +115,10 @@ public class Labrinth
 
 	public void set(Coordinate _coordinate, String _data) {
 		data[_coordinate.row][_coordinate.col].set(_data);
+	}
+
+	public boolean lastRow(int _row) {
+		return _row == numRows - 1;
 	}
 
 	public boolean validRow(int _row) {
@@ -163,19 +167,19 @@ public class Labrinth
 
 		if(_decision == 0) {
 			boolean canBreakNorth = canBreakNorth(_coordinate);
-			System.out.println("\t\tcanBreakNorth: " + canBreakNorth);
+			// System.out.println("\t\tcanBreakNorth: " + canBreakNorth);
 			return canBreakNorth;
 		} else if(_decision == 1) {
 			boolean canBreakEast = canBreakEast(_coordinate);
-			System.out.println("\t\tcanBreakEast: " + canBreakEast);
+			// System.out.println("\t\tcanBreakEast: " + canBreakEast);
 			return canBreakEast;
 		} else if(_decision == 2) {
 			boolean canBreakSouth = canBreakSouth(_coordinate);
-			System.out.println("\t\tcanBreakSouth: " + canBreakSouth);
+			// System.out.println("\t\tcanBreakSouth: " + canBreakSouth);
 			return canBreakSouth;
 		} else if(_decision == 3) {
 			boolean canBreakWest = canBreakWest(_coordinate);
-			System.out.println("\t\tcanBreakWest: " + canBreakWest);
+			// System.out.println("\t\tcanBreakWest: " + canBreakWest);
 			return canBreakWest;
 		} else {
 			return false;
@@ -187,10 +191,10 @@ public class Labrinth
 		Coordinate newCoord = new Coordinate(_coordinate.row - 1, _coordinate.col);
 		boolean canGoHere = canGoHere(newCoord);
 		
-		System.out.println("canGoHere: " + canGoHere);
+		// System.out.println("canGoHere: " + canGoHere);
 		if(canGoHere) {
 			boolean isWall = isWall(newCoord);
-			System.out.println("isWall: " + isWall);	
+			// System.out.println("isWall: " + isWall);	
 		}
 		return canGoHere(newCoord) && isWall(newCoord);
 	}
@@ -204,10 +208,10 @@ public class Labrinth
 		Coordinate newCoord = new Coordinate(_coordinate.row, _coordinate.col + 1);
 		boolean canGoHere = canGoHere(newCoord);
 		
-		System.out.println("canGoHere: " + canGoHere);
+		//System.out.println("canGoHere: " + canGoHere);
 		if(canGoHere) {
 			boolean isWall = isWall(newCoord);
-			System.out.println("isWall: " + isWall);	
+			// System.out.println("isWall: " + isWall);	
 		}
 		
 		return canGoHere(newCoord) && isWall(newCoord);
@@ -221,10 +225,10 @@ public class Labrinth
 		Coordinate newCoord = new Coordinate(_coordinate.row + 1, _coordinate.col);
 		boolean canGoHere = canGoHere(newCoord);
 		
-		System.out.println("canGoHere: " + canGoHere);
+		// System.out.println("canGoHere: " + canGoHere);
 		if(canGoHere) {
 			boolean isWall = isWall(newCoord);
-			System.out.println("isWall: " + isWall);	
+			// System.out.println("isWall: " + isWall);	
 		}
 		return canGoHere(newCoord) && isWall(newCoord);
 	}
@@ -237,10 +241,10 @@ public class Labrinth
 		Coordinate newCoord = new Coordinate(_coordinate.row, _coordinate.col -1);
 		boolean canGoHere = canGoHere(newCoord);
 		
-		System.out.println("canGoHere: " + canGoHere);
+		// System.out.println("canGoHere: " + canGoHere);
 		if(canGoHere) {
 			boolean isWall = isWall(newCoord);
-			System.out.println("isWall: " + isWall);	
+			//System.out.println("isWall: " + isWall);	
 		}
 		return canGoHere(newCoord) && isWall(newCoord);
 	}

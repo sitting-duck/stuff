@@ -23,9 +23,9 @@ public class DecisionTree {
 			//System.out.println("isNull: " + isNull);
 			currentNode = currentNode.child();
 			num++;
-			if(num == 15) {
-				break;
-			}
+			// if(num == 15) {
+			// 	break;
+			// }
 		}
 		if(currentNode != null) {
 			currentNode.setChild(_node);	
@@ -47,9 +47,9 @@ public class DecisionTree {
 			//System.out.println("isNull: " + isNull);
 			currentNode = currentNode.child();
 			num++;
-			if(num == 15) {
-				break;
-			}
+			// if(num == 15) {
+			// 	break;
+			// }
 		}
 		if(currentNode != null) {
 			currentNode.setChild(null);	
@@ -74,16 +74,20 @@ public class DecisionTree {
 			}
 			
 			num++;
-			if(num == 15) {
-				break;
-			}
+			// if(num == 15) {
+			// 	break;
+			// }
 		}
-		
-		return currentNode;
+	
 	}
 
 	public DecisionTreeNode root() {
 		return root;
+	}
+
+	public void printLabrinth() {
+		Labrinth labrinth = new Labrinth(this);
+		labrinth.print();
 	}
 
 	public void print() {
@@ -105,9 +109,9 @@ public class DecisionTree {
 			System.out.println("\t" + currentNode.toString());
 			currentNode = currentNode.child();
 			num++;
-			if(num == 15) {
-				break;
-			}
+			// if(num == 15) {
+			// 	break;
+			// }
 		}
 	}
 }

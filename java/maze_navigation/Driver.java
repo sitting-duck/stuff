@@ -65,8 +65,8 @@ public class Driver {
 		DecisionTreeNode leaf = tree.getLeaf();
 		System.out.println("leaf labrinth: " + leaf.labrinth());
 
-		leaf.labrinth().print();
-		//tree.print();
+		//leaf.labrinth().print();
+		tree.printLabrinth();
 
 		scan.nextLine();
 
