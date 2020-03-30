@@ -13,8 +13,7 @@ public class DecisionTree {
 
 	public boolean makeNextDecision(DecisionTreeNode lastDecision) {
 
-		System.out.println("makeNextDecision(): ");
-		lastDecision.coordinate().print();
+		System.out.println("makeNextDecision(): " + lastDecision.coordinate().toString());
 
 		labrinth.print();
 
@@ -29,6 +28,7 @@ public class DecisionTree {
 			lastDecision.coordinate().print(); 
 
 			if(labrinth.isValid(thisDecisionChoice, lastDecision.coordinate())) {	
+				System.out.println("was valid: " + thisDecisionChoice);
 				// record this decision choice
 				lastDecision.setChild(currentDecision);
 				currentDecision.setParent(lastDecision);

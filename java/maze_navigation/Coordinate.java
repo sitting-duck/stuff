@@ -13,4 +13,8 @@ public class Coordinate {
 		System.out.println("row: " + row + " col: " + col);
 	}
 
+	public String toString() {
+		return "row: " + row + " col: " + col;
+	}
+
 }
