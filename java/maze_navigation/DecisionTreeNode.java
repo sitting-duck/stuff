@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Scanner;
 
 public class DecisionTreeNode {
 	
@@ -10,15 +11,20 @@ public class DecisionTreeNode {
 
 	private Random random_number_generator;
 
+	private int[] choicesTried = {0, 0, 0, 0};
+
 	public DecisionTreeNode(Coordinate _coordinate) {
 		coordinate = _coordinate;
 		random_number_generator = new Random();
+	
+
 	}
 
 	public DecisionTreeNode(Coordinate _coordinate, DecisionTreeNode _parent) {
 		coordinate = _coordinate;
 		parent = _parent;
 		random_number_generator = new Random();
+
 	}
 
 	public int decisionNumber() { // returns the level of the tree
@@ -30,7 +36,14 @@ public class DecisionTreeNode {
 	}
 
 	public int nextChoice() {
-		return random_number_generator.nextInt(4);
+		int rand; 
+		while(true) { // loop until we get a choice we haven't tried before
+			rand = random_number_generator.nextInt(4);
+			if(choicesTried[rand] == 0) { // we have not tried this choice before 
+				choicesTried[rand] = 1;
+				return rand;
+			} 
+		}
 	}
 
 	public Coordinate coordinate() {
