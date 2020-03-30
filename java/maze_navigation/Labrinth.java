@@ -48,6 +48,15 @@ public class Labrinth
 		return numColumns;
 	}
 
+	public String at(Coordinate _coordinate) {
+		if (_coordinate.row < numRows - 1 || _coordinate.col < numColumns - 1) {
+			System.out.println("Error: invalid coordinate!!");
+			return "";
+		} else {
+			return data[_coordinate.row][_coordinate.col].get();
+		}
+	}
+
 	public String at(int _row, int _col) {
 		if (_row < numRows - 1 || _col < numColumns - 1) {
 			System.out.println("Error: invalid coordinate!!");

@@ -99,6 +99,10 @@ public class Driver {
 					if(atGoal == false) { // backtrack has occurred
 						//un - record this decision choice
 						System.out.println("BACKTRACK!!");
+						if(labrinth.at(lastDecision.coordinate()) == "0") {
+							labrinth.set(lastDecision.coordinate(), "1");
+						}
+						
 						lastDecision.setChild(null);
 						tree = tree.removeLeaf();
 					}
