@@ -40,6 +40,28 @@ public class DecisionTree {
 
 	}
 
+	public DecisionTree removeLeaf() {
+		System.out.println("removeLeaf()");
+
+		DecisionTreeNode currentNode = root;
+		boolean isNull = currentNode.child() == null;
+
+		int num = 0;
+		while(!isNull) {
+			isNull = currentNode.child() == null;
+			//System.out.println("isNull: " + isNull);
+			currentNode = currentNode.child();
+			num++;
+			if(num == 15) {
+				break;
+			}
+		}
+		if(currentNode != null) {
+			currentNode.setChild(null);	
+		}
+		return this;
+	}
+
 	public DecisionTreeNode root() {
 		return root;
 	}

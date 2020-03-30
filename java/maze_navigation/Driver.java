@@ -67,13 +67,15 @@ public class Driver {
 		int choiceNumber = 0;
 		int numberOfChoices = 8;
 		while(atGoal == false && choiceNumber < numberOfChoices) {
-			System.out.println("choiceNumber: " + choiceNumber + " atGoal: " + atGoal);
+			System.out.println("choiceNumber: " + choiceNumber + " atGoal: " + atGoal + " lastDecision: " + lastDecision.coordinate().toString());
 			int thisDecisionChoice = lastDecision.nextChoice();
+			System.out.println("thisDecisionChoice: " + thisDecisionChoice);
 			Coordinate newCoordinate = labrinth.nextChoiceAsCoordinate(thisDecisionChoice, lastDecision.coordinate());
 			DecisionTreeNode currentDecision = new DecisionTreeNode(newCoordinate);
 
-
-			if(labrinth.isValid(thisDecisionChoice, lastDecision.coordinate())) {	
+			boolean isValid = labrinth.isValid(thisDecisionChoice, lastDecision.coordinate());
+			System.out.println("isValid: " + isValid);
+			if(isValid) {	
 				// System.out.println("was valid: " + thisDecisionChoice);
 				// record this decision choice
 				System.out.println("before set: ");
@@ -98,6 +100,7 @@ public class Driver {
 						//un - record this decision choice
 						System.out.println("BACKTRACK!!");
 						lastDecision.setChild(null);
+						tree = tree.removeLeaf();
 					}
 				}
 				//atGoal = makeNextDecision(currentDecision, tree, labrinth); // ??
