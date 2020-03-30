@@ -65,7 +65,7 @@ public class Driver {
 
 		boolean atGoal = false;
 		int choiceNumber = 0;
-		int numberOfChoices = 8;
+		int numberOfChoices = 4;
 		while(atGoal == false && choiceNumber < numberOfChoices) {
 			System.out.println("choiceNumber: " + choiceNumber + " atGoal: " + atGoal + " lastDecision: " + lastDecision.coordinate().toString());
 			int thisDecisionChoice = lastDecision.nextChoice();
