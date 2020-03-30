@@ -3,19 +3,14 @@ import java.util.Scanner;
 
 public class DecisionTree {
 
-	private Labrinth labrinth;
-
 	private DecisionTreeNode root;
 
 	private Scanner scan;
 
-	public DecisionTree(DecisionTreeNode _root, Labrinth _labrinth) {
-		labrinth = _labrinth;
+	public DecisionTree(DecisionTreeNode _root) {
 		root = _root;
 		scan = new Scanner(System.in);
 	}
-
-	
 
 	public DecisionTree insertNode(DecisionTreeNode _node) {
 		System.out.println("insertNode: " + _node.toString());
@@ -41,7 +36,7 @@ public class DecisionTree {
 	}
 
 	public DecisionTree removeLeaf() {
-		System.out.println("removeLeaf()");
+		//System.out.println("removeLeaf()");
 
 		DecisionTreeNode currentNode = root;
 		boolean isNull = currentNode.child() == null;
@@ -60,6 +55,31 @@ public class DecisionTree {
 			currentNode.setChild(null);	
 		}
 		return this;
+	}
+
+	public DecisionTreeNode getLeaf() {
+		System.out.println("getLeaf()");
+
+		DecisionTreeNode currentNode = root;
+		System.out.println("root: " + root.coordinate().toString());
+		boolean isNull = currentNode.child() == null;
+
+		int num = 0;
+		while(true) {
+			if(currentNode.child() == null) {
+				System.out.println("returning: " + currentNode.coordinate().toString());
+				return currentNode;
+			} else {
+				currentNode = currentNode.child();	
+			}
+			
+			num++;
+			if(num == 15) {
+				break;
+			}
+		}
+		
+		return currentNode;
 	}
 
 	public DecisionTreeNode root() {

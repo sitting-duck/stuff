@@ -2,6 +2,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class DecisionTreeNode {
+
+	private Labrinth labrinth;
 	
 	private Coordinate coordinate;
 
@@ -13,15 +15,17 @@ public class DecisionTreeNode {
 
 	private int[] choicesTried = {0, 0, 0, 0};
 
-	public DecisionTreeNode(Coordinate _coordinate) {
+	public DecisionTreeNode(Coordinate _coordinate, Labrinth _labrinth) {
 		coordinate = _coordinate;
 		random_number_generator = new Random();
+		labrinth = _labrinth;
 	}
 
-	public DecisionTreeNode(Coordinate _coordinate, DecisionTreeNode _parent) {
+	public DecisionTreeNode(Coordinate _coordinate, DecisionTreeNode _parent, Labrinth _labrinth) {
 		coordinate = _coordinate;
 		parent = _parent;
 		random_number_generator = new Random();
+		labrinth = _labrinth;
 	}
 
 	public int decisionNumber() { // returns the level of the tree
@@ -41,6 +45,10 @@ public class DecisionTreeNode {
 				return rand;
 			} 
 		}
+	}
+
+	public Labrinth labrinth() {
+		return labrinth;
 	}
 
 	public Coordinate coordinate() {

@@ -14,13 +14,13 @@ public class Driver {
 
 		Driver driver = new Driver();
 		Labrinth labrinth = new Labrinth();
-		DecisionTreeNode rootNode = new DecisionTreeNode(labrinth.start());
-		DecisionTree decisionTree = new DecisionTree(rootNode, labrinth);
+		DecisionTreeNode rootNode = new DecisionTreeNode(labrinth.start(), labrinth);
+		DecisionTree decisionTree = new DecisionTree(rootNode);
 
 		labrinth.print();
 		decisionTree.print();		
 
-		driver.makeNextDecision(decisionTree.root(), decisionTree, labrinth);
+		driver.makeNextDecision(decisionTree.root(), decisionTree);
 
 		labrinth.print();
 		decisionTree.print();
@@ -54,11 +54,14 @@ public class Driver {
 
 	}
 
-	public boolean makeNextDecision(DecisionTreeNode lastDecision, DecisionTree tree, Labrinth labrinth) {
+	public boolean makeNextDecision(DecisionTreeNode lastDecision, DecisionTree tree) {
 
 		System.out.println("makeNextDecision(): " + lastDecision.coordinate().toString());
 
-		labrinth.print();
+		DecisionTreeNode leaf = tree.getLeaf();
+		System.out.println("leaf labrinth: " + leaf.labrinth());
+
+		leaf.labrinth().print();
 		tree.print();
 
 		scan.nextLine();
@@ -70,10 +73,10 @@ public class Driver {
 			System.out.println("choiceNumber: " + choiceNumber + " atGoal: " + atGoal + " lastDecision: " + lastDecision.coordinate().toString());
 			int thisDecisionChoice = lastDecision.nextChoice();
 			System.out.println("thisDecisionChoice: " + thisDecisionChoice);
-			Coordinate newCoordinate = labrinth.nextChoiceAsCoordinate(thisDecisionChoice, lastDecision.coordinate());
-			DecisionTreeNode currentDecision = new DecisionTreeNode(newCoordinate);
+			Coordinate newCoordinate = leaf.labrinth().nextChoiceAsCoordinate(thisDecisionChoice, lastDecision.coordinate());
+			DecisionTreeNode currentDecision = new DecisionTreeNode(newCoordinate, leaf.labrinth());
 
-			boolean isValid = labrinth.isValid(thisDecisionChoice, lastDecision.coordinate());
+			boolean isValid = leaf.labrinth().isValid(thisDecisionChoice, lastDecision.coordinate());
 			System.out.println("isValid: " + isValid);
 			if(isValid) {	
 				// System.out.println("was valid: " + thisDecisionChoice);
@@ -81,7 +84,7 @@ public class Driver {
 				System.out.println("before set: ");
 				tree.print();
 
-				labrinth.set(newCoordinate, "0");
+				leaf.labrinth().set(newCoordinate, "0");
 				lastDecision.setChild(currentDecision);
 				currentDecision.setParent(lastDecision);
 				tree = tree.insertNode(currentDecision);
@@ -89,18 +92,18 @@ public class Driver {
 				System.out.println("after set: ");
 				tree.print();
 				
-				if(labrinth.canEndPath(newCoordinate)) {
-					labrinth.set(newCoordinate, "E");
+				if(leaf.labrinth().canEndPath(newCoordinate)) {
+					leaf.labrinth().set(newCoordinate, "E");
 					return true;
 				} else {
 
-					atGoal = makeNextDecision(currentDecision, tree, labrinth); // reduce problem
+					atGoal = makeNextDecision(currentDecision, tree); // reduce problem
 					System.out.println("atGoal " + atGoal);
 					if(atGoal == false) { // backtrack has occurred
 						//un - record this decision choice
 						System.out.println("BACKTRACK!!");
-						if(labrinth.at(lastDecision.coordinate()) == "0") {
-							labrinth.set(lastDecision.coordinate(), "1");
+						if(leaf.labrinth().at(lastDecision.coordinate()) == "0") {
+							leaf.labrinth().set(lastDecision.coordinate(), "1");
 						}
 						
 						lastDecision.setChild(null);
