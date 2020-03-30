@@ -25,9 +25,22 @@ public class Driver {
 		labrinth.print();
 		decisionTree.print();
 
-		Labrinth test = new Labrinth(decisionTree);
-		System.out.println("Test Print: ");
-		test.print();
+		labrinth = new Labrinth(decisionTree);
+		System.out.println("labrinth: ");
+		labrinth.print();
+		
+		// fill in randomly some spots with empty until we hit minEmpty
+		System.out.println("Random!!");
+		while(labrinth.numEmpty() < labrinth.minEmpty()) {
+			Coordinate random = labrinth.random();
+			System.out.println("\t" + random.toString());
+			boolean isWall = labrinth.isWall(random);
+			if(isWall) {
+				labrinth.set(random, "0");
+			}
+		}
+
+		labrinth.print();
 
 		//Testing insert node
 		// DecisionTreeNode child1 = new DecisionTreeNode(new Coordinate(0, 0));

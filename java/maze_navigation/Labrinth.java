@@ -32,7 +32,7 @@ public class Labrinth
 
 		// there are numColumns number of slots in the first row, we use that number - 1 make a suitable range
 		// so that we can pick a random array index to be our "Start" cell of the maze
-    	int column_start = random_number_generator.nextInt(numColumns - 1);
+    	int column_start = random_number_generator.nextInt(numColumns);
 
         // and mark that node of the labrinth with an "S"	
     	data[0][column_start].set("S");
@@ -87,12 +87,42 @@ public class Labrinth
 		}
     }
 
+    public Coordinate random() {
+    	return new Coordinate(randomRow(), randomCol());
+    }
+
+    public int randomRow() {
+    	random_number_generator = new Random(); 
+    	return random_number_generator.nextInt(numRows - 1);
+    }
+
+    public int randomCol() {
+    	random_number_generator = new Random(); 
+    	return random_number_generator.nextInt(numRows - 1);
+    }
+
 	public int rows() {
 		return numRows;
 	}
 
 	public int cols() {
 		return numColumns;
+	}
+
+	public int minEmpty() {
+		return minEmpty;
+	}
+
+	public int numEmpty() {
+		int numEmpty = 0;
+		for(int i = 0; i < numRows; i++) {
+    		for(int j = 0; j < numColumns; j++) {
+    			if(data[i][j].get() == "0") {
+    				numEmpty++;
+    			}
+    		}
+    	}
+    	return numEmpty;
 	}
 
 	public String at(Coordinate _coordinate) {
