@@ -22,7 +22,8 @@ public class DecisionTree {
 		int numberOfChoices = 4;
 		while(atGoal == false && choiceNumber < numberOfChoices) {
 			int thisDecisionChoice = lastDecision.nextChoice();
-			DecisionTreeNode currentDecision = new DecisionTreeNode(labrinth.nextChoiceAsCoordinate(thisDecisionChoice, lastDecision.coordinate()));
+			Coordinate newCoordinate = labrinth.nextChoiceAsCoordinate(thisDecisionChoice, lastDecision.coordinate());
+			DecisionTreeNode currentDecision = new DecisionTreeNode(newCoordinate);
 
 			System.out.println("lastDecision: ");
 			lastDecision.coordinate().print(); 
@@ -30,9 +31,12 @@ public class DecisionTree {
 			if(labrinth.isValid(thisDecisionChoice, lastDecision.coordinate())) {	
 				System.out.println("was valid: " + thisDecisionChoice);
 				// record this decision choice
+				labrinth.set(newCoordinate, "0");
 				lastDecision.setChild(currentDecision);
 				currentDecision.setParent(lastDecision);
+				atGoal = makeNextDecision(currentDecision); // ??
 				if(labrinth.canEndPath(currentDecision.coordinate())) {
+					labrinth.set(newCoordinate, "E");
 					return true;
 				} else {
 					atGoal = makeNextDecision(currentDecision); // reduce problem

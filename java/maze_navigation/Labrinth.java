@@ -58,14 +58,18 @@ public class Labrinth
 		}
 	}
 
+	public void set(Coordinate _coordinate, String _data) {
+		data[_coordinate.row][_coordinate.col].set(_data);
+	}
+
 	public boolean validRow(int _row) {
-		boolean valid = _row > 0 && (_row < numRows - 1);
+		boolean valid = _row > 0 && (_row < numRows);
 		System.out.println("validRow(): row: " + _row + " " + valid);
 		return valid;
 	}
 
 	public boolean validCol(int _col) {
-		boolean valid = _col > 0 && (_col < numColumns -1);
+		boolean valid = _col > 0 && (_col < numColumns);
 		System.out.println("validCol: col: " + _col + " " + valid);
 		return valid;
 	}
