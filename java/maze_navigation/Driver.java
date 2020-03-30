@@ -67,6 +67,7 @@ public class Driver {
 		int choiceNumber = 0;
 		int numberOfChoices = 8;
 		while(atGoal == false && choiceNumber < numberOfChoices) {
+			System.out.println("choiceNumber: " + choiceNumber + " atGoal: " + atGoal);
 			int thisDecisionChoice = lastDecision.nextChoice();
 			Coordinate newCoordinate = labrinth.nextChoiceAsCoordinate(thisDecisionChoice, lastDecision.coordinate());
 			DecisionTreeNode currentDecision = new DecisionTreeNode(newCoordinate);
@@ -90,7 +91,9 @@ public class Driver {
 					labrinth.set(newCoordinate, "E");
 					return true;
 				} else {
+
 					atGoal = makeNextDecision(currentDecision, tree, labrinth); // reduce problem
+					System.out.println("atGoal " + atGoal);
 					if(atGoal == false) { // backtrack has occurred
 						//un - record this decision choice
 						System.out.println("BACKTRACK!!");
@@ -101,6 +104,7 @@ public class Driver {
 			}
 			choiceNumber += 1;
 		}
+		System.out.println("exit while loop");
 		return atGoal;
 	}
 
