@@ -8,7 +8,8 @@ public class Cell {
        if(_data.compareTo("0") == 0 ||
 	  _data.compareTo("1") == 0 ||
 	  _data.compareTo("S") == 0 ||
-	  _data.compareTo("E") == 0 ) {
+	  _data.compareTo("E") == 0 ||
+    _data.compareTo("*") == 0) {
 	  
 	    data = _data;  	
        } else {
