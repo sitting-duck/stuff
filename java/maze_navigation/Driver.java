@@ -14,6 +14,7 @@ public class Driver {
 
 		Driver driver = new Driver();
 		Labrinth labrinth = new Labrinth();
+		Coordinate start = labrinth.start();
 		DecisionTreeNode rootNode = new DecisionTreeNode(labrinth.start(), labrinth);
 		DecisionTree tree = new DecisionTree(rootNode);
 
@@ -23,11 +24,11 @@ public class Driver {
 		tree.print();
 
 		labrinth = new Labrinth(tree);
-		System.out.println("labrinth: ");
-		labrinth.print();
+		//System.out.println("labrinth: ");
+		//labrinth.print();
 		
 		// fill in randomly some spots with empty until we hit minEmpty
-		System.out.println("Random!!");
+		//System.out.println("Random!!");
 		while(labrinth.numEmpty() < labrinth.minEmpty()) {
 			Coordinate random = labrinth.random();
 			System.out.println("\t" + random.toString());
@@ -37,8 +38,10 @@ public class Driver {
 			}
 		}
 
-		labrinth.print();
-		DecisionTree roboTree = new DecisionTree(rootNode);
+		//labrinth.print();
+		DecisionTreeNode roboRoot = new DecisionTreeNode(start, labrinth);
+		System.out.println("roboRoot: " + roboRoot.coordinate().toString());
+		DecisionTree roboTree = new DecisionTree(roboRoot);
 
 		driver.robotWalk(roboTree.root(), labrinth, roboTree);
 
@@ -56,7 +59,8 @@ public class Driver {
 
 		// DecisionTreeNode leaf = pathTree.getLeaf();
 		
-		// System.out.println("tree");
+		System.out.println("roboTree");		
+		roboTree.print();
 		labrinth.print();
 		roboTree.printRoboWalk(labrinth);
 
