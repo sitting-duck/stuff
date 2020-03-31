@@ -15,17 +15,14 @@ public class Driver {
 		Driver driver = new Driver();
 		Labrinth labrinth = new Labrinth();
 		DecisionTreeNode rootNode = new DecisionTreeNode(labrinth.start(), labrinth);
-		DecisionTree decisionTree = new DecisionTree(rootNode);
+		DecisionTree tree = new DecisionTree(rootNode);
 
-		labrinth.print();
-		decisionTree.print();		
+		
+		driver.makeNextDecision(tree.root(), tree);
 
-		driver.makeNextDecision(decisionTree.root(), decisionTree);
+		tree.print();
 
-		labrinth.print();
-		decisionTree.print();
-
-		labrinth = new Labrinth(decisionTree);
+		labrinth = new Labrinth(tree);
 		System.out.println("labrinth: ");
 		labrinth.print();
 		
@@ -41,34 +38,86 @@ public class Driver {
 		}
 
 		labrinth.print();
+		DecisionTree roboTree = new DecisionTree(rootNode);
 
-		//Testing insert node
-		// DecisionTreeNode child1 = new DecisionTreeNode(new Coordinate(0, 0));
-		// decisionTree.insertNode(child1);
+		driver.robotWalk(roboTree.root(), labrinth, roboTree);
 
-		// DecisionTreeNode child2 = new DecisionTreeNode(new Coordinate(0, 1));
-		// decisionTree.insertNode(child2);
+		System.out.println("labrinth!");
+		labrinth.print();
 
-		// DecisionTreeNode child3 = new DecisionTreeNode(new Coordinate(0, 2));
-		// decisionTree.insertNode(child3);
+		System.out.println("roboTree!");
+		roboTree.printLabrinth();
 
-		// DecisionTreeNode child4 = new DecisionTreeNode(new Coordinate(0, 3));
-		// decisionTree.insertNode(child4);
+	}
 
-		// DecisionTreeNode child5 = new DecisionTreeNode(new Coordinate(0, 4));
-		// decisionTree.insertNode(child5);
+	public boolean robotWalk(DecisionTreeNode lastDecision, Labrinth labrinth, DecisionTree roboTree) {
 
-		// DecisionTreeNode child6 = new DecisionTreeNode(new Coordinate(0, 5));
-		// decisionTree.insertNode(child6);
+		System.out.println("robotWalk(): " + lastDecision.coordinate().toString());
 
-		// DecisionTreeNode child7 = new DecisionTreeNode(new Coordinate(0, 6));
-		// decisionTree.insertNode(child7);
+		// DecisionTreeNode leaf = pathTree.getLeaf();
+		
+		// System.out.println("tree");
+		labrinth.print();
 
-		// DecisionTreeNode child8 = new DecisionTreeNode(new Coordinate(0, 7));
-		// decisionTree.insertNode(child8);
+		// System.out.println("roboTree");
+		// roboTree.printLabrinth();
+		// roboTree.print();
 
-		// decisionTree.print();
+		scan.nextLine();
 
+		boolean atGoal = false;
+		int choiceNumber = 0;
+		int numberOfChoices = 4;
+		while(atGoal == false && choiceNumber < numberOfChoices) {
+			System.out.println("choiceNumber: " + choiceNumber + " atGoal: " + atGoal + " lastDecision: " + lastDecision.coordinate().toString());
+			int thisDecisionChoice = lastDecision.nextChoice();
+			System.out.println("thisDecisionChoice: " + thisDecisionChoice);
+			Coordinate newCoordinate = labrinth.nextChoiceAsCoordinate(thisDecisionChoice, lastDecision.coordinate());
+			DecisionTreeNode currentDecision = new DecisionTreeNode(newCoordinate, labrinth);
+
+			boolean canWalk = labrinth.canWalk(thisDecisionChoice, lastDecision.coordinate());
+			System.out.println("canWalk: " + canWalk);
+			if(canWalk) {	
+				// System.out.println("was valid: " + thisDecisionChoice);
+				// record this decision choice
+				// System.out.println("before set: ");
+				// tree.print();
+
+				if(labrinth.at(newCoordinate) != "E") {
+					labrinth.set(newCoordinate, "*");	
+				}
+				
+				lastDecision.setChild(currentDecision);
+				currentDecision.setParent(lastDecision);
+				roboTree = roboTree.insertNode(currentDecision);
+
+				// System.out.println("after set: ");
+				// tree.print();
+				
+				if(labrinth.at(newCoordinate) == "E") {
+					System.out.println("found the end!!");
+					return true;
+				} else {
+
+					atGoal = robotWalk(currentDecision, labrinth, roboTree); // reduce problem
+					// System.out.println("atGoal " + atGoal);
+					if(atGoal == false) { // backtrack has occurred
+						//un - record this decision choice
+						System.out.println("BACKTRACK!!");
+						System.out.println("lastDecision.coordinate: " + lastDecision.coordinate());
+						if(labrinth.at(lastDecision.coordinate()) == "0") {
+							labrinth.set(lastDecision.coordinate(), "1");
+						}
+						
+						lastDecision.setChild(null);
+						roboTree = roboTree.removeLeaf();
+					}
+				}
+			}
+			choiceNumber += 1;
+		}
+		// System.out.println("exit while loop");
+		return atGoal;
 	}
 
 	public boolean makeNextDecision(DecisionTreeNode lastDecision, DecisionTree tree) {
@@ -76,12 +125,9 @@ public class Driver {
 		System.out.println("makeNextDecision(): " + lastDecision.coordinate().toString());
 
 		DecisionTreeNode leaf = tree.getLeaf();
-		System.out.println("leaf labrinth: " + leaf.labrinth());
-
-		//leaf.labrinth().print();
 		tree.printLabrinth();
 
-		scan.nextLine();
+		// scan.nextLine();
 
 		boolean atGoal = false;
 		int choiceNumber = 0;
@@ -127,7 +173,6 @@ public class Driver {
 						tree = tree.removeLeaf();
 					}
 				}
-				//atGoal = makeNextDecision(currentDecision, tree, labrinth); // ??
 			}
 			choiceNumber += 1;
 		}

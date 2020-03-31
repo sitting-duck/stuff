@@ -58,16 +58,16 @@ public class DecisionTree {
 	}
 
 	public DecisionTreeNode getLeaf() {
-		System.out.println("getLeaf()");
+		// System.out.println("getLeaf()");
 
 		DecisionTreeNode currentNode = root;
-		System.out.println("root: " + root.coordinate().toString());
+		// System.out.println("\troot: " + root.coordinate().toString());
 		boolean isNull = currentNode.child() == null;
 
 		int num = 0;
 		while(true) {
 			if(currentNode.child() == null) {
-				System.out.println("returning: " + currentNode.coordinate().toString());
+				// System.out.println("\treturning: " + currentNode.coordinate().toString());
 				return currentNode;
 			} else {
 				currentNode = currentNode.child();	
