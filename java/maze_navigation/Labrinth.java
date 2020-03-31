@@ -87,6 +87,45 @@ public class Labrinth
 		}
     }
 
+    public Labrinth(DecisionTree tree, Labrinth labrinth) {
+
+    	tree.print();
+
+    	labrinth.print();
+
+    	System.out.println("\tinitboop");
+
+    	scan = new Scanner(System.in);
+
+    	System.out.println("numRows: " + labrinth.numRows);
+    	System.out.println("numColumns: " + labrinth.numColumns);
+    	for(int i = 0; i < labrinth.numRows; i++) {
+    		for(int j = 0; j < labrinth.numColumns; j++) {
+    			// System.out.print("i: " + i + " j: " + j);
+    			data[i][j] = new Cell(labrinth.at(i, j));
+    		}
+    		// System.out.println();
+    	}
+
+    	DecisionTreeNode currentNode = tree.root();
+	
+		boolean isNull = currentNode.child() == null;
+
+		int num = 0;
+		while(true) {
+			
+			currentNode = currentNode.child();
+			if(currentNode == null) {
+				return;
+			}
+			if(currentNode.child() == null) {
+				set(currentNode.coordinate(), "E");
+			} else {
+				set(currentNode.coordinate(), "*");	
+			}
+		}
+    }
+
     public Coordinate random() {
     	return new Coordinate(randomRow(), randomCol());
     }
@@ -126,8 +165,8 @@ public class Labrinth
 	}
 
 	public String at(Coordinate _coordinate) {
-		if (_coordinate.row < numRows - 1 || _coordinate.col < numColumns - 1) {
-			System.out.println("Error: invalid coordinate!!");
+		if (!canGoHere(_coordinate)) {
+			System.out.println("Error: invalid coordinate!! " + _coordinate.toString());
 			return "";
 		} else {
 			return data[_coordinate.row][_coordinate.col].get();
@@ -135,7 +174,7 @@ public class Labrinth
 	}
 
 	public String at(int _row, int _col) {
-		if (_row < numRows - 1 || _col < numColumns - 1) {
+		if (!canGoHere(new Coordinate(_row, _col))) {
 			System.out.println("Error: invalid coordinate!!");
 			return "";
 		} else {

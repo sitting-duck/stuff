@@ -58,6 +58,7 @@ public class Driver {
 		
 		// System.out.println("tree");
 		labrinth.print();
+		roboTree.printRoboWalk(labrinth);
 
 		// System.out.println("roboTree");
 		// roboTree.printLabrinth();
@@ -104,10 +105,10 @@ public class Driver {
 					if(atGoal == false) { // backtrack has occurred
 						//un - record this decision choice
 						System.out.println("BACKTRACK!!");
-						System.out.println("lastDecision.coordinate: " + lastDecision.coordinate());
-						if(labrinth.at(lastDecision.coordinate()) == "0") {
-							labrinth.set(lastDecision.coordinate(), "1");
-						}
+						//System.out.println("lastDecision.coordinate: " + lastDecision.coordinate());
+						// if(labrinth.at(lastDecision.coordinate()) == "0") {
+						// 	labrinth.set(lastDecision.coordinate(), "1");
+						// }
 						
 						lastDecision.setChild(null);
 						roboTree = roboTree.removeLeaf();

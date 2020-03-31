@@ -90,6 +90,11 @@ public class DecisionTree {
 		labrinth.print();
 	}
 
+	public void printRoboWalk(Labrinth _labrinth) {
+		Labrinth walkLab = new Labrinth(this, _labrinth);
+		walkLab.print();
+	}
+
 	public void print() {
 		System.out.println("tree");
 		
