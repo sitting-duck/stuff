@@ -45,3 +45,7 @@ apt-get update
 apt-get install vim
 ```
 
+### Get Tensorflow 2 with GPU support for Python 3
+```
+sudo docker pull tensorflow/tensorflow:latest-gpu-py3
+```
