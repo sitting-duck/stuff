@@ -4,6 +4,10 @@ It seems as though Nvidia has released a docker image and so has also Google.
 
 The NVidia docker image is biased towards NVidias newer cards and may not work for an older card (even if the card is not that old, if it is not the latest new stuff, this can happen)
 
+Using docker image it is not as easy to have multiple tabs open so one I can use for editing and the other for executing. 
+
+Seems also, I cannot figure out how to do environment stuff like set bashrc, and this makes it difficult to automate stuff for me. Also, the docs on using docker with supervisord were pretty intimidating.
+
 ### Loading an Image
 You may get an image in to form of a .tar file, in which case you can load it like so: 
 ```
@@ -34,4 +38,10 @@ docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
 
 ```
 
+If you are running a fresh docker container you just downloaded, be sure to run ``apt-get update``
+
+```
+apt-get update
+apt-get install vim
+```
 
