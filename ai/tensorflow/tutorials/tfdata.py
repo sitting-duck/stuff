@@ -357,3 +357,111 @@ image = random_rotate_image(image)
 #show(image, label)
 
 
+rot_ds = images_ds.map(tf_random_rotate_image)
+
+# Can't show anything over ssh
+#for image, label in rot_ds.take(2)
+    #show(image, label)
+
+### Parsing tf.Example protocol buffer messages
+# Many input pipelines extract tf.train.Example protocol buffer messages
+# from a TFRecord format. Each tf.train.Example record contains one or more
+# features and the input pipeline typically converts these features into 
+# tensors.
+
+fsns_test_file = tf.keras.utils.get_file("fsns.tfrec", "https://storage.googleapis.com/download.tensorflow.org/data/fsns-20160927/testdata/fsns-00000-of-00001")
+dataset = tf.data.TFRecordDataset(filenames = [fsns_test_file])
+dataset
+
+# <TFRecordDatasetV2 shapes: (), types: tf.string>
+
+# You can work with tf.train.Example protos outside of a tf.data.Dataset to 
+# to understand the data: 
+
+raw_example = next(iter(dataset))
+parsed = tf.train.Example.FromString(raw_example.numpy())
+
+feature = parsed.features.feature
+raw_img = feature['image/encoded'].bytes_list.value[0]
+img = tf.image.decode_png(raw_img)
+#plt.imshow(img)
+#plt.axis('off')
+#_ = plt.title(feature["image/text"].bytes_list.value[0])
+
+raw_example = next(iter(dataset))
+
+def tf_parse(eg):
+    example = tf.io.parse_example(
+            eg[tf.newaxis], {
+                'image/encoded': tf.io.FixedLenFeature(shape=(), dtype=tf.string), 
+                'image/text': tf.io.FixedLenFeature(shape=(), dtype=tf.string)
+                })
+    return example['image/encoded'][0], example['image/text'][0]
+
+img, txt = tf_parse(raw_example)
+print(txt.numpy())
+print(repr(img.numpy()[:20]), "...")
+
+### Iterator Checkpointing
+# Tensorflow supports taking checkpoints so that when your training process
+# restarts it can restore the latest checkpoint to recover most of its 
+# progress. In addition to checkpointing the model variables, you can also
+# checkpoint the progress of the dataset iterator. This could be useful
+# if you have a large dataset and don't want to start the dataset from
+# from the beginning on each restart. Note however that iterator checkpoints
+# may be large, since transformations such as shuffle and prefetch require
+# buffering elements within the iterator
+
+# To include your iterator in a checkpoint, pass the iterator to the
+# tf.train.Checkpoint constructor
+range_ds = tf.data.Dataset.range(20)
+
+iterator = iter(range_ds)
+ckpt = tf.train.Checkpoint(step=tf.Variable(0), iterator=iterator)
+manager = tf.train.CheckpointManager(ckpt, '/tmp/my_ckpt', max_to_keep=3)
+
+print([next(iterator).numpy() for _ in range(5)])
+
+save_path = manager.save()
+
+print([next(iterator).numpy() for _ in range(5)])
+
+ckpt.restore(manager.latest_checkpoint)
+
+print([next(iterator).numpy() for _ in range(5)])
+
+### Using High Level APIs
+# The tf.keras API simplifies many aspects of creating and executing 
+# machine learning models. Its .fit() and .evaluate() and .predict()
+# APIs support datasets as inputs. Here is a quick dataset and model
+# setup. 
+
+train, test = tf.keras.datasets.fashion_mnist.load_data()
+
+images, labels = train
+images = images/255.0
+labels = labels.astype(np.int32)
+
+fmnist_train_ds = tf.data.Dataset.from_tensor_slices((images, labels))
+fmnist_train_ds = fmnist_train_ds.shuffle(5000).batch(32)
+
+model = tf.keras.Sequential([
+    tf.keras.layers.Flatten(), 
+    tf.keras.layers.Dense(10)
+    ])
+
+model.compile(optimizer='adam',
+        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        metrics=['accuracy'])
+
+# Passing a dataset of (feature, label) pairs is all that's needed for 
+# Model.fit and Model.evaluate
+
+model.fit(fmnist_train_ds, epochs=2)
+
+# If you pass an infinite dataset, for example by calling Dataset.repeat()
+# you just need to also pass the steps_per_epoch argument
+
+
+
+
