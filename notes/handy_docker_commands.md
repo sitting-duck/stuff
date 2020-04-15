@@ -43,6 +43,11 @@ If you are running a fresh docker container you just downloaded, be sure to run 
 ```
 apt-get update
 apt-get install vim
+python -m pip install -U pip
+pip install --upgrade pip
+python -m pip install -U matplotlib
+pip install pandas
+pip install easydict
 ```
 
 ### Get Tensorflow 2 with GPU support for Python 3

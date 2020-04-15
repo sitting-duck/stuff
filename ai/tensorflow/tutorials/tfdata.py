@@ -310,13 +310,13 @@ def parse_image(filename):
 file_path = next(iter(list_ds))
 image, label = parse_image(file_path)
 
-#def show(image, label):
-#    plt.figure()
-#    plt.imshow(image)
-#    plt.title(label.numpy().decode('utf-8'))
-#    plt.axis('off')
-#
-#show(image, label)
+def show(image, label):
+    plt.figure()
+    plt.imshow(image)
+    plt.title(label.numpy().decode('utf-8'))
+    plt.axis('off')
+
+show(image, label)
 
 # Map it over the dataset
 
