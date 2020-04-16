@@ -45,6 +45,11 @@ apt-get update
 apt-get install vim
 apt install git
 
+#python -m pip install -U pip
+pip install --upgrade pip
+
+python -m pip install -U matplotlib
+pip install pandas
 pip install easydict
 ```
 
