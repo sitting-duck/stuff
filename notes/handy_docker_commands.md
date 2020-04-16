@@ -48,6 +48,7 @@ apt install git
 #python -m pip install -U pip
 pip install --upgrade pip
 
+pip install opencv-python
 python -m pip install -U matplotlib
 pip install pandas
 pip install easydict
@@ -56,12 +57,22 @@ apt install libsm6
 apt-get install libxrender1
 apt-get install libxext6
 apt-get install python3-tk
+pip intall imageio
+
+pip uninstall tensorlayer
+pip install tensorlayer=1.11.1
+pip install git+https://github.com/JiahuiYu/neuralgym
+pip install pyyaml
+
 ```
 
-### Needed only in 1.9 tf docker container
+### Create new tmux session
+```bash
+tmux new -s session_name
+# ctrl + bd to detach from session (without ending session)
 ```
-pip install opencv-python
-```
+
+
 
 ### Get Tensorflow 2 with GPU support for Python 3
 ```
