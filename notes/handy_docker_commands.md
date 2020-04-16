@@ -43,9 +43,17 @@ If you are running a fresh docker container you just downloaded, be sure to run 
 ```
 apt-get update
 apt-get install vim
+apt install git
+
+pip install easydict
 ```
 
 ### Get Tensorflow 2 with GPU support for Python 3
 ```
 sudo docker pull tensorflow/tensorflow:latest-gpu-py3
+```
+
+### Copy Your Files From the Docker Container
+```
+sudo docker cp  container_name:/path/in/container/ /path/on/host/machine/
 ```
