@@ -51,6 +51,16 @@ pip install --upgrade pip
 python -m pip install -U matplotlib
 pip install pandas
 pip install easydict
+
+apt install libsm6
+apt-get install libxrender1
+apt-get install libxext6
+apt-get install python3-tk
+```
+
+### Needed only in 1.9 tf docker container
+```
+pip install opencv-python
 ```
 
 ### Get Tensorflow 2 with GPU support for Python 3
