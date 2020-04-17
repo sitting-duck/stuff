@@ -1,10 +1,15 @@
 
+```
+sudo update-pciids
+```
+
 If you are running a fresh docker container you just downloaded, be sure to run ``apt-get update``
 
 ```
 apt-get update
 apt-get install vim
 apt install git
+apt install tmux
 
 #python -m pip install -U pip
 pip install --upgrade pip
