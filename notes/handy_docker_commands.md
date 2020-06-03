@@ -16,7 +16,7 @@ sudo docker load -i ./myImage.tar
 ```
 
 Some convenient aliases:
-```
+```bash
 alias dattach='sudo docker attach '
 alias dimages='sudo docker images '
 alias dinfo='sudo docker info '
@@ -45,10 +45,16 @@ tmux new -s session_name
 # ctrl + bd to detach from session (without ending session)
 ```
 
-
+### Install
+```bash
+sudo apt-get remove docker docker-engine docker.io containerd runc
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+```
 
 ### Get Tensorflow 2 with GPU support for Python 3
-```
+```bash
+sudo docker pull tensorflow/tensorflow:1.9.0-devel-gpu-py3 # TF 1.9
 sudo docker pull tensorflow/tensorflow:latest-gpu-py3
 ```
 
