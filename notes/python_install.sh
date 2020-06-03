@@ -24,7 +24,7 @@ pip install numpy
 pip install scipy
 
 #pip uninstall tensorlayer
-#pip install tensorlayer=1.11.1
+#pip install tensorlayer==1.11.1
 pip install git+https://github.com/JiahuiYu/neuralgym
 pip install pyyaml
 pip install --upgrade cython
