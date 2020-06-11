@@ -1,8 +1,8 @@
 
 
 # If you are running a fresh docker container you just downloaded, be sure to run ``apt-get update``
-
-
+```
+export PYTHONPATH=$PYTHONPATH:/usr/lib/python3.
 alias python='python3'
 alias pip='pip3'
 
@@ -28,4 +28,5 @@ pip install scipy
 pip install git+https://github.com/JiahuiYu/neuralgym
 pip install pyyaml
 pip install --upgrade cython
-
+```
+```
