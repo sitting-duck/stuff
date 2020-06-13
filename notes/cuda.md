@@ -79,3 +79,13 @@ sudo apt install gcc
 
 ```
 
+```
+ERROR: Unable to find the development tool `make` in your path; please make  
+         sure that you have the package 'make' installed.  If make is          
+         installed on your system, then please check that `make` is in your    
+         PATH.
+
+sudo apt install make
+
+```
+
