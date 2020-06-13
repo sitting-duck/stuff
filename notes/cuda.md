@@ -56,4 +56,6 @@ ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/nvidia/lib64/libcuda.so.
 ```
 # Start a GPU enabled container on two GPUs
 docker run --gpus 2 nvidia/cuda:10.0-base nvidia-smi
+
+wget http://us.download.nvidia.com/XFree86/Linux-x86_64/440.82/NVIDIA-Linux-x86_64-440.82.run
 ```
