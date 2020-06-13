@@ -57,5 +57,25 @@ ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/nvidia/lib64/libcuda.so.
 # Start a GPU enabled container on two GPUs
 docker run --gpus 2 nvidia/cuda:10.0-base nvidia-smi
 
+sudo apt-get purge nvidia-*
 wget http://us.download.nvidia.com/XFree86/Linux-x86_64/440.82/NVIDIA-Linux-x86_64-440.82.run
+
+sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+sudo bash -c "echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+
+cat /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+# blacklist nouveau
+# options nouveau modeset=0
+
+sudo reboot
 ```
+
+```
+ERROR: Unable to find the development tool `cc` in your path; please make    
+         sure that you have the package 'gcc' installed.  If gcc is installed  
+         on your system, then please check that `cc` is in your PATH.  
+
+sudo apt install gcc
+
+```
+
