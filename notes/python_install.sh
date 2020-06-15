@@ -30,3 +30,11 @@ pip install pyyaml
 pip install --upgrade cython
 ```
 ```
+Older versions of TensorFlow
+
+For releases 1.15 and older, CPU and GPU packages are separate:
+
+pip install tensorflow==1.15      # CPU
+pip install tensorflow-gpu==1.15  # GPU
+
+```
