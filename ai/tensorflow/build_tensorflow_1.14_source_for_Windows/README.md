@@ -1,6 +1,6 @@
 
-Btw if you enjoy my tutorial, I always appreciate endorsements on my LinkedIn: https://www.linkedin.com/in/ashleytharp/
-Questions can go to ashley.tharp@gmail.com. I can currently check my email and attempt to assist on weekends mostly.
+Btw if you enjoy my tutorial, I always appreciate endorsements on my LinkedIn: https://www.linkedin.com/in/ashleytharp/ <br>
+Questions can go to ashley.tharp@gmail.com. I can currently check my email and attempt to assist on weekends mostly. <br>
 
 ### Building the Tensorflow Source code on Windows in C++ with GPU support
 
