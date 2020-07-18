@@ -12,12 +12,12 @@ if __name__ == '__main__':
     # Get command line args     
     parser = argparse.ArgumentParser()
     parser.add_argument("PACKAGING_DIR", help="a dir where all the assets are thrown together to package into the installer")
-    parser.add_argument("FULLNAME", help="eg. Topaz Video Enhance AI || Topaz Video Enhance AI (BETA)")
+    parser.add_argument("FULLNAME", help="eg. My App || My App BETA")
     args = parser.parse_args()
 
     # first make a copy of the executable
     exec_dir = args.PACKAGING_DIR + "/" + args.FULLNAME + ".app/Contents/MacOS/"
-    orig = args.PACKAGING_DIR + "/" + args.FULLNAME + ".app/Contents/MacOS/Topaz Video Enhance AI" 
+    orig = args.PACKAGING_DIR + "/" + args.FULLNAME + ".app/Contents/MacOS/My App" 
     backup = orig + " backup"
     shutil.copyfile(orig, backup)
 
@@ -28,7 +28,8 @@ if __name__ == '__main__':
     # for each @rpath in the install names we are going to remove it
     o = subprocess.Popen(['/usr/bin/otool', '-L', orig], stdout=subprocess.PIPE)
 
-    for line in o.stdout:
+    # remove junk from the otool output
+    for line in o.stdout: 
         line = str(line)
         line = line.replace("\\t", "")
         line = line.replace("\\n", "")
@@ -39,10 +40,12 @@ if __name__ == '__main__':
         line = line.replace(" ", "")
 
         
+        # call install name tool on the dependency
         #io = subprocess.Popen(["/usr/bin/install_name_tool", "-change", line, line.replace("@rpath", ""), "'"+orig+"'"], shell=True,  stdout=subprocess.PIPE)
         io = os.system("sudo /usr/bin/install_name_tool -change '" + line + "' '" + line.replace("@rpath", "") + "' '" + orig + "'")
+        io = os.system("sudo /usr/bin/install_name_tool -change '" + line + "' '" + line.replace("badString", "") + "' '" + orig + "'")
 
-    print("after install_name_tool to remove @rpath")
+    print("after install_name_tool to remove @rpath, badString")
     o2 = subprocess.Popen(['/usr/bin/otool', '-L', orig], stdout=subprocess.PIPE)
     for line in o2.stdout:
         print(line)
