@@ -59,4 +59,12 @@ SELECT columnlist FROM table1 JOIN table2 USING commonColumn
 
 31. The use of the ALL operator allows you to compare a single value with a list of values returned by the first subquery using a comparison operator other than EQUALS (such as the greater than operator)
 
+37. The IN operator could be used in place of INTERSECT if the DBMS does not support it.
+
+45. The natural join determines the common attribute or attributes by looking for identically named attributes and compatible data types.
+
+46. The HAVING clause is used to restrict the output of a GROUP BY query by applying a conditional criteria to the grouped rows.
+
+54. When using the Oracle TO_DATE function, the code MON represents a three letter month name. 
+
 
