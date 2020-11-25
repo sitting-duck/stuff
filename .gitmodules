@@ -1,0 +1,3 @@
+[submodule "conan/hello"]
+	path = conan/hello
+	url = https://github.com/conan-io/hello.git
