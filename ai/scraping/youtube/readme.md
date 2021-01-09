@@ -16,5 +16,9 @@ On the bright side, if you resume, it will have the same amount of progress beca
 
 extrator simply refers to a website that you want to download videos from.
 
+### Download from a search query
+youtube-dl "ytsearch100:how to create android app in app studio"
+* only the first 100 videos 
 
+youtube-dl.exe "ytsearch10:4K walk" -f "bestvideo[width>=3000]+bestaudio/best[width>=3000]"
 
