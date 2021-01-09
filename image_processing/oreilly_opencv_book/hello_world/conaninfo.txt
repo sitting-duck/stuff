@@ -1,0 +1,116 @@
+[settings]
+    arch=x86_64
+    build_type=Release
+    compiler=gcc
+    compiler.libcxx=libstdc++
+    compiler.version=7
+    os=Linux
+
+[requires]
+    eigen/3.Y.Z
+    gtk/system
+    jasper/2.Y.Z
+    libjpeg/9d
+    libpng/1.Y.Z
+    libtiff/4.Y.Z
+    libwebp/1.Y.Z
+    openexr/2.Y.Z
+    quirc/1.Y.Z
+    zlib/1.Y.Z
+
+[options]
+    contrib=False
+    fPIC=True
+    parallel=False
+    shared=False
+    with_eigen=True
+    with_gtk=True
+    with_jpeg=libjpeg
+    with_jpeg2000=jasper
+    with_openexr=True
+    with_png=True
+    with_quirc=True
+    with_tiff=True
+    with_webp=True
+
+[full_settings]
+    arch=x86_64
+    build_type=Release
+    compiler=gcc
+    compiler.libcxx=libstdc++
+    compiler.version=7
+    os=Linux
+
+[full_requires]
+    eigen/3.3.8:5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9
+    gtk/system:cc5e5ca8b619d2dffaaeae1e4924ae3ce085a8f1
+    jasper/2.0.21:37f81ce48f57e0ea6fafe8f25ce1a4e5702094ed
+    jbig/20160605:d8fff784e71b40316e752103c83b4698d094b5e3
+    libjpeg/9d:d50a0d523d98c15bb147b18fa7d203887c38be8b
+    libpng/1.6.37:b781af3f476d0aa5070a0a35b544db7a3c193cc8
+    libtiff/4.1.0:002751a9a1cfd9ea92f14c37e89536ff78e62f52
+    libwebp/1.1.0:6322a9a56f029bb63526b01c9e32f1e334e3f0cb
+    openexr/2.5.3:2805a5569cf93cb147878a90cd0b7f5dd229db3b
+    quirc/1.1:7dd9b7ca058603edfa49de37d8a95d3d274efd6f
+    xz_utils/5.2.5:d50a0d523d98c15bb147b18fa7d203887c38be8b
+    zlib/1.2.11:d50a0d523d98c15bb147b18fa7d203887c38be8b
+    zstd/1.4.5:d50a0d523d98c15bb147b18fa7d203887c38be8b
+
+[full_options]
+    contrib=False
+    fPIC=True
+    parallel=False
+    shared=False
+    with_eigen=True
+    with_gtk=True
+    with_jpeg=libjpeg
+    with_jpeg2000=jasper
+    with_openexr=True
+    with_png=True
+    with_quirc=True
+    with_tiff=True
+    with_webp=True
+    gtk:version=2
+    jasper:fPIC=True
+    jasper:shared=False
+    jasper:with_libjpeg=libjpeg
+    jbig:build_executables=True
+    jbig:fPIC=True
+    jbig:shared=False
+    libjpeg:fPIC=True
+    libjpeg:shared=False
+    libpng:api_prefix=None
+    libpng:fPIC=True
+    libpng:shared=False
+    libtiff:cxx=True
+    libtiff:fPIC=True
+    libtiff:jbig=True
+    libtiff:jpeg=libjpeg
+    libtiff:lzma=True
+    libtiff:shared=False
+    libtiff:webp=True
+    libtiff:zlib=True
+    libtiff:zstd=True
+    libwebp:fPIC=True
+    libwebp:near_lossless=True
+    libwebp:shared=False
+    libwebp:swap_16bit_csp=False
+    libwebp:with_simd=True
+    openexr:fPIC=True
+    openexr:shared=False
+    quirc:fPIC=True
+    quirc:max_regions=254
+    quirc:shared=False
+    xz_utils:fPIC=True
+    xz_utils:shared=False
+    zlib:fPIC=True
+    zlib:minizip=False
+    zlib:shared=False
+    zstd:fPIC=True
+    zstd:shared=False
+
+[recipe_hash]
+
+
+[env]
+

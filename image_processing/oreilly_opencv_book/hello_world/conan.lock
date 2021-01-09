@@ -1,0 +1,135 @@
+{
+ "graph_lock": {
+  "nodes": {
+   "0": {
+    "ref": "opencv/None",
+    "options": "contrib=False\nfPIC=True\nparallel=False\nshared=False\nwith_eigen=True\nwith_gtk=True\nwith_jpeg=libjpeg\nwith_jpeg2000=jasper\nwith_openexr=True\nwith_png=True\nwith_quirc=True\nwith_tiff=True\nwith_webp=True\ngtk:version=2\njasper:fPIC=True\njasper:shared=False\njasper:with_libjpeg=libjpeg\njbig:build_executables=True\njbig:fPIC=True\njbig:shared=False\nlibjpeg:fPIC=True\nlibjpeg:shared=False\nlibpng:api_prefix=None\nlibpng:fPIC=True\nlibpng:shared=False\nlibtiff:cxx=True\nlibtiff:fPIC=True\nlibtiff:jbig=True\nlibtiff:jpeg=libjpeg\nlibtiff:lzma=True\nlibtiff:shared=False\nlibtiff:webp=True\nlibtiff:zlib=True\nlibtiff:zstd=True\nlibwebp:fPIC=True\nlibwebp:near_lossless=True\nlibwebp:shared=False\nlibwebp:swap_16bit_csp=False\nlibwebp:with_simd=True\nopenexr:fPIC=True\nopenexr:shared=False\nquirc:fPIC=True\nquirc:max_regions=254\nquirc:shared=False\nxz_utils:fPIC=True\nxz_utils:shared=False\nzlib:fPIC=True\nzlib:minizip=False\nzlib:shared=False\nzstd:fPIC=True\nzstd:shared=False",
+    "requires": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "11",
+     "10",
+     "12",
+     "13"
+    ],
+    "path": "conanfile.py",
+    "context": "host"
+   },
+   "1": {
+    "ref": "zlib/1.2.11",
+    "options": "fPIC=True\nminizip=False\nshared=False",
+    "package_id": "d50a0d523d98c15bb147b18fa7d203887c38be8b",
+    "prev": "0",
+    "context": "host"
+   },
+   "2": {
+    "ref": "libjpeg/9d",
+    "options": "fPIC=True\nshared=False",
+    "package_id": "d50a0d523d98c15bb147b18fa7d203887c38be8b",
+    "prev": "0",
+    "context": "host"
+   },
+   "3": {
+    "ref": "jasper/2.0.21",
+    "options": "fPIC=True\nshared=False\nwith_libjpeg=libjpeg\nlibjpeg:fPIC=True\nlibjpeg:shared=False",
+    "package_id": "37f81ce48f57e0ea6fafe8f25ce1a4e5702094ed",
+    "prev": "0",
+    "requires": [
+     "2"
+    ],
+    "context": "host"
+   },
+   "4": {
+    "ref": "libpng/1.6.37",
+    "options": "api_prefix=None\nfPIC=True\nshared=False\nzlib:fPIC=True\nzlib:minizip=False\nzlib:shared=False",
+    "package_id": "b781af3f476d0aa5070a0a35b544db7a3c193cc8",
+    "prev": "0",
+    "requires": [
+     "1"
+    ],
+    "context": "host"
+   },
+   "5": {
+    "ref": "openexr/2.5.3",
+    "options": "fPIC=True\nshared=False\nzlib:fPIC=True\nzlib:minizip=False\nzlib:shared=False",
+    "package_id": "2805a5569cf93cb147878a90cd0b7f5dd229db3b",
+    "prev": "0",
+    "requires": [
+     "1"
+    ],
+    "context": "host"
+   },
+   "6": {
+    "ref": "libtiff/4.1.0",
+    "options": "cxx=True\nfPIC=True\njbig=True\njpeg=libjpeg\nlzma=True\nshared=False\nwebp=True\nzlib=True\nzstd=True\njbig:build_executables=True\njbig:fPIC=True\njbig:shared=False\nlibjpeg:fPIC=True\nlibjpeg:shared=False\nlibwebp:fPIC=True\nlibwebp:near_lossless=True\nlibwebp:shared=False\nlibwebp:swap_16bit_csp=False\nlibwebp:with_simd=True\nxz_utils:fPIC=True\nxz_utils:shared=False\nzlib:fPIC=True\nzlib:minizip=False\nzlib:shared=False\nzstd:fPIC=True\nzstd:shared=False",
+    "package_id": "002751a9a1cfd9ea92f14c37e89536ff78e62f52",
+    "prev": "0",
+    "requires": [
+     "1",
+     "7",
+     "2",
+     "8",
+     "9",
+     "10"
+    ],
+    "context": "host"
+   },
+   "7": {
+    "ref": "xz_utils/5.2.5",
+    "options": "fPIC=True\nshared=False",
+    "package_id": "d50a0d523d98c15bb147b18fa7d203887c38be8b",
+    "prev": "0",
+    "context": "host"
+   },
+   "8": {
+    "ref": "jbig/20160605",
+    "options": "build_executables=True\nfPIC=True\nshared=False",
+    "package_id": "d8fff784e71b40316e752103c83b4698d094b5e3",
+    "prev": "0",
+    "context": "host"
+   },
+   "9": {
+    "ref": "zstd/1.4.5",
+    "options": "fPIC=True\nshared=False",
+    "package_id": "d50a0d523d98c15bb147b18fa7d203887c38be8b",
+    "prev": "0",
+    "context": "host"
+   },
+   "10": {
+    "ref": "libwebp/1.1.0",
+    "options": "fPIC=True\nnear_lossless=True\nshared=False\nswap_16bit_csp=False\nwith_simd=True",
+    "package_id": "6322a9a56f029bb63526b01c9e32f1e334e3f0cb",
+    "prev": "0",
+    "context": "host"
+   },
+   "11": {
+    "ref": "eigen/3.3.8",
+    "options": "",
+    "package_id": "5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9",
+    "prev": "0",
+    "context": "host"
+   },
+   "12": {
+    "ref": "quirc/1.1",
+    "options": "fPIC=True\nmax_regions=254\nshared=False",
+    "package_id": "7dd9b7ca058603edfa49de37d8a95d3d274efd6f",
+    "prev": "0",
+    "context": "host"
+   },
+   "13": {
+    "ref": "gtk/system",
+    "options": "version=2",
+    "package_id": "cc5e5ca8b619d2dffaaeae1e4924ae3ce085a8f1",
+    "prev": "0",
+    "context": "host"
+   }
+  },
+  "revisions_enabled": false
+ },
+ "version": "0.4",
+ "profile_host": "[settings]\narch=x86_64\narch_build=x86_64\nbuild_type=Release\ncompiler=gcc\ncompiler.libcxx=libstdc++\ncompiler.version=7\nos=Linux\nos_build=Linux\n[options]\n[build_requires]\n[env]\n"
+}
