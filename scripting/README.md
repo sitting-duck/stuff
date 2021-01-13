@@ -44,3 +44,23 @@ set block=1x2 2x3 3x4
 	
 ))
 ```
+
+### Grab Stuff from Qt dir Windows
+set qt=C:\Qt\5.15.2\msvc2019_64
+set dll=Q5Core Qt5Gui Qt5Network Qt5Qml Qt5Quick Qt5QuickControls2 Qt5Sql Qt5Svg Qt5Xml Qt5Widgets
+set dest=C:\Users\ashley\projects\image\build-Desktop_Qt_5_15_2_MSVC2019_64bit-Release\
+
+(for %%d in (%dll%) do (
+        XCOPY %qt%\bin\%%.dll %dest% /E /H /C /I
+))
+
+set qml=Qt QtQml QtQuick QtQuick.2
+(for %%q in (%qml%) do (
+        XCOPY %qt%\qml\%%q %dest% /E /H /C /I
+))
+
+set plugins=platforms imageformats
+(for %%p in (%plugins%) do (
+        XCOPY %qt%\plugins\%%p %dest% /E /H /C /I
+))
+
