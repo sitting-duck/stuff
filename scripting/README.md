@@ -8,8 +8,39 @@
 
 
 ### Installing Stuff Windows
+```
 wget https://www.python.org/ftp/python/3.6.8/python-3.6.8-amd64.exe
 wget https://sourceforge.net/projects/qttabbar/files/latest/download 
+wget https://www.qt.io/download-thank-you?hsLang=en
 
 python -m pip install --upgrade pip
 pip install conan
+```
+
+### Looping Windows
+```
+set veai=C:/Program Files/derp.exe
+set videos=C:\Users\me\Documents\stuff
+set model=a b c d e f g
+set sizen=1 2 4
+set device=0 10
+set block=1x2 2x3 3x4
+(for %%m in (%model%) do (
+	echo model: %%m
+	(for %%s in (%sizen%) do (
+		echo size: %%s
+
+		(for %%d in (%device%) do (
+			echo device: %%d
+
+			(for %%b in (%block%) do (
+				echo block: %%b
+				"%veai%" -i "%videos%\input\school_%%b_10f.mp4" -o "%videos%\output\school_%%b_10f_%%sx_%%m_d%%d_out.mp4" -s %%s --output-format mp4 -m %%m -c %%d
+			))
+			
+		))
+		
+	))
+	
+))
+```
