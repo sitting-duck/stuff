@@ -43,5 +43,19 @@ conan remote list
 conan search -r artifactory "*"
 ```
 
+### Install
+pip3 install -U --user conan
+conan --version
+
+### Configure Conan
+conan remote remote conan-center # if you only want to pull from your own artifactory for example
+
+### Add remote
+conan remote add artifactory http://my.address:8080/artifactory/api/conan/
+
+### Login
+conan user -p <password> -r artifactory <username>
+conan config init
+conan config set general.revisions_enabled=1
 
 
