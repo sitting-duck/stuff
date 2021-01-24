@@ -15,7 +15,9 @@ curl.exe -sA "MS" https://webinstall.dev/pathman | powershell
 
 
 wget https://www.python.org/ftp/python/3.6.8/python-3.6.8-amd64.exe
-wget https://sourceforge.net/projects/qttabbar/files/latest/download 
+
+### QTabBar: tabs for Windows Explorer
+https://sourceforge.net/projects/qttabbar/files/latest/download 
 wget https://www.qt.io/download-thank-you?hsLang=en
 wget https://github.com/git-for-windows/git/releases/download/v2.30.0.windows.2/Git-2.30.0.2-64-bit.exe
 

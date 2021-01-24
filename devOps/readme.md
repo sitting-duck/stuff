@@ -43,5 +43,8 @@ I found the plist file that was used to launch Jenkins in ~/Library/LaunchAgents
 
 TL;DR:
 
+```
 sudo vim /usr/local/opt/jenkins/homebrew.mxcl.jenkins.plist
 brew services restart jenkins
+```
+
