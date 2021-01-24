@@ -1,6 +1,6 @@
+*.swp
 *.obj
 *.log
-*.exe
 *.tlog
 *.pdb
 *.idb
