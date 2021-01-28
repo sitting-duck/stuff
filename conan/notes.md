@@ -75,3 +75,8 @@ conan export-pkg ./conanfile.py engine/2.0.0@ashley/testing -f -pr ./../../proje
 conan install .\project\<app>\conanfile.py -if conan -pr .\fStudio\_util\conan\profile_win2019 
 conan install ./project/denoise/conanfile.py -if conan -pr ./fStudio/_util/conan/profile_mac12.0
 mklink /D libs .\conan\libs
+
+### Build in Debug
+```
+conan install . -s build_type=Debug --build=missing
+```
