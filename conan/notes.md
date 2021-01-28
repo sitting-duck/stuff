@@ -58,4 +58,20 @@ conan user -p <password> -r artifactory <username>
 conan config init
 conan config set general.revisions_enabled=1
 
+More note: 
+# copy into conan/profiles so you don't have to type the path everytime
+cp /e/project/_util/conan/profile_win2019 ~/.conan/profiles/
 
+
+conan export-pkg ./conanfile.py angine/2.0.0@ashley/testing -pf . -f
+conan export-pkg ./conanfile.py ashley/testing -pf . -f
+conan upload libomp/1.0@ -r artifactory --all
+conan export-pkg ./conanfile.py engine/2.0.0@ashley/testing -f -pr ./../../project/_util/conan/profile_win2019
+
+
+
+
+# if you're in the same folder fstudio is which you should be it'd be 
+conan install .\project\<app>\conanfile.py -if conan -pr .\fStudio\_util\conan\profile_win2019 
+conan install ./project/denoise/conanfile.py -if conan -pr ./fStudio/_util/conan/profile_mac12.0
+mklink /D libs .\conan\libs
