@@ -7,3 +7,8 @@ Select "Windows Credentials" <br/>
 Delete the Github token under "Generic Credentials" <br/>
 Next time you try to use git from the command line it will prompt you for a new username and password. <br/>
 
+### For linking to your dir to ``/usr/local/lib`` bc your code refs that dir for some inane reason
+```
+ln -s "$(pwd)"/lib /usr/local/lib
+ln -s "$(pwd)"/include /usr/local/include
+```
