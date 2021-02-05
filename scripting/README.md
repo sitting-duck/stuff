@@ -9,15 +9,19 @@
 
 ### Installing Stuff Windows
 ```
-# pathman: for editing PATH
-# https://git.rootprojects.org/root/pathman
-curl.exe -sA "MS" https://webinstall.dev/pathman | powershell
 
+
+
+### Github Desktop
+https://central.github.com/deployments/desktop/desktop/latest/win32
 
 wget https://www.python.org/ftp/python/3.6.8/python-3.6.8-amd64.exe
 
 ### QTabBar: tabs for Windows Explorer
 https://sourceforge.net/projects/qttabbar/files/latest/download 
+
+# Always install Visual Studio 2019 Community BEFORE installing QT
+
 wget https://www.qt.io/download-thank-you?hsLang=en
 wget https://github.com/git-for-windows/git/releases/download/v2.30.0.windows.2/Git-2.30.0.2-64-bit.exe
 
@@ -33,8 +37,8 @@ C:\Users\NVIDIA\AppData\Local\Programs\Python\Python38
 
 ### Looping Windows
 ```
-set veai=C:/Program Files/derp.exe
-set videos=C:\Users\me\Documents\stuff
+set prgm=C:/Program Files/derp.exe
+set files=C:\Users\me\Documents\stuff
 set model=a b c d e f g
 set sizen=1 2 4
 set device=0 10
@@ -49,7 +53,7 @@ set block=1x2 2x3 3x4
 
 			(for %%b in (%block%) do (
 				echo block: %%b
-				"%veai%" -i "%videos%\input\school_%%b_10f.mp4" -o "%videos%\output\school_%%b_10f_%%sx_%%m_d%%d_out.mp4" -s %%s --output-format mp4 -m %%m -c %%d
+				"%prgm%" -i "%files%\input\input_%%b_10f.mp4" -o "%files%\output\input_%%b_10f_%%sx_%%m_d%%d_out.mp4" -s %%s --output-format mp4 -m %%m -c %%d
 			))
 			
 		))
