@@ -10,7 +10,8 @@
 ### Installing Stuff Windows
 ```
 
-
+### Sublime Text
+https://download.sublimetext.com/Sublime%20Text%20Build%203211%20x64%20Setup.exe
 
 ### Github Desktop
 https://central.github.com/deployments/desktop/desktop/latest/win32
