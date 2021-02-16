@@ -1,5 +1,8 @@
 ### Installing Stuff Windows
 ```
+### Dependency Walker x64
+https://www.dependencywalker.com/depends22_x64.zip
+
 
 ### Sublime Text
 https://download.sublimetext.com/Sublime%20Text%20Build%203211%20x64%20Setup.exe
