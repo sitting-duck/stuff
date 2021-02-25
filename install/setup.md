@@ -1,5 +1,8 @@
 ### Installing Stuff Windows
 ```
+### Visual Studio 2019 Build Tools
+https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16#
+
 ### Dependency Walker x64
 https://www.dependencywalker.com/depends22_x64.zip
 
