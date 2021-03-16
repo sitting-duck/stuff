@@ -16,8 +16,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.collections.FXCollections?>
-<?import inventoryApp.CarPart?>
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="inventoryApp.Controller">
+<?import inventoryApp.InHousePart?>
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="inventoryApp.MainController">
    <children>
       <GridPane fx:id="gridPaneRoot" layoutX="161.0" layoutY="139.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 <!--         <padding>-->
@@ -54,18 +54,18 @@
                         <HBox fx:id="partTableHBox" prefHeight="100.0" prefWidth="303.0">
                            <children>
                               <TableView fx:id="partTable" prefHeight="100.0" prefWidth="301.0">
-                                 <columns>
-                                    <TableColumn prefWidth="75.0" text="C1" />
-                                    <TableColumn prefWidth="75.0" text="C2" />
-                                    <TableColumn prefWidth="75.0" text="C3" />
-                                    <TableColumn prefWidth="75.0" text="C4" />
-                                 </columns>
+<!--                                 <columns>-->
+<!--                                    <TableColumn prefWidth="75.0" text="C1" />-->
+<!--                                    <TableColumn prefWidth="75.0" text="C2" />-->
+<!--                                    <TableColumn prefWidth="75.0" text="C3" />-->
+<!--                                    <TableColumn prefWidth="75.0" text="C4" />-->
+<!--                                 </columns>-->
                               </TableView>
                            </children>
                         </HBox>
                         <HBox fx:id="partButtonHBox" prefHeight="100.0" prefWidth="303.0">
                            <children>
-                              <Button fx:id="addPartBtn" mnemonicParsing="false" text="Add" />
+                              <Button fx:id="addPartBtn" mnemonicParsing="false" text="Add" onAction="#toAddPartForm"/>
                               <Button fx:id="modifyPartBtn" mnemonicParsing="false" text="Modify" />
                               <Button fx:id="deletePartBtn" mnemonicParsing="false" text="Delete" />
                            </children>
@@ -83,17 +83,12 @@
                         <HBox fx:id="productTableHBox" prefHeight="100.0" prefWidth="200.0">
                            <children>
                               <TableView fx:id="productTable" prefHeight="100.0" prefWidth="301.0">
-                                 <columns>
-                                    <TableColumn prefWidth="75.0" text="C1" />
-                                    <TableColumn prefWidth="75.0" text="C2" />
-                                    <TableColumn prefWidth="75.0" text="C3" />
-                                    <TableColumn prefWidth="75.0" text="C4" />
-                                 </columns>
-                                 <items>
-                                    <FXCollections fx:factory="observableArrayList">
-                                       <CarPart id="1" name="Brakes" stock="15" price="12.99" min="0" max="100"/>
-                                    </FXCollections>
-                                 </items>
+<!--                                 <columns>-->
+<!--                                    <TableColumn prefWidth="75.0" text="C1" />-->
+<!--                                    <TableColumn prefWidth="75.0" text="C2" />-->
+<!--                                    <TableColumn prefWidth="75.0" text="C3" />-->
+<!--                                    <TableColumn prefWidth="75.0" text="C4" />-->
+<!--                                 </columns>-->
                               </TableView>
                            </children>
                         </HBox>
