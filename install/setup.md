@@ -34,4 +34,8 @@ pip install conan
 
 ## Add to your path
 C:\Users\NVIDIA\AppData\Local\Programs\Python\Python38
+
+## Intel VTune
+https://software.intel.com/content/www/us/en/develop/tools/oneapi/base-toolkit/download.html?operatingsystem=window&distributions=webdownload&options=offline
+
 ```
