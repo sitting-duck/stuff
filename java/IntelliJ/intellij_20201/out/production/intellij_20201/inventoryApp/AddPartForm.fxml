@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="inventoryApp.AddPartController">
    <children>
       <GridPane fx:id="gridPane3Row" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -103,8 +103,8 @@
             <RadioButton mnemonicParsing="false" text="Outsourced" />
             <HBox fx:id="bottomRowHBox" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
                <children>
-                  <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" />
-                  <Button fx:id="cancelBtn" mnemonicParsing="false" text="Cancel" />
+                  <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" onAction="#toMainForm"/>
+                  <Button fx:id="cancelBtn" mnemonicParsing="false" text="Cancel" onAction="#toMainForm"/>
                </children>
             </HBox>
          </children>

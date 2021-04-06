@@ -19,43 +19,7 @@ import java.io.IOException;
 
 public class Main extends Application {
 
-    public TableView initPartTable(Scene scene) {
-        TableView partTableView = (TableView) scene.lookup("#partTable");
-        partTableView.setEditable(true);
 
-        InHousePart brakes = new InHousePart(1, "Brakes",15.00, 15, 0, 100);
-        InHousePart wheel = new InHousePart(2, "Wheel",11.00, 16, 0, 100);
-        InHousePart seat = new InHousePart(3, "Seat",15.00, 10, 0, 100);
-
-        TableColumn partIDCol = new TableColumn("Part ID");
-        TableColumn partNameCol = new TableColumn("Part Name");
-        TableColumn inventoryLevelCol = new TableColumn("Inventory Level");
-        TableColumn priceCostPerUnitCol = new TableColumn("Price/Cost per Unit");
-
-        partTableView.getColumns().addAll(partIDCol, partNameCol, inventoryLevelCol, priceCostPerUnitCol);
-
-        final ObservableList<InHousePart> inHousePartsList = FXCollections.observableArrayList(brakes, wheel, seat);
-        return partTableView;
-    }
-
-    public TableView initProductTable(Scene scene) {
-        TableView ProductTableView = (TableView) scene.lookup("#productTable");
-        ProductTableView.setEditable(true);
-
-        InHousePart brakes = new InHousePart(1, "Brakes",15.00, 15, 0, 100);
-        InHousePart wheel = new InHousePart(2, "Wheel",11.00, 16, 0, 100);
-        InHousePart seat = new InHousePart(3, "Seat",15.00, 10, 0, 100);
-
-        TableColumn partIDCol = new TableColumn("Part ID");
-        TableColumn partNameCol = new TableColumn("Part Name");
-        TableColumn inventoryLevelCol = new TableColumn("Inventory Level");
-        TableColumn priceCostPerUnitCol = new TableColumn("Price/Cost per Unit");
-
-        ProductTableView.getColumns().addAll(partIDCol, partNameCol, inventoryLevelCol, priceCostPerUnitCol);
-
-        final ObservableList<InHousePart> inHousePartsList = FXCollections.observableArrayList(brakes, wheel, seat);
-        return ProductTableView;
-    }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -63,12 +27,7 @@ public class Main extends Application {
         primaryStage.setTitle("Hello World");
         Scene scene = new Scene(root, 600, 400);
         primaryStage.setScene(scene);
-
-        initPartTable(scene);
-        initProductTable(scene);
         primaryStage.show();
-
-
     }
 
     public void toSecond(ActionEvent actionEvent) throws IOException {

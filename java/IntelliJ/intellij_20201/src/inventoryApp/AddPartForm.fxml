@@ -103,8 +103,8 @@
             <RadioButton mnemonicParsing="false" text="Outsourced" />
             <HBox fx:id="bottomRowHBox" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
                <children>
-                  <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" />
-                  <Button fx:id="cancelBtn" mnemonicParsing="false" text="Cancel" />
+                  <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" onAction="#toMainForm"/>
+                  <Button fx:id="cancelBtn" mnemonicParsing="false" text="Cancel" onAction="#toMainForm"/>
                </children>
             </HBox>
          </children>
