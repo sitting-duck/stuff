@@ -6,6 +6,9 @@ https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Buil
 ### Dependency Walker x64
 https://www.dependencywalker.com/depends22_x64.zip
 
+### VC2019 ReDist
+https://aka.ms/vs/16/release/vc_redist.x64.exe
+
 
 ### Sublime Text
 https://download.sublimetext.com/Sublime%20Text%20Build%203211%20x64%20Setup.exe
@@ -31,4 +34,8 @@ pip install conan
 
 ## Add to your path
 C:\Users\NVIDIA\AppData\Local\Programs\Python\Python38
+
+## Intel VTune
+https://software.intel.com/content/www/us/en/develop/tools/oneapi/base-toolkit/download.html?operatingsystem=window&distributions=webdownload&options=offline
+
 ```
