@@ -35,7 +35,7 @@
                         <HBox fx:id="partsSearchRow" prefHeight="100.0" prefWidth="300.0">
                            <children>
                               <Label fx:id="partsLabel" text="Parts" />
-                              <TextField fx:id="partsSearchField" />
+                              <TextField fx:id="partsSearchField" onAction="#getPartSearchResultsHandler"/>
                            </children>
                         </HBox>
                         <HBox fx:id="partTableHBox" prefHeight="100.0" prefWidth="303.0">
@@ -83,7 +83,7 @@
                            <children>
                               <Button fx:id="addProductBtn" mnemonicParsing="false" text="Add" />
                               <Button fx:id="modifyProductBtn" mnemonicParsing="false" text="Modify" />
-                              <Button fx:id="deleteProductBtn" mnemonicParsing="false" text="Delete" />
+                              <Button fx:id="deleteProductBtn" mnemonicParsing="false" onAction="#OnDeleteProductBtnClicked" text="Delete" />
                            </children>
                         </HBox>
                      </children>

@@ -30,7 +30,9 @@ public class MainController implements Initializable {
     public VBox leftVBox;
     public HBox partsSearchRow;
     public Label partsLabel;
+
     public TextField partsSearchField;
+
     public HBox partTableHBox;
     public TableView partTable;
     public HBox partButtonHBox;
@@ -51,7 +53,7 @@ public class MainController implements Initializable {
     public static boolean partTableInitialized = false;
 
     private ObservableList<Part> parts = FXCollections.observableArrayList();
-    private ObservableList<Part> products = FXCollections.observableArrayList();
+    private ObservableList<Product> products = FXCollections.observableArrayList();
 
     @FXML
     public void initPartTable() throws IOException {
@@ -84,11 +86,12 @@ public class MainController implements Initializable {
 
     private static boolean productTableInitialized = false;
     public void initProductTable() throws IOException {
+        System.out.println("initProductTable()");
         this.productTable.setEditable(true);
 
-        InHousePart brakes = new InHousePart(1, "Brakes",15.00, 15, 0, 100);
-        InHousePart wheel = new InHousePart(2, "Wheel",11.00, 16, 0, 100);
-        InHousePart seat = new InHousePart(3, "Seat",15.00, 10, 0, 100);
+        Product brakes = new Product(1, "Brakes",15.00, 15, 0, 100);
+        Product wheel = new Product(2, "Wheel",11.00, 16, 0, 100);
+        Product seat = new Product(3, "Seat",15.00, 10, 0, 100);
 
         this.products.add(brakes);
         this.products.add(wheel);
@@ -157,5 +160,35 @@ public class MainController implements Initializable {
         }
         parts.remove(part);
         partTable.setItems(parts);
+    }
+
+    public void OnDeleteProductBtnClicked(ActionEvent actionEvent) {
+        System.out.println("OnDeleteProductBtnClicked: ");
+        Product product = (Product)productTable.getSelectionModel().getSelectedItem();
+        System.out.println("product: " + product.getName() + " selected.");
+
+        if(product == null) {
+            System.out.println("No product selected.");
+            return;
+        }
+        products.remove(product);
+        productTable.setItems(products);
+    }
+
+    private ObservableList<Part> searchPartByName(String partialName) {
+        ObservableList<Part> namedParts = FXCollections.observableArrayList();
+        for ( Part part : this.parts ) {
+            if(part.getName().toLowerCase().contains(partialName.toLowerCase())) {
+               namedParts.add(part);
+            }
+        }
+        return namedParts;
+    }
+
+    public void getPartSearchResultsHandler(ActionEvent actionEvent) {
+        String queryText = this.partsSearchField.getText();
+        System.out.println("getPartSearchResultsHandler: " + queryText);
+        ObservableList<Part> parts = searchPartByName(queryText);
+        this.partTable.setItems(parts);
     }
 }

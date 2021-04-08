@@ -6,8 +6,6 @@ import javafx.collections.ObservableList;
 
 public class Product {
 
-    final ObservableList<InHousePart> inHousePartsList = null;//FXCollections.observableArrayList(brakes, wheel, seat);
-
     private ObservableList<Part> associatedParts;
     private int id;
     private String name;
