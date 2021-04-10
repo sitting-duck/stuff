@@ -53,7 +53,7 @@
                         <HBox fx:id="partButtonHBox" prefHeight="100.0" prefWidth="303.0">
                            <children>
                               <Button fx:id="addPartBtn" mnemonicParsing="false" onAction="#toAddPartForm" text="Add" />
-                              <Button fx:id="modifyPartBtn" mnemonicParsing="false" text="Modify" />
+                              <Button fx:id="modifyPartBtn" mnemonicParsing="false" onAction="#toModifyPartForm" text="Modify" />
                               <Button fx:id="deletePartBtn" mnemonicParsing="false" onAction="#OnDeletePartBtnClicked" text="Delete" />
                            </children>
                         </HBox>

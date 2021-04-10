@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import inventoryApp.Inventory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -55,6 +56,8 @@ public class MainController implements Initializable {
     private ObservableList<Part> parts = FXCollections.observableArrayList();
     private ObservableList<Product> products = FXCollections.observableArrayList();
 
+    private Inventory inventory = new Inventory();
+
     @FXML
     public void initPartTable() throws IOException {
         System.out.println("initPartTable()");
@@ -64,9 +67,9 @@ public class MainController implements Initializable {
         InHousePart wheel = new InHousePart(2, "Wheel",11.00, 16, 0, 100);
         InHousePart seat = new InHousePart(3, "Seat",15.00, 10, 0, 100);
 
-        this.parts.add(brakes);
-        this.parts.add(wheel);
-        this.parts.add(seat);
+        inventory.addPart(brakes);
+        inventory.addPart(wheel);
+        inventory.addPart(seat);
 
         TableColumn partIDCol = new TableColumn("Part ID");
         partIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -81,7 +84,7 @@ public class MainController implements Initializable {
         priceCostPerUnitCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         partTable.getColumns().addAll(partIDCol, partNameCol, inventoryLevelCol, priceCostPerUnitCol);
-        partTable.setItems(this.parts);
+        partTable.setItems(inventory.getAllParts());
     }
 
     private static boolean productTableInitialized = false;
@@ -93,9 +96,9 @@ public class MainController implements Initializable {
         Product wheel = new Product(2, "Wheel",11.00, 16, 0, 100);
         Product seat = new Product(3, "Seat",15.00, 10, 0, 100);
 
-        this.products.add(brakes);
-        this.products.add(wheel);
-        this.products.add(seat);
+        inventory.addProduct(brakes);
+        inventory.addProduct(wheel);
+        inventory.addProduct(seat);
 
         TableColumn productIDCol = new TableColumn("Part ID");
         productIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -110,7 +113,9 @@ public class MainController implements Initializable {
         priceCostPerUnitCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         productTable.getColumns().addAll(productIDCol, productNameCol, inventoryLevelCol, priceCostPerUnitCol);
-        productTable.setItems(this.products);
+        System.out.println("All Poducts: " + inventory.getAllProducts());
+        productTable.setItems(inventory.getAllProducts());
+
     }
 
     @Override
@@ -149,17 +154,27 @@ public class MainController implements Initializable {
         stage.show();
     }
 
+    public void toModifyPartForm(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("ModifyPartForm.fxml"));
+        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 600, 400);
+        stage.setTitle("Modify Part");
+        stage.setScene(scene);
+        stage.show();
+    }
+
     public void OnDeletePartBtnClicked(ActionEvent actionEvent) {
         System.out.println("OnDeletePartBtnClicked: ");
         Part part = (Part)partTable.getSelectionModel().getSelectedItem();
-        System.out.println("part: " + part.getName() + " selected.");
 
         if(part == null) {
             System.out.println("No part selected.");
             return;
+        } else {
+            System.out.println("part: " + part.getName() + " selected.");
         }
-        parts.remove(part);
-        partTable.setItems(parts);
+        inventory.deletePart(part);
+        partTable.setItems(inventory.getAllParts());
     }
 
     public void OnDeleteProductBtnClicked(ActionEvent actionEvent) {
@@ -171,24 +186,34 @@ public class MainController implements Initializable {
             System.out.println("No product selected.");
             return;
         }
-        products.remove(product);
-        productTable.setItems(products);
-    }
-
-    private ObservableList<Part> searchPartByName(String partialName) {
-        ObservableList<Part> namedParts = FXCollections.observableArrayList();
-        for ( Part part : this.parts ) {
-            if(part.getName().toLowerCase().contains(partialName.toLowerCase())) {
-               namedParts.add(part);
-            }
-        }
-        return namedParts;
+        inventory.deleteProduct(product);
+        productTable.setItems(inventory.getAllProducts());
     }
 
     public void getPartSearchResultsHandler(ActionEvent actionEvent) {
         String queryText = this.partsSearchField.getText();
         System.out.println("getPartSearchResultsHandler: " + queryText);
-        ObservableList<Part> parts = searchPartByName(queryText);
+
+        if(queryText.isEmpty()) {
+            this.partTable.setItems(inventory.getAllParts());
+        }
+
+        ObservableList<Part> parts = inventory.lookupPart(queryText);
+
+        if(parts.size() == 0) {
+            try {
+                int idNum = Integer.parseInt(queryText);
+                Part part = inventory.lookupPart(idNum);
+                parts.add(part);
+            } catch(NumberFormatException exception) {
+                // string is not a number so we search by part name instead of ID
+                System.out.println("Error: " + queryText + "cannot be converted to Integer.");
+            }
+
+        }
         this.partTable.setItems(parts);
+        this.partsSearchField.setText("");
+
+
     }
 }
