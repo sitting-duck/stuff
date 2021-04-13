@@ -14,6 +14,7 @@ public class Inventory {
     }
 
     public void addProduct(Product newProduct) {
+        System.out.println("addProduct(): " + newProduct.getName());
         allProducts.add(newProduct);
     }
 
@@ -59,11 +60,26 @@ public class Inventory {
 
     public void updateProduct(int index, Product newProduct) {}
 
-    public boolean deletePart(Part selectedPart) { return allParts.remove(selectedPart); }
+    public boolean deletePart(Part selectedPart) {
+        // TODO: finish writing delete part
+        for(Part part: allParts) {
+            if (part.getId() == selectedPart.getId() &&
+            part.getNaM) {
+
+            }
+        }
+        return allParts.remove(selectedPart);
+    }
 
     public boolean deleteProduct(Product selectedProduct) { return allProducts.remove(selectedProduct); }
 
     public ObservableList<Part> getAllParts() { return allParts; }
 
-    public ObservableList<Product> getAllProducts() { return allProducts; }
+    public ObservableList<Product> getAllProducts() {
+        System.out.println("getAllProducts(): ");
+        for(Product product : allProducts) {
+            System.out.println("Product: " + product.getName());
+        }
+        return allProducts;
+    }
 }

@@ -98,9 +98,13 @@
                   </GridPane>
                </children>
             </GridPane>
-            <Label text="Add Part" />
-            <RadioButton mnemonicParsing="false" text="In-House" />
-            <RadioButton mnemonicParsing="false" text="Outsourced" />
+          <HBox fx:id="topRowHBox" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="0">
+              <children>
+                  <Label text="Add Part" />
+                  <RadioButton mnemonicParsing="false" text="In-House" />
+                  <RadioButton mnemonicParsing="false" text="Outsourced" />
+              </children>
+          </HBox>
             <HBox fx:id="bottomRowHBox" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
                <children>
                   <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" onAction="#toMainForm"/>

@@ -26,9 +26,9 @@ public class AddPartController implements Initializable {
         TableView partTableView = (TableView) scene.lookup("#partTable");
         partTableView.setEditable(true);
 
-        InHousePart brakes = new InHousePart(1, "Brakes",15.00, 15, 0, 100);
-        InHousePart wheel = new InHousePart(2, "Wheel",11.00, 16, 0, 100);
-        InHousePart seat = new InHousePart(3, "Seat",15.00, 10, 0, 100);
+        InHousePart brakes = new InHousePart(1, "Brakes",15.00, 15, 0, 100, 1);
+        InHousePart wheel = new InHousePart(2, "Wheel",11.00, 16, 0, 100, 2);
+        InHousePart seat = new InHousePart(3, "Seat",15.00, 10, 0, 100, 3);
 
         TableColumn partIDCol = new TableColumn("Part ID");
         TableColumn partNameCol = new TableColumn("Part Name");

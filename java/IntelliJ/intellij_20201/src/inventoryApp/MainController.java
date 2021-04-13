@@ -16,7 +16,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import inventoryApp.Inventory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -51,25 +50,12 @@ public class MainController implements Initializable {
     public Button modifyProductBtn;
     public Button deleteProductBtn;
 
-    public static boolean partTableInitialized = false;
+    private static Inventory inventory = new Inventory();
 
-    private ObservableList<Part> parts = FXCollections.observableArrayList();
-    private ObservableList<Product> products = FXCollections.observableArrayList();
-
-    private Inventory inventory = new Inventory();
-
-    @FXML
     public void initPartTable() throws IOException {
         System.out.println("initPartTable()");
+
         this.partTable.setEditable(true);
-
-        InHousePart brakes = new InHousePart(1, "Brakes",15.00, 15, 0, 100);
-        InHousePart wheel = new InHousePart(2, "Wheel",11.00, 16, 0, 100);
-        InHousePart seat = new InHousePart(3, "Seat",15.00, 10, 0, 100);
-
-        inventory.addPart(brakes);
-        inventory.addPart(wheel);
-        inventory.addPart(seat);
 
         TableColumn partIDCol = new TableColumn("Part ID");
         partIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -84,21 +70,13 @@ public class MainController implements Initializable {
         priceCostPerUnitCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         partTable.getColumns().addAll(partIDCol, partNameCol, inventoryLevelCol, priceCostPerUnitCol);
+
         partTable.setItems(inventory.getAllParts());
     }
 
-    private static boolean productTableInitialized = false;
     public void initProductTable() throws IOException {
         System.out.println("initProductTable()");
         this.productTable.setEditable(true);
-
-        Product brakes = new Product(1, "Brakes",15.00, 15, 0, 100);
-        Product wheel = new Product(2, "Wheel",11.00, 16, 0, 100);
-        Product seat = new Product(3, "Seat",15.00, 10, 0, 100);
-
-        inventory.addProduct(brakes);
-        inventory.addProduct(wheel);
-        inventory.addProduct(seat);
 
         TableColumn productIDCol = new TableColumn("Part ID");
         productIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -113,36 +91,23 @@ public class MainController implements Initializable {
         priceCostPerUnitCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         productTable.getColumns().addAll(productIDCol, productNameCol, inventoryLevelCol, priceCostPerUnitCol);
-        System.out.println("All Poducts: " + inventory.getAllProducts());
-        productTable.setItems(inventory.getAllProducts());
 
+        productTable.setItems(inventory.getAllProducts());
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        System.out.println("partTableInitialized: " + this.partTableInitialized);
-        if(this.partTableInitialized == false) {
-            try {
-                initPartTable();
-            } catch(Exception e) {
-                System.out.println("Error initializing parts table: " + e.toString());
-            }
+        try {
+            initPartTable();
+        } catch(Exception e) {
+            System.out.println("Error initializing parts table: " + e.toString());
         }
-        if(this.productTableInitialized == false) {
-            try {
-                initProductTable();
-            } catch(Exception e) {
-                System.out.println("Error initializing products table");
-            }
+        try {
+            initProductTable();
+        } catch(Exception e) {
+            System.out.println("Error initializing products table");
         }
-
         System.out.println("Initialized");
-    }
-
-    public void OnButtonAction(ActionEvent actionEvent) {
-        System.out.println("Button Clicked");
-        TheLabel.setText("You Clicked!");
     }
 
     public void toAddPartForm(ActionEvent actionEvent) throws IOException {
@@ -154,13 +119,55 @@ public class MainController implements Initializable {
         stage.show();
     }
 
-    public void toModifyPartForm(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("ModifyPartForm.fxml"));
+    public void toAddProductForm(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("AddProductForm.fxml"));
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 600, 400);
-        stage.setTitle("Modify Part");
+        stage.setTitle("Add Part");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void toModifyPartForm(ActionEvent actionEvent) throws IOException {
+        Part part = (Part)partTable.getSelectionModel().getSelectedItem();
+
+        if(part == null) {
+            System.out.println("Error: no part selected");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No part selected");
+            alert.setHeaderText("No part selected");
+            alert.setContentText("No part selected. Please select a part to modify.");
+            alert.showAndWait();
+        } else {
+            ModifyPartController.setPart(part);
+            Parent root = FXMLLoader.load(getClass().getResource("ModifyPartForm.fxml"));
+            Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 600, 400);
+            stage.setTitle("Modify Part");
+            stage.setScene(scene);
+            stage.show();
+        }
+    }
+
+    public void toModifyProductForm(ActionEvent actionEvent) throws IOException {
+        Product product = (Product)productTable.getSelectionModel().getSelectedItem();
+
+        if(product == null) {
+            System.out.println("Error: no product selected");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No product selected");
+            alert.setHeaderText("No product selected");
+            alert.setContentText("No product selected. Please select a product to modify.");
+            alert.showAndWait();
+        } else {
+            ModifyProductController.setProduct(product);
+            Parent root = FXMLLoader.load(getClass().getResource("ModifyProductForm.fxml"));
+            Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 600, 400);
+            stage.setTitle("Modify Product");
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     public void OnDeletePartBtnClicked(ActionEvent actionEvent) {
@@ -213,7 +220,5 @@ public class MainController implements Initializable {
         }
         this.partTable.setItems(parts);
         this.partsSearchField.setText("");
-
-
     }
 }

@@ -38,15 +38,9 @@
                               <TextField fx:id="partsSearchField" onAction="#getPartSearchResultsHandler"/>
                            </children>
                         </HBox>
-                        <HBox fx:id="partTableHBox" prefHeight="100.0" prefWidth="303.0">
+                        <HBox fx:id="partTableHBox" prefHeight="250.0" prefWidth="303.0">
                            <children>
-                              <TableView fx:id="partTable" prefHeight="100.0" prefWidth="301.0">
-<!--                                 <columns>-->
-<!--                                    <TableColumn prefWidth="75.0" text="C1" />-->
-<!--                                    <TableColumn prefWidth="75.0" text="C2" />-->
-<!--                                    <TableColumn prefWidth="75.0" text="C3" />-->
-<!--                                    <TableColumn prefWidth="75.0" text="C4" />-->
-<!--                                 </columns>-->
+                              <TableView fx:id="partTable" prefHeight="250.0" prefWidth="301.0">
                               </TableView>
                            </children>
                         </HBox>
@@ -67,9 +61,9 @@
                               <TextField fx:id="productsSearchField" />
                            </children>
                         </HBox>
-                        <HBox fx:id="productTableHBox" prefHeight="100.0" prefWidth="200.0">
+                        <HBox fx:id="productTableHBox" prefHeight="250.0" prefWidth="200.0">
                            <children>
-                              <TableView fx:id="productTable" prefHeight="100.0" prefWidth="301.0">
+                              <TableView fx:id="productTable" prefHeight="250.0" prefWidth="300.0">
 <!--                                 <columns>-->
 <!--                                    <TableColumn prefWidth="75.0" text="C1" />-->
 <!--                                    <TableColumn prefWidth="75.0" text="C2" />-->
@@ -81,8 +75,8 @@
                         </HBox>
                         <HBox fx:id="productButtonHBox" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Button fx:id="addProductBtn" mnemonicParsing="false" text="Add" />
-                              <Button fx:id="modifyProductBtn" mnemonicParsing="false" text="Modify" />
+                              <Button fx:id="addProductBtn" mnemonicParsing="false" onAction="#toAddProductForm" text="Add" />
+                              <Button fx:id="modifyProductBtn" mnemonicParsing="false" onAction="#toModifyProductForm" text="Modify" />
                               <Button fx:id="deleteProductBtn" mnemonicParsing="false" onAction="#OnDeleteProductBtnClicked" text="Delete" />
                            </children>
                         </HBox>

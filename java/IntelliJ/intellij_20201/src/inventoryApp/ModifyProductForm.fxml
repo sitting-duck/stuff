@@ -29,7 +29,7 @@
         </rowConstraints>
          <children>
             <Label fx:id="addProductLabel" text="Add Product" />
-            <TextField fx:id="searchFiield" GridPane.columnIndex="1" />
+            <TextField fx:id="searchField" GridPane.columnIndex="1" />
             <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
               <columns>
                 <TableColumn prefWidth="75.0" text="Part ID" />
