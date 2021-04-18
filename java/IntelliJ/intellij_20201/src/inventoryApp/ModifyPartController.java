@@ -30,7 +30,6 @@ public class ModifyPartController implements Initializable {
     public Button cancelBtn;
     public Button saveBtn;
 
-
     private ToggleGroup toggleGroup = new ToggleGroup();
     public RadioButton outsourcedRadioButton;
     public RadioButton inHouseRadioButton;
@@ -43,9 +42,11 @@ public class ModifyPartController implements Initializable {
         if(part instanceof InHousePart) {
             System.out.println("Part is InHousePart");
             partOriginal = new InHousePart(part.getId(), part.getName(), part.getPrice(), part.getStock(), part.getMin(), part.getMax(), ((InHousePart) part).getMachineId());
+            inHouseRadioButton.setSelected(true);
         } else if(part instanceof OutSourcedPart) {
             System.out.println("Part is OutsourcedPart");
             partOriginal = new OutSourcedPart(part.getId(), part.getName(), part.getPrice(), part.getStock(), part.getMin(), part.getMax(), ((OutSourcedPart) part).getCompanyName());
+            outsourcedRadioButton.setSelected(true);
         }
 
         idTextField.textProperty().addListener(new ChangeListener<String>() {
@@ -172,7 +173,7 @@ public class ModifyPartController implements Initializable {
         } else if(part instanceof OutSourcedPart) {
             newCompanyName = bottomTextField.getText();
         }
-        System.out.println("partOriginal before delet: " + partOriginal.getName());
+        System.out.println("partOriginal before delete: " + partOriginal.getName());
         System.out.println("Result of deletePart(): " + inventory.deletePart(partOriginal));
 
         part.setName(newName);

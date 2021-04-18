@@ -50,7 +50,7 @@
                         <TextField fx:id="idTextField" />
                         <TextField fx:id="nameTextField" GridPane.rowIndex="1" />
                         <TextField fx:id="invTextField" GridPane.rowIndex="2" />
-                        <TextField fx:id="priceCostTextField" GridPane.rowIndex="3" />
+                        <TextField fx:id="priceTextField" GridPane.rowIndex="3" />
                         <TextField fx:id="maxTextField" GridPane.rowIndex="4" />
                         <TextField fx:id="bottomTextField" GridPane.rowIndex="5" />
                      </children>

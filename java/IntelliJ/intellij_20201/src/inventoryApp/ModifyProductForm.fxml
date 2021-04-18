@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="inventoryApp.ModifyProductController">
    <children>
       <GridPane fx:id="gridPaneRoot" layoutX="169.0" layoutY="95.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -50,8 +50,8 @@
             <Button fx:id="removePartBtn" mnemonicParsing="false" text="Remove Associated Part" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <HBox fx:id="bottomRightHBox" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <children>
-                  <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" />
-                  <Button fx:id="cancelBtn" mnemonicParsing="false" text="Cancel" />
+                  <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" onAction="#saveProduct" />
+                  <Button fx:id="cancelBtn" mnemonicParsing="false" text="Cancel" onAction="#toMainForm"/>
                </children>
             </HBox>
             <GridPane fx:id="gridPaneLeft1" GridPane.rowIndex="1">

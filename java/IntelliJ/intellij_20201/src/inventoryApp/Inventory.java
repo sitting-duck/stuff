@@ -62,21 +62,10 @@ public class Inventory {
 
     public boolean deletePart(Part selectedPart) {
         for(Part part: allParts) {
-            System.out.println(part.getName());
-            System.out.println("\tidMatch: " + (part.getId() == selectedPart.getId()));
-            System.out.println("\tnameMatch: " + (part.getName().equals(selectedPart.getName())));
-            System.out.println("\tpriceMatch: " + (part.getPrice() == selectedPart.getPrice()));
-            System.out.println("\tstockMatch: " + (part.getStock() == selectedPart.getStock()));
-            System.out.println("\tminMatch: " + (part.getMin() == selectedPart.getMin()));
-            System.out.println("\tmaxMatch: " + (part.getMax() == selectedPart.getMax()));
-            System.out.println("\tpart.getMax: " + part.getMax());
-            System.out.println("\tselectedPart.getMax: " + selectedPart.getMax());
             if(selectedPart instanceof InHousePart &&
                     ((InHousePart) part).getMachineId() == ((InHousePart) selectedPart).getMachineId()) {
-                System.out.println("\tmachineIdMatch: " + (((InHousePart) part).getMachineId() == ((InHousePart) selectedPart).getMachineId()));
             } else if(selectedPart instanceof OutSourcedPart &&
                     ((OutSourcedPart)part).getCompanyName() == ((OutSourcedPart) selectedPart).getCompanyName()) {
-                System.out.println("\tcompanyNameMatch: " + (((OutSourcedPart)part).getCompanyName().equals(((OutSourcedPart) selectedPart).getCompanyName())));
             }
 
             if (part.getId() == selectedPart.getId() &&
