@@ -21,7 +21,7 @@ public class ModifyPartController implements Initializable {
 
     public TextField idTextField;
     public TextField nameTextField;
-    public TextField priceCostTextField;
+    public TextField priceTextField;
     public TextField minTextField;
     public TextField maxTextField;
     public TextField invTextField;
@@ -49,14 +49,6 @@ public class ModifyPartController implements Initializable {
             outsourcedRadioButton.setSelected(true);
         }
 
-        idTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(!newValue.matches("\\d*")) {
-                    idTextField.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            }
-        });
         minTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -89,7 +81,7 @@ public class ModifyPartController implements Initializable {
         idTextField.setEditable(false);
         idTextField.setDisable(true);
         nameTextField.setText(part.getName());
-        priceCostTextField.setText(Double.toString(part.getPrice()));
+        priceTextField.setText(Double.toString(part.getPrice()));
         maxTextField.setText(Integer.toString(part.getMax()));
         minTextField.setText(Integer.toString(part.getMin()));
         invTextField.setText(Integer.toString(part.getStock()));
@@ -105,9 +97,9 @@ public class ModifyPartController implements Initializable {
 
         Double newPrice;
         try {
-            newPrice = Double.parseDouble(priceCostTextField.getText());
+            newPrice = Double.parseDouble(priceTextField.getText());
         } catch (NumberFormatException e) {
-            System.out.println("Error parsing Price to Integer: " + priceCostTextField.getText());
+            System.out.println("Error parsing Price to Integer: " + priceTextField.getText());
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Invalid Price");
             alert.setHeaderText("Invalid Price");

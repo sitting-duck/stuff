@@ -143,7 +143,7 @@ public class MainController implements Initializable {
             Parent root = FXMLLoader.load(getClass().getResource("ModifyPartForm.fxml"));
             Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 600, 400);
-            stage.setTitle("Modify Part");
+            stage.setTitle("Modify Product");
             stage.setScene(scene);
             stage.show();
         }

@@ -21,25 +21,19 @@
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label fx:id="addProductLabel" text="Add Product" />
             <TextField fx:id="searchField" GridPane.columnIndex="1" />
-            <TableView fx:id="partTable1" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-              <columns>
-                <TableColumn prefWidth="75.0" text="Part ID" />
-                <TableColumn prefWidth="75.0" text="Part Name" />
-                  <TableColumn prefWidth="75.0" text="Inventory Level" />
-                  <TableColumn prefWidth="75.0" text="Price/Cost per Unit" />
-              </columns>
+            <TableView fx:id="partTable1" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
             </TableView>
             <Button fx:id="addButton" mnemonicParsing="false" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TableView fx:id="partTable2" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <TableView fx:id="partTable2" prefHeight="300.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <columns>
                   <TableColumn prefWidth="75.0" text="Part ID" />
                   <TableColumn prefWidth="75.0" text="Part Name" />

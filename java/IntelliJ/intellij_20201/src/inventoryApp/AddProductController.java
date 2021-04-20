@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -37,9 +38,7 @@ public class AddProductController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.partTable1.setEditable(true);
-        this.partTable2.setEditable(true);
-        partTable1.setItems(inventory.getAllParts());
+
 
         idTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -90,7 +89,25 @@ public class AddProductController implements Initializable {
             }
         });
 
+        this.partTable1.setEditable(true);
+        this.partTable2.setEditable(true);
 
+        TableColumn productIDCol = new TableColumn("Part ID");
+        productIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        TableColumn productNameCol = new TableColumn("Part Name");
+        productNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn inventoryLevelCol = new TableColumn("Inventory Level");
+        inventoryLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+
+        TableColumn priceCostPerUnitCol = new TableColumn("Price/Cost per Unit");
+        priceCostPerUnitCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        partTable1.getColumns().addAll(productIDCol, productNameCol, inventoryLevelCol, priceCostPerUnitCol);
+
+        partTable1.setItems(inventory.getAllParts());
+        System.out.println("Set Part Table 1 parts list length: " + Integer.toString(inventory.getAllParts().size()));
     }
 
     public void saveProduct(ActionEvent actionEvent) throws IOException {

@@ -50,9 +50,9 @@
                         <TextField fx:id="idTextField" />
                         <TextField fx:id="nameTextField" GridPane.rowIndex="1" />
                         <TextField fx:id="invTextField" GridPane.rowIndex="2" />
-                        <TextField fx:id="priceCostTextField" GridPane.rowIndex="3" />
+                        <TextField fx:id="priceTextField" GridPane.rowIndex="3" />
                         <TextField fx:id="maxTextField" GridPane.rowIndex="4" />
-                        <TextField fx:id="machineIdTextField" GridPane.rowIndex="5" />
+                        <TextField fx:id="bottomTextField" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
                   <GridPane fx:id="gridPaneLeftColumn">
@@ -101,13 +101,13 @@
           <HBox fx:id="topRowHBox" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="0">
               <children>
                   <Label text="Add Part" />
-                  <RadioButton mnemonicParsing="false" text="In-House" />
-                  <RadioButton mnemonicParsing="false" text="Outsourced" />
+                  <RadioButton fx:id="inHouseRadioButton" mnemonicParsing="false" text="In-House" onAction="#setLabelToMachineID"/>
+                  <RadioButton fx:id="outsourcedRadioButton" mnemonicParsing="false" text="Outsourced" onAction="#setLabelToCompanyName"/>
               </children>
           </HBox>
             <HBox fx:id="bottomRowHBox" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
                <children>
-                  <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" onAction="#toMainForm"/>
+                  <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" onAction="#savePart"/>
                   <Button fx:id="cancelBtn" mnemonicParsing="false" text="Cancel" onAction="#toMainForm"/>
                </children>
             </HBox>
