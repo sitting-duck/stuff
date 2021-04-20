@@ -98,4 +98,24 @@ public class Inventory {
         }
         return allProducts;
     }
+
+    public int newProductId() {
+        int newId = 0;
+        for (Product product : allProducts) {
+            if(newId <= product.getId()) {
+                newId = product.getId();
+            }
+        }
+        return ++newId;
+    }
+
+    public int newPartId() {
+        int newId = 0;
+        for (Part part : allParts) {
+            if(newId <= part.getId()) {
+                newId = part.getId();
+            }
+        }
+        return ++newId;
+    }
 }
