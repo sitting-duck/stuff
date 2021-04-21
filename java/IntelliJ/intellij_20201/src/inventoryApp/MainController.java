@@ -182,6 +182,7 @@ public class MainController implements Initializable {
         }
         inventory.deletePart(part);
         partTable.setItems(inventory.getAllParts());
+
     }
 
     public void OnDeleteProductBtnClicked(ActionEvent actionEvent) {
