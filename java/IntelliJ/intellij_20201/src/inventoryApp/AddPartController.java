@@ -27,11 +27,13 @@ public class AddPartController implements Initializable {
     public TextField minTextField;
     public TextField maxTextField;
     public TextField bottomTextField;
+    public Label bottomTextFieldLabel;
 
     public RadioButton inHouseRadioButton;
     public RadioButton outsourcedRadioButton;
 
     private static Inventory inventory = new Inventory();
+
     private ToggleGroup toggleGroup = new ToggleGroup();
 
     @Override
@@ -89,12 +91,12 @@ public class AddPartController implements Initializable {
 
     public void setLabelToMachineID(ActionEvent actionEvent) {
         System.out.println("setLabelToMachineID");
-        bottomTextField.setText("Machine ID");
+        bottomTextFieldLabel.setText("Machine ID");
     }
 
     public void setLabelToCompanyName(ActionEvent actionEvent) {
         System.out.println("setLabelToCompanyName");
-        bottomTextField.setText("Company Name");
+        bottomTextFieldLabel.setText("Company Name");
     }
 
     public void savePart(ActionEvent actionEvent) throws IOException {

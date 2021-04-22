@@ -74,7 +74,7 @@
                         <Label text="Inv" GridPane.rowIndex="2" />
                         <Label text="Price/Cost" GridPane.rowIndex="3" />
                         <Label text="Max" GridPane.rowIndex="4" />
-                        <Label text="Machine ID" GridPane.rowIndex="5" />
+                        <Label fx:id="bottomTextFieldLabel" text="Machine ID" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
                   <GridPane fx:id="gridPaneRightColumn" prefHeight="172.0" prefWidth="200.0" GridPane.columnIndex="2">
@@ -101,8 +101,8 @@
           <HBox fx:id="topRowHBox" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="0">
           <children>
               <Label text="Modify Part" />
-              <RadioButton fx:id="inHouseRadioButton" mnemonicParsing="false" text="In-House" />
-              <RadioButton fx:id="outsourcedRadioButton" mnemonicParsing="false" text="Outsourced" />
+              <RadioButton fx:id="inHouseRadioButton" mnemonicParsing="false" text="In-House" onAction="#setLabelToMachineID"/>
+              <RadioButton fx:id="outsourcedRadioButton" mnemonicParsing="false" text="Outsourced" onAction="#setLabelToCompanyName"/>
           </children>
           </HBox>
             <HBox fx:id="bottomRowHBox" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">

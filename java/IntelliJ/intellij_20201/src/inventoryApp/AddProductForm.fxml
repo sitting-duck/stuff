@@ -29,13 +29,13 @@
         </rowConstraints>
          <children>
             <Label fx:id="addProductLabel" text="Add Product" />
-            <TextField fx:id="searchField" GridPane.columnIndex="1" />
+            <TextField fx:id="partsSearchField" GridPane.columnIndex="1" onAction="#getPartSearchResultsHandler"/>
             <TableView fx:id="allPartsTable" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
             </TableView>
             <Button fx:id="addButton" mnemonicParsing="false" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="2" onAction="#addToProductPartsTable" />
             <TableView fx:id="productPartsTable" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
             </TableView>
-            <Button fx:id="removePartBtn" mnemonicParsing="false" text="Remove Associated Part" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Button fx:id="removePartBtn" mnemonicParsing="false" text="Remove Associated Part" GridPane.columnIndex="1" GridPane.rowIndex="4" onAction="#onRemovePartBtn"/>
             <HBox fx:id="bottomRightHBox" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <children>
                   <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" onAction="#saveProduct"/>

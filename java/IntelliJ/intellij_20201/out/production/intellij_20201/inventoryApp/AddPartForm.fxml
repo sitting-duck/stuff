@@ -74,7 +74,7 @@
                         <Label text="Inv" GridPane.rowIndex="2" />
                         <Label text="Price/Cost" GridPane.rowIndex="3" />
                         <Label text="Max" GridPane.rowIndex="4" />
-                        <Label text="Machine ID" GridPane.rowIndex="5" />
+                        <Label fx:id="bottomTextFieldLabel" text="Machine ID" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
                   <GridPane fx:id="gridPaneRightColumn" prefHeight="172.0" prefWidth="200.0" GridPane.columnIndex="2">

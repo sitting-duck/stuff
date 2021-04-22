@@ -6,7 +6,7 @@ import javafx.collections.ObservableList;
 
 public class Product {
 
-    private ObservableList<Part> associatedParts;
+    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
     private int id;
     private String name;
     private double price;
@@ -47,9 +47,30 @@ public class Product {
 
     public int getMax() { return this.max; }
 
-    public void addAssociatedPart(Part part) {  }
+    public void addAssociatedPart(Part part) {
+        associatedParts.add(part);
+    }
 
-    public boolean deleteAssociatedPart(Part selectedAssociatedPart) { return true; }
+    public boolean deleteAssociatedPart(Part selectedPart) {
+        for(Part part : associatedParts) {
+            if(part.getId() == selectedPart.getId() &&
+            part.getName() == selectedPart.getName() &&
+            part.getMax() == selectedPart.getMax() &&
+            part.getMin() == selectedPart.getMin() &&
+            part.getPrice() == selectedPart.getPrice() &&
+            part.getStock() == selectedPart.getStock()) {
+                if(selectedPart instanceof InHousePart &&
+                        ((InHousePart) part).getMachineId() == ((InHousePart) selectedPart).getMachineId()) {
+                    return associatedParts.remove(part);
+                } else if(selectedPart instanceof OutSourcedPart &&
+                        ((OutSourcedPart)part).getCompanyName().equals(((OutSourcedPart) selectedPart).getCompanyName())) {
+                    return associatedParts.remove(part);
+                }
+            }
+        }
+        System.out.println("No matching part was found");
+        return false;
+    }
 
     public ObservableList<Part> getAllAssociatedParts() { return associatedParts; }
 

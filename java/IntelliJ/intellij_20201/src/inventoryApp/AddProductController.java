@@ -31,28 +31,26 @@ public class AddProductController implements Initializable {
     public Button removePartBtn;
     public Button saveBtn;
     public Button cancelBtn;
+
     public TableView allPartsTable;
     public TableView productPartsTable;
+    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
 
     private static Inventory inventory = new Inventory();
-    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
+    public TextField partsSearchField;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        idTextField.setText(Integer.toString(inventory.newProductId()));
+        idTextField.setEditable(false);
+        idTextField.setDisable(true);
 
         idTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 if(!newValue.matches("\\d*")) {
                     idTextField.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            }
-        });
-        nameTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(!newValue.matches("\\d*")) {
-                    nameTextField.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             }
         });
@@ -125,8 +123,100 @@ public class AddProductController implements Initializable {
         productPartsTable.setItems(associatedParts);
     }
 
+    public void getPartSearchResultsHandler(ActionEvent actionEvent) {
+        String queryText = this.partsSearchField.getText();
+        System.out.println("getPartSearchResultsHandler: " + queryText);
+
+        if(queryText.isEmpty()) {
+            this.allPartsTable.setItems(inventory.getAllParts());
+        }
+
+        ObservableList<Part> parts = inventory.lookupPart(queryText);
+
+        if(parts.size() == 0) {
+            try {
+                int idNum = Integer.parseInt(queryText);
+                Part part = inventory.lookupPart(idNum);
+                parts.add(part);
+            } catch(NumberFormatException exception) {
+                // string is not a number so we search by part name instead of ID
+                System.out.println("Error: " + queryText + "cannot be converted to Integer.");
+            }
+
+        }
+        this.allPartsTable.setItems(parts);
+        this.partsSearchField.setText("");
+    }
+
     public void saveProduct(ActionEvent actionEvent) throws IOException {
 
+        String newName = nameTextField.getText();
+        if(newName.length() == 0) {
+            System.out.println("Error Invalid Name: " + newName);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Invalid Name");
+            alert.setHeaderText("Invalid Name");
+            alert.setContentText("Invalid Name");
+            alert.showAndWait();
+            return;
+        }
+
+        Double newPrice;
+        try {
+            newPrice = Double.parseDouble(priceTextField.getText());
+        } catch (NumberFormatException e) {
+            System.out.println("Error parsing Price to Integer: " + priceTextField.getText());
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Invalid Price");
+            alert.setHeaderText("Invalid Price");
+            alert.setContentText("Invalid Price");
+            alert.showAndWait();
+            return;
+        }
+
+        Integer newMin;
+        try {
+            newMin = Integer.parseInt(minTextField.getText());
+        } catch (NumberFormatException e) {
+            System.out.println("Error parsing Min to Integer: " + minTextField.getText());
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Invalid Min");
+            alert.setHeaderText("Invalid Min");
+            alert.setContentText("Invalid Min");
+            alert.showAndWait();
+            return;
+        }
+
+        Integer newMax;
+        try {
+            newMax = Integer.parseInt(maxTextField.getText());
+        } catch (NumberFormatException e) {
+            System.out.println("Error parsing Max to Integer: " + maxTextField.getText());
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Invalid Max");
+            alert.setHeaderText("Invalid Max");
+            alert.setContentText("Invalid Max");
+            alert.showAndWait();
+            return;
+        }
+
+        Integer newStock;
+        try {
+            newStock = Integer.parseInt(invTextField.getText());
+        } catch (NumberFormatException e) {
+            System.out.println("Error parsing Inventory/Stock to Integer: " + invTextField.getText());
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Invalid Inv");
+            alert.setHeaderText("Invalid Inv");
+            alert.setContentText("Invalid Inv");
+            alert.showAndWait();
+            return;
+        }
+
+        Product product = new Product(Integer.parseInt(idTextField.getText()), newName, newPrice, newStock, newMin, newMax);
+        inventory.addProduct(product);
+
+        toMainForm(actionEvent);
     }
 
     public void toMainForm(ActionEvent actionEvent) throws IOException {
@@ -151,12 +241,23 @@ public class AddProductController implements Initializable {
             associatedParts.add(part);
             System.out.println("Associated parts list length: " + Integer.toString(associatedParts.size()));
             productPartsTable.setEditable(true);
-
-            productPartsTable.refresh();
-            productPartsTable.setVisible(false);
             productPartsTable.setItems(associatedParts);
-            productPartsTable.setVisible(true);
+        }
+    }
 
+    public void onRemovePartBtn(ActionEvent actionEvent) {
+        Part part = (Part) productPartsTable.getSelectionModel().getSelectedItem();
+        int index = productPartsTable.getSelectionModel().getSelectedIndex();
+        if(part == null) {
+            System.out.println("Error: no part selected");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No part selected");
+            alert.setHeaderText("No part selected");
+            alert.setContentText("No part selected. Please select a part to add to product.");
+            alert.showAndWait();
+        } else {
+            associatedParts.remove(index);
+            productPartsTable.setItems(associatedParts);
         }
     }
 }

@@ -58,7 +58,7 @@
                         <HBox fx:id="productSearchRow" prefHeight="100.0" prefWidth="200.0">
                            <children>
                               <Label fx:id="productsLabel" text="Products" />
-                              <TextField fx:id="productsSearchField" />
+                              <TextField fx:id="productsSearchField" onAction="#getProductSearchResultsHandler"/>
                            </children>
                         </HBox>
                         <HBox fx:id="productTableHBox" prefHeight="250.0" prefWidth="200.0">
@@ -84,7 +84,7 @@
                   </VBox>
                </children>
             </GridPane>
-            <Button fx:id="exitButton" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="Exit" GridPane.rowIndex="2" />
+            <Button fx:id="exitButton" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="Exit" GridPane.rowIndex="2" onAction="#onExitBtnClicked" />
             <Label fx:id="header" text="Inventory Management System" />
          </children>
       </GridPane>

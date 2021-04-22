@@ -62,12 +62,6 @@ public class Inventory {
 
     public boolean deletePart(Part selectedPart) {
         for(Part part: allParts) {
-            if(selectedPart instanceof InHousePart &&
-                    ((InHousePart) part).getMachineId() == ((InHousePart) selectedPart).getMachineId()) {
-            } else if(selectedPart instanceof OutSourcedPart &&
-                    ((OutSourcedPart)part).getCompanyName() == ((OutSourcedPart) selectedPart).getCompanyName()) {
-            }
-
             if (part.getId() == selectedPart.getId() &&
             part.getName().equals(selectedPart.getName()) &&
             part.getPrice() == selectedPart.getPrice() &&
@@ -87,7 +81,20 @@ public class Inventory {
         return false;
     }
 
-    public boolean deleteProduct(Product selectedProduct) { return allProducts.remove(selectedProduct); }
+    public boolean deleteProduct(Product selectedProduct) {
+        for(Product product: allProducts) {
+            if (product.getId() == selectedProduct.getId() &&
+                    product.getName().equals(selectedProduct.getName()) &&
+                    product.getPrice() == selectedProduct.getPrice() &&
+                    product.getStock() == selectedProduct.getStock() &&
+                    product.getMin() == selectedProduct.getMin() &&
+                    product.getMax() == selectedProduct.getMax()) {
+                return allProducts.remove(product);
+            }
+        }
+        System.out.println("No matching part was found");
+        return false;
+    }
 
     public ObservableList<Part> getAllParts() { return allParts; }
 

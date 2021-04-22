@@ -2,12 +2,15 @@ package inventoryApp;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -26,6 +29,7 @@ public class ModifyPartController implements Initializable {
     public TextField maxTextField;
     public TextField invTextField;
     public TextField bottomTextField;
+    public Label bottomTextFieldLabel;
 
     public Button cancelBtn;
     public Button saveBtn;
@@ -90,6 +94,16 @@ public class ModifyPartController implements Initializable {
         } else if(part instanceof OutSourcedPart) {
             bottomTextField.setText(((OutSourcedPart) part).getCompanyName());
         }
+    }
+
+    public void setLabelToMachineID(ActionEvent actionEvent) {
+        System.out.println("setLabelToMachineID");
+        bottomTextFieldLabel.setText("Machine ID");
+    }
+
+    public void setLabelToCompanyName(ActionEvent actionEvent) {
+        System.out.println("setLabelToCompanyName");
+        bottomTextFieldLabel.setText("Company Name");
     }
 
     public void savePart(ActionEvent actionEvent) throws IOException {
@@ -165,8 +179,7 @@ public class ModifyPartController implements Initializable {
         } else if(part instanceof OutSourcedPart) {
             newCompanyName = bottomTextField.getText();
         }
-        System.out.println("partOriginal before delete: " + partOriginal.getName());
-        System.out.println("Result of deletePart(): " + inventory.deletePart(partOriginal));
+        inventory.deletePart(partOriginal);
 
         part.setName(newName);
         part.setPrice(newPrice);

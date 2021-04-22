@@ -1,5 +1,6 @@
 package inventoryApp;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -143,7 +144,7 @@ public class MainController implements Initializable {
             Parent root = FXMLLoader.load(getClass().getResource("ModifyPartForm.fxml"));
             Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 600, 400);
-            stage.setTitle("Modify Product");
+            stage.setTitle("Modify Part");
             stage.setScene(scene);
             stage.show();
         }
@@ -176,26 +177,36 @@ public class MainController implements Initializable {
 
         if(part == null) {
             System.out.println("No part selected.");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No part selected");
+            alert.setHeaderText("No part selected");
+            alert.setContentText("No part selected. Please select a part to delete.");
+            alert.showAndWait();
             return;
         } else {
             System.out.println("part: " + part.getName() + " selected.");
+            inventory.deletePart(part);
+            partTable.setItems(inventory.getAllParts());
         }
-        inventory.deletePart(part);
-        partTable.setItems(inventory.getAllParts());
-
     }
 
     public void OnDeleteProductBtnClicked(ActionEvent actionEvent) {
         System.out.println("OnDeleteProductBtnClicked: ");
         Product product = (Product)productTable.getSelectionModel().getSelectedItem();
-        System.out.println("product: " + product.getName() + " selected.");
 
         if(product == null) {
             System.out.println("No product selected.");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No product selected");
+            alert.setHeaderText("No product selected");
+            alert.setContentText("No product selected. Please select a product to delete.");
+            alert.showAndWait();
             return;
+        } else {
+            System.out.println("product: " + product.getName() + " selected.");
+            inventory.deleteProduct(product);
+            productTable.setItems(inventory.getAllProducts());
         }
-        inventory.deleteProduct(product);
-        productTable.setItems(inventory.getAllProducts());
     }
 
     public void getPartSearchResultsHandler(ActionEvent actionEvent) {
@@ -213,13 +224,53 @@ public class MainController implements Initializable {
                 int idNum = Integer.parseInt(queryText);
                 Part part = inventory.lookupPart(idNum);
                 parts.add(part);
+                this.partTable.setItems(parts);
+                this.partsSearchField.setText("");
             } catch(NumberFormatException exception) {
                 // string is not a number so we search by part name instead of ID
-                System.out.println("Error: " + queryText + "cannot be converted to Integer.");
+                System.out.println("Error: " + queryText + " cannot be converted to Integer.");
+//                Alert alert = new Alert(Alert.AlertType.WARNING);
+//                alert.setTitle("Error: " + queryText + " cannot be converted to Integer.");
+//                alert.setHeaderText("Error: " + queryText + " cannot be converted to Integer.");
+//                alert.setContentText("Error: " + queryText + " cannot be converted to Integer.");
+//                alert.showAndWait();
             }
-
         }
         this.partTable.setItems(parts);
-        this.partsSearchField.setText("");
+    }
+
+    public void getProductSearchResultsHandler(ActionEvent actionEvent) {
+        String queryText = this.productsSearchField.getText();
+        System.out.println("getProductSearchResultsHandler: " + queryText);
+
+        if(queryText.isEmpty()) {
+            this.productTable.setItems(inventory.getAllProducts());
+        }
+
+        ObservableList<Product> products = inventory.lookupProduct(queryText);
+
+        if(products.size() == 0) {
+            try {
+                int idNum = Integer.parseInt(queryText);
+                Product product = inventory.lookupProduct(idNum);
+                products.add(product);
+                this.productTable.setItems(products);
+                this.productsSearchField.setText("");
+            } catch(NumberFormatException exception) {
+                // string is not a number so we search by part name instead of ID
+                System.out.println("Error: " + queryText + " cannot be converted to Integer.");
+//                Alert alert = new Alert(Alert.AlertType.WARNING);
+//                alert.setTitle("Error: " + queryText + " cannot be converted to Integer.");
+//                alert.setHeaderText("Error: " + queryText + " cannot be converted to Integer.");
+//                alert.setContentText("Error: " + queryText + " cannot be converted to Integer.");
+//                alert.showAndWait();
+            }
+        }
+        this.productTable.setItems(products);
+    }
+
+    public void onExitBtnClicked(ActionEvent actionEvent) {
+        Platform.exit();
+        System.exit(0);
     }
 }

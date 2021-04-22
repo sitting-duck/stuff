@@ -21,33 +21,21 @@
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label fx:id="addProductLabel" text="Add Product" />
             <TextField fx:id="searchField" GridPane.columnIndex="1" />
-            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-              <columns>
-                <TableColumn prefWidth="75.0" text="Part ID" />
-                <TableColumn prefWidth="75.0" text="Part Name" />
-                  <TableColumn fx:id="partTable1" prefWidth="75.0" text="Inventory Level" />
-                  <TableColumn prefWidth="75.0" text="Price/Cost per Unit" />
-              </columns>
+            <TableView fx:id="allPartsTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
             </TableView>
-            <Button fx:id="addButton" mnemonicParsing="false" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-               <columns>
-                  <TableColumn prefWidth="75.0" text="Part ID" />
-                  <TableColumn prefWidth="75.0" text="Part Name" />
-                  <TableColumn fx:id="partTabel2" prefWidth="75.0" text="Inventory Level" />
-                  <TableColumn prefWidth="75.0" text="Price/Cost per Unit" />
-               </columns>
+            <Button fx:id="addButton" mnemonicParsing="false" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="2" onAction="#addToProductPartsTable"/>
+            <TableView fx:id="productPartsTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
             </TableView>
-            <Button fx:id="removePartBtn" mnemonicParsing="false" text="Remove Associated Part" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Button fx:id="removePartBtn" mnemonicParsing="false" text="Remove Associated Part" GridPane.columnIndex="1" GridPane.rowIndex="4" onAction="#onRemovePartBtn"/>
             <HBox fx:id="bottomRightHBox" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <children>
                   <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" onAction="#saveProduct" />
