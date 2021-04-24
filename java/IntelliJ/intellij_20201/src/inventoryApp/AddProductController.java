@@ -16,30 +16,70 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AddProductController implements Initializable {
+
+    /**
+     * Holds an auto generated id, is disabled by default so that it cannot be edited
+     */
     public TextField idTextField;
+
+    /**
+     * Accepts string input with no constraints for the Product Name eg. "Toyota", "Sedan", etc.
+     */
     public TextField nameTextField;
+
+    /**
+     * Accepts string input which is then converted to integer to represent the number of named product currently in inventory. ie. the number of products available to sell.
+     */
     public TextField invTextField;
+
+    /**
+     * Accepts string input which is then converted to Double to represent the price in Dollars of the product. Ie. How much the customer will pay
+     * when purchasing the product
+     */
     public TextField priceTextField;
+
+    /**
+     * The minimum number of product held in inventory
+     */
     public TextField minTextField;
+
+    /**
+     * The maximum number of product held in inventory
+     */
     public TextField maxTextField;
 
-    public TextField searchField;
-    public Button addButton;
-    public Button removePartBtn;
-    public Button saveBtn;
-    public Button cancelBtn;
-
+    /**
+     * Table that holds the set of all parts. User can select a part from this table and then add it to the productPartsTable
+     */
     public TableView allPartsTable;
+
+    /**
+     * Table that holds the set of all parts that the product being edited has. The user can add or remove parts from the product.
+     */
     public TableView productPartsTable;
+
+    /**
+     * The list of parts associated with the Product being edited
+     */
     private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
 
+    /**
+     * Holds the set of all Products and all Parts
+     */
     private static Inventory inventory = new Inventory();
+
+    /**
+     * Search for Parts search field
+     */
     public TextField partsSearchField;
 
-
+    /**
+     * Sets listeners to filter all the text fields input and sets the product being modified as well as populates all the tables
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         idTextField.setText(Integer.toString(inventory.newProductId()));
@@ -123,6 +163,11 @@ public class AddProductController implements Initializable {
         productPartsTable.setItems(associatedParts);
     }
 
+    /**
+     * Called when the user presses enter on the SearchField. Searches the table by name and id for the part in the inventory and displays
+     * the results in the table
+     * @param actionEvent - contains info about the event, not currently used
+     */
     public void getPartSearchResultsHandler(ActionEvent actionEvent) {
         String queryText = this.partsSearchField.getText();
         System.out.println("getPartSearchResultsHandler: " + queryText);
@@ -132,22 +177,34 @@ public class AddProductController implements Initializable {
         }
 
         ObservableList<Part> parts = inventory.lookupPart(queryText);
+        try {
+            int idNum = Integer.parseInt(queryText);
+            Part part = inventory.lookupPart(idNum);
+            parts.add(part);
+        } catch(NumberFormatException exception) {
+            System.out.println("Non Fatal Error: " + queryText + " cannot be converted to Integer.");
+        }
 
         if(parts.size() == 0) {
-            try {
-                int idNum = Integer.parseInt(queryText);
-                Part part = inventory.lookupPart(idNum);
-                parts.add(part);
-            } catch(NumberFormatException exception) {
-                // string is not a number so we search by part name instead of ID
-                System.out.println("Error: " + queryText + "cannot be converted to Integer.");
-            }
-
+            // string is not a number so we search by part name instead of ID
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error: no results for " + queryText);
+            alert.setHeaderText("Error: no results for " + queryText);
+            alert.setContentText("Error: no results for " + queryText);
+            alert.showAndWait();
+            return;
         }
         this.allPartsTable.setItems(parts);
         this.partsSearchField.setText("");
     }
 
+    /**
+     * When user clicks the save button this function is called. It checks all the text fields for correct input and displays a
+     * warning if the input is invalid. If all input is valid, the Product being edited is saved back to inventory and the program
+     * returns to the MainForm.
+     * @param actionEvent - not currently used
+     * @throws IOException -
+     */
     public void saveProduct(ActionEvent actionEvent) throws IOException {
 
         String newName = nameTextField.getText();
@@ -200,6 +257,16 @@ public class AddProductController implements Initializable {
             return;
         }
 
+        if(newMax < newMin) {
+            System.out.println("Error: Max must be greater than min");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error: Max must be greater than min");
+            alert.setHeaderText("Error: Max must be greater than min");
+            alert.setContentText("Error: Max must be greater than min");
+            alert.showAndWait();
+            return;
+        }
+
         Integer newStock;
         try {
             newStock = Integer.parseInt(invTextField.getText());
@@ -219,6 +286,11 @@ public class AddProductController implements Initializable {
         toMainForm(actionEvent);
     }
 
+    /**
+     * Returns the program from the ModifyProductForm (the current form) the MainForm (the initial program screen that shows two tables)
+     * @param actionEvent
+     * @throws IOException
+     */
     public void toMainForm(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
         Stage stage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
@@ -228,6 +300,10 @@ public class AddProductController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Adds a Part to the productPartsTable when the user clicks the add button
+     * @param actionEvent
+     */
     public void addToProductPartsTable(ActionEvent actionEvent) {
         Part part = (Part) allPartsTable.getSelectionModel().getSelectedItem();
         if(part == null) {
@@ -245,6 +321,10 @@ public class AddProductController implements Initializable {
         }
     }
 
+    /**
+     * Removes a part from the productPartsTable when the user clicks the remove part button
+     * @param actionEvent - not currently used
+     */
     public void onRemovePartBtn(ActionEvent actionEvent) {
         Part part = (Part) productPartsTable.getSelectionModel().getSelectedItem();
         int index = productPartsTable.getSelectionModel().getSelectedIndex();
@@ -256,8 +336,15 @@ public class AddProductController implements Initializable {
             alert.setContentText("No part selected. Please select a part to add to product.");
             alert.showAndWait();
         } else {
-            associatedParts.remove(index);
-            productPartsTable.setItems(associatedParts);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm Delete");
+            alert.setHeaderText("Really delete part: " + part.getName() + "?");
+            alert.setContentText("Really delete product: " + part.getName() + "?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                associatedParts.remove(index);
+                productPartsTable.setItems(associatedParts);
+            }
         }
     }
 }

@@ -30,6 +30,7 @@ public class ModifyPartController implements Initializable {
     public TextField invTextField;
     public TextField bottomTextField;
     public Label bottomTextFieldLabel;
+    public ChangeListener<String> bottomTextFieldListener;
 
     public Button cancelBtn;
     public Button saveBtn;
@@ -69,14 +70,15 @@ public class ModifyPartController implements Initializable {
                 }
             }
         });
-        bottomTextField.textProperty().addListener(new ChangeListener<String>() {
+        this.bottomTextFieldListener = new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 if(!newValue.matches("\\d*")) {
                     bottomTextField.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             }
-        });
+        };
+        bottomTextField.textProperty().addListener(bottomTextFieldListener);
 
         inHouseRadioButton.setToggleGroup(toggleGroup);
         outsourcedRadioButton.setToggleGroup(toggleGroup);
@@ -99,11 +101,31 @@ public class ModifyPartController implements Initializable {
     public void setLabelToMachineID(ActionEvent actionEvent) {
         System.out.println("setLabelToMachineID");
         bottomTextFieldLabel.setText("Machine ID");
+        bottomTextField.setText("");
+        bottomTextField.textProperty().removeListener(this.bottomTextFieldListener);
+        this.bottomTextFieldListener = new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if(!newValue.matches("\\d*")) {
+                    bottomTextField.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        };
+        bottomTextField.textProperty().addListener(this.bottomTextFieldListener);
     }
 
     public void setLabelToCompanyName(ActionEvent actionEvent) {
         System.out.println("setLabelToCompanyName");
         bottomTextFieldLabel.setText("Company Name");
+        bottomTextField.setText("");
+        bottomTextField.textProperty().removeListener(this.bottomTextFieldListener);
+        this.bottomTextFieldListener = new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                bottomTextField.setText(newValue);
+            }
+        };
+        bottomTextField.textProperty().addListener(this.bottomTextFieldListener);
     }
 
     public void savePart(ActionEvent actionEvent) throws IOException {
@@ -148,6 +170,16 @@ public class ModifyPartController implements Initializable {
             return;
         }
 
+        if(newMax < newMin) {
+            System.out.println("Error: Max must be greater than min");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error: Max must be greater than min");
+            alert.setHeaderText("Error: Max must be greater than min");
+            alert.setContentText("Error: Max must be greater than min");
+            alert.showAndWait();
+            return;
+        }
+
         Integer newStock;
         try {
             newStock = Integer.parseInt(invTextField.getText());
@@ -163,7 +195,7 @@ public class ModifyPartController implements Initializable {
 
         int newMachineId = -1;
         String newCompanyName = "";
-        if(part instanceof InHousePart) {
+        if(inHouseRadioButton.isSelected()) {
             try {
                 newMachineId = Integer.parseInt(bottomTextField.getText());
             } catch (NumberFormatException e) {
@@ -175,12 +207,19 @@ public class ModifyPartController implements Initializable {
                 alert.showAndWait();
                 return;
             }
-
-        } else if(part instanceof OutSourcedPart) {
+        } else if(outsourcedRadioButton.isSelected()) {
             newCompanyName = bottomTextField.getText();
+            if(newCompanyName.length() == 0) {
+                System.out.println("Error: Empty company name");
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Error: Empty company name");
+                alert.setHeaderText("Error: Empty company name");
+                alert.setContentText("Error: Empty company name");
+                alert.showAndWait();
+                return;
+            }
         }
         inventory.deletePart(partOriginal);
-
         part.setName(newName);
         part.setPrice(newPrice);
         part.setMin(newMin);
