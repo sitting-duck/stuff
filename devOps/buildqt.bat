@@ -9,17 +9,17 @@ call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary
 
 call "C:\Qt\5.15.2\msvc2019_64\bin\qtenv2.bat"
 
-
 echo "start build"
 
-python "C:\projects\text_replace.py" "C:\projects\" "$$(VAR)" "C:/Users/suraj/projects/aiengine/conan/lib3rdparty"
+:: pass in folder to recursively text replace, original string and replacement string
+python "C:\projects\text_replace.py" "C:\projects\" "$$(VAR)" "C:/projects/conan/3rdpartylibs"
 
-"C:\Qt\5.15.2\msvc2019_64\bin\qmake.exe" -set "AIE_DEPENDENCY_DIR" "C:\projects\conan\lib3rdparty"
+"C:\Qt\5.15.2\msvc2019_64\bin\qmake.exe" -set "AIE_DEPENDENCY_DIR" "C:\projects\conan\3rdpartylibs"
 cd "C:\projects"
 "C:\Qt\5.15.2\msvc2019_64\bin\qmake.exe" "C:\projects\project.pro" -spec win32-msvc "CONFIG+=force_debug_info" "CONFIG+=separate_debug_info"
 "C:\Qt\Tools\QtCreator\bin\jom.exe" -j6 release
 
 echo "after build"
 
-
-python "C:\projects\text_replace.py" "C:\projects" "$$(VAR)"
+:: put the text back to original before text replacement
+python "C:\projects\text_replace.py" "C:\projects" "$$(VAR)" "C:/projects/conan/3rdpartylibs"
