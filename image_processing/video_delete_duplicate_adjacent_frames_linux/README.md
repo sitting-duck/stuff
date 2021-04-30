@@ -1,5 +1,6 @@
 
-**delete_dups.py**: will walk through all the directories in sequenced_footage and delete all adjacent duplicate frames. This will not work if the frames are not named in alpha order. It is a safe assumption that two non-adjacent frames will never be completely identical because the universe is pretty random. 
+**delete_dups.py**: will walk through all the directories in sequenced_footage and delete all adjacent duplicate frames. This will not work if the frames are not named in alpha order. 
+It is a safe assumption that two non-adjacent sequenced video frames will never be completely identical because the universe is random enough that from one moment to the next, light particles will never fall again in exactly the same way. 
 
 **frame_sequencer.py**: Will grab all the video files in a directory and for each video file it will make a folder with the same name, and save each video frame as a png into that folder. Each frame png file will be named with the frame number, so the files are technically in alphabetical order.
 
