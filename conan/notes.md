@@ -83,5 +83,5 @@ conan install . -s build_type=Debug --build=missing
 
 ### Upload the Lib you just built from source
 ```
-conan upload opencv/4.5.1@ -r topaz-zuel-copy --all
+conan upload opencv/4.5.1@ -r my-remote-repo --all
 ```
