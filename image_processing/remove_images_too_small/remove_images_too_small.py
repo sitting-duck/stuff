@@ -1,7 +1,7 @@
 import os
 from PIL import Image
 
-img_dir = r"/media/NNDataset/Datasets/ashley/gigapixel_street_images/"
+img_dir = r"/path/to/my/dataset"
 
 
 for filename in os.listdir(img_dir):
