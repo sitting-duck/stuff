@@ -1,3 +1,5 @@
+# A script for running through log files and grabbing relevant data about hardware printed from dxDiag and putting it into a spreadsheet
+
 import os
 import glob
 from pathlib import Path
