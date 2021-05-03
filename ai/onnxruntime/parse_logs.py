@@ -128,9 +128,9 @@ def onnx_problem(lines):
     return False
 
 def get_pretty_name(net_name):
-    if "model1" in net_name or "gaia" in net_name:
+    if "model1" in net_name:
         pretty_name = "model1"
-    elif "model2" in net_name or "n2" in net_name:
+    elif "model2" in net_name:
         pretty_name = "model2"
     elif "model3" in net_name:
         pretty_name = "model3"
