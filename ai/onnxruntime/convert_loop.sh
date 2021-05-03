@@ -13,7 +13,7 @@
  13     for input_in in "${!pb_input_size[@]}"; do
  14         for i in "${!sizen[@]}"; do
  15             mkdir -p ${pb_input_size[$input_in]}
- 16             python -m tf2onnx.convert --graphdef ${pb_names[$pb]}-${pb_input_size[$input_in]}.pb --output ${pb_input_size[$input_in]}/gpx-v${version}-fp32-${height}x${width}-${sizen[$i]}.onnx --inputs "netInput:0,t_param:0,t_para    m1:0" --outputs "${outputs[$i]}"
+ 16             python -m tf2onnx.convert --graphdef ${pb_names[$pb]}-${pb_input_size[$input_in]}.pb --output ${pb_input_size[$input_in]}/gpx-v${version}-fp32-${height}x${width}-${sizen[$i]}.onnx --inputs "input_name:0,parameter_name:0,parameter_name:0" --outputs "${outputs[$i]}"
  17         done
  18     done
  19 done
