@@ -1,3 +1,5 @@
+# this script is just for inspecting an onnx file and printing out some basic things about it, such as its input names and output names.
+
 import onnxruntime as ort
 import numpy as np
 
