@@ -1,4 +1,10 @@
-  
+# This script shows an example of a script I might write to check the logs for performance times, write all those times into a .csv file, which 
+# can then be loaded into a spreadsheet for performance analysis. 
+# Automated log checkers like this can make it easy to detect a regression automatically, on a regular basis. 
+# You could attach this to your nighly builds on Jenkins for example if they run the program they have just built on the command line, and then 
+# generate a nighly report.
+
+
 import os, glob, math
 
 def get_average_time(times):    
