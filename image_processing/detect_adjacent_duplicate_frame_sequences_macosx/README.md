@@ -1,3 +1,6 @@
+Context: Sometimes when creating a video dataset you may need to get video from many sources, and not all of them will be high quality.
+
+When converting video to image sequence, some video conversions can result in multiple identical video frames in the sequence which will need to be cleaned up.
 
 **delete_dups.py**: will walk through all the directories in sequenced_footage and delete all adjacent duplicate frames. This will not work if the frames are not named in alpha order. It is a safe assumption that two non-adjacent frames will never be completely identical because the universe is pretty random. 
 

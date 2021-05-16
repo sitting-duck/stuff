@@ -1,3 +1,12 @@
+# Windows only script utility for searching a folder for a .lib containing symbolname
+
+# This script will recursively search the folder passed into the sript with the argument "folder",
+# and for every .lib file found, it will invoke DUMPBIN, a Microsoft built in utility, 
+# to print out all the symbols in the .lib file, 
+# if the symbol name (or part of it) is a match for the "original string" argument that you passed in
+# it will print out to the command line
+# so any symbols with a complete or with a substring match will print out for you,
+# I find this very useful for troubleshooting "Unresolved External Symbol" Errors in C++
 
 # run this in vstudio 2019 developer console as administrator 
 import os, shutil, ntpath, fileinput, argparse, glob, platform, sys, io, subprocess

@@ -8,12 +8,8 @@ This meant that this objectName property would always be accessible from either 
 In my experience writing Android code, I found that I often passed variables between layout files, and executing Java code files
 pretty much all the time, so I expected that would be the case here. 
 
-It turns out this was not to be. The employee that had been at the company the longest at the time only wrote in QML.
-This meant that if it wasn't written by the image processing phd types, and it wasn't file io related, it was probably written
-in QML. 
-
-This class turned out to never really be useful to me at all because it didn't go with the paradigm of most of the code base at work, and was based a on a false assumption. It was a nice little kata in Python, but I have yet to have found an actual use for it.
- 
+This class turned out to never really be useful to me at all because it didn't go with the paradigm of most of the code base at work, and was based a on a false assumption of mine that every object in QML should have an id. It was a nice little kata in Python, but I have yet to have found an actual use for it.
+I was also trying to learn Python at the time I wrote this, so it is not an example of good python code, but I will keep it in my notes regardless as an example to learn from.
 
 ```
 Rectangle {
