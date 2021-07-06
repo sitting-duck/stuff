@@ -35,3 +35,4 @@
 /java/HelloWorldJFX/nbproject/private/
 /java/HelloWorldJFX/build/
 /java/HelloWorldJFX/dist/
+*.DS_STORE
