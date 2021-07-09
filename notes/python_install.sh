@@ -37,4 +37,8 @@ For releases 1.15 and older, CPU and GPU packages are separate:
 pip install tensorflow==1.15      # CPU
 pip install tensorflow-gpu==1.15  # GPU
 
+# Jupyter 
+# If installing using pip install --user, you must add the user-level bin directory to your PATH environment variable in order to launch jupyter lab. 
+# If you are using a Unix derivative (FreeBSD, GNU / Linux, OS X), you can achieve this by using export PATH="$HOME/.local/bin:$PATH" command.
+
 ```
