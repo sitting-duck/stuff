@@ -18,4 +18,6 @@ codesign --force --verify --verbose --sign "Developer ID Application: Company Na
 
 "Apple Development: Ashley Tharp (4JFQZVB37F)"
 
+security unlock-keychain login.keychain
+
 ```
