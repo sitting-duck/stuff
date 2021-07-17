@@ -16,8 +16,12 @@ codesign --force --verify --verbose --sign "Developer ID Application: Company Na
 
 # Always use cp -R when copying in Qt files to be signed 
 
+```
+
+```
 "Apple Development: Ashley Tharp (4JFQZVB37F)"
 
 security unlock-keychain login.keychain
 
+spctl -a -t exec -vv /path/to/MyApp.app
 ```
