@@ -23,9 +23,9 @@ alias dinfo='sudo docker info '
 alias dps='sudo docker ps '
 alias drestart='sudo docker restart '
 alias drm='sudo docker rm '
-alias drun='sudo docker run -shm-size=96g --ulimit memlock=-1 --ulimit stack=-1 -p 6006:6006 -p 6007:6007 -it -v /home/user:/user -v /mnt/ssd:/mnt/ssd -v /mnt/ssd1:/mnt/ssd1 '
+alias drun='sudo docker run -shm-size=96g --ulimit memlock=-1 --ulimit stack=-1 -p 6006:6006 -p 6007:6007 -it -v /home/user:/user -v /mnt/someFolder1:/mnt/someFolder1 -v /mnt/someFolder2:/mnt/someFolder2 '
 ```
-just refernece here on that run command:
+just reference here on that run command:
 ```
 docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
 
